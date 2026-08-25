@@ -133,35 +133,9 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 
 <ComponentPreview name="tooltip/group-animation" />
 
-```tsx
-const sharedTooltip = Tooltip.createHandle<string>();
-
-<TooltipProvider>
-  <TooltipTrigger
-    handle={sharedTooltip}
-    payload="Bold"
-    render={<Button variant="outline" />}
-  >
-    Bold
-  </TooltipTrigger>
-
-  <TooltipTrigger
-    handle={sharedTooltip}
-    payload="Italic"
-    render={<Button variant="outline" />}
-  >
-    Italic
-  </TooltipTrigger>
-
-  <Tooltip handle={sharedTooltip}>
-    {({ payload }) => <TooltipPopup>{payload}</TooltipPopup>}
-  </Tooltip>
-</TooltipProvider>;
-```
-
 ## Popup Animation
 
-Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation.
+Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 <ComponentPreview name="tooltip/animation" />
 
