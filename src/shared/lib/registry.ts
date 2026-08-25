@@ -5,6 +5,7 @@ import { Button as BaseButton } from "@/registry/base/button";
 import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
 import Sidebar01Page from "@/registry/base/sidebar-01/page";
 import { Skeleton as BaseSkeleton } from "@/registry/base/skeleton";
+import { Spinner as BaseSpinner } from "@/registry/base/spinner";
 
 import registryManifest from "../../../registry.json";
 
@@ -75,6 +76,7 @@ const registryComponents: Record<string, RegistryComponent> = {
   button: BaseButton as RegistryComponent,
   checkbox: BaseCheckbox as RegistryComponent,
   skeleton: BaseSkeleton as RegistryComponent,
+  spinner: BaseSpinner as RegistryComponent,
   "sidebar-01": Sidebar01Page as RegistryComponent,
 };
 

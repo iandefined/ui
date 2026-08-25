@@ -1,6 +1,6 @@
-# Badge
+# Spinner
 
-Compact labels for status, category, or metadata.
+An SVG indicator for loading states.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
@@ -9,7 +9,7 @@ Compact labels for status, category, or metadata.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/badge.json
+pnpm dlx shadcn@latest add https://ui.iandefined.com/r/spinner.json
 ```
 
 ```bash
@@ -28,17 +28,11 @@ export function cn(...inputs: ClassValue[]) {
 ## Usage
 
 ```tsx
-import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 ```
 
 ```tsx
-<Badge color="violet">Fiction</Badge>
+<Spinner />
 ```
 
-## Variants
-
-### Solid and dot
-
-### Colors
-
-### Sizes
+## Sizes

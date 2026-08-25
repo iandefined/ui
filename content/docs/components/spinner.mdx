@@ -1,11 +1,11 @@
 ---
-title: Skeleton
-description: A shimmer placeholder for loading content.
+title: Spinner
+description: An SVG indicator for loading states.
 ---
 
 ## Preview
 
-<ComponentPreview name="skeleton/default" />
+<ComponentPreview name="spinner/default" />
 
 ## Installation
 
@@ -17,7 +17,7 @@ description: A shimmer placeholder for loading content.
   <TabsContent value="cli">
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
+pnpm dlx shadcn@latest add https://ui.iandefined.com/r/spinner.json
 ```
 
   </TabsContent>
@@ -44,8 +44,8 @@ export function cn(...inputs: ClassValue[]) {
 <Step>Copy and paste the following code into your project.</Step>
 
 <ComponentSource
-  src="src/registry/base/skeleton.tsx"
-  title="components/ui/skeleton.tsx"
+  src="src/registry/base/spinner.tsx"
+  title="components/ui/spinner.tsx"
 />
 </Steps>
 
@@ -55,19 +55,13 @@ export function cn(...inputs: ClassValue[]) {
 ## Usage
 
 ```tsx
-import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 ```
 
 ```tsx
-<Skeleton className="h-4 w-48" />
+<Spinner />
 ```
 
-## Examples
+## Sizes
 
-### Card
-
-<ComponentPreview name="skeleton/card" />
-
-### No animation
-
-<ComponentPreview name="skeleton/no-animation" />
+<ComponentPreview name="spinner/sizes" />

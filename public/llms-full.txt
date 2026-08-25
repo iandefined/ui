@@ -109,7 +109,7 @@ pnpm dlx shadcn@latest add https://ui.iandefined.com/r/badge.json
 ```
 
 ```bash
-pnpm add class-variance-authority clsx tailwind-merge
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
 ```ts filename="lib/utils.ts"
@@ -164,7 +164,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 ```bash
-npm install @base-ui/react tailwind-variants
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
 ## Usage
@@ -262,7 +262,7 @@ pnpm dlx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
 ```
 
 ```bash
-pnpm add class-variance-authority clsx tailwind-merge @base-ui/react
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
 ```ts filename="lib/utils.ts"
@@ -317,7 +317,7 @@ pnpm dlx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
 ```
 
 ```bash
-pnpm add clsx tailwind-merge
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
 ```ts filename="lib/utils.ts"
@@ -344,6 +344,45 @@ import { Skeleton } from "@/components/ui/skeleton";
 ### Card
 
 ### No animation
+
+# Spinner
+
+An SVG indicator for loading states.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+## Preview
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.iandefined.com/r/spinner.json
+```
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+## Usage
+
+```tsx
+import { Spinner } from "@/components/ui/spinner";
+```
+
+```tsx
+<Spinner />
+```
+
+## Sizes
 
 # Extending
 

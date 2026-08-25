@@ -23,7 +23,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 ```bash
-npm install @base-ui/react tailwind-variants
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
 ## Usage

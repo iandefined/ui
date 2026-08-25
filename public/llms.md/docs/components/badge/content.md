@@ -13,7 +13,7 @@ pnpm dlx shadcn@latest add https://ui.iandefined.com/r/badge.json
 ```
 
 ```bash
-pnpm add class-variance-authority clsx tailwind-merge
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
 ```ts filename="lib/utils.ts"
