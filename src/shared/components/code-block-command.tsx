@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { CopyButton } from "@/shared/components/copy-button";
 import { getIconForPackageManager } from "@/shared/components/icons";
@@ -13,6 +13,7 @@ import {
 import type { PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
 import type { Event } from "@/shared/lib/events";
+import { highlightCode } from "@/shared/lib/highlight-code";
 import { cn } from "@/shared/lib/utils";
 
 export const CodeBlockCommand = ({
@@ -31,6 +32,9 @@ export const CodeBlockCommand = ({
   copyEvent?: Event["name"];
 }) => {
   const [packageManager, setPackageManager] = usePackageManager();
+  const [highlightedCommands, setHighlightedCommands] = useState<
+    Partial<Record<PackageManager, string>>
+  >({});
 
   const commandTabs = useMemo(
     () => ({
@@ -46,6 +50,47 @@ export const CodeBlockCommand = ({
     (value: string) => setPackageManager(value as PackageManager),
     [setPackageManager]
   );
+
+  const commandEntries = useMemo(
+    () =>
+      Object.entries(commandTabs) as Array<
+        [PackageManager, string | undefined]
+      >,
+    [commandTabs]
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadHighlightedCommands = async () => {
+      const highlights = await Promise.all(
+        commandEntries.map(
+          async ([key, command]) =>
+            [key, command ? await highlightCode(command, "bash") : ""] as const
+        )
+      );
+
+      if (!isMounted) {
+        return;
+      }
+
+      setHighlightedCommands(
+        highlights.reduce<Partial<Record<PackageManager, string>>>(
+          (commands, [key, highlightedCommand]) => {
+            commands[key] = highlightedCommand;
+            return commands;
+          },
+          {}
+        )
+      );
+    };
+
+    void loadHighlightedCommands();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [commandEntries]);
 
   const copyValue = useMemo(
     () => commandTabs[packageManager] || "",
@@ -68,7 +113,7 @@ export const CodeBlockCommand = ({
           <TabsList className="rounded-none bg-transparent p-0 [&_svg]:me-2 [&_svg]:size-4 [&_svg]:text-muted-foreground">
             {getIconForPackageManager(packageManager)}
 
-            {Object.entries(commandTabs).map(([key]) => (
+            {commandEntries.map(([key]) => (
               <TabsTrigger
                 key={key}
                 className="data-active:border-input h-7 border border-transparent pt-0.5 data-active:shadow-none"
@@ -80,22 +125,29 @@ export const CodeBlockCommand = ({
           </TabsList>
         </div>
         <div className="no-scrollbar overflow-x-auto">
-          {Object.entries(commandTabs).map(([key, value]) => (
+          {commandEntries.map(([key, value]) => (
             <TabsContent
               key={key}
-              className="mt-0 w-max min-w-full px-4 py-3.5"
+              className="mt-0 w-max min-w-full"
               value={key}
             >
-              <pre>
-                <code
-                  data-slot="code-block"
-                  data-language="bash"
-                  className="block whitespace-pre font-mono text-sm leading-6 [font-feature-settings:'liga'_0,'calt'_0] [font-variant-ligatures:none]"
-                >
-                  <span className="select-none">$ </span>
-                  {value}
-                </code>
-              </pre>
+              {highlightedCommands[key] ? (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: highlightedCommands[key],
+                  }}
+                />
+              ) : (
+                <pre className="px-4 py-3.5">
+                  <code
+                    data-slot="code-block"
+                    data-language="bash"
+                    className="block whitespace-pre font-mono text-sm leading-6 [font-feature-settings:'liga'_0,'calt'_0] [font-variant-ligatures:none]"
+                  >
+                    {value}
+                  </code>
+                </pre>
+              )}
             </TabsContent>
           ))}
         </div>
