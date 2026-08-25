@@ -7,7 +7,7 @@
 - [Introduction](https://ui.iandefined.com/docs.md) - Build, document, and deploy this custom shadcn registry.
 - [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
 - [Button](https://ui.iandefined.com/docs/components/button.md) - Displays a button or a component that looks like a button.
-- [Your Component](https://ui.iandefined.com/docs/components/your-component.md) - Basic usage of the YourComponent template.
+- [Checkbox](https://ui.iandefined.com/docs/components/checkbox.md) - A control that allows the user to toggle between checked and unchecked.
 - [Extending](https://ui.iandefined.com/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
 - [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
 - [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.

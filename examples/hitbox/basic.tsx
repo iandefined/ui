@@ -1,18 +1,21 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/registry/base/checkbox";
 
 export default function HitboxDemo() {
   const [showHitbox, setShowHitbox] = useState(false);
 
   return (
     <div className="relative flex min-h-64 w-full flex-col items-center justify-center gap-5">
-      <label className="absolute top-4 right-0 flex items-center gap-2 text-sm text-muted-foreground">
-        <input
+      <label
+        className="absolute top-2 -right-2 flex items-center gap-2 cursor-pointer text-muted-foreground font-medium"
+        htmlFor="show-hitbox"
+      >
+        <Checkbox
           checked={showHitbox}
-          className="accent-primary size-4"
-          onChange={(event) => setShowHitbox(event.currentTarget.checked)}
-          type="checkbox"
+          id="show-hitbox"
+          onCheckedChange={setShowHitbox}
         />
         Show hitbox
       </label>

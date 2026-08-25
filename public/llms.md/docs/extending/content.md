@@ -190,7 +190,7 @@ title: My Component
 description: A concise description of what the component does.
 ---
 
-<ComponentPreview name="my-component-demo" />
+<ComponentPreview name="my-component/demo" />
 
 ## Installation
 
@@ -210,7 +210,7 @@ import { MyComponent } from "@/components/ui/my-component";
 
 ## Examples
 
-<ComponentPreview name="my-component-with-icon" />
+<ComponentPreview name="my-component/with-icon" />
 ````
 
 Pages are discovered automatically from the filesystem. Prefer real use cases over prop inventories. Good examples are named after the situation they demonstrate, such as "With icon", "Loading", "Form field", or "Empty state".
@@ -220,7 +220,7 @@ Pages are discovered automatically from the filesystem. Prefer real use cases ov
 Use an `examples` file when the same demo is reused or when the example is large enough to deserve its own module.
 
 ```txt
-examples/my-component-demo.tsx
+examples/my-component/demo.tsx
 ```
 
 ```tsx
@@ -234,10 +234,10 @@ export default function MyComponentDemo() {
 Then reference it from MDX:
 
 ```mdx
-<ComponentPreview name="my-component-demo" />
+<ComponentPreview name="my-component/demo" />
 ```
 
-The examples directory is loaded dynamically, so keep file names stable and use kebab-case names that match the preview name.
+The examples directory is loaded dynamically. Group demos by component and use the relative path without `.tsx` as the preview name, for example `examples/my-component/with-icon.tsx` becomes `my-component/with-icon`.
 
 If the demo is reused by multiple pages, import it in `src/shared/lib/registry.ts` and add it to `demoComponents`.
 

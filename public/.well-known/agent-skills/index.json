@@ -2,7 +2,7 @@
   "skills": [
     {
       "description": "Discover, inspect, and install components from this public shadcn registry starter.",
-      "digest": "sha256:e5ed6cbe2917a0be65d03fc58f7501a6d5e1cc7f03305a0b73cc5c4aa9a6257e",
+      "digest": "sha256:4b4e399eee5af2bfbe1b5770781f236a5ab5820040e5d1e143cceb0c208fd88c",
       "href": "https://ui.iandefined.com/.well-known/agent-skills/site-skill.md",
       "mediaType": "text/markdown",
       "name": "iandefined/ui"

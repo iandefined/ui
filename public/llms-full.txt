@@ -119,7 +119,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 ```bash
-npm install @base-ui/react
+npm install @base-ui/react tailwind-variants
 ```
 
 ## Usage
@@ -202,23 +202,60 @@ export function ButtonDestructive() {
 
 ### Icon Only
 
-# Your Component
+# Checkbox
 
-Basic usage of the YourComponent template.
+A control that allows the user to toggle between checked and unchecked.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Usage
+## Preview
 
-After you add the component with the CLI, import it from your UI folder:
+## Installation
 
-```tsx
-import { YourComponent } from "@/components/ui/your-component";
+```bash
+pnpm dlx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
+```
 
-export function MyComponent() {
-  return <YourComponent />;
+```bash
+pnpm add class-variance-authority clsx tailwind-merge @base-ui/react
+```
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
 ```
+
+## Anatomy
+
+```tsx
+import {
+  Checkbox,
+  CheckboxIndicator,
+  CheckboxRoot,
+} from "@/components/ui/checkbox";
+
+// Option #1. Basic usage:
+<Checkbox />;
+
+// Option #2. Custom usage:
+<CheckboxRoot>
+  <CheckboxIndicator />
+</CheckboxRoot>;
+```
+
+## Usage
+
+### Disabled
+
+### Sizes
+
+### Radius
+
+### Custom Icons
 
 # Extending
 
@@ -412,7 +449,7 @@ title: My Component
 description: A concise description of what the component does.
 ---
 
-<ComponentPreview name="my-component-demo" />
+<ComponentPreview name="my-component/demo" />
 
 ## Installation
 
@@ -432,7 +469,7 @@ import { MyComponent } from "@/components/ui/my-component";
 
 ## Examples
 
-<ComponentPreview name="my-component-with-icon" />
+<ComponentPreview name="my-component/with-icon" />
 ````
 
 Pages are discovered automatically from the filesystem. Prefer real use cases over prop inventories. Good examples are named after the situation they demonstrate, such as "With icon", "Loading", "Form field", or "Empty state".
@@ -442,7 +479,7 @@ Pages are discovered automatically from the filesystem. Prefer real use cases ov
 Use an `examples` file when the same demo is reused or when the example is large enough to deserve its own module.
 
 ```txt
-examples/my-component-demo.tsx
+examples/my-component/demo.tsx
 ```
 
 ```tsx
@@ -456,10 +493,10 @@ export default function MyComponentDemo() {
 Then reference it from MDX:
 
 ```mdx
-<ComponentPreview name="my-component-demo" />
+<ComponentPreview name="my-component/demo" />
 ```
 
-The examples directory is loaded dynamically, so keep file names stable and use kebab-case names that match the preview name.
+The examples directory is loaded dynamically. Group demos by component and use the relative path without `.tsx` as the preview name, for example `examples/my-component/with-icon.tsx` becomes `my-component/with-icon`.
 
 If the demo is reused by multiple pages, import it in `src/shared/lib/registry.ts` and add it to `demoComponents`.
 

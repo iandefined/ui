@@ -4,19 +4,6 @@
   "homepage": "https://ui.iandefined.com",
   "items": [
     {
-      "name": "your-component",
-      "type": "registry:ui",
-      "title": "Your Component",
-      "description": "A placeholder component. Replace this with your custom shadcn component.",
-      "files": [
-        {
-          "path": "src/registry/base/your-component.tsx",
-          "type": "registry:ui",
-          "target": "components/ui/your-component.tsx"
-        }
-      ]
-    },
-    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -27,6 +14,25 @@
           "path": "src/registry/base/button.tsx",
           "type": "registry:ui",
           "target": "components/ui/button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "A Base UI checkbox component with sizes, radius variants, and a snappy indicator animation.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/checkbox.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/checkbox.tsx"
         }
       ]
     },

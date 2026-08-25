@@ -1,8 +1,8 @@
 import type { ComponentType } from "react";
 
 import { Button as BaseButton } from "@/registry/base/button";
+import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
 import Sidebar01Page from "@/registry/base/sidebar-01/page";
-import { YourComponent } from "@/registry/base/your-component";
 
 import registryManifest from "../../../registry.json";
 
@@ -34,13 +34,13 @@ const registrySources = import.meta.glob("../../registry/**/*.tsx", {
   query: "?raw",
 }) as Record<string, string>;
 
-const exampleSources = import.meta.glob("../../../examples/*.tsx", {
+const exampleSources = import.meta.glob("../../../examples/**/*.tsx", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>;
 
-const exampleModules = import.meta.glob("../../../examples/*.tsx", {
+const exampleModules = import.meta.glob("../../../examples/**/*.tsx", {
   eager: true,
 }) as Record<string, DemoModule>;
 
@@ -48,9 +48,8 @@ const normalizePath = (value: string) => value.replaceAll("\\", "/");
 
 const toDemoName = (filePath: string) =>
   normalizePath(filePath)
-    .split("/")
-    .at(-1)
-    ?.replace(/\.tsx$/, "");
+    .replace(/^.*\/examples\//, "")
+    .replace(/\.tsx$/, "");
 
 const toRootPath = (filePath: string) =>
   normalizePath(filePath)
@@ -71,8 +70,8 @@ const allRegistryItems = Object.fromEntries(
 
 const registryComponents: Record<string, RegistryComponent> = {
   button: BaseButton as RegistryComponent,
+  checkbox: BaseCheckbox as RegistryComponent,
   "sidebar-01": Sidebar01Page as RegistryComponent,
-  "your-component": YourComponent as RegistryComponent,
 };
 
 const demoComponentsByName = Object.fromEntries(
