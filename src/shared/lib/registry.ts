@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 
+import { Badge as BaseBadge } from "@/registry/base/badge";
 import { Button as BaseButton } from "@/registry/base/button";
 import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
 import Sidebar01Page from "@/registry/base/sidebar-01/page";
@@ -69,6 +70,7 @@ const allRegistryItems = Object.fromEntries(
 ) as Record<string, RegistryItem>;
 
 const registryComponents: Record<string, RegistryComponent> = {
+  badge: BaseBadge as RegistryComponent,
   button: BaseButton as RegistryComponent,
   checkbox: BaseCheckbox as RegistryComponent,
   "sidebar-01": Sidebar01Page as RegistryComponent,
