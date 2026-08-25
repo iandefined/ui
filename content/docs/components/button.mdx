@@ -3,12 +3,27 @@ title: Button
 description: Displays a button or a component that looks like a button.
 ---
 
-import { Button } from "@/registry/base/button";
+import { Button } from "@/components/ui/button";
+import { ArrowUpRightIcon, ArrowUpIcon, GitBranchIcon } from "lucide-react";
 
-<ComponentPreview
-  name="button-demo"
-  caption="A button with a secondary icon action."
-/>
+<ComponentPreview>
+  <div className="flex flex-wrap items-center gap-2 md:flex-row">
+    <Button>Button</Button>
+    <Button variant="outline" size="icon" aria-label="Submit">
+      <ArrowUpIcon />
+    </Button>
+  </div>
+
+```tsx
+<div className="flex flex-wrap items-center gap-2 md:flex-row">
+  <Button>Button</Button>
+  <Button variant="outline" size="icon" aria-label="Submit">
+    <ArrowUpIcon />
+  </Button>
+</div>
+```
+
+</ComponentPreview>
 
 ## Installation
 
@@ -56,31 +71,108 @@ import { Button } from "@/components/ui/button";
 <Button variant="outline">Button</Button>
 ```
 
-## Examples
+## Variants
 
-### Start aligned
+### Default
 
-<ComponentPreview name="button-demo" align="start" />
-
-### Hidden code
-
-<ComponentPreview
-  name="button-demo"
-  hideCode
-  caption="Use hideCode for demos where the preview is the documentation."
-/>
-
-### Inline example
-
-<ComponentPreview name="inline-button-example" title="inline-button-example.tsx">
-  <Button variant="outline">Inline example</Button>
+<ComponentPreview name="button-default-demo" title="button-default-demo.tsx">
+  <Button>Default</Button>
 
 ```tsx
 import { Button } from "@/components/ui/button";
 
-export function InlineButtonExample() {
-  return <Button variant="outline">Inline example</Button>;
+export function ButtonDefault() {
+  return <Button>Default</Button>;
 }
 ```
 
 </ComponentPreview>
+
+### Secondary
+
+<ComponentPreview name="button-secondary-demo" title="button-secondary-demo.tsx">
+  <Button variant="secondary">Secondary</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function ButtonSecondary() {
+  return <Button variant="secondary">Secondary</Button>;
+}
+```
+
+</ComponentPreview>
+
+### Outline
+
+<ComponentPreview name="button-outline-demo" title="button-outline-demo.tsx">
+  <Button variant="outline">Outline</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function ButtonOutline() {
+  return <Button variant="outline">Outline</Button>;
+}
+```
+
+</ComponentPreview>
+
+### Ghost
+
+<ComponentPreview name="button-ghost-demo" title="button-ghost-demo.tsx">
+  <Button variant="ghost">Ghost</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function ButtonGhost() {
+  return <Button variant="ghost">Ghost</Button>;
+}
+```
+
+</ComponentPreview>
+
+### Link
+
+<ComponentPreview name="button-link-demo" title="button-link-demo.tsx">
+  <Button variant="link">Link</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function ButtonLink() {
+  return <Button variant="link">Link</Button>;
+}
+```
+
+</ComponentPreview>
+
+### Destructive
+
+<ComponentPreview name="button-destructive-demo" title="button-destructive-demo.tsx">
+  <Button variant="destructive">Destructive</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function ButtonDestructive() {
+  return <Button variant="destructive">Destructive</Button>;
+}
+```
+
+</ComponentPreview>
+
+## Examples
+
+### Sizes
+
+<ComponentPreview name="button-sizes-demo" />
+
+### With Icon
+
+<ComponentPreview name="button-with-icon-demo" />
+
+### Icon Only
+
+<ComponentPreview name="button-icon-only-demo" />

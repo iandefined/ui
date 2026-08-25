@@ -21,7 +21,7 @@
       "type": "registry:ui",
       "title": "Button",
       "description": "A Base UI button component with variants and sizes.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": ["@base-ui/react", "tailwind-variants"],
       "files": [
         {
           "path": "src/registry/base/button.tsx",

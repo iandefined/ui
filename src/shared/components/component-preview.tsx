@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from "react";
 
 import { ComponentPreviewTabs } from "@/shared/components/component-preview-tabs";
 import { ComponentSource } from "@/shared/components/component-source";
+import { MdxPreviewProvider } from "@/shared/lib/mdx-preview-context";
 import { getRegistryComponent } from "@/shared/lib/registry";
 import { cn } from "@/shared/lib/utils";
 
@@ -149,7 +150,11 @@ export function ComponentPreview({
       hideCode={hideCode}
       chromeLessOnMobile={chromeLessOnMobile}
       component={
-        previewChildren ?? (RegistryComponent ? <RegistryComponent /> : null)
+        previewChildren ? (
+          <MdxPreviewProvider>{previewChildren}</MdxPreviewProvider>
+        ) : RegistryComponent ? (
+          <RegistryComponent />
+        ) : null
       }
       source={
         <ComponentSource

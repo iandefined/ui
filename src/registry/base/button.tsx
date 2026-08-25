@@ -1,82 +1,76 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button";
+"use client";
+
+import {
+  Button as BaseButton,
+  type ButtonProps as BaseButtonProps,
+} from "@base-ui/react/button";
+import { tv, type VariantProps } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
-const baseButtonClasses =
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+const buttonVariants = tv({
+  base: [
+    `group inline-flex relative isolate shrink-0 items-center gap-1.5 text-sm justify-center w-fit touch-none whitespace-nowrap cursor-pointer outline-hidden transform-gpu motion-reduce:transform-none overflow-hidden`,
+    `focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-foreground`,
+    `disabled:cursor-not-allowed disabled:scale-100 disabled:opacity-60 disabled:bg-secondary`,
+    `[transition:scale_0.1s,box-shadow_0.2s,background_0.20s,width_0.2s] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] will-change-transform`,
+    `[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none active:scale-98`,
+  ],
+  variants: {
+    variant: {
+      default: `bg-linear-to-b from-primary/80 dark:from-primary to-primary text-primary-foreground hover:from-primary/75 dark:hover:from-primary/95`,
+      secondary:
+        "border-secondary bg-secondary text-secondary-foreground hover:bg-secondary/90 data-pressed:bg-secondary/90",
+      outline: `border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50`,
+      ghost: `text-primary hover:bg-primary/10 focus-vislbe:bg-primary/10 focus-visible:border-primary/25`,
+      link: `text-primary hover:underline hover:underline-offset-4 hover:decoration-1 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-1`,
+      destructive:
+        "bg-destructive text-white hover:bg-destructive/90 focus-visible:border-destructive focus-visible:bg-destructive/90 focus-visible:ring-destructive bg-linear-to-t from-destructive/90 to-destructive",
+    },
+    size: {
+      default: "h-9 px-4 py-2 has-[>svg]:px-3",
+      xs: "h-6 gap-1 rounded-md px-[calc(--spacing(2)-1px)] py-[calc(--spacing(1)-1px)] text-xs [&_svg:not([class*='size-'])]:size-3",
+      sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+      lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+      xl: "h-12 px-[calc(--spacing(4)-1px)] py-[calc(--spacing(2)-1px)] text-base [&_svg:not([class*='size-'])]:size-4.5",
+      "icon-sm": "size-8 [&_svg:not([class*='size-'])]:size-3.5",
+      icon: "size-9 [&_svg:not([class*='size-'])]:size-4",
+      "icon-lg": "size-10 [&_svg:not([class*='size-'])]:size-4.5",
+      "icon-xl": "size-12 [&_svg:not([class*='size-'])]:size-4.5",
+    },
+    radius: {
+      none: "rounded-none",
+      sm: "rounded-sm",
+      default: "rounded-md",
+      lg: "rounded-lg",
+      xl: "rounded-xl",
+      full: "rounded-full",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+    radius: "default",
+  },
+});
 
-const buttonVariantClasses = {
-  default: "bg-primary text-primary-foreground hover:bg-primary/80",
-  destructive:
-    "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-  ghost:
-    "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-  link: "text-primary underline-offset-4 hover:underline",
-  outline:
-    "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-  secondary:
-    "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
-} as const;
-
-const buttonSizeClasses = {
-  default:
-    "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-  icon: "size-8",
-  "icon-lg": "size-9",
-  "icon-sm":
-    "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
-  "icon-xs":
-    "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
-  lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-  sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-  xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-} as const;
-
-type ButtonVariant = keyof typeof buttonVariantClasses;
-type ButtonSize = keyof typeof buttonSizeClasses;
-
-const buttonVariants = ({
-  className,
-  size = "default",
-  variant = "default",
-}: {
-  className?: string;
-  size?: ButtonSize;
-  variant?: ButtonVariant;
-} = {}) =>
-  cn(
-    baseButtonClasses,
-    buttonVariantClasses[variant],
-    buttonSizeClasses[size],
-    className
-  );
+type ButtonProps = BaseButtonProps & {
+  variant?: VariantProps<typeof buttonVariants>["variant"];
+  size?: VariantProps<typeof buttonVariants>["size"];
+  radius?: VariantProps<typeof buttonVariants>["radius"];
+};
 
 function Button({
   className,
   variant = "default",
   size = "default",
+  radius = "default",
   ...props
-}: ButtonPrimitive.Props & {
-  size?: ButtonSize;
-  variant?: ButtonVariant;
-}) {
+}: ButtonProps) {
   return (
-    <ButtonPrimitive
+    <BaseButton
       data-slot="button"
-      data-variant={variant}
-      data-size={size}
-      className={
-        typeof className === "function"
-          ? (state) =>
-              cn(
-                buttonVariants({
-                  variant,
-                  size,
-                  className: className(state),
-                })
-              )
-          : cn(buttonVariants({ variant, size, className }))
-      }
+      className={cn(buttonVariants({ variant, size, radius }), className)}
       {...props}
     />
   );
