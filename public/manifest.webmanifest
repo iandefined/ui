@@ -1,0 +1,21 @@
+{
+  "background_color": "#ffffff",
+  "description": "A highly customizable shadcn registry template repository built with TanStack Start. Fork, customize, and deploy free to Cloudflare Workers.",
+  "display": "standalone",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "/web-app-manifest-192x192.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "512x512",
+      "src": "/web-app-manifest-512x512.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "tanstartercn",
+  "short_name": "tanstartercn",
+  "start_url": "/",
+  "theme_color": "#ffffff"
+}

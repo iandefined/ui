@@ -1,0 +1,56 @@
+# Installation
+
+Install registry components in your project.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+## Prerequisites
+
+Components are distributed through the [shadcn registry](https://ui.shadcn.com/docs/registry) format. Before installing a component, make sure your project has:
+
+- React
+- Tailwind CSS v4
+- shadcn/ui initialized
+- a `components` alias that resolves to your app's component directory
+
+For a new project, initialize shadcn first:
+
+```bash
+npx shadcn@latest init
+```
+
+## Adding components
+
+### CLI
+
+Install the Button component from this registry:
+
+```bash
+npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
+```
+
+The CLI copies the component source into your project and installs the npm dependencies declared by the registry item.
+
+Then import it from the target path:
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function Example() {
+  return <Button variant="outline">Button</Button>;
+}
+```
+
+### Manual
+
+Copy component source from the component docs via the Manual tab. Manual installation is useful when you want to review the source before adding it to your project.
+
+### Registry index
+
+The registry index is available at:
+
+```bash
+https://tanstartercn.tsu.moe/r/registry.json
+```
+
+Use the index to inspect available components. Install individual components with their `/r/<component>.json` URL.

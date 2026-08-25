@@ -1,0 +1,2 @@
+/docs.mdx /docs.md 301
+/docs/*.mdx /docs/:splat.md 301

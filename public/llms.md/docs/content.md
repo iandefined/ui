@@ -1,0 +1,89 @@
+# Introduction
+
+Build, document, and deploy this custom shadcn registry.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+This repository publishes a custom [shadcn registry](https://ui.shadcn.com/docs/registry) with a documentation site, live component previews, generated registry JSON, and machine-readable docs for AI coding assistants.
+
+The app is a static-hostable TanStack Start SPA deployed to Cloudflare Workers with Worker Static Assets. Component docs are authored in MDX with Fumadocs, registry items are built from `registry.json`, and generated files are served from stable public URLs.
+
+## What this repo includes
+
+- **Fumadocs documentation** in `content/docs`, discovered from the filesystem.
+- **shadcn registry output** generated from `registry.json` into `public/r`.
+- **Live component previews** that can render examples from `examples` or inline MDX.
+- **A single `base` registry namespace** for new components, plus the current placeholder item.
+- **Static AI documentation endpoints** such as `/llms.txt`, `/llms-full.txt`, and `/llms.md/...`.
+- **Cloudflare Workers deployment** using Worker Static Assets.
+
+## Tech Stack
+
+- `TanStack Start`
+- `TanStack Router`
+- `React 19` + `TypeScript`
+- `Vite`
+- `Tailwind CSS 4`
+- `Fumadocs`
+- `shadcn/ui`
+- `motion`
+- `shiki` + `rehype-pretty-code`
+- `Cloudflare Workers`
+
+## How It Works
+
+1. Add or edit registry source in `src/registry/base`.
+2. Add the registry item to `registry.json`.
+3. Document the component in `content/docs/components`.
+4. Render a preview with `ComponentPreview`.
+5. Build the generated registry files with `pnpm registry:build`.
+6. Build generated docs and agent files with `pnpm static:build`.
+
+Once deployed, users can install registry items with the shadcn CLI:
+
+```bash
+npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
+```
+
+## Important Paths
+
+- `content/docs` - MDX documentation pages.
+- `examples` - reusable preview examples.
+- `src/registry/base` - installable registry component source.
+- `src/shared/components` - app and docs UI.
+- `src/shared/components/ui` - complete shadcn/ui primitives used by the site.
+- `src/shared/lib/registry.ts` - preview/component lookup wiring.
+- `registry.json` - shadcn registry manifest.
+- `public/r` - generated registry JSON files.
+- `scripts/generate-static-assets.mjs` - generated docs, LLM, sitemap, and discovery files.
+
+Do not edit generated output by hand. Regenerate it with the matching script instead.
+
+## Public Endpoints
+
+- `/r/registry.json` - registry index.
+- `/r/button.json` - individual registry item.
+- `/llms.txt` - quick AI docs index.
+- `/llms-full.txt` - complete generated docs.
+- `/openapi.json` - machine-readable endpoint catalog.
+- `/.well-known/agent-skills/index.json` - agent skill discovery.
+
+The production origin comes from `FALLBACK_SITE_ORIGIN` in `src/shared/constants/site.ts`, unless `SITE_URL` is provided at build time.
+
+## Common Commands
+
+```bash
+pnpm dev
+pnpm registry:build
+pnpm static:build
+pnpm typecheck
+pnpm check
+pnpm build
+pnpm deploy
+```
+
+Use `pnpm registry:build` after registry changes, `pnpm static:build` after docs or static endpoint changes, and `pnpm build` before deploy.
+
+## Next Steps
+
+Read [Installation](/docs/installation) to install registry components, [Styling](/docs/styling) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.

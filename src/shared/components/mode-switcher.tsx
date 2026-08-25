@@ -1,0 +1,40 @@
+"use client";
+
+import { ThemeIcon } from "@/shared/components/icons";
+import { Button } from "@/shared/components/ui/button";
+import { Kbd } from "@/shared/components/ui/kbd";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
+import { useThemeToggle } from "@/shared/hooks/use-theme-toggle";
+
+export const ModeSwitcher = () => {
+  const { toggleTheme } = useThemeToggle();
+
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="group/toggle extend-touch-target size-8"
+            onClick={toggleTheme}
+            title="Toggle theme"
+          />
+        }
+      >
+        <ThemeIcon className="size-4.5" strokeWidth="2" />
+        <span className="sr-only">Toggle theme</span>
+      </TooltipTrigger>
+      <TooltipContent className="pr-2 pl-3">
+        <div className="flex items-center gap-3">
+          Toggle Mode
+          <Kbd>D</Kbd>
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+};

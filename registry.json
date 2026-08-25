@@ -1,0 +1,76 @@
+{
+  "name": "tanstartercn",
+  "homepage": "https://tanstartercn.tsu.moe",
+  "items": [
+    {
+      "name": "your-component",
+      "type": "registry:ui",
+      "title": "Your Component",
+      "description": "A placeholder component. Replace this with your custom shadcn component.",
+      "files": [
+        {
+          "path": "src/registry/base/your-component.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/your-component.tsx"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "A Base UI button component with variants and sizes.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "src/registry/base/button.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sidebar-01",
+      "type": "registry:block",
+      "title": "Sidebar 01",
+      "description": "A simple sidebar with navigation grouped by section.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": [
+        "https://ui.shadcn.com/r/styles/base-luma/sidebar.json",
+        "https://ui.shadcn.com/r/styles/base-luma/breadcrumb.json",
+        "https://ui.shadcn.com/r/styles/base-luma/separator.json",
+        "https://ui.shadcn.com/r/styles/base-luma/label.json",
+        "https://ui.shadcn.com/r/styles/base-luma/dropdown-menu.json",
+        "https://ui.shadcn.com/r/styles/base-luma/button.json",
+        "https://ui.shadcn.com/r/styles/base-luma/input.json",
+        "https://ui.shadcn.com/r/styles/base-luma/sheet.json",
+        "https://ui.shadcn.com/r/styles/base-luma/skeleton.json",
+        "https://ui.shadcn.com/r/styles/base-luma/tooltip.json",
+        "https://ui.shadcn.com/r/styles/base-luma/use-mobile.json"
+      ],
+      "categories": ["sidebar"],
+      "files": [
+        {
+          "path": "src/registry/base/sidebar-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/dashboard/page.tsx"
+        },
+        {
+          "path": "src/registry/base/sidebar-01/components/app-sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/app-sidebar.tsx"
+        },
+        {
+          "path": "src/registry/base/sidebar-01/components/search-form.tsx",
+          "type": "registry:component",
+          "target": "components/search-form.tsx"
+        },
+        {
+          "path": "src/registry/base/sidebar-01/components/version-switcher.tsx",
+          "type": "registry:component",
+          "target": "components/version-switcher.tsx"
+        }
+      ]
+    }
+  ]
+}

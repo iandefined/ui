@@ -1,0 +1,65 @@
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+
+/llms.md/*
+  Content-Type: text/markdown; charset=utf-8
+
+/docs.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/button.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/your-component.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/extending.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/installation.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/llms.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/styling.md
+  Content-Type: text/markdown; charset=utf-8
+
+/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
+
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/manifest.webmanifest
+  Content-Type: application/manifest+json; charset=utf-8
+
+/openapi.json
+  Content-Type: application/openapi+json; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/api/status
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=60
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; charset=utf-8
+
+/.well-known/agent-skills/index.json
+  Content-Type: application/json; charset=utf-8
+
+/.well-known/agent-skills/site-skill.md
+  Content-Type: text/markdown; charset=utf-8
+
+/*
+  Link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc", </docs>; rel="service-doc", <https://ui.shadcn.com/docs/mcp>; rel="service-doc"; title="shadcn MCP server", </.well-known/agent-skills/index.json>; rel="describedby"

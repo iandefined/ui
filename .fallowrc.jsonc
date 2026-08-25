@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.fallow.tools/schema.json",
+  "entry": [
+    "examples/*.tsx",
+    "src/polyfills/node-path.ts",
+    "src/registry/**/*.tsx",
+    "src/shared/components/ui/*.tsx",
+  ],
+  "ignoreDependencies": ["collections"],
+  "ignoreExports": [
+    {
+      "file": "src/shared/components/ui/*.tsx",
+      "exports": ["*"],
+    },
+    {
+      "file": "src/registry/**/*.tsx",
+      "exports": ["*"],
+    },
+  ],
+}

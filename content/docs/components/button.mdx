@@ -1,0 +1,86 @@
+---
+title: Button
+description: Displays a button or a component that looks like a button.
+---
+
+import { Button } from "@/registry/base/button";
+
+<ComponentPreview
+  name="button-demo"
+  caption="A button with a secondary icon action."
+/>
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/button.tsx"
+  title="components/ui/button.tsx"
+/>
+
+  <Step>Update the import paths to match your project setup.</Step>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Button } from "@/components/ui/button";
+```
+
+```tsx
+<Button variant="outline">Button</Button>
+```
+
+## Examples
+
+### Start aligned
+
+<ComponentPreview name="button-demo" align="start" />
+
+### Hidden code
+
+<ComponentPreview
+  name="button-demo"
+  hideCode
+  caption="Use hideCode for demos where the preview is the documentation."
+/>
+
+### Inline example
+
+<ComponentPreview name="inline-button-example" title="inline-button-example.tsx">
+  <Button variant="outline">Inline example</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function InlineButtonExample() {
+  return <Button variant="outline">Inline example</Button>;
+}
+```
+
+</ComponentPreview>

@@ -1,0 +1,23 @@
+# tanstartercn
+
+> A highly customizable shadcn registry template repository built with TanStack Start. Fork, customize, and deploy free to Cloudflare Workers. Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
+
+## Documentation
+
+- [Introduction](https://tanstartercn.tsu.moe/docs.md) - Build, document, and deploy this custom shadcn registry.
+- [Components](https://tanstartercn.tsu.moe/docs/components.md) - Browse the components available in this registry.
+- [Button](https://tanstartercn.tsu.moe/docs/components/button.md) - Displays a button or a component that looks like a button.
+- [Your Component](https://tanstartercn.tsu.moe/docs/components/your-component.md) - Basic usage of the YourComponent template.
+- [Extending](https://tanstartercn.tsu.moe/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
+- [Installation](https://tanstartercn.tsu.moe/docs/installation.md) - Install registry components in your project.
+- [LLMS.txt](https://tanstartercn.tsu.moe/docs/llms.md) - Let AI coding assistants use tanstartercn documentation and registry references.
+- [Styling](https://tanstartercn.tsu.moe/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.
+
+## Machine-readable Resources
+
+- [Full documentation](https://tanstartercn.tsu.moe/llms-full.txt)
+- [Homepage markdown](https://tanstartercn.tsu.moe/llms.md/content.md)
+- [OpenAPI description](https://tanstartercn.tsu.moe/openapi.json)
+- [API catalog](https://tanstartercn.tsu.moe/.well-known/api-catalog)
+- [Agent skill](https://tanstartercn.tsu.moe/.well-known/agent-skills/site-skill.md)
+- [shadcn MCP server documentation](https://ui.shadcn.com/docs/mcp)

@@ -1,0 +1,30 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://tanstartercn.tsu.moe",
+      "describedby": [
+        {
+          "href": "https://tanstartercn.tsu.moe/.well-known/agent-skills/index.json",
+          "type": "application/json"
+        }
+      ],
+      "service-desc": [
+        {
+          "href": "https://tanstartercn.tsu.moe/openapi.json",
+          "type": "application/openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://tanstartercn.tsu.moe/docs",
+          "type": "text/html"
+        },
+        {
+          "href": "https://ui.shadcn.com/docs/mcp",
+          "title": "shadcn MCP server",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

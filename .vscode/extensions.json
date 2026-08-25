@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "VoidZero.vite-plus-extension-pack",
+    "unifiedjs.vscode-mdx",
+    "bradlc.vscode-tailwindcss",
+    "usernamehw.errorlens",
+    "eamodio.gitlens",
+    "solomonkinard.git-blame",
+    "GitHub.vscode-pull-request-github",
+    "pflannery.vscode-versionlens",
+    "midudev.better-svg",
+    "kisstkondoros.vscode-gutter-preview",
+    "johnsoncodehk.vscode-tsconfig-helper",
+    "naumovs.color-highlight",
+    "wayou.vscode-todo-highlight",
+    "ibm.output-colorizer",
+    "oderwat.indent-rainbow"
+  ]
+}

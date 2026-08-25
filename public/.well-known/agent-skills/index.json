@@ -1,0 +1,11 @@
+{
+  "skills": [
+    {
+      "description": "Discover, inspect, and install components from this public shadcn registry starter.",
+      "digest": "sha256:0fc463333afaaa541ebe5f7f0216b98aadef1583717fa592e21823a1da99552b",
+      "href": "https://tanstartercn.tsu.moe/.well-known/agent-skills/site-skill.md",
+      "mediaType": "text/markdown",
+      "name": "tanstartercn"
+    }
+  ]
+}

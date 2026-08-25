@@ -1,0 +1,312 @@
+---
+title: Extending
+description: How to add docs pages, registry components, previews, and clear examples.
+---
+
+This project has two extension paths: documentation pages in `content/docs` and installable shadcn registry items in `src/registry`. Most changes should keep those paths connected so readers can see the component, copy the usage, and install the same source from `/r/<name>.json`.
+
+## Add a docs page
+
+Create MDX under `content/docs`. Put general guides in `content/docs/(root)` and component reference pages in `content/docs/components`.
+
+```txt
+content/docs/(root)/my-guide.mdx
+content/docs/components/my-component.mdx
+```
+
+Every page should start with frontmatter:
+
+```mdx
+---
+title: My Guide
+description: A direct sentence that explains what the page helps with.
+---
+```
+
+Pages are discovered automatically from the filesystem. The file name creates the route, and the frontmatter creates the label.
+
+```txt
+content/docs/(root)/extending.mdx -> /docs/extending
+content/docs/components/button.mdx -> /docs/components/button
+```
+
+Use `meta.json` only as an optional override for folder metadata or custom ordering. If a folder has no `meta.json`, the docs tree still includes every MDX file in that folder. Use short headings, small examples, and task-focused sections. A good page answers what to edit, where to put it, how to wire it, and how to verify it.
+
+## Add a registry component
+
+Put installable source under the single `base` registry folder.
+
+```txt
+src/registry/base/my-component.tsx
+```
+
+Use shadcn-compatible imports in registry source. The installed code should import from paths that exist in a user's app, such as `@/lib/utils` and `@/components/ui/button`. If you need an upstream shadcn/ui primitive first, add it with:
+
+```bash
+pnpm exec shadcn add <component>
+```
+
+Add the component to `registry.json`:
+
+```json
+{
+  "name": "my-component",
+  "type": "registry:ui",
+  "title": "My Component",
+  "description": "A concise description of what it provides.",
+  "dependencies": ["@base-ui/react"],
+  "files": [
+    {
+      "path": "src/registry/base/my-component.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/my-component.tsx"
+    }
+  ]
+}
+```
+
+Use `dependencies` for npm packages the installed component needs. Use the file `target` for the path users should receive in their app.
+
+Then wire the preview in `src/shared/lib/registry.ts`:
+
+```tsx
+import { MyComponent } from "@/registry/base/my-component";
+
+const registryComponents: Record<string, RegistryComponent> = {
+  "my-component": MyComponent as RegistryComponent,
+};
+```
+
+Do not edit `public/r/*` by hand. Run `pnpm registry:build` after registry changes.
+
+## Add a block to `/blocks`
+
+Blocks are larger installable examples, such as full pages, dashboard shells, auth screens, or composed sections. They appear in the `/blocks` browser when an item in `registry.json` uses `type: "registry:block"`.
+
+Put block source under a named folder in the `base` registry:
+
+```txt
+src/registry/base/my-block/page.tsx
+src/registry/base/my-block/components/my-block-sidebar.tsx
+```
+
+Use install-friendly imports inside block source, just like registry components. For example, a block should import primitives from `@/components/ui/button`, not from this site's `src/shared` paths. If the block needs upstream shadcn/ui primitives, add them first:
+
+```bash
+pnpm exec shadcn add <component>
+```
+
+Then add the block to `registry.json`:
+
+```json
+{
+  "name": "my-block",
+  "type": "registry:block",
+  "title": "My Block",
+  "description": "A concise description of the composed UI.",
+  "registryDependencies": ["button", "card"],
+  "categories": ["dashboard"],
+  "files": [
+    {
+      "path": "src/registry/base/my-block/page.tsx",
+      "type": "registry:page",
+      "target": "app/dashboard/page.tsx"
+    },
+    {
+      "path": "src/registry/base/my-block/components/my-block-sidebar.tsx",
+      "type": "registry:component",
+      "target": "components/my-block-sidebar.tsx"
+    }
+  ]
+}
+```
+
+Use `registryDependencies` for shadcn registry items the block needs, such as `button`, `card`, `sidebar`, or `breadcrumb`. Use `dependencies` for npm packages.
+
+Wire the live preview in `src/shared/lib/registry.ts`:
+
+```tsx
+import MyBlockPage from "@/registry/base/my-block/page";
+
+const registryComponents: Record<string, RegistryComponent> = {
+  "my-block": MyBlockPage as RegistryComponent,
+};
+```
+
+The `/blocks/<name>/preview` route renders that registered component in an iframe. The `/blocks` page reads its catalog from `registry.json`; `/blocks?category=<category>` opens the searchable category view, so you do not add a separate list item by hand.
+
+## Configure block categories
+
+Block categories come from each block item's `categories` array in `registry.json`.
+
+```json
+"categories": ["sidebar", "dashboard"]
+```
+
+The category catalog is derived in `src/shared/lib/blocks.ts`. That file groups `registry:block` items, creates counts, and adds the special `all` category. If a category needs a custom display name, add it to `categoryTitles`:
+
+```ts
+const categoryTitles: Record<string, string> = {
+  sidebar: "Sidebar",
+};
+```
+
+If there is no custom title, the site title-cases the category name automatically. For example, `emptyState` becomes `Empty State`, and `order-confirmation` becomes `Order Confirmation`.
+
+## Customize block category preview art
+
+The preview art on `/blocks` lives in `src/shared/components/blocks/block-category-grid.tsx`. Each category can map to a small skeleton preview:
+
+```tsx
+const CATEGORY_SKELETONS: Record<string, React.ComponentType> = {
+  sidebar: SidebarSkeleton,
+  login: AuthSkeleton,
+};
+```
+
+Add a new skeleton component in that file when a category needs a distinct visual. Keep these previews decorative and generic: use muted skeleton shapes, small card layouts, and theme tokens rather than real app content or hard-coded brand colors. If a category is not mapped, it uses `DefaultSkeleton`.
+
+## How the block browser is wired
+
+The block browser is split across a few files:
+
+- `src/routes/blocks.tsx` owns the blocks layout route and shared metadata.
+- `src/routes/blocks.index.tsx` renders the category grid when no category is selected and the searchable block list when `category` is present in the URL.
+- `src/routes/blocks.$block.preview.tsx` renders the iframe-only preview target.
+- `src/shared/components/blocks/block-preview-list.tsx` owns category filtering, search, empty state, and bottom navigation.
+- `src/shared/components/blocks/block-showcase.tsx` owns the preview/code tabs, responsive preview controls, reload button, fullscreen link, and copy command.
+- `src/shared/components/blocks/block-code-explorer.tsx` reads the files listed in `registry.json` and shows the code browser.
+
+Most new blocks only require three edits: add files under `src/registry/base`, add the block item to `registry.json`, and register the preview in `src/shared/lib/registry.ts`. Add category titles or category art only when the defaults are not enough.
+
+## Write component docs
+
+Component docs should show the preview first, then installation, usage, and meaningful variants.
+
+````mdx
+---
+title: My Component
+description: A concise description of what the component does.
+---
+
+<ComponentPreview name="my-component-demo" />
+
+## Installation
+
+```bash
+npx shadcn@latest add https://your-site.com/r/my-component.json
+```
+
+## Usage
+
+```tsx
+import { MyComponent } from "@/components/ui/my-component";
+```
+
+```tsx
+<MyComponent />
+```
+
+## Examples
+
+<ComponentPreview name="my-component-with-icon" />
+````
+
+Pages are discovered automatically from the filesystem. Prefer real use cases over prop inventories. Good examples are named after the situation they demonstrate, such as "With icon", "Loading", "Form field", or "Empty state".
+
+## Preview from an examples file
+
+Use an `examples` file when the same demo is reused or when the example is large enough to deserve its own module.
+
+```txt
+examples/my-component-demo.tsx
+```
+
+```tsx
+import { MyComponent } from "@/registry/base/my-component";
+
+export default function MyComponentDemo() {
+  return <MyComponent>Save changes</MyComponent>;
+}
+```
+
+Then reference it from MDX:
+
+```mdx
+<ComponentPreview name="my-component-demo" />
+```
+
+The examples directory is loaded dynamically, so keep file names stable and use kebab-case names that match the preview name.
+
+If the demo is reused by multiple pages, import it in `src/shared/lib/registry.ts` and add it to `demoComponents`.
+
+## Preview inline
+
+Use inline previews when the example only belongs to one docs page.
+
+````mdx
+import { Button } from "@/registry/base/button";
+
+<ComponentPreview name="inline-button-example" title="inline-button-example.tsx">
+  <Button variant="outline">Inline example</Button>
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function InlineButtonExample() {
+  return <Button variant="outline">Inline example</Button>;
+}
+```
+
+</ComponentPreview>
+````
+
+The JSX child renders the live preview. The fenced `tsx` block becomes the source panel users copy from.
+
+## Show source directly
+
+Use `ComponentSource` when the page needs to show the registry file itself.
+
+```mdx
+<ComponentSource
+  src="src/registry/base/button.tsx"
+  title="components/ui/button.tsx"
+/>
+```
+
+Use a `title` that matches the installed target path when possible.
+
+## Smoke-test registry output
+
+For a public registry, smoke-test generated files with the shadcn CLI:
+
+```bash
+npx shadcn@latest add https://your-site.com/r/my-component.json --dry-run
+```
+
+Before deploy, confirm `/r/registry.json`, `/r/my-component.json`, the docs page, and `/llms-full.txt` resolve from the built app.
+
+## Documentation checklist
+
+Before finishing, check that the page has:
+
+- A specific title and description.
+- A working primary preview near the top.
+- Installation and usage snippets that match the registry target.
+- Examples that teach real decisions, not every possible prop.
+- Links or notes for dependencies when the user must install something extra.
+- A verification section only when it helps the reader complete the task.
+
+## Verification
+
+Run the checks that match the change:
+
+```bash
+pnpm registry:build
+pnpm static:build
+pnpm typecheck
+pnpm check
+pnpm build
+```
+
+Use `pnpm registry:build` for registry changes and `pnpm static:build` for docs changes. `pnpm build` runs both and verifies the deployable app.
