@@ -9,7 +9,7 @@ A control that allows the user to toggle between checked and unchecked.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
+npx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
 ```
 
 ```bash

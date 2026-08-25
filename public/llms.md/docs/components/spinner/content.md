@@ -9,7 +9,7 @@ An SVG indicator for loading states.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/spinner.json
+npx shadcn@latest add https://ui.iandefined.com/r/spinner.json
 ```
 
 ```bash

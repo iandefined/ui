@@ -105,7 +105,7 @@ Compact labels for status, category, or metadata.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/badge.json
+npx shadcn@latest add https://ui.iandefined.com/r/badge.json
 ```
 
 ```bash
@@ -258,7 +258,7 @@ A control that allows the user to toggle between checked and unchecked.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
+npx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
 ```
 
 ```bash
@@ -302,6 +302,63 @@ import {
 
 ### Custom Icons
 
+# Dropdown Menu
+
+A keyboard-navigable list of actions in a popup.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+## Preview
+
+## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/dropdown-menu.json
+```
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+## Usage
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+```
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>Profile</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## Examples
+
+### Open on hover
+
+### Checkboxes
+
+### Radio group
+
+### Submenu
+
 # Skeleton
 
 A shimmer placeholder for loading content.
@@ -313,7 +370,7 @@ A shimmer placeholder for loading content.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
+npx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
 ```
 
 ```bash
@@ -356,7 +413,7 @@ An SVG indicator for loading states.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/spinner.json
+npx shadcn@latest add https://ui.iandefined.com/r/spinner.json
 ```
 
 ```bash

@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import { Badge as BaseBadge } from "@/registry/base/badge";
 import { Button as BaseButton } from "@/registry/base/button";
 import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
+import { DropdownMenu as BaseDropdownMenu } from "@/registry/base/dropdown-menu";
 import Sidebar01Page from "@/registry/base/sidebar-01/page";
 import { Skeleton as BaseSkeleton } from "@/registry/base/skeleton";
 import { Spinner as BaseSpinner } from "@/registry/base/spinner";
@@ -75,6 +76,7 @@ const registryComponents: Record<string, RegistryComponent> = {
   badge: BaseBadge as RegistryComponent,
   button: BaseButton as RegistryComponent,
   checkbox: BaseCheckbox as RegistryComponent,
+  "dropdown-menu": BaseDropdownMenu as RegistryComponent,
   skeleton: BaseSkeleton as RegistryComponent,
   spinner: BaseSpinner as RegistryComponent,
   "sidebar-01": Sidebar01Page as RegistryComponent,

@@ -1,0 +1,214 @@
+---
+title: Dropdown Menu
+description: A list of actions in a dropdown, enhanced with keyboard navigation.
+---
+
+## Preview
+
+<ComponentPreview name="dropdown-menu/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/dropdown-menu.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/dropdown-menu.tsx"
+  title="components/ui/dropdown-menu.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Anatomy
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuGroupLabel,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+<DropdownMenu>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuItem />
+    <DropdownMenuSeparator />
+    <DropdownMenuGroup>
+      <DropdownMenuGroupLabel />
+      <DropdownMenuItem />
+    </DropdownMenuGroup>
+    <DropdownMenuCheckboxItem />
+    <DropdownMenuRadioGroup>
+      <DropdownMenuRadioItem />
+    </DropdownMenuRadioGroup>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger />
+      <DropdownMenuSubContent />
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
+
+## Usage
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+```
+
+### Basic
+
+<ComponentPreview name="dropdown-menu/default" />
+
+### With Arrow
+
+Set `showArrow` on the content. Keep `sideOffset` at 8 or more so the arrow has room.
+
+<ComponentPreview name="dropdown-menu/with-arrow" />
+
+### Sides
+
+Set `side` on the content to control where the menu opens. The default is `bottom`.
+
+<ComponentPreview name="dropdown-menu/sides" />
+
+### Open on Hover
+
+Set `openOnHover` on the trigger to open the menu on hover instead of click.
+
+<ComponentPreview name="dropdown-menu/hover" />
+
+### Checkboxes
+
+<ComponentPreview name="dropdown-menu/checkboxes" />
+
+Checkbox items stay open when clicked by default. Set `closeOnClick` to close the menu after a selection.
+
+```tsx
+<DropdownMenuCheckboxItem closeOnClick>
+  Show status bar
+</DropdownMenuCheckboxItem>
+```
+
+### Radio Group
+
+<ComponentPreview name="dropdown-menu/radio-group" />
+
+Radio items also stay open by default. Set `closeOnClick` to close the menu after choosing an item.
+
+```tsx
+<DropdownMenuRadioItem closeOnClick value="light">
+  Light
+</DropdownMenuRadioItem>
+```
+
+Pass `activeIcon` to the radio group to replace the default dot indicator.
+
+<ComponentPreview name="dropdown-menu/custom-radio-icon" />
+
+### With Groups
+
+<ComponentPreview name="dropdown-menu/groups" />
+
+### Nested Menu
+
+<ComponentPreview name="dropdown-menu/submenu" />
+
+### Navigate to Another Page
+
+Compose a menu item with an anchor using Base UI’s `render` prop.
+
+```tsx
+<DropdownMenuItem render={<a href="/projects" />}>
+  Go to projects
+</DropdownMenuItem>
+```
+
+### Open a Dialog
+
+Control the dialog state and open it from the menu item’s `onClick` handler.
+
+```tsx
+<DropdownMenuItem onClick={() => setDialogOpen(true)}>
+  Open dialog
+</DropdownMenuItem>
+```
+
+## Popup Animation
+
+Set `animationPreset` on the content. The default is `scale`.
+
+### Scale
+
+<ComponentPreview name="dropdown-menu/animation-scale" />
+
+### Wipe
+
+<ComponentPreview name="dropdown-menu/animation-wipe" />
+
+### Wipe Scale
+
+<ComponentPreview name="dropdown-menu/animation-wipe-scale" />
+
+### Motion
+
+<ComponentPreview name="dropdown-menu/animation-motion" />
+
+### Motion Blur
+
+<ComponentPreview name="dropdown-menu/animation-motion-blur" />
+
+### Slide Outside
+
+<ComponentPreview name="dropdown-menu/animation-slide-outside" />
+
+### Slide Inside
+
+<ComponentPreview name="dropdown-menu/animation-slide-inside" />

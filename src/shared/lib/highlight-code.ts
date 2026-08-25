@@ -80,8 +80,12 @@ const hashString = (input: string) => {
   return (hash >>> 0).toString(16);
 };
 
-export const highlightCode = async (code: string, language = "tsx") => {
-  const cacheKey = hashString(`${language}:${code}`);
+export const highlightCode = async (
+  code: string,
+  language = "tsx",
+  { lineNumbers = true }: { lineNumbers?: boolean } = {}
+) => {
+  const cacheKey = hashString(`${language}:${lineNumbers}:${code}`);
 
   const cached = highlightCache.get(cacheKey);
   if (cached) {
@@ -100,7 +104,9 @@ export const highlightCode = async (code: string, language = "tsx") => {
     transformers: [
       {
         code(node) {
-          node.properties["data-line-numbers"] = "";
+          if (lineNumbers) {
+            node.properties["data-line-numbers"] = "";
+          }
         },
         line(node) {
           node.properties["data-line"] = "";

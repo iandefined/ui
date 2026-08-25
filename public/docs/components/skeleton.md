@@ -9,7 +9,7 @@ A shimmer placeholder for loading content.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
+npx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
 ```
 
 ```bash

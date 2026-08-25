@@ -1,6 +1,6 @@
-# Checkbox
+# Dropdown Menu
 
-A control that allows the user to toggle between checked and unchecked.
+A keyboard-navigable list of actions in a popup.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
@@ -9,7 +9,7 @@ A control that allows the user to toggle between checked and unchecked.
 ## Installation
 
 ```bash
-npx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
+npx shadcn@latest add https://ui.iandefined.com/r/dropdown-menu.json
 ```
 
 ```bash
@@ -25,30 +25,32 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-## Anatomy
+## Usage
 
 ```tsx
 import {
-  Checkbox,
-  CheckboxIndicator,
-  CheckboxRoot,
-} from "@/components/ui/checkbox";
-
-// Option #1. Basic usage:
-<Checkbox />;
-
-// Option #2. Custom usage:
-<CheckboxRoot>
-  <CheckboxIndicator />
-</CheckboxRoot>;
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 ```
 
-## Usage
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>Profile</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
 
-### Disabled
+## Examples
 
-### Sizes
+### Open on hover
 
-### Radius
+### Checkboxes
 
-### Custom Icons
+### Radio group
+
+### Submenu

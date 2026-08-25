@@ -66,7 +66,12 @@ export const CodeBlockCommand = ({
       const highlights = await Promise.all(
         commandEntries.map(
           async ([key, command]) =>
-            [key, command ? await highlightCode(command, "bash") : ""] as const
+            [
+              key,
+              command
+                ? await highlightCode(command, "bash", { lineNumbers: false })
+                : "",
+            ] as const
         )
       );
 

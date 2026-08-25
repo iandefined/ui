@@ -9,7 +9,7 @@ Compact labels for status, category, or metadata.
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/badge.json
+npx shadcn@latest add https://ui.iandefined.com/r/badge.json
 ```
 
 ```bash
