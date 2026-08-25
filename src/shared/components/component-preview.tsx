@@ -136,11 +136,26 @@ export function ComponentPreview({
   const { inlineSource, previewChildren } = splitPreviewChildren(children);
   const previewCode = code ?? inlineSource?.code;
   const previewLanguage = language ?? inlineSource?.language;
+  const hasLongPreviewCode =
+    previewCode === undefined || previewCode.trim().split(/\r?\n/).length > 3;
   const RegistryComponent = previewChildren ? null : getRegistryComponent(name);
 
   if (!previewChildren && !RegistryComponent) {
     return <MissingComponent name={name} />;
   }
+
+  const sourcePreview = hasLongPreviewCode ? (
+    <ComponentSource
+      name={name}
+      src={src}
+      code={previewCode}
+      language={previewLanguage}
+      title={title}
+      collapsible={false}
+      maxLines={3}
+      connected
+    />
+  ) : undefined;
 
   const content = (
     <ComponentPreviewTabs
@@ -167,18 +182,7 @@ export function ComponentPreview({
           connected
         />
       }
-      sourcePreview={
-        <ComponentSource
-          name={name}
-          src={src}
-          code={previewCode}
-          language={previewLanguage}
-          title={title}
-          collapsible={false}
-          maxLines={3}
-          connected
-        />
-      }
+      sourcePreview={sourcePreview}
       {...props}
     />
   );

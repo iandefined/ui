@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = tv({
   base: [
-    `group inline-flex relative isolate shrink-0 items-center gap-1.5 text-sm justify-center w-fit touch-none whitespace-nowrap cursor-pointer outline-hidden transform-gpu motion-reduce:transform-none overflow-hidden`,
+    `group inline-flex relative isolate shrink-0 items-center gap-1.5 text-sm justify-center w-fit touch-none whitespace-nowrap cursor-pointer outline-hidden transform-gpu motion-reduce:transform-none`,
     `focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-foreground`,
     `disabled:cursor-not-allowed disabled:scale-100 disabled:opacity-60 disabled:bg-secondary`,
     `[transition:scale_0.1s,box-shadow_0.2s,background_0.20s,width_0.2s] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] will-change-transform`,

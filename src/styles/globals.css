@@ -57,6 +57,10 @@
   --color-code-number: var(--code-number);
   --color-selection: var(--selection);
   --color-selection-foreground: var(--selection-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
 }
 
 :root {
@@ -100,6 +104,10 @@
   --code-number: oklch(0.56 0 0);
   --selection: oklch(0.145 0 0);
   --selection-foreground: oklch(1 0 0);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-blue-700);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-700);
 }
 
 .dark {
@@ -142,6 +150,10 @@
   --code-number: oklch(0.72 0 0);
   --selection: oklch(0.922 0 0);
   --selection-foreground: oklch(0.205 0 0);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-blue-400);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-400);
 }
 
 @layer base {
@@ -217,6 +229,145 @@
 @utility extend-touch-target {
   @media (pointer: coarse) {
     @apply relative touch-manipulation after:absolute after:-inset-2;
+  }
+}
+
+@utility hitbox-debug {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    top: var(--hitbox-t, 0px);
+    right: var(--hitbox-r, 0px);
+    bottom: var(--hitbox-b, 0px);
+    left: var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+    @apply border border-dashed border-info bg-info/10;
+  }
+
+  &:hover::before {
+    @apply border border-dashed border-success bg-success/10;
+  }
+}
+
+@utility hitbox {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-* {
+  --hitbox-t: calc(--spacing(--value(integer)) * -1);
+  --hitbox-t: calc(--value([*]) * -1);
+  --hitbox-b: calc(--spacing(--value(integer)) * -1);
+  --hitbox-b: calc(--value([*]) * -1);
+  --hitbox-l: calc(--spacing(--value(integer)) * -1);
+  --hitbox-l: calc(--value([*]) * -1);
+  --hitbox-r: calc(--spacing(--value(integer)) * -1);
+  --hitbox-r: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-l-* {
+  --hitbox-l: calc(--spacing(--value(integer)) * -1);
+  --hitbox-l: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-r-* {
+  --hitbox-r: calc(--spacing(--value(integer)) * -1);
+  --hitbox-r: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-t-* {
+  --hitbox-t: calc(--spacing(--value(integer)) * -1);
+  --hitbox-t: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-b-* {
+  --hitbox-b: calc(--spacing(--value(integer)) * -1);
+  --hitbox-b: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-x-* {
+  --hitbox-l: calc(--spacing(--value(integer)) * -1);
+  --hitbox-l: calc(--value([*]) * -1);
+  --hitbox-r: calc(--spacing(--value(integer)) * -1);
+  --hitbox-r: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
+  }
+}
+
+@utility hitbox-y-* {
+  --hitbox-t: calc(--spacing(--value(integer)) * -1);
+  --hitbox-t: calc(--value([*]) * -1);
+  --hitbox-b: calc(--spacing(--value(integer)) * -1);
+  --hitbox-b: calc(--value([*]) * -1);
+  position: relative;
+
+  &::before {
+    position: absolute;
+    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
+      var(--hitbox-l, 0px);
+    pointer-events: inherit;
+    content: "";
   }
 }
 

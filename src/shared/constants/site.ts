@@ -32,7 +32,7 @@ export const SITE = {
   OG_IMAGE: `${baseUrl}/og`,
   REGISTRY: baseUrl,
   TITLE: {
-    LONG: "iandefined/ui | The Open Source TanStack Start shadcn Registry Template",
+    LONG: "Utilitarian Component Registry for Product-oriented Engineers | iandefined/ui",
     SHORT: "iandefined/ui",
   },
   URL: baseUrl,

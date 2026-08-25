@@ -12,6 +12,7 @@
 - [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
 - [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
 - [Styling](https://ui.iandefined.com/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.
+- [Hitbox](https://ui.iandefined.com/docs/utilities/hitbox.md) - Expand hit areas of interactive elements without affecting layout.
 
 ## Machine-readable Resources
 
