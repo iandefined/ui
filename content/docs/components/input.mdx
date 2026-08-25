@@ -1,0 +1,77 @@
+---
+title: Input
+description: A styled text input built on Base UI.
+---
+
+## Preview
+
+<ComponentPreview name="input/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList><TabsTrigger value="cli">Command</TabsTrigger><TabsTrigger value="manual">Manual</TabsTrigger></TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/input.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>Copy the component into your project.</Step>
+
+<ComponentSource src="src/registry/base/input.tsx" title="components/ui/input.tsx" />
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Input } from "@/components/ui/input";
+
+<Input placeholder="Enter text" />;
+```
+
+## Examples
+
+### Sizes
+
+<ComponentPreview name="input/sizes" />
+
+### Input Types
+
+<ComponentPreview name="input/types" />
+
+### File
+
+<ComponentPreview name="input/file" />
+
+### Disabled
+
+<ComponentPreview name="input/disabled" />
+
+### Controlled
+
+<ComponentPreview name="input/controlled" />

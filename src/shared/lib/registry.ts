@@ -4,9 +4,14 @@ import { Badge as BaseBadge } from "@/registry/base/badge";
 import { Button as BaseButton } from "@/registry/base/button";
 import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
 import { DropdownMenu as BaseDropdownMenu } from "@/registry/base/dropdown-menu";
+import { Input as BaseInput } from "@/registry/base/input";
+import { InputGroup as BaseInputGroup } from "@/registry/base/input-group";
+import { Separator as BaseSeparator } from "@/registry/base/separator";
 import Sidebar01Page from "@/registry/base/sidebar-01/page";
 import { Skeleton as BaseSkeleton } from "@/registry/base/skeleton";
 import { Spinner as BaseSpinner } from "@/registry/base/spinner";
+import { Textarea as BaseTextarea } from "@/registry/base/textarea";
+import { Tooltip as BaseTooltip } from "@/registry/base/tooltip";
 
 import registryManifest from "../../../registry.json";
 
@@ -77,8 +82,13 @@ const registryComponents: Record<string, RegistryComponent> = {
   button: BaseButton as RegistryComponent,
   checkbox: BaseCheckbox as RegistryComponent,
   "dropdown-menu": BaseDropdownMenu as RegistryComponent,
+  input: BaseInput as RegistryComponent,
+  "input-group": BaseInputGroup as RegistryComponent,
+  separator: BaseSeparator as RegistryComponent,
   skeleton: BaseSkeleton as RegistryComponent,
   spinner: BaseSpinner as RegistryComponent,
+  textarea: BaseTextarea as RegistryComponent,
+  tooltip: BaseTooltip as RegistryComponent,
   "sidebar-01": Sidebar01Page as RegistryComponent,
 };
 

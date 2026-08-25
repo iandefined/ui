@@ -1,6 +1,6 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/lib/utils";
 
 export interface InputProps extends Omit<InputPrimitive.Props, "size"> {
   size?: "sm" | "default" | "lg" | number;

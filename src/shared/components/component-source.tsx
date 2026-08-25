@@ -26,6 +26,7 @@ export type ComponentSourceProps = {
 
 type ComponentSourceData = {
   code: string;
+  copyCode: string;
   highlightedCode: string;
   language: string;
 };
@@ -34,12 +35,14 @@ const sourceCache = new Map<string, Promise<ComponentSourceData | null>>();
 
 const ComponentCode = ({
   code,
+  copyCode,
   highlightedCode,
   language,
   title,
   connected,
 }: {
   code: string;
+  copyCode: string;
   highlightedCode: string;
   language: string;
   title: string | undefined;
@@ -63,7 +66,7 @@ const ComponentCode = ({
         {title}
       </figcaption>
     ) : null}
-    <CopyButton event="copy_primitive_code" value={code} />
+    <CopyButton event="copy_primitive_code" value={copyCode} />
     <div dangerouslySetInnerHTML={{ __html: highlightedCode }} />
   </figure>
 );
@@ -101,6 +104,8 @@ const loadComponentSource = async ({
   code = await formatCode(code);
   code = code.replaceAll("/* eslint-disable react/no-children-prop */\n", "");
 
+  const copyCode = code;
+
   if (maxLines) {
     code = code.split("\n").slice(0, maxLines).join("\n");
   }
@@ -108,7 +113,7 @@ const loadComponentSource = async ({
   const lang = language ?? title?.split(".").pop() ?? "tsx";
   const highlightedCode = await highlightCode(code, lang);
 
-  return { code, highlightedCode, language: lang };
+  return { code, copyCode, highlightedCode, language: lang };
 };
 
 const getComponentSource = (props: ComponentSourceProps) => {
@@ -144,6 +149,7 @@ const ComponentSourceContent = ({
       <div className={cn("relative", className)}>
         <ComponentCode
           code={data.code}
+          copyCode={data.copyCode}
           highlightedCode={data.highlightedCode}
           language={data.language}
           title={props.title}
@@ -157,6 +163,7 @@ const ComponentSourceContent = ({
     <CodeCollapsibleWrapper className={className}>
       <ComponentCode
         code={data.code}
+        copyCode={data.copyCode}
         highlightedCode={data.highlightedCode}
         language={data.language}
         title={props.title}

@@ -1,0 +1,110 @@
+---
+title: Input Group
+description: Compose inputs and textareas with icons, text, buttons, and menus.
+---
+
+## Preview
+
+<ComponentPreview name="input-group/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList><TabsTrigger value="cli">Command</TabsTrigger><TabsTrigger value="manual">Manual</TabsTrigger></TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/input-group.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>
+  Install or add Button, Input, and Textarea before using Input Group.
+</Step>
+
+<Step>Copy the component into your project.</Step>
+
+<ComponentSource src="src/registry/base/input-group.tsx" title="components/ui/input-group.tsx" />
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/ui/input-group";
+```
+
+## Anatomy
+
+```tsx
+<InputGroup>
+  <InputGroupAddon>
+    <InputGroupText>https://</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput placeholder="example.com" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton>Search</InputGroupButton>
+  </InputGroupAddon>
+</InputGroup>
+```
+
+Use `InputGroupTextarea` in place of `InputGroupInput` when you need a multiline control. Addons can be placed at `inline-start`, `inline-end`, `block-start`, or `block-end`.
+
+## Examples
+
+### Basic
+
+<ComponentPreview name="input-group/default" />
+
+### Text
+
+<ComponentPreview name="input-group/text" />
+
+### Icons
+
+<ComponentPreview name="input-group/icons" />
+
+### Buttons
+
+<ComponentPreview name="input-group/buttons" />
+
+### Spinner
+
+<ComponentPreview name="input-group/spinner" />
+
+### Tooltip
+
+<ComponentPreview name="input-group/tooltip" />
+
+### Menu
+
+<ComponentPreview name="input-group/menu" />

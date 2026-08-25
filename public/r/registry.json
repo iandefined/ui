@@ -292,6 +292,106 @@
       ]
     },
     {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "A visual or semantic divider with horizontal and vertical orientations.",
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/separator.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/separator.tsx"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "A styled Base UI text input with size variants.",
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/input.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "A styled Base UI multiline text control with size variants.",
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/textarea.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/textarea.tsx"
+        }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input Group",
+      "description": "Composable input and textarea controls with addons and buttons.",
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/input.json",
+        "https://ui.iandefined.com/r/textarea.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/input-group.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/input-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Contextual information shown on hover or focus.",
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/tooltip.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tooltip.tsx"
+        }
+      ]
+    },
+    {
       "name": "sidebar-01",
       "type": "registry:block",
       "title": "Sidebar 01",

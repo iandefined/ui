@@ -25,10 +25,25 @@
 /docs/components/dropdown-menu.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/input.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/input-group.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/separator.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/skeleton.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/components/spinner.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/textarea.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/tooltip.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/extending.md

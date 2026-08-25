@@ -158,7 +158,7 @@ export const CodeBlockCommand = ({
         </div>
       </Tabs>
       <CopyButton
-        className="absolute top-2 right-2 z-10 size-7 opacity-70 hover:opacity-100 focus-visible:opacity-100"
+        className="absolute top-3 right-3 z-10 size-7 opacity-70 hover:opacity-100 focus-visible:opacity-100"
         value={copyValue}
         event={copyEvent}
       />

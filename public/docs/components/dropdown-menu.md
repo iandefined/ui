@@ -1,6 +1,6 @@
 # Dropdown Menu
 
-A keyboard-navigable list of actions in a popup.
+A list of actions in a dropdown, enhanced with keyboard navigation.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
@@ -25,6 +25,46 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
+## Anatomy
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuGroupLabel,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+<DropdownMenu>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuItem />
+    <DropdownMenuSeparator />
+    <DropdownMenuGroup>
+      <DropdownMenuGroupLabel />
+      <DropdownMenuItem />
+    </DropdownMenuGroup>
+    <DropdownMenuCheckboxItem />
+    <DropdownMenuRadioGroup>
+      <DropdownMenuRadioItem />
+    </DropdownMenuRadioGroup>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger />
+      <DropdownMenuSubContent />
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
+
 ## Usage
 
 ```tsx
@@ -36,21 +76,80 @@ import {
 } from "@/components/ui/dropdown-menu";
 ```
 
-```tsx
-<DropdownMenu>
-  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuItem>Profile</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-```
+### Basic
 
-## Examples
+### With Arrow
 
-### Open on hover
+Set `showArrow` on the content. Keep `sideOffset` at 8 or more so the arrow has room.
+
+### Sides
+
+Set `side` on the content to control where the menu opens. The default is `bottom`.
+
+### Open on Hover
+
+Set `openOnHover` on the trigger to open the menu on hover instead of click.
 
 ### Checkboxes
 
-### Radio group
+Checkbox items stay open when clicked by default. Set `closeOnClick` to close the menu after a selection.
 
-### Submenu
+```tsx
+<DropdownMenuCheckboxItem closeOnClick>
+  Show status bar
+</DropdownMenuCheckboxItem>
+```
+
+### Radio Group
+
+Radio items also stay open by default. Set `closeOnClick` to close the menu after choosing an item.
+
+```tsx
+<DropdownMenuRadioItem closeOnClick value="light">
+  Light
+</DropdownMenuRadioItem>
+```
+
+Pass `activeIcon` to the radio group to replace the default dot indicator.
+
+### With Groups
+
+### Nested Menu
+
+### Navigate to Another Page
+
+Compose a menu item with an anchor using Base UI’s `render` prop.
+
+```tsx
+<DropdownMenuItem render={<a href="/projects" />}>
+  Go to projects
+</DropdownMenuItem>
+```
+
+### Open a Dialog
+
+Control the dialog state and open it from the menu item’s `onClick` handler.
+
+```tsx
+<DropdownMenuItem onClick={() => setDialogOpen(true)}>
+  Open dialog
+</DropdownMenuItem>
+```
+
+## Popup Animation
+
+Set `animationPreset` on the content. The default is `scale`.
+
+### Scale
+
+### Wipe
+
+### Wipe Scale
+
+### Motion
+
+### Motion Blur
+
+### Slide Outside
+
+### Slide Inside

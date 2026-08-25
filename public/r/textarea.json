@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "A styled Base UI multiline text control with size variants.",
+  "dependencies": [
+    "@base-ui/react",
+    "tailwind-variants",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/textarea.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { Field as FieldPrimitive } from \"@base-ui/react/field\";\nimport { mergeProps } from \"@base-ui/react/merge-props\";\n\nimport { cn } from \"@/lib/utils\";\n\nexport interface TextareaProps extends React.ComponentProps<\"textarea\"> {\n  size?: \"sm\" | \"default\" | \"lg\" | number;\n}\n\nfunction Textarea({ className, size = \"default\", ...props }: TextareaProps) {\n  return (\n    <FieldPrimitive.Control\n      render={(defaultProps) => (\n        <textarea\n          className={cn(\n            \"field-sizing-content relative min-h-17.5 w-full rounded-lg border border-input/70 bg-background px-3 py-2 text-base/5 shadow-xs outline-none placeholder:text-muted-foreground/80 [transition:box-shadow_150ms_ease-out] focus-visible:border-ring focus-visible:ring-[1px] disabled:opacity-64 focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/16 [disabled,focus-visible,aria-invalid]:shadow-none dark:bg-input/32 dark:aria-invalid:ring-destructive/24 max-sm:min-h-20.5 sm:text-sm\",\n            size === \"sm\" &&\n              \"min-h-16.5 px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(1)-1px)] max-sm:min-h-19.5\",\n            size === \"lg\" &&\n              \"min-h-18.5 py-[calc(--spacing(2)-1px)] max-sm:min-h-21.5\",\n            className\n          )}\n          data-slot=\"textarea\"\n          {...mergeProps(defaultProps, props)}\n        />\n      )}\n    />\n  );\n}\n\nexport { Textarea };\n",
+      "type": "registry:ui",
+      "target": "components/ui/textarea.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}
