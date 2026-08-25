@@ -13,10 +13,16 @@
 /docs/components.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/badge.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/button.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/components/checkbox.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/skeleton.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/extending.md

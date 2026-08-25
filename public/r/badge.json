@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "title": "Badge",
+  "description": "A compact label with solid and dot variants across the Tailwind color palette.",
+  "dependencies": [
+    "class-variance-authority",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/badge.tsx",
+      "content": "import { cva, type VariantProps } from \"class-variance-authority\";\nimport type { HTMLAttributes } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\nconst badgeColors = {\n  gray: \"var(--muted-foreground)\",\n  red: \"var(--color-red-500)\",\n  orange: \"var(--color-orange-500)\",\n  amber: \"var(--color-amber-500)\",\n  yellow: \"var(--color-yellow-500)\",\n  lime: \"var(--color-lime-500)\",\n  green: \"var(--color-green-500)\",\n  emerald: \"var(--color-emerald-500)\",\n  teal: \"var(--color-teal-500)\",\n  cyan: \"var(--color-cyan-500)\",\n  blue: \"var(--color-blue-500)\",\n  indigo: \"var(--color-indigo-500)\",\n  violet: \"var(--color-violet-500)\",\n  purple: \"var(--color-purple-500)\",\n  fuchsia: \"var(--color-fuchsia-500)\",\n  pink: \"var(--color-pink-500)\",\n  rose: \"var(--color-rose-500)\",\n} as const;\n\nconst badgeVariants = cva(\n  \"inline-flex items-center gap-1.5 rounded-md font-medium whitespace-nowrap\",\n  {\n    variants: {\n      variant: {\n        solid: \"text-foreground\",\n        dot: \"border border-border bg-background text-foreground\",\n      },\n      size: {\n        default: \"h-6 px-2.5 text-xs\",\n        compact: \"h-5 gap-1 px-2 text-[11px]\",\n      },\n    },\n    defaultVariants: {\n      variant: \"solid\",\n      size: \"default\",\n    },\n  }\n);\n\ntype BadgeColor = keyof typeof badgeColors;\n\ninterface BadgeProps\n  extends\n    Omit<HTMLAttributes<HTMLSpanElement>, \"color\">,\n    VariantProps<typeof badgeVariants> {\n  color?: BadgeColor;\n}\n\nfunction Badge({\n  className,\n  variant = \"solid\",\n  size = \"default\",\n  color = \"gray\",\n  style,\n  children,\n  ...props\n}: BadgeProps) {\n  const isSolid = variant === \"solid\";\n  const badgeStyle = isSolid\n    ? color === \"gray\"\n      ? { backgroundColor: \"var(--muted)\" }\n      : {\n          backgroundColor: `color-mix(in srgb, ${badgeColors[color]} 15%, var(--background))`,\n        }\n    : undefined;\n\n  return (\n    <span\n      className={cn(badgeVariants({ variant, size }), className)}\n      data-slot=\"badge\"\n      style={{ ...badgeStyle, ...style }}\n      {...props}\n    >\n      {!isSolid && (\n        <span\n          aria-hidden=\"true\"\n          className={cn(\n            \"shrink-0 rounded-full\",\n            size === \"compact\" ? \"size-1\" : \"size-1.5\"\n          )}\n          style={{ backgroundColor: badgeColors[color] }}\n        />\n      )}\n      {children}\n    </span>\n  );\n}\n\nexport { Badge, badgeColors, badgeVariants };\nexport type { BadgeColor, BadgeProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/badge.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

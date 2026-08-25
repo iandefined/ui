@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "A shimmer placeholder with configurable corners and animation.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/skeleton.tsx",
+      "content": "import type { HTMLAttributes } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\ntype SkeletonProps = {\n  rounded?: \"none\" | \"sm\" | \"md\" | \"lg\" | \"full\";\n  animate?: boolean;\n} & HTMLAttributes<HTMLDivElement>;\n\nfunction Skeleton({\n  className,\n  rounded = \"lg\",\n  animate = true,\n  ...props\n}: SkeletonProps) {\n  const roundedClass = {\n    none: \"rounded-none\",\n    sm: \"rounded-sm\",\n    md: \"rounded-md\",\n    lg: \"rounded-lg\",\n    full: \"rounded-full\",\n  }[rounded];\n\n  return (\n    <div\n      aria-label=\"Loading\"\n      className={cn(\n        \"relative overflow-hidden bg-muted\",\n        roundedClass,\n        className\n      )}\n      data-slot=\"skeleton\"\n      role=\"status\"\n      {...props}\n    >\n      {animate && (\n        <span\n          aria-hidden=\"true\"\n          className=\"pointer-events-none absolute inset-0 -translate-x-full\"\n          style={{\n            animation: \"shimmer 1.6s ease-in-out infinite\",\n            background:\n              \"linear-gradient(90deg, transparent 0%, color-mix(in oklch, var(--foreground) 6%, transparent) 50%, transparent 100%)\",\n          }}\n        />\n      )}\n      <style>{`@keyframes shimmer { to { transform: translateX(200%); } }`}</style>\n    </div>\n  );\n}\n\nexport { Skeleton };\nexport type { SkeletonProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/skeleton.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}
