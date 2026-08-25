@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
-Sitemap: https://tanstartercn.tsu.moe/sitemap.xml
+Sitemap: https://ui.iandefined.com/sitemap.xml

@@ -1,22 +1,22 @@
 {
   "linkset": [
     {
-      "anchor": "https://tanstartercn.tsu.moe",
+      "anchor": "https://ui.iandefined.com",
       "describedby": [
         {
-          "href": "https://tanstartercn.tsu.moe/.well-known/agent-skills/index.json",
+          "href": "https://ui.iandefined.com/.well-known/agent-skills/index.json",
           "type": "application/json"
         }
       ],
       "service-desc": [
         {
-          "href": "https://tanstartercn.tsu.moe/openapi.json",
+          "href": "https://ui.iandefined.com/openapi.json",
           "type": "application/openapi+json"
         }
       ],
       "service-doc": [
         {
-          "href": "https://tanstartercn.tsu.moe/docs",
+          "href": "https://ui.iandefined.com/docs",
           "type": "text/html"
         },
         {

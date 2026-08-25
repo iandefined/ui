@@ -1,10 +1,10 @@
 # LLMS.txt
 
-Let AI coding assistants use tanstartercn documentation and registry references.
+Let AI coding assistants use iandefined/ui documentation and registry references.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-tanstartercn provides [llms.txt](https://llmstxt.org/) endpoints so AI coding assistants can fetch documentation, registry links, and page-specific markdown directly by URL.
+iandefined/ui provides [llms.txt](https://llmstxt.org/) endpoints so AI coding assistants can fetch documentation, registry links, and page-specific markdown directly by URL.
 
 ## Available files
 
@@ -30,13 +30,13 @@ tanstartercn provides [llms.txt](https://llmstxt.org/) endpoints so AI coding as
 **Claude Code:** Reference the docs in your prompt or project instructions:
 
 ```bash
-Use tanstartercn documentation from https://tanstartercn.tsu.moe/llms.txt
+Use iandefined/ui documentation from https://ui.iandefined.com/llms.txt
 ```
 
 **Cursor:** Use the `@Docs` feature:
 
 ```bash
-@Docs https://tanstartercn.tsu.moe/llms-full.txt
+@Docs https://ui.iandefined.com/llms-full.txt
 ```
 
 [Learn more](https://docs.cursor.com/context/@-symbols/@-docs)
@@ -44,7 +44,7 @@ Use tanstartercn documentation from https://tanstartercn.tsu.moe/llms.txt
 **Windsurf:** Add the docs URL to your rules:
 
 ```bash
-#docs https://tanstartercn.tsu.moe/llms-full.txt
+#docs https://ui.iandefined.com/llms-full.txt
 ```
 
 [Learn more](https://docs.codeium.com/windsurf/memories#memories-and-rules)
@@ -52,19 +52,19 @@ Use tanstartercn documentation from https://tanstartercn.tsu.moe/llms.txt
 **Other AI tools:** Most assistants accept documentation URLs:
 
 ```bash
-https://tanstartercn.tsu.moe/llms.txt
+https://ui.iandefined.com/llms.txt
 ```
 
 For complete documentation:
 
 ```bash
-https://tanstartercn.tsu.moe/llms-full.txt
+https://ui.iandefined.com/llms-full.txt
 ```
 
 For a specific docs page:
 
 ```bash
-https://tanstartercn.tsu.moe/llms.md/docs/components/button/content.md
+https://ui.iandefined.com/llms.md/docs/components/button/content.md
 ```
 
 ## Contributing

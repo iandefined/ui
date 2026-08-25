@@ -1,23 +1,23 @@
-# tanstartercn
+# iandefined/ui
 
-> A highly customizable shadcn registry template repository built with TanStack Start. Fork, customize, and deploy free to Cloudflare Workers. Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
+> A utilitarian component registry for product-oriented engineers.  Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
 
 ## Documentation
 
-- [Introduction](https://tanstartercn.tsu.moe/docs.md) - Build, document, and deploy this custom shadcn registry.
-- [Components](https://tanstartercn.tsu.moe/docs/components.md) - Browse the components available in this registry.
-- [Button](https://tanstartercn.tsu.moe/docs/components/button.md) - Displays a button or a component that looks like a button.
-- [Your Component](https://tanstartercn.tsu.moe/docs/components/your-component.md) - Basic usage of the YourComponent template.
-- [Extending](https://tanstartercn.tsu.moe/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
-- [Installation](https://tanstartercn.tsu.moe/docs/installation.md) - Install registry components in your project.
-- [LLMS.txt](https://tanstartercn.tsu.moe/docs/llms.md) - Let AI coding assistants use tanstartercn documentation and registry references.
-- [Styling](https://tanstartercn.tsu.moe/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.
+- [Introduction](https://ui.iandefined.com/docs.md) - Build, document, and deploy this custom shadcn registry.
+- [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
+- [Button](https://ui.iandefined.com/docs/components/button.md) - Displays a button or a component that looks like a button.
+- [Your Component](https://ui.iandefined.com/docs/components/your-component.md) - Basic usage of the YourComponent template.
+- [Extending](https://ui.iandefined.com/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
+- [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
+- [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
+- [Styling](https://ui.iandefined.com/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.
 
 ## Machine-readable Resources
 
-- [Full documentation](https://tanstartercn.tsu.moe/llms-full.txt)
-- [Homepage markdown](https://tanstartercn.tsu.moe/llms.md/content.md)
-- [OpenAPI description](https://tanstartercn.tsu.moe/openapi.json)
-- [API catalog](https://tanstartercn.tsu.moe/.well-known/api-catalog)
-- [Agent skill](https://tanstartercn.tsu.moe/.well-known/agent-skills/site-skill.md)
+- [Full documentation](https://ui.iandefined.com/llms-full.txt)
+- [Homepage markdown](https://ui.iandefined.com/llms.md/content.md)
+- [OpenAPI description](https://ui.iandefined.com/openapi.json)
+- [API catalog](https://ui.iandefined.com/.well-known/api-catalog)
+- [Agent skill](https://ui.iandefined.com/.well-known/agent-skills/site-skill.md)
 - [shadcn MCP server documentation](https://ui.shadcn.com/docs/mcp)

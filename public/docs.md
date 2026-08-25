@@ -42,7 +42,7 @@ The app is a static-hostable TanStack Start SPA deployed to Cloudflare Workers w
 Once deployed, users can install registry items with the shadcn CLI:
 
 ```bash
-npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 ## Important Paths

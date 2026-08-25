@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tanstartercn Changelog</title>
-    <link>https://tanstartercn.tsu.moe</link>
-    <description>A highly customizable shadcn registry template repository built with TanStack Start. Fork, customize, and deploy free to Cloudflare Workers.</description>
+    <title>iandefined/ui Changelog</title>
+    <link>https://ui.iandefined.com</link>
+    <description>A utilitarian component registry for product-oriented engineers. </description>
     <language>en-us</language>
-    <atom:link href="https://tanstartercn.tsu.moe/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://ui.iandefined.com/rss.xml" rel="self" type="application/rss+xml"/>
 
   </channel>
 </rss>

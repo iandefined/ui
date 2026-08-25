@@ -7,7 +7,7 @@ Displays a button or a component that looks like a button.
 ## Installation
 
 ```bash
-npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 ```bash

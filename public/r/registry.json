@@ -1,6 +1,7 @@
 {
-  "name": "tanstartercn",
-  "homepage": "https://tanstartercn.tsu.moe",
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "iandefined/ui",
+  "homepage": "https://ui.iandefined.com",
   "items": [
     {
       "name": "your-component",

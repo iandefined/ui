@@ -1,40 +1,17 @@
 <p align="center">
-  <img src="https://tanstartercn.tsu.moe/marketing-og-image.png" alt="tanstartercn" />
+  <img src="https://ui.iandefined.com/marketing-og-image.png" alt="tanstartercn" />
 </p>
 
 <p align="center">
-  A highly customizable shadcn registry template repository built with TanStack Start.  Fork, customize, and deploy free to Cloudflare Workers.
+  A utilitarian component registry for product-oriented engineers. 
   <br />
   <br />
-  <a href="https://tanstartercn.tsu.moe">Documentation</a>
+  <a href="https://ui.iandefined.com">Documentation</a>
   ·
-  <a href="https://tanstartercn.tsu.moe/r/registry.json">Registry</a>
+  <a href="https://ui.iandefined.com/r/registry.json">Registry</a>
   ·
-  <a href="https://tanstartercn.tsu.moe/llms.txt">LLMS.txt</a>
-  <br />
-  <br />
-  <a href="https://deploy.workers.cloudflare.com/?url=https://github.com/tsu-moe/tanstartercn.git">
-    <img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare" />
-  </a>
+  <a href="https://ui.iandefined.com/llms.txt">LLMS.txt</a>
 </p>
-
-## Features
-
-- **Registry compatible** - Components install with `npx shadcn@latest add <url>`.
-- **Fumadocs documentation** - MDX docs in `content/docs`.
-- **Component previews** - Live examples from `examples` or inline MDX.
-- **Static AI docs** - Generated `llms.txt`, `llms-full.txt`, markdown mirrors, OpenAPI, and agent discovery files.
-- **Cloudflare Workers deploy** - Static-hostable SPA with Worker Static Assets.
-
-## Built In
-
-- `TanStack Start` with file routes and static prerendering
-- `React 19` and `TypeScript`
-- `Tailwind CSS 4`
-- `Fumadocs` for documentation
-- `shiki` + `rehype-pretty-code` for code blocks
-- `sonner` for toasts
-- `@base-ui/react` for accessible primitives
 
 ## Development Setup
 
@@ -69,10 +46,21 @@ pnpm typecheck
 pnpm check
 ```
 
-Build and deploy:
+Create a production build:
 
 ```bash
 pnpm build
+```
+
+Preview the production build locally:
+
+```bash
+pnpm preview
+```
+
+Deploy to Cloudflare Workers (this also runs the production build):
+
+```bash
 pnpm deploy
 ```
 
@@ -120,7 +108,7 @@ Regenerate generated files with the matching script instead.
 Users install published registry components with the shadcn CLI:
 
 ```bash
-npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 ## Project Structure
@@ -134,6 +122,7 @@ npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
 │   ├── shared/             # Shared components, hooks, lib, constants, SEO
 │   └── styles/             # Global CSS and themes
 ├── examples/               # Reusable component previews
+├── scripts/                # Build-time static asset generation
 ├── registry.json           # Component registry manifest
 ├── content/docs/           # Documentation (MDX)
 └── public/r/               # Built registry files (auto-generated)
@@ -141,19 +130,22 @@ npx shadcn@latest add https://tanstartercn.tsu.moe/r/button.json
 
 ## Scripts
 
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm registry:build` - Rebuild the component registry
-- `pnpm static:build` - Generate static endpoint files
+| Command               | Description                                                   |
+| --------------------- | ------------------------------------------------------------- |
+| `pnpm dev`            | Start the development server on port 3000.                    |
+| `pnpm typecheck`      | Type-check the project without writing output.                |
+| `pnpm check`          | Check formatting and linting.                                 |
+| `pnpm fix`            | Apply available formatting and lint fixes.                    |
+| `pnpm registry:build` | Rebuild `public/r` from `registry.json`.                      |
+| `pnpm static:build`   | Generate static docs, discovery, sitemap, and OpenAPI assets. |
+| `pnpm build`          | Build the registry, static assets, and production app.        |
+| `pnpm preview`        | Serve the production build locally.                           |
+| `pnpm cf-typegen`     | Regenerate Cloudflare Worker bindings.                        |
+| `pnpm deploy`         | Build and deploy to Cloudflare Workers.                       |
 
 ## Acknowledgements
 
-- This project was originally forked from [shadcn-labs/startercn](https://github.com/shadcn-labs/startercn) and refactored into TanStack Start together with my own preferences.
-  - I urge you to support the original project and use it if you prefer a Vercel or Next.js approach to deploying this repository.
-
-- I'd also like to spend some time appreciating the amazing work being done at [fumadocs](https://github.com/fuma-nama/fumadocs); the cleanest React documentation framework in the ecosystem today and their constant innovation in the documentation space.
-
-- I would also like to extend my thanks to [shadcn-ui-blocks](https://github.com/akash3444/shadcn-ui-blocks) for being the inspiration to the `/blocks` page of the registry.
+- This project was originally forked from [tanstartercn](https://tanstartercn.tsu.moe/).
 
 ## License
 

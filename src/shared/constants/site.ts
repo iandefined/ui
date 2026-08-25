@@ -1,4 +1,4 @@
-export const FALLBACK_SITE_ORIGIN = "https://tanstartercn.tsu.moe" as const;
+export const FALLBACK_SITE_ORIGIN = "https://ui.iandefined.com" as const;
 
 const getBaseUrl = () => {
   if (process.env.NODE_ENV !== "production") {
@@ -16,7 +16,7 @@ export const SITE = {
     TWITTER: "@tsu-moe",
   },
   DESCRIPTION: {
-    LONG: "A highly customizable shadcn registry template repository built with TanStack Start. Fork, customize, and deploy free to Cloudflare Workers.",
+    LONG: "A utilitarian component registry for product-oriented engineers. ",
     SHORT: "Build your own shadcn registry",
   },
   KEYWORDS: [
@@ -28,12 +28,12 @@ export const SITE = {
     "tailwindcss",
     "npx shadcn add",
   ] as const,
-  NAME: "tanstartercn",
+  NAME: "iandefined/ui",
   OG_IMAGE: `${baseUrl}/og`,
   REGISTRY: baseUrl,
   TITLE: {
-    LONG: "tanstartercn | The Open Source TanStack Start shadcn Registry Template",
-    SHORT: "tanstartercn",
+    LONG: "iandefined/ui | The Open Source TanStack Start shadcn Registry Template",
+    SHORT: "iandefined/ui",
   },
   URL: baseUrl,
 };
