@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "number-field",
+  "title": "Number Field",
+  "description": "A numeric input with increment, decrement, and scrub controls.",
+  "dependencies": [
+    "@base-ui/react",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/number-field.tsx",
+      "content": "\"use client\";\n\nimport { NumberField as NumberFieldPrimitive } from \"@base-ui/react/number-field\";\n\nimport { cn } from \"@/lib/utils\";\n\nconst NumberField = ({\n  className,\n  ...props\n}: React.ComponentProps<typeof NumberFieldPrimitive.Root>) => (\n  <NumberFieldPrimitive.Root\n    data-slot=\"number-field\"\n    className={cn(\n      \"flex w-full max-w-[200px] flex-col items-start gap-2\",\n      className\n    )}\n    {...props}\n  />\n);\n\nconst NumberFieldGroup = ({\n  className,\n  ...props\n}: React.ComponentProps<typeof NumberFieldPrimitive.Group>) => (\n  <NumberFieldPrimitive.Group\n    data-slot=\"number-field-group\"\n    className={cn(\n      \"relative flex w-full rounded-lg border border-input bg-background text-sm shadow-xs transition-colors focus-within:border-ring focus-within:ring-[1px] focus-within:ring-ring data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32\",\n      className\n    )}\n    {...props}\n  />\n);\n\nconst NumberFieldInput = ({\n  className,\n  ...props\n}: React.ComponentProps<typeof NumberFieldPrimitive.Input>) => (\n  <NumberFieldPrimitive.Input\n    data-slot=\"number-field-input\"\n    className={cn(\n      \"flex-1 w-full min-w-0 bg-transparent px-3 py-1.5 text-center outline-none tabular-nums\",\n      className\n    )}\n    {...props}\n  />\n);\n\nconst NumberFieldDecrement = ({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof NumberFieldPrimitive.Decrement>) => (\n  <NumberFieldPrimitive.Decrement\n    data-slot=\"number-field-decrement\"\n    className={cn(\n      \"flex shrink-0 cursor-pointer items-center justify-center rounded-s-lg px-3 transition-colors hover:bg-accent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-64\",\n      className\n    )}\n    {...props}\n  >\n    {children ?? (\n      <svg\n        aria-hidden=\"true\"\n        fill=\"none\"\n        height=\"10\"\n        stroke=\"currentColor\"\n        strokeWidth=\"1.6\"\n        viewBox=\"0 0 10 10\"\n        width=\"10\"\n      >\n        <path d=\"M0 5H10\" />\n      </svg>\n    )}\n  </NumberFieldPrimitive.Decrement>\n);\n\nconst NumberFieldIncrement = ({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof NumberFieldPrimitive.Increment>) => (\n  <NumberFieldPrimitive.Increment\n    data-slot=\"number-field-increment\"\n    className={cn(\n      \"flex shrink-0 cursor-pointer items-center justify-center rounded-e-lg px-3 transition-colors hover:bg-accent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-64\",\n      className\n    )}\n    {...props}\n  >\n    {children ?? (\n      <svg\n        aria-hidden=\"true\"\n        fill=\"none\"\n        height=\"10\"\n        stroke=\"currentColor\"\n        strokeWidth=\"1.6\"\n        viewBox=\"0 0 10 10\"\n        width=\"10\"\n      >\n        <path d=\"M0 5H5M10 5H5M5 5V0M5 5V10\" />\n      </svg>\n    )}\n  </NumberFieldPrimitive.Increment>\n);\n\nconst NumberFieldScrubArea = ({\n  className,\n  ...props\n}: React.ComponentProps<typeof NumberFieldPrimitive.ScrubArea>) => (\n  <NumberFieldPrimitive.ScrubArea\n    data-slot=\"number-field-scrub-area\"\n    className={cn(\"flex cursor-ew-resize\", className)}\n    {...props}\n  />\n);\n\nexport {\n  NumberField,\n  NumberFieldDecrement,\n  NumberFieldGroup,\n  NumberFieldIncrement,\n  NumberFieldInput,\n  NumberFieldScrubArea,\n};\n",
+      "type": "registry:ui",
+      "target": "components/ui/number-field.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}
