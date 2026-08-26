@@ -3,8 +3,6 @@ title: Number Field
 description: A numeric input with increment, decrement, and scrub controls.
 ---
 
-## Preview
-
 <ComponentPreview name="number-field/default" />
 
 ## Installation
@@ -52,19 +50,6 @@ export function cn(...inputs: ClassValue[]) {
   </TabsContent>
 </CodeTabs>
 
-## Anatomy
-
-```tsx
-<NumberField>
-  <NumberFieldScrubArea />
-  <NumberFieldGroup>
-    <NumberFieldDecrement />
-    <NumberFieldInput />
-    <NumberFieldIncrement />
-  </NumberFieldGroup>
-</NumberField>
-```
-
 ## Usage
 
 ```tsx
@@ -87,31 +72,46 @@ import {
 </NumberField>
 ```
 
-## With Scrub
+## Anatomy
+
+```tsx
+<NumberField>
+  <NumberFieldScrubArea />
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberField>
+```
+
+## Examples
+
+### With Scrub
 
 Wrap a label in `NumberFieldScrubArea` to let people drag the label and adjust the value. Set `allowWheelScrub` to also allow mouse-wheel scrubbing while the input is focused.
 
 <ComponentPreview name="number-field/with-scrub" />
 
-## Disabled
+### Disabled
 
 <ComponentPreview name="number-field/disabled" />
 
-## Range
+### Range
 
 Use `min` and `max` to constrain the allowed values.
 
 <ComponentPreview name="number-field/range" />
 
-## Step
+### Step
 
 <ComponentPreview name="number-field/step" />
 
-## Controlled
+### Controlled
 
 <ComponentPreview name="number-field/controlled" />
 
-## Formatting
+### Formatting
 
 Pass `Intl.NumberFormat` options through `format` to display values such as currency.
 

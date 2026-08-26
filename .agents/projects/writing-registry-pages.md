@@ -32,10 +32,10 @@ Live demos import from `@/registry/base/...`. Installation and usage snippets sh
 Use this order unless a component genuinely does not need a section:
 
 1. Frontmatter
-2. Preview
+2. Preview (inline, without a heading)
 3. Installation
-4. Anatomy for compound components
-5. Usage
+4. Usage
+5. Anatomy for compound components
 6. Examples
 7. A focused advanced section, such as popup animation, when it materially helps
 
@@ -46,8 +46,6 @@ A typical page starts like this:
 title: Component Name
 description: A concise sentence describing what the component does.
 ---
-
-## Preview
 
 <ComponentPreview name="component/default" />
 
@@ -109,18 +107,9 @@ export function cn(...inputs: ClassValue[]) {
 
 ## Anatomy and Usage
 
-Add an Anatomy section for compound components so readers can see the intended hierarchy before the usage example. Keep it structural and omit incidental props:
+Add an Anatomy section for compound components so readers can see the intended hierarchy after the usage example. Keep it structural and omit incidental props:
 
 ````mdx
-## Anatomy
-
-```tsx
-<Component>
-  <ComponentTrigger />
-  <ComponentPopup />
-</Component>
-```
-
 ## Usage
 
 ```tsx
@@ -129,6 +118,15 @@ import { Component } from "@/components/ui/component";
 
 ```tsx
 <Component />
+```
+
+## Anatomy
+
+```tsx
+<Component>
+  <ComponentTrigger />
+  <ComponentPopup />
+</Component>
 ```
 ````
 

@@ -3,8 +3,6 @@ title: Tooltip
 description: Displays contextual information when a user hovers or focuses an element.
 ---
 
-## Preview
-
 <ComponentPreview name="tooltip/default" />
 
 ## Installation
@@ -49,24 +47,6 @@ export function cn(...inputs: ClassValue[]) {
   </TabsContent>
 </CodeTabs>
 
-## Anatomy
-
-```tsx
-import {
-  Tooltip,
-  TooltipPopup,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger />
-    <TooltipPopup />
-  </Tooltip>
-</TooltipProvider>;
-```
-
 ## Usage
 
 ```tsx
@@ -86,6 +66,26 @@ import {
 ```
 
 Wrap related tooltips in `TooltipProvider` so adjacent tooltips open instantly after the first one.
+
+## Anatomy
+
+```tsx
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger />
+    <TooltipPopup />
+  </Tooltip>
+</TooltipProvider>;
+```
+
+## Examples
 
 ### Basic
 

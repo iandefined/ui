@@ -3,8 +3,6 @@ title: Scroll Area
 description: A scrollable region with custom scrollbars and optional background fades.
 ---
 
-## Preview
-
 <ComponentPreview previewClassName="h-90" name="scroll-area/default" />
 
 ## Installation
@@ -52,14 +50,6 @@ export function cn(...inputs: ClassValue[]) {
   </TabsContent>
 </CodeTabs>
 
-## Anatomy
-
-```tsx
-<ScrollArea>
-  <ScrollAreaContent />
-</ScrollArea>
-```
-
 ## Usage
 
 ```tsx
@@ -74,7 +64,17 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 
 `scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
 
-## Horizontal Layout
+## Anatomy
+
+```tsx
+<ScrollArea>
+  <ScrollAreaContent />
+</ScrollArea>
+```
+
+## Examples
+
+### Horizontal Layout
 
 Use `orientation="horizontal"` when the content overflows inline.
 
@@ -83,32 +83,30 @@ Use `orientation="horizontal"` when the content overflows inline.
   name="scroll-area/horizontal-layout"
 />
 
-## Both Scroll
+### Both Scroll
 
 Use `orientation="both"` to render horizontal and vertical scrollbars for content that overflows in both directions.
 
 <ComponentPreview previewClassName="h-84" name="scroll-area/both-scroll" />
 
-## Scroll Shadows
+### Vertical Scroll Shadows
 
 Set `scrollShadow` independently of the scrollbar orientation to fade only the overflowing edges.
 
-### Vertical
-
 <ComponentPreview previewClassName="h-84" name="scroll-area/vertical-shadow" />
 
-### Horizontal
+### Horizontal Scroll Shadows
 
 <ComponentPreview
   previewClassName="h-68"
   name="scroll-area/horizontal-shadow"
 />
 
-### Both
+### Both Scroll Shadows
 
 <ComponentPreview previewClassName="h-84" name="scroll-area/both-shadows" />
 
-## Hide Scrollbar
+### Hide Scrollbar
 
 Set `hideScrollbar` to keep the scroll area and edge fades while removing the custom scrollbar.
 
