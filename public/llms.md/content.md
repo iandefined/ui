@@ -1,6 +1,6 @@
 # iandefined/ui
 
-A utilitarian component registry for product-oriented engineers. 
+Thoughtful components for product engineers.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 

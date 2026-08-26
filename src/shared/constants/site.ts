@@ -12,12 +12,12 @@ const baseUrl = getBaseUrl();
 
 export const SITE = {
   AUTHOR: {
-    NAME: "tsu!moe",
-    TWITTER: "@tsu-moe",
+    NAME: "Ian de Jesus",
+    TWITTER: "@iandefined",
   },
   DESCRIPTION: {
-    LONG: "A utilitarian component registry for product-oriented engineers. ",
-    SHORT: "Build your own shadcn registry",
+    LONG: "Thoughtful components for product engineers.",
+    SHORT: "Components for product engineers",
   },
   KEYWORDS: [
     "shadcn",
@@ -32,7 +32,7 @@ export const SITE = {
   OG_IMAGE: `${baseUrl}/og.png`,
   REGISTRY: baseUrl,
   TITLE: {
-    LONG: "Utilitarian Component Registry for Product-oriented Engineers | iandefined/ui",
+    LONG: "Thoughtful Component Registry for Product Engineers | iandefined/ui",
     SHORT: "iandefined/ui",
   },
   URL: baseUrl,

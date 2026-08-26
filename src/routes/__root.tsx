@@ -11,6 +11,8 @@ import {
   ScriptOnce,
   Scripts,
 } from "@tanstack/react-router";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 import { DefaultErrorPage } from "@/shared/components/pages/default-error-page";
 import { ProgressProvider } from "@/shared/components/progress-provider";
@@ -26,9 +28,9 @@ import "@/styles/globals.css";
 
 const themeScript = `
   try {
-    if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '${META_THEME_COLORS.dark}')
-    }
+    const isDark = localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.querySelector('link#theme-favicon')?.setAttribute('href', isDark ? '/favicon-dark.svg' : '/favicon.svg');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '${META_THEME_COLORS.dark}' : '${META_THEME_COLORS.light}');
   } catch (_) {}
 `;
 
@@ -61,6 +63,23 @@ function RootComponent() {
   return <Outlet />;
 }
 
+function ThemeFavicon() {
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    if (!resolvedTheme) return;
+
+    document
+      .querySelector<HTMLLinkElement>("link#theme-favicon")
+      ?.setAttribute(
+        "href",
+        resolvedTheme === "dark" ? "/favicon-dark.svg" : "/favicon.svg"
+      );
+  }, [resolvedTheme]);
+
+  return null;
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -76,6 +95,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         )}
       >
         <ThemeProvider>
+          <ThemeFavicon />
           <ProgressProvider>
             {children}
             <Toaster position="top-center" />

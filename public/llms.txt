@@ -1,6 +1,6 @@
 # iandefined/ui
 
-> A utilitarian component registry for product-oriented engineers.  Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
+> Thoughtful components for product engineers. Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
 
 ## Documentation
 

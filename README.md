@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A utilitarian component registry for product-oriented engineers. 
+  Thoughtful components for product engineers.
   <br />
   <br />
   <a href="https://ui.iandefined.com">Documentation</a>
