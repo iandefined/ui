@@ -1,5 +1,4 @@
-import { fromJsx } from "takumi-js/helpers/jsx";
-import { init as initTakumiWasm, Renderer } from "takumi-js/wasm";
+import { render } from "takumi-js";
 
 import { LogoMark } from "@/shared/components/logo";
 import { SITE } from "@/shared/constants/site";
@@ -35,24 +34,10 @@ const lineClampStyle = ({
 
 const getTitleFontSize = (title: string) => (title.length > 20 ? 64 : 80);
 
-let renderer: Renderer | undefined;
-let rendererPromise: Promise<Renderer> | undefined;
-
 export const ogImageSize = {
   height: OG_IMAGE_HEIGHT,
   width: OG_IMAGE_WIDTH,
 } as const;
-
-const getRenderer = () => {
-  rendererPromise ??= Promise.resolve()
-    .then(() => initTakumiWasm())
-    .then(() => {
-      renderer = new Renderer();
-      return renderer;
-    });
-
-  return renderer ?? rendererPromise;
-};
 
 const createOgImageElement = ({
   description = SITE.DESCRIPTION.LONG,
@@ -166,12 +151,9 @@ const createOgImageElement = ({
 );
 
 export const createOgImageResponse = async (options?: OgImageOptions) => {
-  const takumiRenderer = await getRenderer();
-  const { node, stylesheets } = await fromJsx(createOgImageElement(options));
-  const image = await takumiRenderer.render(node, {
+  const image = await render(createOgImageElement(options), {
     ...ogImageSize,
     format: "png",
-    stylesheets,
   });
   const body = new ArrayBuffer(image.byteLength);
   new Uint8Array(body).set(image);
