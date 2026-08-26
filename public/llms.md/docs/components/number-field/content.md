@@ -4,8 +4,6 @@ A numeric input with increment, decrement, and scrub controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -23,19 +21,6 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-```
-
-## Anatomy
-
-```tsx
-<NumberField>
-  <NumberFieldScrubArea />
-  <NumberFieldGroup>
-    <NumberFieldDecrement />
-    <NumberFieldInput />
-    <NumberFieldIncrement />
-  </NumberFieldGroup>
-</NumberField>
 ```
 
 ## Usage
@@ -60,20 +45,35 @@ import {
 </NumberField>
 ```
 
-## With Scrub
+## Anatomy
+
+```tsx
+<NumberField>
+  <NumberFieldScrubArea />
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberField>
+```
+
+## Examples
+
+### With Scrub
 
 Wrap a label in `NumberFieldScrubArea` to let people drag the label and adjust the value. Set `allowWheelScrub` to also allow mouse-wheel scrubbing while the input is focused.
 
-## Disabled
+### Disabled
 
-## Range
+### Range
 
 Use `min` and `max` to constrain the allowed values.
 
-## Step
+### Step
 
-## Controlled
+### Controlled
 
-## Formatting
+### Formatting
 
 Pass `Intl.NumberFormat` options through `format` to display values such as currency.

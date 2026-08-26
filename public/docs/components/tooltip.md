@@ -4,8 +4,6 @@ Displays contextual information when a user hovers or focuses an element.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -23,24 +21,6 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-```
-
-## Anatomy
-
-```tsx
-import {
-  Tooltip,
-  TooltipPopup,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger />
-    <TooltipPopup />
-  </Tooltip>
-</TooltipProvider>;
 ```
 
 ## Usage
@@ -62,6 +42,26 @@ import {
 ```
 
 Wrap related tooltips in `TooltipProvider` so adjacent tooltips open instantly after the first one.
+
+## Anatomy
+
+```tsx
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger />
+    <TooltipPopup />
+  </Tooltip>
+</TooltipProvider>;
+```
+
+## Examples
 
 ### Basic
 
@@ -96,9 +96,3 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 ## Popup Animation
 
 Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
-
-## Base UI vs Radix UI
-
-- Use `render` on `TooltipTrigger` instead of `asChild`.
-- Prefer `TooltipPopup` over `TooltipContent`.
-- Compose the trigger with a native button or a Button passed through `render`.

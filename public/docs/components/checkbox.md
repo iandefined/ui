@@ -4,8 +4,6 @@ A control that allows the user to toggle between checked and unchecked.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -23,6 +21,16 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+```
+
+## Usage
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox";
+```
+
+```tsx
+<Checkbox />
 ```
 
 ## Anatomy
@@ -43,7 +51,7 @@ import {
 </CheckboxRoot>;
 ```
 
-## Usage
+## Examples
 
 ### Disabled
 

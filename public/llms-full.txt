@@ -100,8 +100,6 @@ Compact labels for status, category, or metadata.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -253,8 +251,6 @@ A control that allows the user to toggle between checked and unchecked.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -272,6 +268,16 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+```
+
+## Usage
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox";
+```
+
+```tsx
+<Checkbox />
 ```
 
 ## Anatomy
@@ -292,7 +298,7 @@ import {
 </CheckboxRoot>;
 ```
 
-## Usage
+## Examples
 
 ### Disabled
 
@@ -307,8 +313,6 @@ import {
 A list of actions in a dropdown, enhanced with keyboard navigation.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -327,6 +331,17 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+```
+
+## Usage
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 ```
 
 ## Anatomy
@@ -369,16 +384,7 @@ import {
 </DropdownMenu>;
 ```
 
-## Usage
-
-```tsx
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-```
+## Examples
 
 ### Basic
 
@@ -464,8 +470,6 @@ A styled text input built on Base UI.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -510,8 +514,6 @@ import { Input } from "@/components/ui/input";
 Compose inputs and textareas with icons, text, buttons, and menus.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -585,8 +587,6 @@ Displays textual keyboard input and shortcut combinations.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -619,21 +619,21 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 </KbdGroup>
 ```
 
-## Group
+## Examples
 
-## Button
+### Group
 
-## Tooltip
+### Button
 
-## Input Group
+### Tooltip
+
+### Input Group
 
 # Label
 
 Renders an accessible label associated with controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -664,15 +664,15 @@ import { Label } from "@/components/ui/label";
 <Label htmlFor="email">Email</Label>
 ```
 
-## With Checkbox
+## Examples
+
+### With Checkbox
 
 # Number Field
 
 A numeric input with increment, decrement, and scrub controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -691,19 +691,6 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-```
-
-## Anatomy
-
-```tsx
-<NumberField>
-  <NumberFieldScrubArea />
-  <NumberFieldGroup>
-    <NumberFieldDecrement />
-    <NumberFieldInput />
-    <NumberFieldIncrement />
-  </NumberFieldGroup>
-</NumberField>
 ```
 
 ## Usage
@@ -728,21 +715,36 @@ import {
 </NumberField>
 ```
 
-## With Scrub
+## Anatomy
+
+```tsx
+<NumberField>
+  <NumberFieldScrubArea />
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberField>
+```
+
+## Examples
+
+### With Scrub
 
 Wrap a label in `NumberFieldScrubArea` to let people drag the label and adjust the value. Set `allowWheelScrub` to also allow mouse-wheel scrubbing while the input is focused.
 
-## Disabled
+### Disabled
 
-## Range
+### Range
 
 Use `min` and `max` to constrain the allowed values.
 
-## Step
+### Step
 
-## Controlled
+### Controlled
 
-## Formatting
+### Formatting
 
 Pass `Intl.NumberFormat` options through `format` to display values such as currency.
 
@@ -751,8 +753,6 @@ Pass `Intl.NumberFormat` options through `format` to display values such as curr
 A scrollable region with custom scrollbars and optional background fades.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -773,14 +773,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-## Anatomy
-
-```tsx
-<ScrollArea>
-  <ScrollAreaContent />
-</ScrollArea>
-```
-
 ## Usage
 
 ```tsx
@@ -795,25 +787,33 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 
 `scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
 
-## Horizontal Layout
+## Anatomy
+
+```tsx
+<ScrollArea>
+  <ScrollAreaContent />
+</ScrollArea>
+```
+
+## Examples
+
+### Horizontal Layout
 
 Use `orientation="horizontal"` when the content overflows inline.
 
-## Both Scroll
+### Both Scroll
 
 Use `orientation="both"` to render horizontal and vertical scrollbars for content that overflows in both directions.
 
-## Scroll Shadows
+### Vertical Scroll Shadows
 
 Set `scrollShadow` independently of the scrollbar orientation to fade only the overflowing edges.
 
-### Vertical
+### Horizontal Scroll Shadows
 
-### Horizontal
+### Both Scroll Shadows
 
-### Both
-
-## Hide Scrollbar
+### Hide Scrollbar
 
 Set `hideScrollbar` to keep the scroll area and edge fades while removing the custom scrollbar.
 
@@ -822,8 +822,6 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
 Visually or semantically separates content.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -863,8 +861,6 @@ import { Separator } from "@/components/ui/separator";
 A shimmer placeholder for loading content.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -907,8 +903,6 @@ An SVG indicator for loading states.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -938,15 +932,15 @@ import { Spinner } from "@/components/ui/spinner";
 <Spinner />
 ```
 
-## Sizes
+## Examples
+
+### Sizes
 
 # Textarea
 
 A styled multiline text control built on Base UI Field.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
-
-## Preview
 
 ## Installation
 
@@ -989,8 +983,6 @@ Displays contextual information when a user hovers or focuses an element.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -1008,24 +1000,6 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-```
-
-## Anatomy
-
-```tsx
-import {
-  Tooltip,
-  TooltipPopup,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger />
-    <TooltipPopup />
-  </Tooltip>
-</TooltipProvider>;
 ```
 
 ## Usage
@@ -1047,6 +1021,26 @@ import {
 ```
 
 Wrap related tooltips in `TooltipProvider` so adjacent tooltips open instantly after the first one.
+
+## Anatomy
+
+```tsx
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger />
+    <TooltipPopup />
+  </Tooltip>
+</TooltipProvider>;
+```
+
+## Examples
 
 ### Basic
 
@@ -1081,12 +1075,6 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 ## Popup Animation
 
 Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
-
-## Base UI vs Radix UI
-
-- Use `render` on `TooltipTrigger` instead of `asChild`.
-- Prefer `TooltipPopup` over `TooltipContent`.
-- Compose the trigger with a native button or a Button passed through `render`.
 
 # Extending
 

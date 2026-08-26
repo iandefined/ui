@@ -4,8 +4,6 @@ Displays textual keyboard input and shortcut combinations.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -38,10 +36,12 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 </KbdGroup>
 ```
 
-## Group
+## Examples
 
-## Button
+### Group
 
-## Tooltip
+### Button
 
-## Input Group
+### Tooltip
+
+### Input Group

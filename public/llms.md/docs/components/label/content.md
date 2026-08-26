@@ -4,8 +4,6 @@ Renders an accessible label associated with controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
@@ -35,4 +33,6 @@ import { Label } from "@/components/ui/label";
 <Label htmlFor="email">Email</Label>
 ```
 
-## With Checkbox
+## Examples
+
+### With Checkbox
