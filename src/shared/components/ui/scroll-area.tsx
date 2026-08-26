@@ -96,7 +96,7 @@ function ScrollAreaContent({
   return (
     <ScrollAreaPrimitive.Content
       data-slot="scroll-area-content"
-      className={cn("size-full", className)}
+      className={cn("w-full", className)}
       {...props}
     >
       {children}

@@ -47,6 +47,24 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 
 `scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
 
+## Horizontal Layout
+
+Use `orientation="horizontal"` when the content overflows inline.
+
+## Both Scroll
+
+Use `orientation="both"` to render horizontal and vertical scrollbars for content that overflows in both directions.
+
+## Scroll Shadows
+
+Set `scrollShadow` independently of the scrollbar orientation to fade only the overflowing edges.
+
+### Vertical
+
+### Horizontal
+
+### Both
+
 ## Hide Scrollbar
 
 Set `hideScrollbar` to keep the scroll area and edge fades while removing the custom scrollbar.

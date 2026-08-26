@@ -18,6 +18,7 @@ export const ExternalLinkButton = ({
         {renderProps.children}
       </a>
     )}
+    nativeButton={false}
     {...props}
   >
     {children}

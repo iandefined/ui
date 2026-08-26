@@ -26,6 +26,7 @@ export const MainNav = ({
               className={cn(pathname === item.href && "text-primary")}
             />
           }
+          nativeButton={false}
           size="sm"
         >
           {item.label}

@@ -29,6 +29,7 @@ export const SiteHeader = () => (
         <BrandContextMenu>
           <Button
             render={<Link href={ROUTES.HOME} />}
+            nativeButton={false}
             variant="ghost"
             size="icon"
             className="hidden size-8 lg:flex"

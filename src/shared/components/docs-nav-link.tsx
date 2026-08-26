@@ -44,6 +44,7 @@ export const DocsNavLink = ({
   const link = (
     <Button
       render={<Link href={href} />}
+      nativeButton={false}
       variant="secondary"
       size={size}
       className={cn("shadow-none", className)}

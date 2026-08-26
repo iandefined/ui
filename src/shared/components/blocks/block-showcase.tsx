@@ -245,6 +245,7 @@ export function BlockShowcase({
                         {props.children}
                       </a>
                     )}
+                    nativeButton={false}
                     className="size-6"
                     size="icon-sm"
                     variant="ghost"

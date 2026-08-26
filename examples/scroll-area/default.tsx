@@ -5,7 +5,7 @@ export default function ScrollAreaDefaultDemo() {
     <div className="border rounded-md">
       <ScrollArea className="h-64 w-80" scrollShadow="vertical">
         <ScrollAreaContent className="p-4">
-          <p className="space-y-3 pb-4">
+          <p>
             At the edge of the town stood a narrow house with seven windows. Six
             looked toward the road, where carts passed in the morning and lamps
             appeared at night. The seventh looked toward the hills. Nobody paid

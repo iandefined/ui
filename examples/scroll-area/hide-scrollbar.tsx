@@ -9,14 +9,12 @@ export default function ScrollAreaHideScrollbarDemo() {
   return (
     <div className="border rounded-md">
       <ScrollArea className="h-64 w-80" hideScrollbar scrollShadow="vertical">
-        <ScrollAreaContent className="p-4">
-          <div className="space-y-3 pb-4">
-            {items.map((item) => (
-              <p className="text-sm" key={item}>
-                {item}
-              </p>
-            ))}
-          </div>
+        <ScrollAreaContent className="space-y-3 p-4">
+          {items.map((item) => (
+            <p className="text-sm" key={item}>
+              {item}
+            </p>
+          ))}
         </ScrollAreaContent>
       </ScrollArea>
     </div>

@@ -25,6 +25,7 @@ const GetStartedButton = () => {
   return (
     <Button
       render={<Link href={ROUTES.DOCS_INSTALLATION} />}
+      nativeButton={false}
       className="px-4"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -49,6 +50,7 @@ const BrowseComponentsButton = () => {
   return (
     <Button
       render={<Link href={ROUTES.DOCS_COMPONENTS} />}
+      nativeButton={false}
       variant="outline"
       className="px-4"
       onMouseEnter={handleMouseEnter}

@@ -37,7 +37,7 @@ export const DefaultErrorPage = ({
           home.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-2">
-          <Button render={<Link to="/" />}>
+          <Button render={<Link to="/" />} nativeButton={false}>
             <Home />
             Go home
           </Button>

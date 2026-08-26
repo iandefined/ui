@@ -12,7 +12,7 @@ export const DefaultNotFoundPage = () => (
     <p className="text-muted-foreground mt-4 max-w-md text-balance">
       The page you are looking for does not exist or has moved.
     </p>
-    <Button render={<Link to="/" />} className="mt-8">
+    <Button render={<Link to="/" />} nativeButton={false} className="mt-8">
       <Home />
       Go home
     </Button>

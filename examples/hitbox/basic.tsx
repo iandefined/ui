@@ -10,7 +10,7 @@ export default function HitboxDemo() {
   return (
     <div className="relative flex min-h-64 w-full flex-col items-center justify-center gap-5">
       <Label
-        className="absolute top-2 -right-2 flex items-center gap-2 cursor-pointer text-muted-foreground"
+        className="absolute -top-2 -right-1 flex items-center gap-2 cursor-pointer text-muted-foreground"
         htmlFor="show-hitbox"
       >
         <Checkbox
@@ -24,10 +24,10 @@ export default function HitboxDemo() {
       <Button
         className={`group/hitbox w-30 hitbox-6 ${showHitbox ? "hitbox-debug" : ""}`}
       >
-        <span className="group-hover/hitbox:hidden group-active:hidden">
+        <span className="group-hover/hitbox:hidden group-active/hitbox:hidden">
           hitbox-6
         </span>
-        <span className="not-group-hover/hitbox:hidden group-active:hidden">
+        <span className="not-group-hover/hitbox:hidden group-active/hitbox:hidden">
           Hovered
         </span>
         <span className="not-group-active/hitbox:hidden">Pressed</span>
