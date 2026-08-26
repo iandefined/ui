@@ -12,6 +12,8 @@
 - [Dropdown Menu](https://ui.iandefined.com/docs/components/dropdown-menu.md) - A list of actions in a dropdown, enhanced with keyboard navigation.
 - [Input](https://ui.iandefined.com/docs/components/input.md) - A styled text input built on Base UI.
 - [Input Group](https://ui.iandefined.com/docs/components/input-group.md) - Compose inputs and textareas with icons, text, buttons, and menus.
+- [Kbd](https://ui.iandefined.com/docs/components/kbd.md) - Displays textual keyboard input and shortcut combinations.
+- [Label](https://ui.iandefined.com/docs/components/label.md) - Renders an accessible label associated with controls.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
 - [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.

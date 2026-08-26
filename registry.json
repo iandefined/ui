@@ -51,6 +51,34 @@
       ]
     },
     {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Displays textual keyboard input and shortcut combinations.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/kbd.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/kbd.tsx"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "An accessible label for form controls.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/label.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/label.tsx"
+        }
+      ]
+    },
+    {
       "name": "hitbox",
       "type": "registry:style",
       "title": "Hitbox",
@@ -401,7 +429,7 @@
         "https://ui.shadcn.com/r/styles/base-luma/sidebar.json",
         "https://ui.shadcn.com/r/styles/base-luma/breadcrumb.json",
         "https://ui.shadcn.com/r/styles/base-luma/separator.json",
-        "https://ui.shadcn.com/r/styles/base-luma/label.json",
+        "https://ui.iandefined.com/r/label.json",
         "https://ui.shadcn.com/r/styles/base-luma/dropdown-menu.json",
         "https://ui.shadcn.com/r/styles/base-luma/button.json",
         "https://ui.shadcn.com/r/styles/base-luma/input.json",

@@ -31,6 +31,12 @@
 /docs/components/input-group.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/kbd.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/label.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/separator.md
   Content-Type: text/markdown; charset=utf-8
 

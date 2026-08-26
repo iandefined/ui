@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "title": "Label",
+  "description": "An accessible label for form controls.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/label.tsx",
+      "content": "import { cn } from \"@/lib/utils\";\n\nfunction Label({\n  className,\n  htmlFor,\n  ...props\n}: React.ComponentProps<\"label\">) {\n  return (\n    <label\n      data-slot=\"label\"\n      htmlFor={htmlFor}\n      className={cn(\"inline-flex items-center gap-2 text-sm/4\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { Label };\n",
+      "type": "registry:ui",
+      "target": "components/ui/label.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

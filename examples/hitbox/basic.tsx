@@ -2,13 +2,14 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/registry/base/checkbox";
+import { Label } from "@/registry/base/label";
 
 export default function HitboxDemo() {
   const [showHitbox, setShowHitbox] = useState(false);
 
   return (
     <div className="relative flex min-h-64 w-full flex-col items-center justify-center gap-5">
-      <label
+      <Label
         className="absolute top-2 -right-2 flex items-center gap-2 cursor-pointer text-muted-foreground"
         htmlFor="show-hitbox"
       >
@@ -18,7 +19,7 @@ export default function HitboxDemo() {
           onCheckedChange={setShowHitbox}
         />
         Show hitbox
-      </label>
+      </Label>
 
       <Button
         className={`group/hitbox w-30 hitbox-6 ${showHitbox ? "hitbox-debug" : ""}`}
