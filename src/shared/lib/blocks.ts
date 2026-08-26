@@ -35,10 +35,7 @@ type RegistryItem = {
 export const BLOCKS_PAGE_TITLE = "Blocks";
 export const BLOCKS_PAGE_DESCRIPTION =
   "Browse production-ready registry blocks and copy them directly to your project.";
-export const BLOCKS_OG_IMAGE = `${SITE.URL}/og?${new URLSearchParams({
-  description: BLOCKS_PAGE_DESCRIPTION,
-  title: BLOCKS_PAGE_TITLE,
-}).toString()}`;
+export const BLOCKS_OG_IMAGE = `${SITE.URL}/og/blocks.png`;
 
 const categoryTitles: Record<string, string> = {
   sidebar: "Sidebar",

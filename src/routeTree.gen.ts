@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlocksRouteImport } from './routes/blocks'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as OgRouteImport } from './routes/og'
 import { Route as BlocksIndexRouteImport } from './routes/blocks.index'
 import { Route as BlocksBlockRouteImport } from './routes/blocks.$block'
 import { Route as DocsIndexRouteImport } from './routes/docs.index'
@@ -21,7 +20,6 @@ import { Route as DocsSplatRouteImport } from './routes/docs.$'
 import { Route as ViewNameRouteImport } from './routes/view.$name'
 import { Route as BlocksBlockIndexRouteImport } from './routes/blocks.$block.index'
 import { Route as BlocksBlockPreviewRouteImport } from './routes/blocks.$block.preview'
-import { Route as OgDocsSplatRouteImport } from './routes/og.docs.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,11 +39,6 @@ const DocsRoute = DocsRouteImport.update({
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OgRoute = OgRouteImport.update({
-  id: '/og',
-  path: '/og',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlocksIndexRoute = BlocksIndexRouteImport.update({
@@ -83,37 +76,28 @@ const BlocksBlockPreviewRoute = BlocksBlockPreviewRouteImport.update({
   path: '/preview',
   getParentRoute: () => BlocksBlockRoute,
 } as any)
-const OgDocsSplatRoute = OgDocsSplatRouteImport.update({
-  id: '/docs/$',
-  path: '/docs/$',
-  getParentRoute: () => OgRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blocks': typeof BlocksRouteWithChildren
   '/docs': typeof DocsRouteWithChildren
   '/llms.txt': typeof LlmsDottxtRoute
-  '/og': typeof OgRouteWithChildren
   '/blocks/$block': typeof BlocksBlockRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
   '/view/$name': typeof ViewNameRoute
   '/blocks/': typeof BlocksIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/blocks/$block/preview': typeof BlocksBlockPreviewRoute
-  '/og/docs/$': typeof OgDocsSplatRoute
   '/blocks/$block/': typeof BlocksBlockIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/og': typeof OgRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
   '/view/$name': typeof ViewNameRoute
   '/blocks': typeof BlocksIndexRoute
   '/docs': typeof DocsIndexRoute
   '/blocks/$block/preview': typeof BlocksBlockPreviewRoute
-  '/og/docs/$': typeof OgDocsSplatRoute
   '/blocks/$block': typeof BlocksBlockIndexRoute
 }
 export interface FileRoutesById {
@@ -122,14 +106,12 @@ export interface FileRoutesById {
   '/blocks': typeof BlocksRouteWithChildren
   '/docs': typeof DocsRouteWithChildren
   '/llms.txt': typeof LlmsDottxtRoute
-  '/og': typeof OgRouteWithChildren
   '/blocks/$block': typeof BlocksBlockRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
   '/view/$name': typeof ViewNameRoute
   '/blocks/': typeof BlocksIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/blocks/$block/preview': typeof BlocksBlockPreviewRoute
-  '/og/docs/$': typeof OgDocsSplatRoute
   '/blocks/$block/': typeof BlocksBlockIndexRoute
 }
 export interface FileRouteTypes {
@@ -139,26 +121,22 @@ export interface FileRouteTypes {
     | '/blocks'
     | '/docs'
     | '/llms.txt'
-    | '/og'
     | '/blocks/$block'
     | '/docs/$'
     | '/view/$name'
     | '/blocks/'
     | '/docs/'
     | '/blocks/$block/preview'
-    | '/og/docs/$'
     | '/blocks/$block/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/llms.txt'
-    | '/og'
     | '/docs/$'
     | '/view/$name'
     | '/blocks'
     | '/docs'
     | '/blocks/$block/preview'
-    | '/og/docs/$'
     | '/blocks/$block'
   id:
     | '__root__'
@@ -166,14 +144,12 @@ export interface FileRouteTypes {
     | '/blocks'
     | '/docs'
     | '/llms.txt'
-    | '/og'
     | '/blocks/$block'
     | '/docs/$'
     | '/view/$name'
     | '/blocks/'
     | '/docs/'
     | '/blocks/$block/preview'
-    | '/og/docs/$'
     | '/blocks/$block/'
   fileRoutesById: FileRoutesById
 }
@@ -182,7 +158,6 @@ export interface RootRouteChildren {
   BlocksRoute: typeof BlocksRouteWithChildren
   DocsRoute: typeof DocsRouteWithChildren
   LlmsDottxtRoute: typeof LlmsDottxtRoute
-  OgRoute: typeof OgRouteWithChildren
   ViewNameRoute: typeof ViewNameRoute
 }
 
@@ -214,13 +189,6 @@ declare module '@tanstack/react-router' {
       path: '/llms.txt'
       fullPath: '/llms.txt'
       preLoaderRoute: typeof LlmsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/og': {
-      id: '/og'
-      path: '/og'
-      fullPath: '/og'
-      preLoaderRoute: typeof OgRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blocks/': {
@@ -272,13 +240,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlocksBlockPreviewRouteImport
       parentRoute: typeof BlocksBlockRoute
     }
-    '/og/docs/$': {
-      id: '/og/docs/$'
-      path: '/docs/$'
-      fullPath: '/og/docs/$'
-      preLoaderRoute: typeof OgDocsSplatRouteImport
-      parentRoute: typeof OgRoute
-    }
   }
 }
 
@@ -321,22 +282,11 @@ const DocsRouteChildren: DocsRouteChildren = {
 
 const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)
 
-interface OgRouteChildren {
-  OgDocsSplatRoute: typeof OgDocsSplatRoute
-}
-
-const OgRouteChildren: OgRouteChildren = {
-  OgDocsSplatRoute: OgDocsSplatRoute,
-}
-
-const OgRouteWithChildren = OgRoute._addFileChildren(OgRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlocksRoute: BlocksRouteWithChildren,
   DocsRoute: DocsRouteWithChildren,
   LlmsDottxtRoute: LlmsDottxtRoute,
-  OgRoute: OgRouteWithChildren,
   ViewNameRoute: ViewNameRoute,
 }
 export const routeTree = rootRouteImport

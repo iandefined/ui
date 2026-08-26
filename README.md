@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ui.iandefined.com/marketing-og-image.png" alt="tanstartercn" />
+  <img src="https://ui.iandefined.com/og.png" alt="tanstartercn" />
 </p>
 
 <p align="center">

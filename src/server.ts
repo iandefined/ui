@@ -7,7 +7,9 @@ type AssetsEnv = {
 };
 
 const assetPathPattern =
-  /(?:^\/(?:assets|r|llms\.md)\/|^\/\.well-known\/|\/[^/]+\.[^/]+$)/;
+  // Keep the extensionless `/og` path here so Static Assets can apply the
+  // generated legacy redirect to `/og.png` before the app handler runs.
+  /(?:^\/(?:assets|r|llms\.md)\/|^\/\.well-known\/|^\/og$|\/[^/]+\.[^/]+$)/;
 
 const fetchAsset = async (request: Request, env: AssetsEnv) => {
   if (!assetPathPattern.test(new URL(request.url).pathname)) {

@@ -29,7 +29,7 @@ export const SITE = {
     "npx shadcn add",
   ] as const,
   NAME: "iandefined/ui",
-  OG_IMAGE: `${baseUrl}/og`,
+  OG_IMAGE: `${baseUrl}/og.png`,
   REGISTRY: baseUrl,
   TITLE: {
     LONG: "Utilitarian Component Registry for Product-oriented Engineers | iandefined/ui",

@@ -3,6 +3,8 @@ import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { renderOgImage } from "./og-image.mjs";
+
 process.env.NODE_ENV ||= "production";
 
 const root = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -21,6 +23,7 @@ const ROUTES = {
   LLMS_MD: "/llms.md",
   MANIFEST: "/manifest.webmanifest",
   OPENAPI: "/openapi.json",
+  OG: "/og",
   REGISTRY: "/r/registry.json",
   ROBOTS: "/robots.txt",
   RSS: "/rss.xml",
@@ -268,6 +271,10 @@ const writePublic = async (route, body) => {
 
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, body);
+};
+
+const writeOgImage = async (route, options) => {
+  await writePublic(route, await renderOgImage(options));
 };
 
 const writeGenerated = async (fileName, body) => {
@@ -634,6 +641,7 @@ const agentSkillsIndex = () => ({
 
 const redirects = () =>
   [
+    `${ROUTES.OG} ${ROUTES.OG}.png 301`,
     `${ROUTES.DOCS}.mdx ${ROUTES.DOCS}.md 301`,
     `${ROUTES.DOCS}/*.mdx ${ROUTES.DOCS}/:splat.md 301`,
     "",
@@ -704,6 +712,28 @@ await rm(path.join(publicDir, ".well-known"), { force: true, recursive: true });
 
 const pages = await readDocs();
 const llmsIndex = docsIndex(pages);
+
+// These images must stay build-time generated: keeping Takumi out of the
+// Worker bundle avoids shipping its WASM runtime and preserves the free-plan
+// Worker size limit. The PNGs are intentionally published as static assets.
+await writeOgImage(`${ROUTES.OG}.png`, {
+  description: SITE.DESCRIPTION.LONG,
+  title: SITE.NAME,
+});
+await writeOgImage(`${ROUTES.OG}/blocks.png`, {
+  description:
+    "Browse production-ready registry blocks and copy them directly to your project.",
+  title: "Blocks",
+});
+
+for (const page of pages) {
+  const segments = [...page.slugs, "image.png"];
+
+  await writeOgImage(`${ROUTES.OG}/docs/${segments.join("/")}`, {
+    description: page.description || SITE.DESCRIPTION.LONG,
+    title: page.title,
+  });
+}
 
 await writePublic(ROUTES.LLMS, llmsIndex);
 await writeGenerated("llms.txt", llmsIndex);
