@@ -43,7 +43,8 @@ export const docsPageHead = (slugs: string[]) => {
 
   return createPageHead({
     description: doc.description,
-    ogImage: getPageImage(page).url,
+    // Social crawlers fetch this URL outside the app, so it must be absolute.
+    ogImage: absoluteUrl(getPageImage(page).url),
     ogType: "article",
     path: page.url,
     title: doc.title ?? "Docs",
