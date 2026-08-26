@@ -138,9 +138,3 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 <ComponentPreview name="tooltip/animation" />
-
-## Base UI vs Radix UI
-
-- Use `render` on `TooltipTrigger` instead of `asChild`.
-- Prefer `TooltipPopup` over `TooltipContent`.
-- Compose the trigger with a native button or a Button passed through `render`.
