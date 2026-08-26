@@ -1,8 +1,8 @@
 "use client";
 
+import { Kbd } from "@/registry/base/kbd";
 import { ThemeIcon } from "@/shared/components/icons";
 import { Button } from "@/shared/components/ui/button";
-import { Kbd } from "@/shared/components/ui/kbd";
 import {
   Tooltip,
   TooltipContent,

@@ -10,6 +10,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
+import { Kbd } from "@/registry/base/kbd";
 import { Button } from "@/shared/components/ui/button";
 import {
   Command,
@@ -27,7 +28,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { Kbd } from "@/shared/components/ui/kbd";
 import { Separator } from "@/shared/components/ui/separator";
 import { SITE } from "@/shared/constants/site";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
