@@ -22,7 +22,6 @@ type HeadMeta =
 
 type HeadLink = {
   href: string;
-  id?: string;
   rel: string;
   sizes?: string;
   type?: string;
@@ -107,8 +106,7 @@ export const rootHead: PageHead = {
       type: "image/png",
     },
     {
-      href: "/favicon.svg",
-      id: "theme-favicon",
+      href: "/favicon-dark.svg",
       rel: "icon",
       sizes: "any",
       type: "image/svg+xml",
