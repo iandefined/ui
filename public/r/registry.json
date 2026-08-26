@@ -339,6 +339,20 @@
       ]
     },
     {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "Scroll Area",
+      "description": "A scrollable region with optional custom scrollbars and conditional background fades.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/scroll-area.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/scroll-area.tsx"
+        }
+      ]
+    },
+    {
       "name": "input",
       "type": "registry:ui",
       "title": "Input",

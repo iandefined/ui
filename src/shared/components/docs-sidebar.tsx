@@ -4,6 +4,10 @@ import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
 
 import { Link } from "@/shared/components/link";
 import {
+  ScrollArea,
+  ScrollAreaContent,
+} from "@/shared/components/ui/scroll-area";
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -70,17 +74,24 @@ export const DocsSidebar = ({
       {...props}
     >
       <div className="h-9" />
-      <SidebarContent className="mx-auto no-scrollbar w-(--sidebar-menu-width) overflow-x-hidden px-2">
-        <div className="h-6" />
-        {getDocsNavigationGroups(tree).map((group) => (
-          <SidebarPageGroup
-            key={group.id}
-            label={group.label}
-            pages={group.pages}
-            pathname={pathname}
-          />
-        ))}
-        <div className="from-background via-background/80 to-background/50 sticky -bottom-1 z-10 h-16 shrink-0 bg-linear-to-t blur-xs" />
+      <SidebarContent className="mx-auto w-(--sidebar-menu-width) overflow-hidden px-2">
+        <ScrollArea
+          className="h-full rounded-none border-0 [--scroll-area-fade-size:80px]"
+          hideScrollbar
+          scrollShadow="vertical"
+          style={{ height: "100%" }}
+        >
+          <ScrollAreaContent>
+            {getDocsNavigationGroups(tree).map((group) => (
+              <SidebarPageGroup
+                key={group.id}
+                label={group.label}
+                pages={group.pages}
+                pathname={pathname}
+              />
+            ))}
+          </ScrollAreaContent>
+        </ScrollArea>
       </SidebarContent>
     </Sidebar>
   );
