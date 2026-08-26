@@ -801,7 +801,9 @@ import {
 } from "@/components/ui/tooltip";
 
 <Tooltip>
-  <TooltipTrigger render={<Button variant="outline" />}>Hover me</TooltipTrigger>
+  <TooltipTrigger render={<Button variant="outline" />}>
+    Hover me
+  </TooltipTrigger>
   <TooltipPopup>Helpful hint</TooltipPopup>
 </Tooltip>;
 ```
@@ -838,35 +840,9 @@ Control `open` and `onOpenChange` on `Tooltip` when the open state needs to be m
 
 To animate a tooltip as it moves between triggers, create one shared handle and pass it to each trigger and its single `Tooltip` root. A `TooltipProvider` coordinates the group, but the handle is what makes the popup shared. The Positioner transitions its position, the Popup transitions its dimensions, and the built-in viewport transitions the content.
 
-```tsx
-const sharedTooltip = Tooltip.createHandle<string>();
-
-<TooltipProvider>
-  <TooltipTrigger
-    handle={sharedTooltip}
-    payload="Bold"
-    render={<Button variant="outline" />}
-  >
-    Bold
-  </TooltipTrigger>
-
-  <TooltipTrigger
-    handle={sharedTooltip}
-    payload="Italic"
-    render={<Button variant="outline" />}
-  >
-    Italic
-  </TooltipTrigger>
-
-  <Tooltip handle={sharedTooltip}>
-    {({ payload }) => <TooltipPopup>{payload}</TooltipPopup>}
-  </Tooltip>
-</TooltipProvider>;
-```
-
 ## Popup Animation
 
-Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation.
+Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 ## Base UI vs Radix UI
 

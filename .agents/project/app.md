@@ -10,3 +10,4 @@ Use this when changing app code, routing, UI, or shared modules.
 - Keep request-time Worker code free of real filesystem assumptions. Cloudflare `nodejs_compat` supports TanStack Start, but it does not make repo file walking work at the edge.
 - Avoid request-time Wasm compilation in Worker-rendered paths. For Shiki, use the JavaScript regex engine.
 - If shared component directories move, keep the `components.json` shadcn aliases in sync.
+- When a Base UI trigger should look and behave like a project button, compose the existing Button through the primitive's `render` prop instead of styling the trigger primitive directly.

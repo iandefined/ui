@@ -14,3 +14,4 @@ Use this when changing deployment, prerendering, Wrangler config, Worker entrypo
 - Server routes for file-like endpoints must be Worker-safe: avoid `node:fs`, directory walking, and `process.cwd()` assumptions in request handlers.
 - Runtime syntax highlighting and markdown tooling must avoid request-time Wasm compilation. Prefer Shiki's JavaScript regex engine for Worker-rendered paths.
 - Treat `pnpm preview` as the deployment smoke test for this repo because it runs the Cloudflare/Vite Worker environment. Plain static preview is not enough.
+- Reserve `pnpm preview` for deployment behavior, static-delivery changes, new registry publication, an explicit build/deploy request, or work the user asks to commit and push to `main`. Do not run it for ordinary copy edits, MDX refinements, styling changes, or focused updates to existing components.
