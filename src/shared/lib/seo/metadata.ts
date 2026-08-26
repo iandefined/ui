@@ -106,7 +106,7 @@ export const rootHead: PageHead = {
       type: "image/png",
     },
     {
-      href: "/favicon-dark.svg",
+      href: "/favicon.svg",
       rel: "icon",
       sizes: "any",
       type: "image/svg+xml",
