@@ -9,6 +9,9 @@
     "clsx",
     "tailwind-merge"
   ],
+  "registryDependencies": [
+    "https://ui.iandefined.com/r/text-morph.json"
+  ],
   "files": [
     {
       "path": "src/registry/base/input.tsx",

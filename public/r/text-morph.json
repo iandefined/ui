@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-morph",
+  "title": "Text Morph",
+  "description": "The standard animated-text primitive, powered by Calligraph with smooth container resizing.",
+  "dependencies": [
+    "calligraph",
+    "motion"
+  ],
+  "registryDependencies": [
+    "https://ui.iandefined.com/r/icon-swap.json"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/text-morph.tsx",
+      "content": "\"use client\";\n\nimport { Calligraph, type CalligraphProps } from \"calligraph\";\n\ntype TextMorphProps = CalligraphProps;\n\n/**\n * The registry's standard animated-text primitive.\n *\n * Calligraph handles grapheme-aware text transitions and, by default, measures\n * the natural inner width while animating a separate outer wrapper to that\n * measured width.\n */\nfunction TextMorph({ children, autoSize = true, ...props }: TextMorphProps) {\n  const accessibleLabel = props[\"aria-label\"] ?? String(children ?? \"\");\n\n  return (\n    <Calligraph\n      {...props}\n      aria-label={accessibleLabel}\n      autoSize={autoSize}\n      data-slot=\"text-morph\"\n    >\n      {children}\n    </Calligraph>\n  );\n}\n\nexport { TextMorph, type TextMorphProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/text-morph.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -10,6 +10,12 @@ A styled text input built on Base UI.
 npx shadcn@latest add https://ui.iandefined.com/r/input.json
 ```
 
+The CLI also installs `TextMorph` and its Calligraph and Motion dependencies for the animated controlled example.
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
+```
+
 ```bash
 npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
@@ -42,3 +48,5 @@ import { Input } from "@/components/ui/input";
 ### Disabled
 
 ### Controlled
+
+The value preview uses the shared `TextMorph` abstraction instead of a component-specific text animation.

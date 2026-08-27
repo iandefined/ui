@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { TextMorph } from "@/registry/base/text-morph";
 import { CopyButton } from "@/shared/components/copy-button";
 import { getIconForPackageManager } from "@/shared/components/icons";
 import {
@@ -11,7 +11,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/shared/components/ui/tabs";
-import { TextFlip } from "@/shared/components/ui/text-flip";
 import { SITE } from "@/shared/constants/site";
 import type { PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
@@ -36,8 +35,22 @@ const registryItemNames = registry.items
 
 export const CommandBox = ({ className }: { className?: string }) => {
   const [packageManager, setPackageManager] = usePackageManager();
+  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+  const currentItem = registryItemNames[currentItemIndex] ?? "";
 
-  const currentItemRef = useRef(registryItemNames[0]);
+  const currentItemRef = useRef(currentItem);
+
+  useEffect(() => {
+    currentItemRef.current = currentItem;
+  }, [currentItem]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCurrentItemIndex((index) => (index + 1) % registryItemNames.length);
+    }, 1500);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <div
@@ -84,26 +97,14 @@ export const CommandBox = ({ className }: { className?: string }) => {
               </TabsContent>
             ))}{" "}
             <span>{SITE.REGISTRY}/r/</span>
-            <TextFlip
+            <TextMorph
+              animation="snappy"
               className="text-foreground"
-              as={motion.span}
-              variants={{
-                animate: { opacity: 1, y: 0 },
-                exit: { opacity: 0, y: 12 },
-                initial: { opacity: 0, y: -12 },
-              }}
-              interval={1.5}
-              onIndexChange={(index: number) => {
-                currentItemRef.current = registryItemNames[index];
-              }}
+              trend={-1}
             >
-              {registryItemNames.map((itemName) => (
-                <span key={itemName} className="inline-block">
-                  {itemName}
-                  <span className="text-muted-foreground">.json</span>
-                </span>
-              ))}
-            </TextFlip>
+              {currentItem}
+            </TextMorph>
+            <span className="text-muted-foreground">.json</span>
           </code>
         </pre>
       </Tabs>

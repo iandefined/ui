@@ -17,6 +17,7 @@
 - [Number Field](https://ui.iandefined.com/docs/components/number-field.md) - A numeric input with increment, decrement, and scrub controls.
 - [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
 - [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
+- [Select](https://ui.iandefined.com/docs/components/select.md) - A form control for choosing one or more values from a popup list.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
 - [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
@@ -27,6 +28,8 @@
 - [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
 - [Styling](https://ui.iandefined.com/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.
 - [Hitbox](https://ui.iandefined.com/docs/utilities/hitbox.md) - Expand hit areas of interactive elements without affecting layout.
+- [Icon Swap](https://ui.iandefined.com/docs/utilities/icon-swap.md) - Animate between keyed icons with a consistent scale, blur, and fade transition.
+- [Text Morph](https://ui.iandefined.com/docs/utilities/text-morph.md) - Animate changing text with Calligraph and smoothly follow its width.
 
 ## Machine-readable Resources
 

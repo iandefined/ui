@@ -15,11 +15,19 @@ description: Compose inputs and textareas with icons, text, buttons, and menus.
 npx shadcn@latest add https://ui.iandefined.com/r/input-group.json
 ```
 
+The CLI also installs `IconSwap` and Motion for the copy-button example.
+
   </TabsContent>
   <TabsContent value="manual">
 
 <Steps>
-  <Step>Install the following dependencies:</Step>
+  <Step>Install the [Icon Swap](/docs/utilities/icon-swap) registry dependency:</Step>
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
+
+<Step>Install the following dependencies:</Step>
 
 ```bash
 npm install @base-ui/react tailwind-variants clsx tailwind-merge

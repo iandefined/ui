@@ -11,6 +11,7 @@
   ],
   "registryDependencies": [
     "https://ui.iandefined.com/r/button.json",
+    "https://ui.iandefined.com/r/icon-swap.json",
     "https://ui.iandefined.com/r/input.json",
     "https://ui.iandefined.com/r/textarea.json"
   ],

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const legacyCopyToClipboard = (value: string) => {
   const textArea = document.createElement("textarea");
@@ -34,6 +34,15 @@ export const useCopyToClipboard = ({
   onCopy?: () => void;
 } = {}) => {
   const [isCopied, setIsCopied] = useState(false);
+  const resetTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current !== null) {
+        window.clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
 
   const copyToClipboard = async (value: string) => {
     if (typeof window === "undefined") {
@@ -67,9 +76,15 @@ export const useCopyToClipboard = ({
       onCopy();
     }
 
+    if (resetTimerRef.current !== null) {
+      window.clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+
     if (timeout !== 0) {
-      setTimeout(() => {
+      resetTimerRef.current = window.setTimeout(() => {
         setIsCopied(false);
+        resetTimerRef.current = null;
       }, timeout);
     }
 

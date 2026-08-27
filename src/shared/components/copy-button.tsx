@@ -1,10 +1,9 @@
 "use client";
 
 import { CheckIcon, CopyIcon } from "lucide-react";
-import type { HTMLMotionProps, Variants } from "motion/react";
-import { AnimatePresence, motion } from "motion/react";
 import { useCallback } from "react";
 
+import { IconSwap } from "@/registry/base/icon-swap";
 import { Button } from "@/shared/components/ui/button";
 import {
   Tooltip,
@@ -15,20 +14,6 @@ import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
 import type { Event } from "@/shared/lib/events";
 import { trackEvent } from "@/shared/lib/events";
 import { cn } from "@/shared/lib/utils";
-
-const motionIconVariants: Variants = {
-  animate: { filter: "blur(0px)", opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.8 },
-  initial: { filter: "blur(2px)", opacity: 0, scale: 0.8 },
-};
-
-const motionIconProps: HTMLMotionProps<"span"> = {
-  animate: "animate",
-  exit: "exit",
-  initial: "initial",
-  transition: { duration: 0.15, ease: "easeOut" },
-  variants: motionIconVariants,
-};
 
 export interface CopyButtonProps extends Omit<
   React.ComponentProps<typeof Button>,
@@ -90,17 +75,12 @@ export const CopyButton = ({
       {...props}
     >
       <span className="sr-only">Copy</span>
-      <AnimatePresence mode="popLayout" initial={false}>
-        {isCopied ? (
-          <motion.span key="done" {...motionIconProps}>
-            <CheckIcon strokeWidth={3} />
-          </motion.span>
-        ) : (
-          <motion.span key="idle" {...motionIconProps}>
-            <CopyIcon />
-          </motion.span>
-        )}
-      </AnimatePresence>
+      <IconSwap
+        className="inline-flex shrink-0"
+        state={isCopied ? "done" : "idle"}
+      >
+        {isCopied ? <CheckIcon strokeWidth={3} /> : <CopyIcon />}
+      </IconSwap>
       {children}
     </Button>
   );

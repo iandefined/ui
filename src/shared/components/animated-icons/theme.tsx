@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 
+import { IconSwap } from "@/registry/base/icon-swap";
 import { cn } from "@/shared/lib/utils";
 
 type AnimatedThemeIconProps = React.ComponentProps<"svg"> & {
@@ -12,12 +13,15 @@ export const AnimatedThemeIcon = ({
   className,
   state,
   ...props
-}: AnimatedThemeIconProps) =>
-  state === "dark" ? (
-    <SunnyToMoonIcon className={className} {...props} />
-  ) : (
-    <MoonToSunnyIcon className={className} {...props} />
-  );
+}: AnimatedThemeIconProps) => (
+  <IconSwap className="inline-flex shrink-0" state={state}>
+    {state === "dark" ? (
+      <SunnyToMoonIcon className={className} {...props} />
+    ) : (
+      <MoonToSunnyIcon className={className} {...props} />
+    )}
+  </IconSwap>
+);
 
 const SunnyToMoonIcon = ({
   className,

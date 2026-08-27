@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon-swap",
+  "title": "Icon Swap",
+  "description": "A consistent keyed scale, blur, and fade transition for changing icons.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "https://ui.iandefined.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/icon-swap.tsx",
+      "content": "\"use client\";\n\nimport type { HTMLMotionProps } from \"motion/react\";\nimport { AnimatePresence, motion } from \"motion/react\";\n\ntype IconSwapProps = Omit<HTMLMotionProps<\"span\">, \"children\"> & {\n  children?: React.ReactNode;\n  state: React.Key;\n};\n\nfunction IconSwap({ children, state, ...props }: IconSwapProps) {\n  return (\n    <AnimatePresence initial={false} mode=\"popLayout\">\n      {children == null ? null : (\n        <motion.span\n          animate={{ filter: \"blur(0px)\", opacity: 1, scale: 1 }}\n          data-slot=\"icon-swap\"\n          exit={{ filter: \"blur(4px)\", opacity: 0, scale: 0.25 }}\n          initial={{ filter: \"blur(4px)\", opacity: 0, scale: 0.25 }}\n          key={state}\n          transition={{ bounce: 0, duration: 0.3, type: \"spring\" }}\n          {...props}\n        >\n          {children}\n        </motion.span>\n      )}\n    </AnimatePresence>\n  );\n}\n\nexport { IconSwap };\nexport type { IconSwapProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/icon-swap.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

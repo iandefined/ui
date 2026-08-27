@@ -1,0 +1,197 @@
+---
+title: Select
+description: A form control for choosing one or more values from a popup list.
+---
+
+<ComponentPreview name="select/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/select.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/select.tsx"
+  title="components/ui/select.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Select,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+```
+
+```tsx
+const items = [
+  { label: "Next.js", value: "next" },
+  { label: "Vite", value: "vite" },
+  { label: "Astro", value: "astro" },
+];
+
+<Select items={items}>
+  <SelectTrigger>
+    <SelectValue placeholder="Select a framework" />
+    <SelectIcon />
+  </SelectTrigger>
+  <SelectPopup>
+    <SelectList>
+      {items.map((item) => (
+        <SelectItem key={item.value} value={item.value}>
+          <SelectItemText>{item.label}</SelectItemText>
+          <SelectItemIndicator />
+        </SelectItem>
+      ))}
+    </SelectList>
+  </SelectPopup>
+</Select>;
+```
+
+Pass `items` to `Select` when `SelectValue` should resolve a selected value to its label. Without `items`, the value renders as-is. For a searchable list, use a combobox instead.
+
+## Anatomy
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue />
+    <SelectIcon />
+  </SelectTrigger>
+  <SelectPopup>
+    <SelectList>
+      <SelectGroup>
+        <SelectGroupLabel />
+        <SelectItem>
+          <SelectItemText />
+          <SelectItemIndicator />
+        </SelectItem>
+      </SelectGroup>
+      <SelectSeparator />
+    </SelectList>
+  </SelectPopup>
+</Select>
+```
+
+## Examples
+
+### Basic
+
+Use `alignItemWithTrigger` when the selected item should align with the trigger value while the popup is open.
+
+<ComponentPreview name="select/basic" />
+
+### Country
+
+Items can include rich content such as icons or images.
+
+<ComponentPreview name="select/country" />
+
+### Formatting Values
+
+Providing `items` lets `SelectValue` display the matching label instead of the raw value.
+
+<ComponentPreview name="select/formatting-value" />
+
+Pass a function child to `SelectValue` when the trigger needs custom content.
+
+<ComponentPreview name="select/formatting-country" />
+
+### Object Values
+
+Items can use objects as values. Set `itemToStringValue` so forms and hidden inputs receive a stable string.
+
+<ComponentPreview name="select/object-values" />
+
+### Multiple Selection
+
+Set `multiple` to work with an array of selected values.
+
+<ComponentPreview name="select/multiple-selection" />
+
+### Groups
+
+Use `SelectGroup`, `SelectGroupLabel`, and `SelectSeparator` to organize related options.
+
+<ComponentPreview name="select/groups" />
+
+### Disabled
+
+Disable the entire control or individual items with the `disabled` prop.
+
+<ComponentPreview name="select/disabled" />
+
+### Controlled
+
+Control the selection with `value` and `onValueChange` when application state owns the current value.
+
+<ComponentPreview name="select/controlled" />
+
+## Popup Animation
+
+Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup animation.
+
+### Scale
+
+`scale` is the default preset.
+
+<ComponentPreview name="select/animation-scale" />
+
+### Wipe
+
+<ComponentPreview name="select/animation-wipe" />
+
+### Wipe Scale
+
+<ComponentPreview name="select/animation-wipe-scale" />
+
+### Motion
+
+<ComponentPreview name="select/animation-motion" />
+
+### Motion Blur
+
+<ComponentPreview name="select/animation-motion-blur" />

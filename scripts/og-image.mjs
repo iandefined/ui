@@ -94,9 +94,9 @@ const createOgImageElement = ({ description, title }) => {
       h(
         "svg",
         {
-          fill: "currentColor",
+          fill: "#ffffff",
           height: 48,
-          viewBox: "0 0 16 16",
+          viewBox: "0 0 256 256",
           width: 48,
           xmlns: "http://www.w3.org/2000/svg",
         },

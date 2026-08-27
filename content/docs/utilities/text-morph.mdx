@@ -1,0 +1,102 @@
+---
+title: Text Morph
+description: Animate changing text with Calligraph and smoothly follow its width.
+---
+
+<ComponentPreview name="text-morph/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
+```
+
+The CLI also installs `IconSwap` and Motion for the coordinated status example.
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the [Icon Swap](/docs/utilities/icon-swap) registry dependency:</Step>
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
+
+<Step>Install Calligraph and Motion:</Step>
+
+```bash
+npm install calligraph motion
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/text-morph.tsx"
+  title="components/ui/text-morph.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { TextMorph } from "@/components/ui/text-morph";
+```
+
+```tsx
+<TextMorph>{status}</TextMorph>
+```
+
+`TextMorph` is the standard way to animate changing text in this registry. Use it instead of adding a one-off text transition with Motion or `AnimatePresence`. The caller owns when the value changes; `TextMorph` owns how the characters transition.
+
+It is powered by [Calligraph](https://calligraph.raphaelsalaja.com/), which preserves shared characters, animates entering and leaving characters, and supports text, number, and slot-style transitions.
+
+## Container Width
+
+`autoSize` is enabled by default. Calligraph measures an inner element at its natural content width with `ResizeObserver`, then animates a separate outer wrapper to the measured pixel width. This avoids measuring and animating the same element and skips an animation from zero on the first render, following the technique in [Animating Container Bounds](https://www.userinterface.wiki/animating-container-bounds).
+
+Use `autoSize={false}` only when the text lives in an intentionally fixed-width container.
+
+```tsx
+<TextMorph autoSize={false}>{status}</TextMorph>
+```
+
+## Coordinating Icons and Text
+
+When a status changes both an icon and its label, drive both from the same state. Use `TextMorph` for the label and [Icon Swap](/docs/utilities/icon-swap) for the icon. Do not recreate the underlying Motion presence or transition code in the consumer.
+
+The preview at the top demonstrates the complete sequence: **Fetch → Fetching → Data Fetched → Fetch**. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
+
+## Examples
+
+### Input-driven Text
+
+Keep the input state in the caller and pass the displayed string to `TextMorph`.
+
+<ComponentPreview name="text-morph/input" />
+
+### Number and Slots
+
+Use `variant="number"` for rolling digits or `variant="slots"` for a slot-machine transition.
+
+<ComponentPreview name="text-morph/variants" />
+
+## Animation
+
+Choose `default`, `smooth`, `snappy`, or `bouncy` with the `animation` prop. Text transitions also support `drift`, `trend`, and `stagger`.
+
+```tsx
+<TextMorph animation="snappy" trend={-1}>
+  {status}
+</TextMorph>
+```

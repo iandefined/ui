@@ -1,4 +1,4 @@
 {
-  "pages": ["hitbox"],
+  "pages": ["hitbox", "icon-swap", "text-morph"],
   "title": "Utilities"
 }

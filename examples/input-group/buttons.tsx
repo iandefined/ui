@@ -3,6 +3,7 @@
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 
+import { IconSwap } from "@/registry/base/icon-swap";
 import {
   InputGroup,
   InputGroupAddon,
@@ -23,7 +24,12 @@ export default function InputGroupButtonsDemo() {
             onClick={() => setCopied(true)}
             size="icon-xs"
           >
-            {copied ? <CheckIcon /> : <CopyIcon />}
+            <IconSwap
+              className="inline-flex shrink-0"
+              state={copied ? "copied" : "copy"}
+            >
+              {copied ? <CheckIcon /> : <CopyIcon />}
+            </IconSwap>
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>

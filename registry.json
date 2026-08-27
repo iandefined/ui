@@ -267,6 +267,36 @@
       }
     },
     {
+      "name": "icon-swap",
+      "type": "registry:ui",
+      "title": "Icon Swap",
+      "description": "A consistent keyed scale, blur, and fade transition for changing icons.",
+      "dependencies": ["motion"],
+      "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
+      "files": [
+        {
+          "path": "src/registry/base/icon-swap.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/icon-swap.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-morph",
+      "type": "registry:ui",
+      "title": "Text Morph",
+      "description": "The standard animated-text primitive, powered by Calligraph with smooth container resizing.",
+      "dependencies": ["calligraph", "motion"],
+      "registryDependencies": ["https://ui.iandefined.com/r/icon-swap.json"],
+      "files": [
+        {
+          "path": "src/registry/base/text-morph.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/text-morph.tsx"
+        }
+      ]
+    },
+    {
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
@@ -363,6 +393,7 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": ["https://ui.iandefined.com/r/text-morph.json"],
       "files": [
         {
           "path": "src/registry/base/input.tsx",
@@ -417,6 +448,7 @@
       ],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/icon-swap.json",
         "https://ui.iandefined.com/r/input.json",
         "https://ui.iandefined.com/r/textarea.json"
       ],
@@ -458,6 +490,25 @@
           "path": "src/registry/base/popover.tsx",
           "type": "registry:ui",
           "target": "components/ui/popover.tsx"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "An accessible, customizable select component.",
+      "dependencies": [
+        "@base-ui/react",
+        "clsx",
+        "tailwind-merge",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/select.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/select.tsx"
         }
       ]
     },

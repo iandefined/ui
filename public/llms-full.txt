@@ -476,6 +476,12 @@ A styled text input built on Base UI.
 npx shadcn@latest add https://ui.iandefined.com/r/input.json
 ```
 
+The CLI also installs `TextMorph` and its Calligraph and Motion dependencies for the animated controlled example.
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
+```
+
 ```bash
 npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
@@ -509,6 +515,8 @@ import { Input } from "@/components/ui/input";
 
 ### Controlled
 
+The value preview uses the shared `TextMorph` abstraction instead of a component-specific text animation.
+
 # Input Group
 
 Compose inputs and textareas with icons, text, buttons, and menus.
@@ -519,6 +527,12 @@ Compose inputs and textareas with icons, text, buttons, and menus.
 
 ```bash
 npx shadcn@latest add https://ui.iandefined.com/r/input-group.json
+```
+
+The CLI also installs `IconSwap` and Motion for the copy-button example.
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
 ```
 
 ```bash
@@ -937,6 +951,149 @@ Set `scrollShadow` independently of the scrollbar orientation to fade only the o
 ### Hide Scrollbar
 
 Set `hideScrollbar` to keep the scroll area and edge fades while removing the custom scrollbar.
+
+# Select
+
+A form control for choosing one or more values from a popup list.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/select.json
+```
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+## Usage
+
+```tsx
+import {
+  Select,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+```
+
+```tsx
+const items = [
+  { label: "Next.js", value: "next" },
+  { label: "Vite", value: "vite" },
+  { label: "Astro", value: "astro" },
+];
+
+<Select items={items}>
+  <SelectTrigger>
+    <SelectValue placeholder="Select a framework" />
+    <SelectIcon />
+  </SelectTrigger>
+  <SelectPopup>
+    <SelectList>
+      {items.map((item) => (
+        <SelectItem key={item.value} value={item.value}>
+          <SelectItemText>{item.label}</SelectItemText>
+          <SelectItemIndicator />
+        </SelectItem>
+      ))}
+    </SelectList>
+  </SelectPopup>
+</Select>;
+```
+
+Pass `items` to `Select` when `SelectValue` should resolve a selected value to its label. Without `items`, the value renders as-is. For a searchable list, use a combobox instead.
+
+## Anatomy
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue />
+    <SelectIcon />
+  </SelectTrigger>
+  <SelectPopup>
+    <SelectList>
+      <SelectGroup>
+        <SelectGroupLabel />
+        <SelectItem>
+          <SelectItemText />
+          <SelectItemIndicator />
+        </SelectItem>
+      </SelectGroup>
+      <SelectSeparator />
+    </SelectList>
+  </SelectPopup>
+</Select>
+```
+
+## Examples
+
+### Basic
+
+Use `alignItemWithTrigger` when the selected item should align with the trigger value while the popup is open.
+
+### Country
+
+Items can include rich content such as icons or images.
+
+### Formatting Values
+
+Providing `items` lets `SelectValue` display the matching label instead of the raw value.
+
+Pass a function child to `SelectValue` when the trigger needs custom content.
+
+### Object Values
+
+Items can use objects as values. Set `itemToStringValue` so forms and hidden inputs receive a stable string.
+
+### Multiple Selection
+
+Set `multiple` to work with an array of selected values.
+
+### Groups
+
+Use `SelectGroup`, `SelectGroupLabel`, and `SelectSeparator` to organize related options.
+
+### Disabled
+
+Disable the entire control or individual items with the `disabled` prop.
+
+### Controlled
+
+Control the selection with `value` and `onValueChange` when application state owns the current value.
+
+## Popup Animation
+
+Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup animation.
+
+### Scale
+
+`scale` is the default preset.
+
+### Wipe
+
+### Wipe Scale
+
+### Motion
+
+### Motion Blur
 
 # Separator
 
@@ -2090,4 +2247,118 @@ Hover the target
 
 ```tsx
 <Button className="hitbox-6 hitbox-debug">Hover the target</Button>
+```
+
+# Icon Swap
+
+Animate between keyed icons with a consistent scale, blur, and fade transition.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
+
+The CLI also installs the registry `Button` used by the default example.
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
+```
+
+```bash
+npm install motion
+```
+
+## Usage
+
+```tsx
+import { IconSwap } from "@/components/ui/icon-swap";
+```
+
+```tsx
+<IconSwap className="inline-flex shrink-0" state={isCopied ? "copied" : "copy"}>
+  {isCopied ? <CheckIcon /> : <CopyIcon />}
+</IconSwap>
+```
+
+Change the `state` value whenever the semantic icon state changes. `IconSwap` keeps initial rendering still, uses pop layout so an exiting icon does not push nearby content, and owns the shared scale, blur, fade, and spring transition. Styling and Motion props passed to `IconSwap` are applied to its animated span.
+
+When an interaction changes both an icon and text, derive both from the same state. Use `IconSwap` for the icon and [Text Morph](/docs/utilities/text-morph) for the label.
+
+## Reset After Inactivity
+
+For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
+
+# Text Morph
+
+Animate changing text with Calligraph and smoothly follow its width.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
+```
+
+The CLI also installs `IconSwap` and Motion for the coordinated status example.
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
+
+```bash
+npm install calligraph motion
+```
+
+## Usage
+
+```tsx
+import { TextMorph } from "@/components/ui/text-morph";
+```
+
+```tsx
+<TextMorph>{status}</TextMorph>
+```
+
+`TextMorph` is the standard way to animate changing text in this registry. Use it instead of adding a one-off text transition with Motion or `AnimatePresence`. The caller owns when the value changes; `TextMorph` owns how the characters transition.
+
+It is powered by [Calligraph](https://calligraph.raphaelsalaja.com/), which preserves shared characters, animates entering and leaving characters, and supports text, number, and slot-style transitions.
+
+## Container Width
+
+`autoSize` is enabled by default. Calligraph measures an inner element at its natural content width with `ResizeObserver`, then animates a separate outer wrapper to the measured pixel width. This avoids measuring and animating the same element and skips an animation from zero on the first render, following the technique in [Animating Container Bounds](https://www.userinterface.wiki/animating-container-bounds).
+
+Use `autoSize={false}` only when the text lives in an intentionally fixed-width container.
+
+```tsx
+<TextMorph autoSize={false}>{status}</TextMorph>
+```
+
+## Coordinating Icons and Text
+
+When a status changes both an icon and its label, drive both from the same state. Use `TextMorph` for the label and [Icon Swap](/docs/utilities/icon-swap) for the icon. Do not recreate the underlying Motion presence or transition code in the consumer.
+
+The preview at the top demonstrates the complete sequence: **Fetch → Fetching → Data Fetched → Fetch**. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
+
+## Examples
+
+### Input-driven Text
+
+Keep the input state in the caller and pass the displayed string to `TextMorph`.
+
+### Number and Slots
+
+Use `variant="number"` for rolling digits or `variant="slots"` for a slot-machine transition.
+
+## Animation
+
+Choose `default`, `smooth`, `snappy`, or `bouncy` with the `animation` prop. Text transitions also support `drift`, `trend`, and `stagger`.
+
+```tsx
+<TextMorph animation="snappy" trend={-1}>
+  {status}
+</TextMorph>
 ```

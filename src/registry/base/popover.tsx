@@ -88,7 +88,7 @@ function PopoverPopup({
       >
         <PopoverPrimitive.Popup
           className={cn(
-            "relative flex h-(--popup-height,auto) w-(--popup-width,auto) origin-(--transform-origin) rounded-lg border bg-popover text-popover-foreground shadow-lg/5 outline-none transition-[width,height,scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-starting-style:scale-98 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
+            "relative flex h-(--popup-height,auto) w-(--popup-width,auto) origin-(--transform-origin) rounded-lg border [border-color:var(--border)] bg-popover text-popover-foreground shadow-lg/5 outline-none transition-[width,height,scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-starting-style:scale-98 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
             className
           )}
           data-slot="popover-popup"
@@ -103,7 +103,7 @@ function PopoverPopup({
           ) : null}
           {showArrow ? (
             <PopoverPrimitive.Arrow
-              className="relative block h-1.5 w-3 overflow-clip data-[side=bottom]:top-[-6px] data-[side=inline-start]:right-[-9px] data-[side=inline-start]:rotate-90 data-[side=inline-end]:left-[-9px] data-[side=inline-end]:-rotate-90 data-[side=left]:right-[-9px] data-[side=left]:rotate-90 data-[side=right]:left-[-9px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-6px] data-[side=top]:rotate-180 before:absolute before:bottom-0 before:left-1/2 before:h-[calc(6px*sqrt(2))] before:w-[calc(6px*sqrt(2))] before:border before:border-border before:bg-popover before:content-[''] before:[transform:translate(-50%,50%)_rotate(45deg)]"
+              className="relative block h-1.5 w-3 overflow-clip data-[side=bottom]:top-[-6px] data-[side=inline-start]:right-[-9px] data-[side=inline-start]:rotate-90 data-[side=inline-end]:left-[-9px] data-[side=inline-end]:-rotate-90 data-[side=left]:right-[-9px] data-[side=left]:rotate-90 data-[side=right]:left-[-9px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-6px] data-[side=top]:rotate-180 before:absolute before:bottom-0 before:left-1/2 before:h-[calc(6px*sqrt(2))] before:w-[calc(6px*sqrt(2))] before:border before:[border-color:var(--border)] before:bg-popover before:content-[''] before:[transform:translate(-50%,50%)_rotate(45deg)]"
               data-slot="popover-arrow"
             />
           ) : null}

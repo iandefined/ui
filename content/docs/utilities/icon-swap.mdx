@@ -1,0 +1,68 @@
+---
+title: Icon Swap
+description: Animate between keyed icons with a consistent scale, blur, and fade transition.
+---
+
+<ComponentPreview name="icon-swap/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
+
+The CLI also installs the registry `Button` used by the default example.
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the [Button](/docs/components/button) registry dependency:</Step>
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
+```
+
+<Step>Install Motion:</Step>
+
+```bash
+npm install motion
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/icon-swap.tsx"
+  title="components/ui/icon-swap.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { IconSwap } from "@/components/ui/icon-swap";
+```
+
+```tsx
+<IconSwap className="inline-flex shrink-0" state={isCopied ? "copied" : "copy"}>
+  {isCopied ? <CheckIcon /> : <CopyIcon />}
+</IconSwap>
+```
+
+Change the `state` value whenever the semantic icon state changes. `IconSwap` keeps initial rendering still, uses pop layout so an exiting icon does not push nearby content, and owns the shared scale, blur, fade, and spring transition. Styling and Motion props passed to `IconSwap` are applied to its animated span.
+
+When an interaction changes both an icon and text, derive both from the same state. Use `IconSwap` for the icon and [Text Morph](/docs/utilities/text-morph) for the label.
+
+## Reset After Inactivity
+
+For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.

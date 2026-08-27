@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Input } from "@/registry/base/input";
+import { TextMorph } from "@/registry/base/text-morph";
 
 export default function InputControlledDemo() {
   const [value, setValue] = useState("base-ui.com");
@@ -15,8 +16,9 @@ export default function InputControlledDemo() {
         placeholder="domain"
         value={value}
       />
-      <span className="px-1 text-sm text-muted-foreground">
-        https://{value || "your-domain"}
+      <span className="inline-flex w-fit px-1 text-sm text-muted-foreground">
+        https://
+        <TextMorph>{value || "your-domain"}</TextMorph>
       </span>
     </div>
   );

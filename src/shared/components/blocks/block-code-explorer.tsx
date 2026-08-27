@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { IconSwap } from "@/registry/base/icon-swap";
 import { CopyButton } from "@/shared/components/copy-button";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -284,11 +285,16 @@ function TreeItem({
             />
           }
         >
-          {isLoadingCode && isActive ? (
-            <Loader2Icon className="animate-spin" />
-          ) : (
-            <FileIcon className="text-muted-foreground" />
-          )}
+          <IconSwap
+            className="inline-flex shrink-0"
+            state={isLoadingCode && isActive ? "loading" : "file"}
+          >
+            {isLoadingCode && isActive ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              <FileIcon className="text-muted-foreground" />
+            )}
+          </IconSwap>
           <span className="truncate">{item.name}</span>
         </TooltipTrigger>
         <TooltipContent side="right">{item.name}</TooltipContent>

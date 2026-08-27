@@ -10,6 +10,12 @@ Compose inputs and textareas with icons, text, buttons, and menus.
 npx shadcn@latest add https://ui.iandefined.com/r/input-group.json
 ```
 
+The CLI also installs `IconSwap` and Motion for the copy-button example.
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
+
 ```bash
 npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```

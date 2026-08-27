@@ -23,6 +23,8 @@ Do not manually edit generated output: `src/routeTree.gen.ts`, `public/r/*`, `pu
 - Verification scope and when builds are warranted: [.agents/project/verification.md](.agents/project/verification.md)
 - Documentation, metadata, and generated static endpoints: [.agents/project/docs-and-static-assets.md](.agents/project/docs-and-static-assets.md)
 - Writing registry MDX pages and choosing examples: [.agents/projects/writing-registry-pages.md](.agents/projects/writing-registry-pages.md)
+- Animated text, icon swaps, and changing container bounds: [.agents/project/animation.md](.agents/project/animation.md)
+- Reusing project UI primitives instead of raw interactive HTML: [.agents/project/primitives.md](.agents/project/primitives.md)
 
 ## Task Entry Points
 
