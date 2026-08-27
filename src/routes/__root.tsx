@@ -22,7 +22,7 @@ import { JsonLdScripts } from "@/shared/lib/seo/json-ld";
 import { rootHead } from "@/shared/lib/seo/metadata";
 import { cn } from "@/shared/lib/utils";
 
-import "@/styles/globals.css";
+import "@/styles/app.css";
 
 const themeScript = `
   try {

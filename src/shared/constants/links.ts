@@ -11,7 +11,7 @@ export const LINK = {
   DISCORD: "https://discord.gg",
   GITHUB: githubUrl,
   LICENSE: `${githubUrl}/blob/${GITHUB.branch}/LICENSE`,
-  PORTFOLIO: "https://github.com/iandefined",
+  PORTFOLIO: "https://iandefined.com",
   SHADCN_MCP_DOCS: "https://ui.shadcn.com/docs/mcp",
   X: "https://x.com/iandefined",
 } as const;

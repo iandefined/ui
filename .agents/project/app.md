@@ -11,3 +11,4 @@ Use this when changing app code, routing, UI, or shared modules.
 - Avoid request-time Wasm compilation in Worker-rendered paths. For Shiki, use the JavaScript regex engine.
 - If shared component directories move, keep the `components.json` shadcn aliases in sync.
 - When a Base UI trigger should look and behave like a project button, compose the existing Button through the primitive's `render` prop instead of styling the trigger primitive directly.
+- Keep `globals.css` portable for installed registry components. Import app-only styles through `app.css`; put generic app utilities in `utilities.css`, registry-style utilities in their own stylesheet (for example `hitbox.css`), and repository-only selectors in `components.css`.
