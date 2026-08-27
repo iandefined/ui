@@ -15,6 +15,7 @@
 - [Kbd](https://ui.iandefined.com/docs/components/kbd.md) - Displays textual keyboard input and shortcut combinations.
 - [Label](https://ui.iandefined.com/docs/components/label.md) - Renders an accessible label associated with controls.
 - [Number Field](https://ui.iandefined.com/docs/components/number-field.md) - A numeric input with increment, decrement, and scrub controls.
+- [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
 - [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.

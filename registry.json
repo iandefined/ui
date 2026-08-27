@@ -448,6 +448,20 @@
       ]
     },
     {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "An accessible popup anchored to a button.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/popover.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/popover.tsx"
+        }
+      ]
+    },
+    {
       "name": "sidebar-01",
       "type": "registry:block",
       "title": "Sidebar 01",

@@ -1,0 +1,169 @@
+---
+title: Popover
+description: An accessible popup anchored to a button.
+---
+
+<ComponentPreview name="popover/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/popover.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/popover.tsx"
+  title="components/ui/popover.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Popover,
+  PopoverClose,
+  PopoverDescription,
+  PopoverPopup,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+```
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>
+    Open Popover
+  </PopoverTrigger>
+  <PopoverPopup>
+    <PopoverTitle>Popover Title</PopoverTitle>
+    <PopoverDescription>Popover Description</PopoverDescription>
+    <PopoverClose render={<Button variant="ghost" />}>Close</PopoverClose>
+  </PopoverPopup>
+</Popover>
+```
+
+## Anatomy
+
+```tsx
+import {
+  Popover,
+  PopoverDescription,
+  PopoverPopup,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+<Popover>
+  <PopoverTrigger />
+  <PopoverPopup>
+    <PopoverTitle />
+    <PopoverDescription />
+  </PopoverPopup>
+</Popover>;
+```
+
+## Examples
+
+### With Arrow
+
+Pass `showArrow` to `PopoverPopup` to show an arrow. Keep `sideOffset` at 8 or more so it has room.
+
+<ComponentPreview name="popover/with-arrow" />
+
+### Sides
+
+Pass `side` to `PopoverPopup` to change the side of the popover. The default is `bottom`.
+
+<ComponentPreview name="popover/sides" />
+
+### Open on Hover
+
+By default, Popover opens when the trigger is clicked. Pass `openOnHover` to `PopoverTrigger` to open it when the trigger is hovered. Use `delay` and `closeDelay` to control the hover timing.
+
+<ComponentPreview name="popover/hover" />
+
+### Modal
+
+The `modal` prop determines whether the popover enters a modal state and how it interacts with the page:
+
+- `false`: keyboard focus and pointer interaction can move between the popover and the page.
+- `"trap-focus"`: keyboard focus stays within the popover, while page scrolling and pointer interaction outside it remain enabled. Clicking outside is therefore expected.
+- `true`: keyboard focus stays within the popover, page scrolling is locked, and pointer interaction outside it is disabled.
+
+The included `PopoverPopup` renders the visually hidden close control Base UI needs to enable focus trapping. Add a visible `PopoverClose` when people need an explicit way to close the popover.
+
+<ComponentPreview name="popover/modal" />
+
+### Offset
+
+Pass `sideOffset` to `PopoverPopup` to change the offset of the popover. The default is `4`.
+
+<ComponentPreview name="popover/offset" />
+
+### Controlled
+
+Control `open` and `onOpenChange` on `Popover` when the open state needs to be managed externally.
+
+<ComponentPreview name="popover/controlled" />
+
+### With Form
+
+Popover content can contain interactive form controls.
+
+<ComponentPreview name="popover/with-form" />
+
+### Backdrop
+
+Pass `backdrop` to `Popover` to choose how the page appears while the popover is open. The default is `transparent`.
+
+#### Opaque
+
+<ComponentPreview name="popover/backdrop-opaque" />
+
+#### Blur
+
+<ComponentPreview name="popover/backdrop-blur" />
+
+#### Transparent
+
+<ComponentPreview name="popover/backdrop-transparent" />
+
+### Custom Trigger
+
+Use the `render` prop to compose a custom trigger. This example also uses `openOnHover` to open the popover when the trigger is hovered.
+
+<ComponentPreview name="popover/custom-trigger" />
