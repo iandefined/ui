@@ -16,6 +16,7 @@
 - [Label](https://ui.iandefined.com/docs/components/label.md) - Renders an accessible label associated with controls.
 - [Number Field](https://ui.iandefined.com/docs/components/number-field.md) - A numeric input with increment, decrement, and scrub controls.
 - [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
+- [Radio Group](https://ui.iandefined.com/docs/components/radio-group.md) - A set of checkable buttons where only one item can be checked at a time.
 - [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
 - [Select](https://ui.iandefined.com/docs/components/select.md) - A form control for choosing one or more values from a popup list.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.

@@ -6,6 +6,7 @@ import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
 import { DropdownMenu as BaseDropdownMenu } from "@/registry/base/dropdown-menu";
 import { Input as BaseInput } from "@/registry/base/input";
 import { InputGroup as BaseInputGroup } from "@/registry/base/input-group";
+import { RadioGroup as BaseRadioGroup } from "@/registry/base/radio-group";
 import { Separator as BaseSeparator } from "@/registry/base/separator";
 import Sidebar01Page from "@/registry/base/sidebar-01/page";
 import { Skeleton as BaseSkeleton } from "@/registry/base/skeleton";
@@ -84,6 +85,7 @@ const registryComponents: Record<string, RegistryComponent> = {
   "dropdown-menu": BaseDropdownMenu as RegistryComponent,
   input: BaseInput as RegistryComponent,
   "input-group": BaseInputGroup as RegistryComponent,
+  "radio-group": BaseRadioGroup as RegistryComponent,
   separator: BaseSeparator as RegistryComponent,
   skeleton: BaseSkeleton as RegistryComponent,
   spinner: BaseSpinner as RegistryComponent,

@@ -1,0 +1,136 @@
+---
+title: Radio Group
+description: A set of checkable buttons where only one item can be checked at a time.
+---
+
+<ComponentPreview name="radio-group/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/radio-group.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/radio-group.tsx"
+  title="components/ui/radio-group.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Label } from "@/components/ui/label";
+import { Radio, RadioGroup } from "@/components/ui/radio-group";
+```
+
+```tsx
+<RadioGroup defaultValue="react-query">
+  <div className="text-sm font-medium">
+    Choose your favorite Tanstack library
+  </div>
+  <Label>
+    <Radio value="react-query" /> React Query
+  </Label>
+  <Label>
+    <Radio value="tanstack-router" /> Tanstack Router
+  </Label>
+  <Label>
+    <Radio value="tanstack-table" /> Tanstack Table
+  </Label>
+</RadioGroup>
+```
+
+## Anatomy
+
+```tsx
+import {
+  Radio,
+  RadioGroup,
+  RadioIndicator,
+  RadioRoot,
+} from "@/components/ui/radio-group";
+
+// Option #1. Basic usage:
+<RadioGroup>
+  <Radio value="one" />
+</RadioGroup>;
+
+// Option #2. Custom usage:
+<RadioGroup>
+  <RadioRoot value="one">
+    <RadioIndicator />
+  </RadioRoot>
+</RadioGroup>;
+```
+
+## Examples
+
+### Basic
+
+<ComponentPreview name="radio-group/basic" />
+
+### With Description
+
+<ComponentPreview name="radio-group/with-description" />
+
+### Orientation
+
+Change the orientation of the radio group with the `orientation` prop.
+
+<ComponentPreview name="radio-group/orientation" />
+
+### Controlled
+
+Control the selected value with the `value` prop and `onValueChange` callback.
+
+<ComponentPreview name="radio-group/controlled" />
+
+### Custom Layout
+
+<ComponentPreview name="radio-group/custom-layout" />
+
+### Disabled
+
+<ComponentPreview name="radio-group/disabled" />
+
+### Sizes
+
+<ComponentPreview name="radio-group/sizes" />
+
+### Custom Indicator
+
+<ComponentPreview name="radio-group/custom-indicator" />
