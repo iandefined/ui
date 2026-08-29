@@ -189,7 +189,7 @@ function SelectTrigger({ className, ...props }: SelectTriggerProps) {
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input bg-background px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs transition-colors ease-out hover:bg-input/20 focus-visible:border-primary focus-visible:outline-none data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/40 dark:hover:bg-input/50",
+        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input bg-background px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs transition-colors ease-out hover:bg-input/20 focus-visible:border-primary focus-visible:outline-none data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32/40 dark:hover:bg-input/50",
         className
       )}
       {...props}
@@ -279,9 +279,9 @@ function SelectBackdrop({ className, ...props }: SelectBackdropProps) {
       data-slot="select-backdrop"
       className={cn(
         backdrop === "opaque" &&
-          "fixed inset-0 bg-black z-100 opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
+          "fixed inset-0 z-20 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
         backdrop === "blur" &&
-          "fixed inset-0 z-100 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed inset-0 z-20 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
         backdrop === "transparent" && "hidden",
         className
       )}
@@ -311,7 +311,7 @@ function SelectPositioner({
         data-align-item-with-trigger={alignItemWithTrigger ? "" : undefined}
         data-slot="select-positioner"
         className={cn(
-          "z-100 select-none outline-none data-[align-item-with-trigger]:[&_[data-slot=select-item]]:px-1",
+          "z-30 select-none outline-none data-[align-item-with-trigger]:[&_[data-slot=select-item]]:px-1",
           className
         )}
         {...props}
@@ -430,7 +430,7 @@ function SelectPopup({
                 )}
                 <SelectPrimitive.ScrollUpArrow
                   className={cn(
-                    "top-0 z-50 flex h-6 w-full cursor-default items-center justify-center",
+                    "top-0 z-20 flex h-6 w-full cursor-default items-center justify-center",
                     "before:pointer-events-none before:absolute before:inset-x-px before:top-px before:h-[140%] before:rounded-t-[calc(var(--radius-lg)-1px)] before:bg-linear-to-b before:from-popover before:from-50%"
                   )}
                   data-slot="select-scroll-up-arrow"
@@ -440,7 +440,7 @@ function SelectPopup({
                 {children}
                 <SelectPrimitive.ScrollDownArrow
                   className={cn(
-                    "bottom-0 z-50 flex h-6 w-full cursor-default items-center justify-center",
+                    "bottom-0 z-20 flex h-6 w-full cursor-default items-center justify-center",
                     "before:pointer-events-none before:absolute before:inset-x-px before:bottom-px before:h-[140%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-popover before:from-50%"
                   )}
                   data-slot="select-scroll-down-arrow"
@@ -470,7 +470,7 @@ function SelectPopup({
               )}
               <SelectPrimitive.ScrollUpArrow
                 className={cn(
-                  "top-0 z-50 flex h-6 w-full cursor-default items-center justify-center",
+                  "top-0 z-20 flex h-6 w-full cursor-default items-center justify-center",
                   "before:pointer-events-none before:absolute before:inset-x-px before:top-px before:h-[140%] before:rounded-t-[calc(var(--radius-lg)-1px)] before:bg-linear-to-b before:from-popover before:from-50%"
                 )}
                 data-slot="select-scroll-up-arrow"
@@ -480,7 +480,7 @@ function SelectPopup({
               {children}
               <SelectPrimitive.ScrollDownArrow
                 className={cn(
-                  "bottom-0 z-50 flex h-6 w-full cursor-default items-center justify-center",
+                  "bottom-0 z-20 flex h-6 w-full cursor-default items-center justify-center",
                   "before:pointer-events-none before:absolute before:inset-x-px before:bottom-px before:h-[140%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-popover before:from-50%"
                 )}
                 data-slot="select-scroll-down-arrow"

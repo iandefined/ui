@@ -134,7 +134,7 @@ function TooltipPositioner({
     <TooltipPortal>
       <TooltipPrimitive.Positioner
         className={cn(
-          "z-100 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom,transform] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none",
+          "z-30 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom,transform] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none",
           (side === "inline-end" || side === "inline-start") &&
             "**:data-[slot=tooltip-arrow]:hidden",
           className

@@ -18,6 +18,26 @@
       ]
     },
     {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "A container that groups related buttons together with consistent styling.",
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["https://ui.iandefined.com/r/separator.json"],
+      "files": [
+        {
+          "path": "src/registry/base/button-group.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/button-group.tsx"
+        }
+      ]
+    },
+    {
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
@@ -571,6 +591,25 @@
           "path": "src/registry/base/sidebar-01/components/version-switcher.tsx",
           "type": "registry:component",
           "target": "components/version-switcher.tsx"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "A filterable input for selecting one or more predefined values.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/input.json",
+        "https://ui.iandefined.com/r/label.json",
+        "https://ui.iandefined.com/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/combobox.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/combobox.tsx"
         }
       ]
     }

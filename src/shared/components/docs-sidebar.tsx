@@ -69,7 +69,7 @@ export const DocsSidebar = ({
 
   return (
     <Sidebar
-      className="text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden h-[calc(100svh-10rem)] flex-col overscroll-none bg-transparent [--sidebar-menu-width:--spacing(48)] lg:flex"
+      className="text-sidebar-foreground sticky top-[calc(var(--header-height)+0.6rem)] z-20 hidden h-[calc(100svh-10rem)] flex-col overscroll-none bg-transparent [--sidebar-menu-width:--spacing(48)] lg:flex"
       collapsible="none"
       {...props}
     >
