@@ -24,6 +24,7 @@
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
 - [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
+- [Switch](https://ui.iandefined.com/docs/components/switch.md) - A draggable toggle with spring-based thumb animation.
 - [Textarea](https://ui.iandefined.com/docs/components/textarea.md) - A styled multiline text control built on Base UI Field.
 - [Tooltip](https://ui.iandefined.com/docs/components/tooltip.md) - Displays contextual information when a user hovers or focuses an element.
 - [Extending](https://ui.iandefined.com/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
