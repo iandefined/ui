@@ -26,7 +26,8 @@ export default function ButtonGroupMenuDemo() {
       <Button variant="outline">Follow</Button>
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button className="pl-2!" variant="outline" />}
+          aria-label="More follow actions"
+          render={<Button size="icon" variant="outline" />}
         >
           <ChevronDownIcon />
         </DropdownMenuTrigger>

@@ -29,9 +29,9 @@ const buttonVariants = tv({
     },
     size: {
       default: "h-9 px-4 py-2 has-[>svg]:px-3",
-      xs: "h-6 gap-1 rounded-md px-[calc(--spacing(2)-1px)] py-[calc(--spacing(1)-1px)] text-xs [&_svg:not([class*='size-'])]:size-3",
-      sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-      lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+      xs: "h-6 gap-1 px-[calc(--spacing(2)-1px)] py-[calc(--spacing(1)-1px)] text-xs [&_svg:not([class*='size-'])]:size-3",
+      sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
+      lg: "h-10 px-6 has-[>svg]:px-4",
       xl: "h-12 px-[calc(--spacing(4)-1px)] py-[calc(--spacing(2)-1px)] text-base [&_svg:not([class*='size-'])]:size-4.5",
       "icon-sm": "size-8 [&_svg:not([class*='size-'])]:size-3.5",
       icon: "size-9 [&_svg:not([class*='size-'])]:size-4",
@@ -41,7 +41,7 @@ const buttonVariants = tv({
     radius: {
       none: "rounded-none",
       sm: "rounded-sm",
-      default: "rounded-md",
+      default: "rounded-lg",
       lg: "rounded-lg",
       xl: "rounded-xl",
       full: "rounded-full",

@@ -51,8 +51,8 @@ export default function ButtonGroupSelectDemo() {
               <ChevronsUpDownIcon className="size-3.5" />
             </SelectIcon>
           </SelectTrigger>
-          <SelectPopup alignItemWithTrigger className="min-w-48">
-            <SelectList>
+          <SelectPopup alignItemWithTrigger>
+            <SelectList className="min-w-48">
               {currencies.map((currency) => (
                 <SelectItem key={currency.value} value={currency}>
                   <SelectItemText>

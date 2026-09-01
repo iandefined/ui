@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 const buttonGroupVariants = tv({
-  base: "flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md [&_button]:active:scale-100 [&_[data-slot=button]]:active:scale-100",
+  base: "isolate flex w-fit items-stretch [&>*:focus-visible]:relative [&>*:focus-visible]:z-10 [&>input]:flex-1 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&_button]:active:scale-100 [&_[data-slot=button]]:active:scale-100",
   variants: {
     orientation: {
       horizontal:
@@ -49,7 +49,7 @@ function ButtonGroupText({
 }: useRender.ComponentProps<"div">) {
   const defaultProps = {
     className: cn(
-      "flex items-center gap-2 rounded-md border bg-muted px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+      "flex items-center gap-2 rounded-lg border bg-muted px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
       className
     ),
     "data-slot": "button-group-text",

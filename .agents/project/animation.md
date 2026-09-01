@@ -11,6 +11,7 @@ Use this when changing text whose content animates or a container whose bounds a
 - Never measure and animate the same element; that creates a resize feedback loop.
 - Guard the initial zero measurement by using the natural `auto` size until a positive measurement exists.
 - Respect reduced-motion preferences and avoid animated bounds when the size change does not add useful feedback.
+- For popup wipe animations implemented with `clip-path: inset(...)`, preserve a small negative inset around every resting and non-collapsing edge so rounded borders and shadows are not clipped. Increase the clip radius by the same bleed amount, and compensate the collapsing edge to `calc(100% + bleed)` so the popup still closes fully. Apply the rule consistently to both wipe and wipe-plus-scale presets across Select, Dropdown Menu, Popover, Tooltip, and similar overlay primitives.
 
 ## Coordinated Icon and Text Transitions
 

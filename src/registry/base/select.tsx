@@ -50,36 +50,36 @@ const cssAnimationPresets = {
   ],
   wipe: [
     `[transition-property:clip-path] [will-change:clip-path]`,
-    `[clip-path:inset(0_0_0_0_round_12px)] [-webkit-clip-path:inset(0_0_0_0_round_12px)]`,
+    `[clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] [-webkit-clip-path:inset(-2px_-2px_-2px_-2px_round_12px)]`,
     // side=bottom
-    `data-[side=bottom]:data-starting-style:[clip-path:inset(0_0_100%_0_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(0_0_100%_0_round_12px)]`,
+    `data-[side=bottom]:data-starting-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)]`,
     // side=top
-    `data-[side=top]:data-starting-style:[clip-path:inset(100%_0_0_0_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(100%_0_0_0_round_12px)]`,
+    `data-[side=top]:data-starting-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)]`,
     // side=left
-    `data-[side=left]:data-starting-style:[clip-path:inset(0_0_0_100%_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(0_0_0_100%_round_12px)]`,
+    `data-[side=left]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
     // side=right
-    `data-[side=right]:data-starting-style:[clip-path:inset(0_100%_0_0_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(0_100%_0_0_round_12px)]`,
+    `data-[side=right]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
     // side=inline-start
-    `data-[side=inline-start]:data-starting-style:[clip-path:inset(0_0_0_100%_round_12px)] data-[side=inline-start]:data-ending-style:[clip-path:inset(0_0_0_100%_round_12px)]`,
+    `data-[side=inline-start]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=inline-start]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
     // side=inline-end
-    `data-[side=inline-end]:data-starting-style:[clip-path:inset(0_100%_0_0_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(0_100%_0_0_round_12px)]`,
+    `data-[side=inline-end]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
   ],
   wipeScale: [
     `[transition-property:clip-path,scale] [will-change:clip-path,scale]`,
-    `[clip-path:inset(0_0_0_0_round_12px)] [-webkit-clip-path:inset(0_0_0_0_round_12px)]`,
+    `[clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] [-webkit-clip-path:inset(-2px_-2px_-2px_-2px_round_12px)]`,
     `data-starting-style:scale-80 data-ending-style:scale-80`,
     // side=bottom
-    `data-[side=bottom]:data-starting-style:[clip-path:inset(0_0_100%_0_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(0_0_100%_0_round_12px)]`,
+    `data-[side=bottom]:data-starting-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)]`,
     // side=top
-    `data-[side=top]:data-starting-style:[clip-path:inset(100%_0_0_0_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(100%_0_0_0_round_12px)]`,
+    `data-[side=top]:data-starting-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)]`,
     // side=left
-    `data-[side=left]:data-starting-style:[clip-path:inset(0_0_0_100%_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(0_0_0_100%_round_12px)]`,
+    `data-[side=left]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
     // side=right
-    `data-[side=right]:data-starting-style:[clip-path:inset(0_100%_0_0_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(0_100%_0_0_round_12px)]`,
+    `data-[side=right]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
     // side=inline-start
-    `data-[side=inline-start]:data-starting-style:[clip-path:inset(0_0_0_100%_round_12px)] data-[side=inline-start]:data-ending-style:[clip-path:inset(0_0_0_100%_round_12px)]`,
+    `data-[side=inline-start]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=inline-start]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
     // side=inline-end
-    `data-[side=inline-end]:data-starting-style:[clip-path:inset(0_100%_0_0_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(0_100%_0_0_round_12px)]`,
+    `data-[side=inline-end]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
   ],
   motion: [
     `[transition-property:translate,scale,opacity,rotateX,rotateY,transform] [will-change:translate,scale,opacity,rotateX,rotateY,transform]`,
@@ -189,7 +189,7 @@ function SelectTrigger({ className, ...props }: SelectTriggerProps) {
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input bg-background px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs transition-colors ease-out hover:bg-input/20 focus-visible:border-primary focus-visible:outline-none data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32/40 dark:hover:bg-input/50",
+        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input/70 bg-background px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs transition-colors ease-out hover:bg-input/20 focus-visible:border-primary focus-visible:outline-none data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
         className
       )}
       {...props}
@@ -505,7 +505,7 @@ function SelectList({ className, ...props }: SelectListProps) {
     <SelectPrimitive.List
       data-slot="select-list"
       className={cn(
-        "relative block box-border h-full max-h-[min(var(--available-height),260px)] w-(--anchor-width) max-w-(--available-width) overflow-y-auto rounded-lg border border-foreground/15 bg-popover p-1 shadow-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+        "relative block box-border h-full max-h-[min(var(--available-height),260px)] w-max min-w-(--anchor-width) max-w-(--available-width) overflow-y-auto rounded-lg border border-foreground/15 bg-popover p-1 shadow-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
         className
       )}
       {...props}
