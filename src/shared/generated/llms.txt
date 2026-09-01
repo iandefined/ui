@@ -13,6 +13,7 @@
 - [Checkbox](https://ui.iandefined.com/docs/components/checkbox.md) - A control that allows the user to toggle between checked and unchecked.
 - [Combobox](https://ui.iandefined.com/docs/components/combobox.md) - A filterable input for selecting one or more predefined values.
 - [Dropdown Menu](https://ui.iandefined.com/docs/components/dropdown-menu.md) - A list of actions in a dropdown, enhanced with keyboard navigation.
+- [Fancy Button](https://ui.iandefined.com/docs/components/fancy-button.md) - A glossy button with press animation, custom color gradients, and section icons.
 - [Input](https://ui.iandefined.com/docs/components/input.md) - A styled text input built on Base UI.
 - [Input Group](https://ui.iandefined.com/docs/components/input-group.md) - Compose inputs and textareas with icons, text, buttons, and menus.
 - [Input OTP](https://ui.iandefined.com/docs/components/input-otp.md) - An accessible one-time-code input with animated slots, invalid states, and masked entry.
