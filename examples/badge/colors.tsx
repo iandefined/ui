@@ -25,7 +25,7 @@ export default function BadgeColorsDemo() {
     <div className="flex flex-col items-start gap-5">
       <div className="flex flex-wrap gap-2">
         {colors.map((color) => (
-          <Badge color={color} key={color}>
+          <Badge color={color} key={color} variant="translucent">
             {color}
           </Badge>
         ))}

@@ -2,8 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "badge",
   "title": "Badge",
-  "description": "A compact label with solid and dot variants across the Tailwind color palette.",
+  "description": "A compact label with semantic, translucent, and dot variants.",
   "dependencies": [
+    "@base-ui/react",
     "class-variance-authority",
     "clsx",
     "tailwind-merge"
@@ -11,10 +12,34 @@
   "files": [
     {
       "path": "src/registry/base/badge.tsx",
-      "content": "import { cva, type VariantProps } from \"class-variance-authority\";\nimport type { HTMLAttributes } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\nconst badgeColors = {\n  gray: \"var(--muted-foreground)\",\n  red: \"var(--color-red-500)\",\n  orange: \"var(--color-orange-500)\",\n  amber: \"var(--color-amber-500)\",\n  yellow: \"var(--color-yellow-500)\",\n  lime: \"var(--color-lime-500)\",\n  green: \"var(--color-green-500)\",\n  emerald: \"var(--color-emerald-500)\",\n  teal: \"var(--color-teal-500)\",\n  cyan: \"var(--color-cyan-500)\",\n  blue: \"var(--color-blue-500)\",\n  indigo: \"var(--color-indigo-500)\",\n  violet: \"var(--color-violet-500)\",\n  purple: \"var(--color-purple-500)\",\n  fuchsia: \"var(--color-fuchsia-500)\",\n  pink: \"var(--color-pink-500)\",\n  rose: \"var(--color-rose-500)\",\n} as const;\n\nconst badgeVariants = cva(\n  \"inline-flex items-center gap-1.5 rounded-md font-medium whitespace-nowrap\",\n  {\n    variants: {\n      variant: {\n        solid: \"text-foreground\",\n        dot: \"border border-border bg-background text-foreground\",\n      },\n      size: {\n        default: \"h-6 px-2.5 text-xs\",\n        compact: \"h-5 gap-1 px-2 text-[11px]\",\n      },\n    },\n    defaultVariants: {\n      variant: \"solid\",\n      size: \"default\",\n    },\n  }\n);\n\ntype BadgeColor = keyof typeof badgeColors;\n\ninterface BadgeProps\n  extends\n    Omit<HTMLAttributes<HTMLSpanElement>, \"color\">,\n    VariantProps<typeof badgeVariants> {\n  color?: BadgeColor;\n}\n\nfunction Badge({\n  className,\n  variant = \"solid\",\n  size = \"default\",\n  color = \"gray\",\n  style,\n  children,\n  ...props\n}: BadgeProps) {\n  const isSolid = variant === \"solid\";\n  const badgeStyle = isSolid\n    ? color === \"gray\"\n      ? { backgroundColor: \"var(--muted)\" }\n      : {\n          backgroundColor: `color-mix(in srgb, ${badgeColors[color]} 15%, var(--background))`,\n        }\n    : undefined;\n\n  return (\n    <span\n      className={cn(badgeVariants({ variant, size }), className)}\n      data-slot=\"badge\"\n      style={{ ...badgeStyle, ...style }}\n      {...props}\n    >\n      {!isSolid && (\n        <span\n          aria-hidden=\"true\"\n          className={cn(\n            \"shrink-0 rounded-full\",\n            size === \"compact\" ? \"size-1\" : \"size-1.5\"\n          )}\n          style={{ backgroundColor: badgeColors[color] }}\n        />\n      )}\n      {children}\n    </span>\n  );\n}\n\nexport { Badge, badgeColors, badgeVariants };\nexport type { BadgeColor, BadgeProps };\n",
+      "content": "\"use client\";\n\nimport { mergeProps } from \"@base-ui/react/merge-props\";\nimport { useRender } from \"@base-ui/react/use-render\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport type React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\nconst badgeColors = {\n  gray: \"var(--muted-foreground)\",\n  red: \"var(--color-red-500)\",\n  orange: \"var(--color-orange-500)\",\n  amber: \"var(--color-amber-500)\",\n  yellow: \"var(--color-yellow-500)\",\n  lime: \"var(--color-lime-500)\",\n  green: \"var(--color-green-500)\",\n  emerald: \"var(--color-emerald-500)\",\n  teal: \"var(--color-teal-500)\",\n  cyan: \"var(--color-cyan-500)\",\n  blue: \"var(--color-blue-500)\",\n  indigo: \"var(--color-indigo-500)\",\n  violet: \"var(--color-violet-500)\",\n  purple: \"var(--color-purple-500)\",\n  fuchsia: \"var(--color-fuchsia-500)\",\n  pink: \"var(--color-pink-500)\",\n  rose: \"var(--color-rose-500)\",\n} as const;\n\nconst badgeVariants = cva(\n  \"relative inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent font-medium outline-none transition-[background-color,box-shadow,color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3 [a&,button&]:cursor-pointer\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"bg-primary text-primary-foreground [a&,button&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&,button&]:hover:bg-secondary/90\",\n        outline:\n          \"border-border bg-background text-foreground [a&,button&]:hover:bg-accent [a&,button&]:hover:text-accent-foreground\",\n        destructive:\n          \"bg-destructive text-destructive-foreground [a&,button&]:hover:bg-destructive/90\",\n        error: \"bg-error/8 text-error-foreground dark:bg-error/16\",\n        info: \"bg-info/8 text-info-foreground dark:bg-info/16\",\n        success: \"bg-success/8 text-success-foreground dark:bg-success/16\",\n        warning: \"bg-warning/8 text-warning-foreground dark:bg-warning/16\",\n        translucent: \"text-foreground\",\n        dot: \"border-border bg-background text-foreground\",\n      },\n      size: {\n        default: \"h-6 min-w-6 text-xs\",\n        compact: \"h-5 min-w-5 gap-1 text-[11px]\",\n      },\n    },\n    compoundVariants: [\n      {\n        variant: [\n          \"default\",\n          \"secondary\",\n          \"outline\",\n          \"destructive\",\n          \"error\",\n          \"info\",\n          \"success\",\n          \"warning\",\n          \"translucent\",\n        ],\n        className: \"px-2\",\n      },\n      {\n        variant: \"dot\",\n        className: \"px-1.5\",\n      },\n    ],\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n);\n\ntype BadgeColor = keyof typeof badgeColors;\ntype BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>[\"variant\"]>;\ntype BadgeSize = VariantProps<typeof badgeVariants>[\"size\"];\ntype BadgeBaseProps = Omit<useRender.ComponentProps<\"span\">, \"color\"> & {\n  size?: BadgeSize;\n};\n\ntype SemanticBadgeProps = BadgeBaseProps & {\n  variant?: Exclude<BadgeVariant, \"translucent\" | \"dot\">;\n  color?: never;\n};\n\ntype PaletteBadgeProps = BadgeBaseProps & {\n  variant: Extract<BadgeVariant, \"translucent\" | \"dot\">;\n  color?: BadgeColor;\n};\n\ntype BadgeProps = SemanticBadgeProps | PaletteBadgeProps;\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  color,\n  render,\n  style,\n  children,\n  ...props\n}: BadgeProps): React.ReactElement {\n  const isPaletteVariant = variant === \"translucent\" || variant === \"dot\";\n  const resolvedColor = color ?? \"gray\";\n  const badgeStyle =\n    variant === \"translucent\"\n      ? resolvedColor === \"gray\"\n        ? { backgroundColor: \"var(--muted)\" }\n        : {\n            backgroundColor: `color-mix(in srgb, ${badgeColors[resolvedColor]} 15%, var(--background))`,\n          }\n      : undefined;\n\n  const defaultProps = {\n    className: cn(badgeVariants({ variant, size }), className),\n    \"data-color\": isPaletteVariant ? resolvedColor : undefined,\n    \"data-slot\": \"badge\",\n    \"data-variant\": variant,\n    style: { ...badgeStyle, ...style },\n    children: (\n      <>\n        {variant === \"dot\" && (\n          <span\n            aria-hidden=\"true\"\n            className={cn(\n              \"shrink-0 rounded-full\",\n              size === \"compact\" ? \"size-1\" : \"size-1.5\"\n            )}\n            style={{ backgroundColor: badgeColors[resolvedColor] }}\n          />\n        )}\n        {children}\n      </>\n    ),\n  };\n\n  return useRender({\n    defaultTagName: \"span\",\n    props: mergeProps<\"span\">(defaultProps, props),\n    render,\n  });\n}\n\nexport { Badge, badgeColors, badgeVariants };\nexport type { BadgeColor, BadgeProps, BadgeVariant };\n",
       "type": "registry:ui",
       "target": "components/ui/badge.tsx"
     }
   ],
+  "cssVars": {
+    "light": {
+      "destructive-foreground": "var(--color-white)",
+      "error": "var(--color-red-500)",
+      "error-foreground": "var(--color-red-700)",
+      "info": "var(--color-blue-500)",
+      "info-foreground": "var(--color-blue-700)",
+      "success": "var(--color-emerald-500)",
+      "success-foreground": "var(--color-emerald-700)",
+      "warning": "var(--color-amber-500)",
+      "warning-foreground": "var(--color-amber-700)"
+    },
+    "dark": {
+      "destructive-foreground": "var(--color-white)",
+      "error": "var(--color-red-500)",
+      "error-foreground": "var(--color-red-400)",
+      "info": "var(--color-blue-500)",
+      "info-foreground": "var(--color-blue-400)",
+      "success": "var(--color-emerald-500)",
+      "success-foreground": "var(--color-emerald-400)",
+      "warning": "var(--color-amber-500)",
+      "warning-foreground": "var(--color-amber-400)"
+    }
+  },
   "type": "registry:ui"
 }
