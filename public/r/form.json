@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form",
+  "title": "Form",
+  "description": "A TanStack Form submission wrapper for composing type-safe forms with registry controls.",
+  "dependencies": [
+    "@tanstack/react-form",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "https://ui.iandefined.com/r/button.json",
+    "https://ui.iandefined.com/r/checkbox.json",
+    "https://ui.iandefined.com/r/fieldset.json",
+    "https://ui.iandefined.com/r/input.json",
+    "https://ui.iandefined.com/r/label.json"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/form.tsx",
+      "content": "\"use client\";\n\nimport type { AnyFormApi } from \"@tanstack/react-form\";\nimport type { ComponentProps, FormEventHandler } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\ninterface FormProps extends Omit<ComponentProps<\"form\">, \"onSubmit\"> {\n  form: Pick<AnyFormApi, \"handleSubmit\">;\n}\n\nfunction Form({ className, form, noValidate = true, ...props }: FormProps) {\n  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {\n    event.preventDefault();\n    void form.handleSubmit();\n  };\n\n  return (\n    <form\n      className={cn(className)}\n      data-slot=\"form\"\n      noValidate={noValidate}\n      onSubmit={handleSubmit}\n      {...props}\n    />\n  );\n}\n\nexport { Form };\nexport type { FormProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/form.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

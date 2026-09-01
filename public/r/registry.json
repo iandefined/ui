@@ -536,6 +536,45 @@
       ]
     },
     {
+      "name": "form",
+      "type": "registry:ui",
+      "title": "Form",
+      "description": "A TanStack Form submission wrapper for composing type-safe forms with registry controls.",
+      "dependencies": ["@tanstack/react-form", "clsx", "tailwind-merge"],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/checkbox.json",
+        "https://ui.iandefined.com/r/fieldset.json",
+        "https://ui.iandefined.com/r/input.json",
+        "https://ui.iandefined.com/r/label.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/form.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fieldset",
+      "type": "registry:ui",
+      "title": "Fieldset",
+      "description": "A semantic field group with a styled legend.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/input.json",
+        "https://ui.iandefined.com/r/label.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/fieldset.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/fieldset.tsx"
+        }
+      ]
+    },
+    {
       "name": "input",
       "type": "registry:ui",
       "title": "Input",

@@ -1,0 +1,80 @@
+---
+title: Fieldset
+description: A semantic field group with a styled legend.
+---
+
+<ComponentPreview name="fieldset/default" />
+
+## Installation
+
+<CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">Command</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/fieldset.json
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<Steps>
+  <Step>Install the Input and Label registry dependencies:</Step>
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json
+```
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui/react tailwind-variants clsx tailwind-merge
+```
+
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="src/registry/base/fieldset.tsx"
+  title="components/ui/fieldset.tsx"
+/>
+</Steps>
+
+  </TabsContent>
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
+```
+
+```tsx
+<Fieldset>
+  <FieldsetLegend>Shipping address</FieldsetLegend>
+  {/* Input and Label compositions */}
+</Fieldset>
+```
+
+## Anatomy
+
+```tsx
+<Fieldset>
+  <FieldsetLegend />
+</Fieldset>
+```
+
+Fieldset uses native `fieldset` and `legend` elements, so related controls retain their semantic grouping without another form library.

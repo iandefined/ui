@@ -62,8 +62,8 @@ const buttonVariants = tv({
       variant: "default",
       customColor: false,
       class: [
-        "bg-linear-to-b from-[color-mix(in_oklch,var(--primary),white_6%)] to-[color-mix(in_oklch,var(--primary),black_10%)] ring-[0.5px] ring-primary/60",
-        "shadow-[inset_0_1px_0.5px_rgb(255_255_255_/_0.28),inset_0_-1px_0.5px_rgb(0_0_0_/_0.14),0_1px_2px_oklch(0.1_0_0_/_0.1)] dark:shadow-[inset_0_1px_0.5px_rgb(255_255_255_/_0.42),inset_0_-1px_0.5px_rgb(0_0_0_/_0.18),0_1px_2px_oklch(0.1_0_0_/_0.1)]",
+        "bg-linear-to-b from-[color-mix(in_oklch,var(--primary),white_6%)] to-[color-mix(in_oklch,var(--primary),black_10%)] ring-1 ring-[oklch(0.15_0_0)]",
+        "shadow-[inset_0_1px_1px_oklch(1_0_0_/_0.22),0_1px_2px_oklch(0.1_0_0_/_0.1),inset_0_-1px_1px_oklch(0_0_0_/_0.16)]",
         "hover:from-[color-mix(in_oklch,var(--primary),black_5%)] hover:to-[color-mix(in_oklch,var(--primary),black_16%)]",
       ],
     },
@@ -71,8 +71,8 @@ const buttonVariants = tv({
       variant: "default",
       customColor: true,
       class: [
-        "bg-linear-to-b from-[var(--button-from)] to-[var(--button-to)] ring-[0.5px] ring-[var(--button-ring)] hover:opacity-90",
-        "shadow-[inset_0_1px_0.5px_rgb(255_255_255_/_0.32),inset_0_-1px_0.5px_rgb(0_0_0_/_0.14),0_1px_2px_oklch(0.1_0_0_/_0.1)]",
+        "bg-linear-to-b from-[var(--button-from)] to-[var(--button-to)] ring-1 ring-[var(--button-ring)] hover:opacity-90",
+        "shadow-[inset_0_1px_1px_oklch(1_0_0_/_0.4),0_1px_2px_oklch(0.1_0_0_/_0.1),inset_0_-1px_1px_oklch(0_0_0_/_0.15)]",
       ],
     },
   ],

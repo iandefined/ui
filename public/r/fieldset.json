@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fieldset",
+  "title": "Fieldset",
+  "description": "A semantic field group with a styled legend.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "https://ui.iandefined.com/r/input.json",
+    "https://ui.iandefined.com/r/label.json"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/fieldset.tsx",
+      "content": "import type { ComponentProps } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\nfunction Fieldset({ className, ...props }: ComponentProps<\"fieldset\">) {\n  return (\n    <fieldset\n      className={cn(\"m-0 grid min-w-0 space-y-4 border-0 p-0\", className)}\n      data-slot=\"fieldset\"\n      {...props}\n    />\n  );\n}\n\nfunction FieldsetLegend({ className, ...props }: ComponentProps<\"legend\">) {\n  return (\n    <legend\n      className={cn(\n        \"text-base/6 font-semibold mb-4 text-foreground\",\n        className\n      )}\n      data-slot=\"fieldset-legend\"\n      {...props}\n    />\n  );\n}\n\nexport { Fieldset, FieldsetLegend };\n",
+      "type": "registry:ui",
+      "target": "components/ui/fieldset.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}
