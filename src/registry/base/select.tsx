@@ -189,7 +189,7 @@ function SelectTrigger({ className, ...props }: SelectTriggerProps) {
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input/70 bg-background px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs transition-colors ease-out hover:bg-input/20 focus-visible:border-primary focus-visible:outline-none data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
+        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input/70 bg-background px-3 py-2 text-sm text-foreground shadow-xs transition-colors ease-out hover:bg-input/20 focus-visible:border-primary focus-visible:outline-none data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
         className
       )}
       {...props}
