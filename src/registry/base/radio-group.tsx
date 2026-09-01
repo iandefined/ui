@@ -25,7 +25,6 @@ const radioRootStyles = tv({
     "group relative isolate inline-flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full outline-hidden focus:outline-hidden focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
     "data-disabled:cursor-not-allowed data-disabled:scale-100 data-disabled:opacity-50 data-disabled:grayscale",
     "before:absolute before:inset-0 before:rounded-full before:border-2 before:border-border before:content-[''] not-data-disabled:hover:before:bg-secondary/60",
-    "after:absolute after:inset-0 after:origin-center after:rounded-full after:bg-primary after:content-[''] data-checked:after:scale-100 data-checked:after:opacity-100 data-unchecked:after:scale-50 data-unchecked:after:opacity-0",
   ],
   variants: {
     size: {
@@ -34,13 +33,30 @@ const radioRootStyles = tv({
       lg: "size-6",
     },
     reduceMotion: {
-      true: "transition-none before:transition-none after:transition-none",
-      false:
-        "transition-transform before:transition-colors after:[transition:0.1s_linear] after:[transition-property:opacity,scale,transform]",
+      true: "transition-none before:transition-none",
+      false: "transition-transform before:transition-colors",
     },
   },
   defaultVariants: {
     size: "default",
+    reduceMotion: false,
+  },
+});
+
+const radioSelectedSurfaceStyles = tv({
+  base: [
+    "pointer-events-none absolute inset-0 z-0 origin-center rounded-full bg-linear-to-b from-primary to-[color-mix(in_oklch,var(--primary),black_10%)] dark:from-[color-mix(in_oklch,var(--primary),white_35%)] dark:to-[color-mix(in_oklch,var(--primary),white_5%)]",
+    "shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),black_16%),inset_0_2px_0_0_rgb(255_255_255_/_0.25)] dark:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),white_12%),inset_0_2px_0_0_rgb(255_255_255_/_0.55)]",
+    "data-checked:scale-100 data-checked:opacity-100 data-unchecked:scale-50 data-unchecked:opacity-0",
+  ],
+  variants: {
+    reduceMotion: {
+      true: "transition-none",
+      false:
+        "duration-100 ease-linear [transition-property:opacity,scale,transform]",
+    },
+  },
+  defaultVariants: {
     reduceMotion: false,
   },
 });
@@ -125,6 +141,12 @@ function RadioRoot<Value = string>({
         data-slot="radio"
         {...props}
       >
+        <RadioPrimitive.Indicator
+          aria-hidden
+          className={radioSelectedSurfaceStyles({ reduceMotion })}
+          data-slot="radio-selected-surface"
+          keepMounted
+        />
         {children}
       </RadioPrimitive.Root>
     </RadioContext.Provider>

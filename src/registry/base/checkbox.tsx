@@ -11,8 +11,6 @@ const checkboxRootStyles = tv({
     `group size-7 relative inline-flex items-center justify-center shrink-0 overflow-hidden outline-hidden focus:outline-hidden focus-visible:outline-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background`,
     `data-disabled:cursor-not-allowed data-disabled:grayscale data-disabled:scale-100 data-disabled:opacity-50`,
     `before:content-[''] before:absolute before:border-2 before:inset-0 before:border-border not-data-disabled:hover:before:bg-secondary/60`,
-    `after:content-[''] after:absolute after:inset-0 after:bg-primary data-unchecked:after:scale-50 data-unchecked:after:opacity-0 after:origin-center data-checked:after:scale-100 data-checked:after:opacity-100`,
-    ``,
   ],
   variants: {
     size: {
@@ -21,21 +19,38 @@ const checkboxRootStyles = tv({
       lg: "size-6",
     },
     radius: {
-      none: "rounded-none before:rounded-none after:rounded-none",
-      sm: "rounded-[6px] before:rounded-[6px] after:rounded-[6px]",
-      default: "rounded-[7.2px] before:rounded-[7.2px] after:rounded-[7.2px]",
-      lg: "rounded-[8.4px] before:rounded-[8.4px] after:rounded-[8.4px]",
-      full: "rounded-full before:rounded-full after:rounded-full",
+      none: "rounded-none before:rounded-none",
+      sm: "rounded-[6px] before:rounded-[6px]",
+      default: "rounded-[7.2px] before:rounded-[7.2px]",
+      lg: "rounded-[8.4px] before:rounded-[8.4px]",
+      full: "rounded-full before:rounded-full",
     },
     reduceMotion: {
-      true: "transition-none before:transition-none after:transition-none",
-      false:
-        "before:transition-colors transition-transform after:[transition:0.1s_linear] after:[transition-property:opacity,scale,transform]",
+      true: "transition-none before:transition-none",
+      false: "before:transition-colors transition-transform",
     },
   },
   defaultVariants: {
     size: "default",
     radius: "default",
+    reduceMotion: false,
+  },
+});
+
+const checkboxSelectedSurfaceStyles = tv({
+  base: [
+    "pointer-events-none absolute inset-0 z-0 origin-center rounded-[inherit] bg-linear-to-b from-primary to-[color-mix(in_oklch,var(--primary),black_10%)] dark:from-[color-mix(in_oklch,var(--primary),white_35%)] dark:to-[color-mix(in_oklch,var(--primary),white_5%)]",
+    "shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),black_16%),inset_0_2px_0_0_rgb(255_255_255_/_0.25)] dark:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),white_12%),inset_0_2px_0_0_rgb(255_255_255_/_0.55)]",
+    "data-checked:scale-100 data-checked:opacity-100 data-unchecked:scale-50 data-unchecked:opacity-0",
+  ],
+  variants: {
+    reduceMotion: {
+      true: "transition-none",
+      false:
+        "duration-100 ease-linear [transition-property:opacity,scale,transform]",
+    },
+  },
+  defaultVariants: {
     reduceMotion: false,
   },
 });
@@ -90,6 +105,7 @@ const useCheckbox = () => {
 
 function CheckboxRoot({
   checked,
+  children,
   defaultChecked,
   onCheckedChange,
   indeterminate,
@@ -131,14 +147,22 @@ function CheckboxRoot({
     >
       <CheckboxPrimitive.Root
         checked={isChecked}
-        onCheckedChange={handleCheckedChange}
-        indeterminate={indeterminate}
         className={cn(
           checkboxRootStyles({ size, radius, reduceMotion }),
           className
         )}
+        indeterminate={indeterminate}
+        onCheckedChange={handleCheckedChange}
         {...rest}
-      />
+      >
+        <CheckboxPrimitive.Indicator
+          aria-hidden
+          className={checkboxSelectedSurfaceStyles({ reduceMotion })}
+          data-slot="checkbox-selected-surface"
+          keepMounted
+        />
+        {children}
+      </CheckboxPrimitive.Root>
     </CheckboxContext.Provider>
   );
 }
