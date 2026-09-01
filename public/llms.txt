@@ -23,6 +23,7 @@
 - [Select](https://ui.iandefined.com/docs/components/select.md) - A form control for choosing one or more values from a popup list.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
+- [Slider](https://ui.iandefined.com/docs/components/slider.md) - A Base UI slider with compact track and rectangular control layouts, cursor previews, and editable values.
 - [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
 - [Switch](https://ui.iandefined.com/docs/components/switch.md) - A draggable toggle with spring-based thumb animation.
 - [Textarea](https://ui.iandefined.com/docs/components/textarea.md) - A styled multiline text control built on Base UI Field.

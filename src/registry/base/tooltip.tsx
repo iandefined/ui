@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
-import { useMemo } from "react";
+import { useMemo, type ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -97,6 +97,19 @@ const transitionPresets: Record<TooltipTransitionPreset, string> = {
   none: "duration-0 ease-none",
 };
 
+const tooltipSurfaceStyles =
+  "[--radius:10px] [--overlay-border:color-mix(in_oklab,var(--border)_96%,var(--popover-foreground)_4%)] rounded-(--radius) border [border-color:var(--overlay-border)] bg-popover text-[13px] text-balance shadow-xs dark:[--overlay-border:color-mix(in_oklab,var(--border)_94%,var(--popover-foreground)_6%)]";
+
+function TooltipSurface({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(tooltipSurfaceStyles, "px-2 py-1", className)}
+      data-slot="tooltip-surface"
+      {...props}
+    />
+  );
+}
+
 function TooltipProvider({
   delay = 300,
   ...props
@@ -134,7 +147,7 @@ function TooltipPositioner({
     <TooltipPortal>
       <TooltipPrimitive.Positioner
         className={cn(
-          "z-30 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom,transform] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none",
+          "z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom,transform] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none",
           (side === "inline-end" || side === "inline-start") &&
             "**:data-[slot=tooltip-arrow]:hidden",
           className
@@ -195,7 +208,8 @@ function TooltipPopup({
     >
       <TooltipPrimitive.Popup
         className={cn(
-          "[--radius:10px] [--overlay-border:color-mix(in_oklab,var(--border)_96%,var(--popover-foreground)_4%)] pointer-events-auto relative h-[var(--popup-height,auto)] w-[var(--popup-width,auto)] max-w-[500px] origin-(--transform-origin) rounded-(--radius) border [border-color:var(--overlay-border)] bg-popover text-[13px] text-balance shadow-xs data-instant:transition-none dark:[--overlay-border:color-mix(in_oklab,var(--border)_94%,var(--popover-foreground)_6%)]",
+          tooltipSurfaceStyles,
+          "pointer-events-auto relative h-[var(--popup-height,auto)] w-[var(--popup-width,auto)] max-w-[500px] origin-(--transform-origin) data-instant:transition-none",
           animation,
           transition,
           groupTransition,
@@ -230,5 +244,6 @@ export {
   TooltipPortal,
   TooltipPositioner,
   TooltipProvider,
+  TooltipSurface,
   TooltipTrigger,
 };

@@ -126,9 +126,9 @@ function DropdownMenuBackdrop({
     <DropdownMenuPrimitive.Backdrop
       className={cn(
         backdrop === "opaque" &&
-          "fixed inset-0 z-20 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
+          "fixed inset-0 z-50 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
         backdrop === "blur" &&
-          "fixed inset-0 z-20 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed inset-0 z-50 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
         backdrop === "transparent" && "hidden",
         className
       )}
@@ -201,7 +201,7 @@ function DropdownMenuContent({
         alignOffset={alignOffset}
         anchor={anchor}
         arrowPadding={arrowPadding}
-        className="z-30 [--item-block-padding:6px] [--item-inline-padding:8px]"
+        className="z-50 [--item-block-padding:6px] [--item-inline-padding:8px]"
         collisionAvoidance={collisionAvoidance}
         collisionBoundary={collisionBoundary}
         collisionPadding={collisionPadding}
@@ -442,7 +442,7 @@ function DropdownMenuSubContent({
       <DropdownMenuPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
-        className="z-30 -top-[calc(var(--item-block-padding)-1.8px)]! [--item-block-padding:6px] [--item-inline-padding:8px]"
+        className="z-50 -top-[calc(var(--item-block-padding)-1.8px)]! [--item-block-padding:6px] [--item-inline-padding:8px]"
         side={side}
         sideOffset={sideOffset}
       >

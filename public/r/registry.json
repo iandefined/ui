@@ -61,17 +61,27 @@
       "type": "registry:ui",
       "title": "Switch",
       "description": "A draggable Base UI switch with spring-based thumb animation.",
-      "dependencies": [
-        "@base-ui/react",
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "motion", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/registry/base/switch.tsx",
           "type": "registry:ui",
           "target": "components/ui/switch.tsx"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "A Base UI slider with compact track and rectangular control layouts, cursor previews, and editable values.",
+      "dependencies": ["@base-ui/react", "motion", "clsx", "tailwind-merge"],
+      "registryDependencies": ["https://ui.iandefined.com/r/tooltip.json"],
+      "files": [
+        {
+          "path": "src/registry/base/slider.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/slider.tsx"
         }
       ]
     },

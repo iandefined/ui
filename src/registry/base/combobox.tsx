@@ -145,7 +145,10 @@ function ComboboxInput({
   }
 
   return (
-    <div className="relative z-[35] w-full" data-slot="combobox-input-wrapper">
+    <div
+      className="relative w-full has-data-popup-open:z-[51]"
+      data-slot="combobox-input-wrapper"
+    >
       <ComboboxPrimitive.Input
         className={cn(
           "relative rounded-[12px]",
@@ -209,7 +212,7 @@ function ComboboxChips({ className, ...props }: ComboboxPrimitive.Chips.Props) {
   return (
     <ComboboxPrimitive.Chips
       className={cn(
-        "relative z-[35] inline-flex min-h-9 w-full flex-wrap items-center gap-1 rounded-[12px] border border-input bg-background px-1 py-1 text-base/5 shadow-xs outline-none ring-ring/24 transition-shadow focus-within:border-ring focus-within:ring-[1px] focus-within:ring-border dark:bg-input/32 sm:text-sm",
+        "relative inline-flex min-h-9 w-full flex-wrap items-center gap-1 rounded-[12px] border border-input bg-background px-1 py-1 text-base/5 shadow-xs outline-none ring-ring/24 transition-shadow has-data-popup-open:z-[51] focus-within:border-ring focus-within:ring-[1px] focus-within:ring-border dark:bg-input/32 sm:text-sm",
         className
       )}
       data-slot="combobox-chips"
@@ -285,7 +288,7 @@ type ComboboxPositionerProps = ComboboxPrimitive.Positioner.Props;
 function ComboboxPositioner({ className, ...props }: ComboboxPositionerProps) {
   return (
     <ComboboxPrimitive.Positioner
-      className={cn("z-30 select-none outline-none", className)}
+      className={cn("z-50 select-none outline-none", className)}
       data-slot="combobox-positioner"
       {...props}
     />

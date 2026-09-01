@@ -1,12 +1,7 @@
 "use client";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
-import {
-  animate,
-  motion,
-  useMotionValue,
-  type Transition,
-} from "framer-motion";
+import { animate, motion, useMotionValue, type Transition } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
