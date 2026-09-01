@@ -19,32 +19,32 @@ interface SwitchProps extends Omit<
 
 const METRICS = {
   sm: {
-    trackWidth: 28,
-    trackHeight: 16,
-    thumbSize: 12,
+    trackWidth: 40,
+    trackHeight: 24,
+    thumbSize: 16,
     pillExtend: 2,
     pressExtend: 3,
     pressShrink: 3,
   },
   default: {
-    trackWidth: 34,
-    trackHeight: 20,
-    thumbSize: 16,
+    trackWidth: 48,
+    trackHeight: 28,
+    thumbSize: 20,
     pillExtend: 2,
     pressExtend: 4,
     pressShrink: 4,
   },
   lg: {
-    trackWidth: 40,
-    trackHeight: 24,
-    thumbSize: 20,
+    trackWidth: 56,
+    trackHeight: 32,
+    thumbSize: 24,
     pillExtend: 3,
     pressExtend: 5,
     pressShrink: 5,
   },
 } as const;
 
-const THUMB_OFFSET = 2;
+const THUMB_OFFSET = 4;
 const DRAG_DEAD_ZONE = 2;
 
 type SwitchPointerEvent = Parameters<
