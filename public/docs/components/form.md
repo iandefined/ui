@@ -19,6 +19,10 @@ npm install @tanstack/react-form
 ```
 
 ```bash
+npm install zod
+```
+
+```bash
 npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
@@ -72,3 +76,11 @@ The component defaults to `noValidate` so TanStack Form remains the only validat
 ### With Fieldset
 
 Group related TanStack fields with the semantic Fieldset component and keep each control composed from the existing registry primitives.
+
+### Zod Validation
+
+Pass a Zod schema to TanStack Form's dynamic validator. The form validates on submit, then revalidates as values change so errors clear while the user corrects them.
+
+### Server Validation
+
+Use an asynchronous submit validator for checks that need a server round trip, such as reserved or already-used usernames. Try `admin` to see the server error.

@@ -34,6 +34,12 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefi
 npm install @tanstack/react-form
 ```
 
+<Step>Install Zod for the schema-validation example:</Step>
+
+```bash
+npm install zod
+```
+
 <Step>Install the following dependencies:</Step>
 
 ```bash
@@ -105,3 +111,15 @@ The component defaults to `noValidate` so TanStack Form remains the only validat
 Group related TanStack fields with the semantic Fieldset component and keep each control composed from the existing registry primitives.
 
 <ComponentPreview name="form/with-fieldset" />
+
+### Zod Validation
+
+Pass a Zod schema to TanStack Form's dynamic validator. The form validates on submit, then revalidates as values change so errors clear while the user corrects them.
+
+<ComponentPreview name="form/zod-validation" />
+
+### Server Validation
+
+Use an asynchronous submit validator for checks that need a server round trip, such as reserved or already-used usernames. Try `admin` to see the server error.
+
+<ComponentPreview name="form/server-validation" />

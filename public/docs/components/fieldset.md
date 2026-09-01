@@ -11,7 +11,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/fieldset.json
 ```
 
 ```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json
+npx shadcn@latest add https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json https://ui.iandefined.com/r/radio-group.json
 ```
 
 ```bash
@@ -49,3 +49,13 @@ import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
 ```
 
 Fieldset uses native `fieldset` and `legend` elements, so related controls retain their semantic grouping without another form library.
+
+## Examples
+
+### With Radio Group
+
+Place a Radio Group inside Fieldset when the user must choose exactly one option.
+
+### With Checkbox Group
+
+Use several controlled Checkbox components when the user can choose multiple related options.

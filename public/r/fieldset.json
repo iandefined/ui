@@ -8,8 +8,10 @@
     "tailwind-merge"
   ],
   "registryDependencies": [
+    "https://ui.iandefined.com/r/checkbox.json",
     "https://ui.iandefined.com/r/input.json",
-    "https://ui.iandefined.com/r/label.json"
+    "https://ui.iandefined.com/r/label.json",
+    "https://ui.iandefined.com/r/radio-group.json"
   ],
   "files": [
     {

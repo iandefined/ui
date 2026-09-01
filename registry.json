@@ -540,7 +540,7 @@
       "type": "registry:ui",
       "title": "Form",
       "description": "A TanStack Form submission wrapper for composing type-safe forms with registry controls.",
-      "dependencies": ["@tanstack/react-form", "clsx", "tailwind-merge"],
+      "dependencies": ["@tanstack/react-form", "clsx", "tailwind-merge", "zod"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
         "https://ui.iandefined.com/r/checkbox.json",
@@ -563,8 +563,10 @@
       "description": "A semantic field group with a styled legend.",
       "dependencies": ["clsx", "tailwind-merge"],
       "registryDependencies": [
+        "https://ui.iandefined.com/r/checkbox.json",
         "https://ui.iandefined.com/r/input.json",
-        "https://ui.iandefined.com/r/label.json"
+        "https://ui.iandefined.com/r/label.json",
+        "https://ui.iandefined.com/r/radio-group.json"
       ],
       "files": [
         {
