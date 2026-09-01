@@ -6,6 +6,7 @@
 
 - [Introduction](https://ui.iandefined.com/docs.md) - Build, document, and deploy this custom shadcn registry.
 - [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
+- [Avatar](https://ui.iandefined.com/docs/components/avatar.md) - An image element with a fallback for representing the user.
 - [Badge](https://ui.iandefined.com/docs/components/badge.md) - Compact labels for status, category, or metadata.
 - [Button](https://ui.iandefined.com/docs/components/button.md) - Displays a button or a component that looks like a button.
 - [Button Group](https://ui.iandefined.com/docs/components/button-group.md) - A container that groups related buttons together with consistent styling.
