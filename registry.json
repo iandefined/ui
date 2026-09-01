@@ -57,6 +57,20 @@
       ]
     },
     {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "A compound card with default and inset frame variants.",
+      "dependencies": ["tailwind-variants", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/card.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/card.tsx"
+        }
+      ]
+    },
+    {
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",

@@ -1,0 +1,121 @@
+import type React from "react";
+import { tv, type VariantProps } from "tailwind-variants";
+
+import { cn } from "@/lib/utils";
+
+const cardVariants = tv({
+  base: "flex flex-col rounded-xl bg-card text-card-foreground shadow-[0_0_0_1px_rgb(0_0_0/0.06)] dark:shadow-[inset_0_0_0_1px_rgb(255_255_255/0.02)]",
+  variants: {
+    variant: {
+      default: "gap-6 py-6",
+      inset: "p-1",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+type CardVariant = NonNullable<VariantProps<typeof cardVariants>["variant"]>;
+
+type CardProps = React.ComponentProps<"div"> & {
+  variant?: CardVariant;
+};
+
+function Card({ className, variant = "default", ...props }: CardProps) {
+  return (
+    <div
+      data-slot="card"
+      data-card-variant={variant}
+      className={cn(cardVariants({ variant }), className)}
+      {...props}
+    />
+  );
+}
+
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-header"
+      className={cn(
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 [[data-card-variant=default]>_&]:gap-1.5 [[data-card-variant=default]>_&]:px-6 [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:py-2 [[data-card-variant=inset]>_&]:pt-1",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn(
+        "font-semibold [[data-card-variant=default]_&]:leading-none",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-description"
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  );
+}
+
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn(
+        "[[data-card-variant=default]>_&]:px-6 [[data-card-variant=inset]>_&]:flex [[data-card-variant=inset]>_&]:flex-1 [[data-card-variant=inset]>_&]:flex-col [[data-card-variant=inset]>_&]:rounded-lg [[data-card-variant=inset]>_&]:bg-muted [[data-card-variant=inset]>_&]:p-4 [[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:[[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn(
+        "flex items-center [.border-t]:pt-6 [[data-card-variant=default]>_&]:px-6 [[data-card-variant=inset]>_&]:mt-auto [[data-card-variant=inset]>_&]:justify-end [[data-card-variant=inset]>_&]:pt-4",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+export {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  cardVariants,
+};
+export type { CardProps, CardVariant };
