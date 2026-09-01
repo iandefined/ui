@@ -14,7 +14,7 @@ import {
   useState,
 } from "react";
 
-import { Button } from "@/shared/components/ui/button";
+import { Button, type ButtonProps } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Separator } from "@/shared/components/ui/separator";
 import {
@@ -268,11 +268,11 @@ const SidebarTrigger = ({
   className,
   onClick,
   ...props
-}: React.ComponentProps<typeof Button>) => {
+}: Omit<ButtonProps, "color" | "variant">) => {
   const { toggleSidebar } = useSidebar();
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback<NonNullable<ButtonProps["onClick"]>>(
+    (event) => {
       onClick?.(event);
       toggleSidebar();
     },

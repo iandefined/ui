@@ -7,21 +7,7 @@
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
-      "description": "A Base UI button component with variants and sizes.",
-      "dependencies": ["@base-ui/react", "tailwind-variants"],
-      "files": [
-        {
-          "path": "src/registry/base/button.tsx",
-          "type": "registry:ui",
-          "target": "components/ui/button.tsx"
-        }
-      ]
-    },
-    {
-      "name": "fancy-button",
-      "type": "registry:ui",
-      "title": "Fancy Button",
-      "description": "A glossy Base UI button with press animation, custom color gradients, section icons, and matched design-system sizes.",
+      "description": "A Base UI button with glossy default and custom-color treatments, variants, sections, and sizes.",
       "dependencies": [
         "@base-ui/react",
         "tailwind-variants",
@@ -30,9 +16,9 @@
       ],
       "files": [
         {
-          "path": "src/registry/base/fancy-button.tsx",
+          "path": "src/registry/base/button.tsx",
           "type": "registry:ui",
-          "target": "components/ui/fancy-button.tsx"
+          "target": "components/ui/button.tsx"
         }
       ]
     },

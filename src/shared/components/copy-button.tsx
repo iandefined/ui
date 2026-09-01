@@ -4,7 +4,7 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 import { useCallback } from "react";
 
 import { IconSwap } from "@/registry/base/icon-swap";
-import { Button } from "@/shared/components/ui/button";
+import { Button, type ButtonProps } from "@/shared/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -15,10 +15,7 @@ import type { Event } from "@/shared/lib/events";
 import { trackEvent } from "@/shared/lib/events";
 import { cn } from "@/shared/lib/utils";
 
-export interface CopyButtonProps extends Omit<
-  React.ComponentProps<typeof Button>,
-  "value"
-> {
+export interface CopyButtonProps extends Omit<ButtonProps, "color" | "value"> {
   value: string | (() => Promise<string> | string);
   src?: string;
   event?: Event["name"];

@@ -1,31 +1,32 @@
-import { ArrowUpRightIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
-import { Button } from "@/registry/base/button";
+import { Button, type ButtonSize } from "@/registry/base/button";
 
-export default function ButtonSizeDemo() {
+const TEXT_SIZES: ButtonSize[] = ["xs", "sm", "default", "lg", "xl"];
+const ICON_SIZES: ButtonSize[] = [
+  "icon-xs",
+  "icon-sm",
+  "icon",
+  "icon-lg",
+  "icon-xl",
+];
+
+export default function ButtonSizesDemo() {
   return (
-    <div className="flex flex-col items-start gap-8 sm:flex-row">
-      <div className="flex items-start gap-2">
-        <Button size="sm" variant="outline">
-          Small
-        </Button>
-        <Button size="icon-sm" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
+    <div className="grid gap-6">
+      <div className="flex flex-wrap items-end gap-2">
+        {TEXT_SIZES.map((size) => (
+          <Button key={size} size={size}>
+            {size === "default" ? "Default" : size.toUpperCase()}
+          </Button>
+        ))}
       </div>
-      <div className="flex items-start gap-2">
-        <Button variant="outline">Default</Button>
-        <Button size="icon" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
-      </div>
-      <div className="flex items-start gap-2">
-        <Button variant="outline" size="lg">
-          Large
-        </Button>
-        <Button size="icon-lg" aria-label="Submit" variant="outline">
-          <ArrowUpRightIcon />
-        </Button>
+      <div className="flex flex-wrap items-end gap-2">
+        {ICON_SIZES.map((size) => (
+          <Button aria-label={`Add item, ${size}`} key={size} size={size}>
+            <PlusIcon />
+          </Button>
+        ))}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import { ArrowLeftIcon } from "@/shared/components/animated-icons/arrow-left";
 import type { ArrowRightIconHandle } from "@/shared/components/animated-icons/arrow-right";
 import { ArrowRightIcon } from "@/shared/components/animated-icons/arrow-right";
 import { Link } from "@/shared/components/link";
-import { Button } from "@/shared/components/ui/button";
+import { Button, type ButtonProps } from "@/shared/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -24,7 +24,7 @@ export const DocsNavLink = ({
   navDirection,
   size = "icon",
   ...props
-}: React.ComponentProps<typeof Button> & {
+}: Omit<ButtonProps, "color" | "variant"> & {
   href: string;
   children: React.ReactNode;
   className?: string;

@@ -8,13 +8,12 @@
 - [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
 - [Avatar](https://ui.iandefined.com/docs/components/avatar.md) - An image element with a fallback for representing the user.
 - [Badge](https://ui.iandefined.com/docs/components/badge.md) - Compact labels for status, category, or metadata.
-- [Button](https://ui.iandefined.com/docs/components/button.md) - Displays a button or a component that looks like a button.
+- [Button](https://ui.iandefined.com/docs/components/button.md) - A button with a glossy default treatment, custom colors, variants, sections, and sizes.
 - [Button Group](https://ui.iandefined.com/docs/components/button-group.md) - A container that groups related buttons together with consistent styling.
 - [Card](https://ui.iandefined.com/docs/components/card.md) - A container with header, content, action, and footer regions.
 - [Checkbox](https://ui.iandefined.com/docs/components/checkbox.md) - A control that allows the user to toggle between checked and unchecked.
 - [Combobox](https://ui.iandefined.com/docs/components/combobox.md) - A filterable input for selecting one or more predefined values.
 - [Dropdown Menu](https://ui.iandefined.com/docs/components/dropdown-menu.md) - A list of actions in a dropdown, enhanced with keyboard navigation.
-- [Fancy Button](https://ui.iandefined.com/docs/components/fancy-button.md) - A glossy button with press animation, custom color gradients, and section icons.
 - [Input](https://ui.iandefined.com/docs/components/input.md) - A styled text input built on Base UI.
 - [Input Group](https://ui.iandefined.com/docs/components/input-group.md) - Compose inputs and textareas with icons, text, buttons, and menus.
 - [Input OTP](https://ui.iandefined.com/docs/components/input-otp.md) - An accessible one-time-code input with animated slots, invalid states, and masked entry.

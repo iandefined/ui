@@ -4,7 +4,7 @@ import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { CodeBlockCommand } from "@/shared/components/code-block-command";
-import { Button } from "@/shared/components/ui/button";
+import { Button, type ButtonProps } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -70,7 +70,7 @@ export const RegistryAddButton = ({
   ...props
 }: {
   registry: { name: string } | string;
-} & Omit<React.ComponentProps<typeof Button>, "children"> & {
+} & Omit<ButtonProps, "children" | "color"> & {
     children?: React.ReactNode;
   }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,14 +89,14 @@ export const RegistryAddButton = ({
     [registryTemplate]
   );
 
-  const handleTriggerClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleTriggerClick: NonNullable<ButtonProps["onClick"]> = (event) => {
     trackEvent({
       name: "click_registry_add_button",
       properties: {
         registry: registryName,
       },
     });
-    onClick?.(e);
+    onClick?.(event);
   };
 
   const trigger = (

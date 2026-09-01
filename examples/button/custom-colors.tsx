@@ -1,4 +1,4 @@
-import { FancyButton } from "@/registry/base/fancy-button";
+import { Button } from "@/registry/base/button";
 
 const COLORS = [
   ["Blue", "#3b82f6"],
@@ -8,13 +8,13 @@ const COLORS = [
   ["Purple", "#8b5cf6"],
 ] as const;
 
-export default function FancyButtonCustomColorsDemo() {
+export default function ButtonCustomColorsDemo() {
   return (
     <div className="flex flex-wrap items-center gap-3">
       {COLORS.map(([label, color]) => (
-        <FancyButton color={color} key={color}>
+        <Button className="text-white" color={color} key={color}>
           {label}
-        </FancyButton>
+        </Button>
       ))}
     </div>
   );

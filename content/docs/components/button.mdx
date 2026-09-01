@@ -1,29 +1,9 @@
 ---
 title: Button
-description: Displays a button or a component that looks like a button.
+description: A button with a glossy default treatment, custom colors, variants, sections, and sizes.
 ---
 
-import { Button } from "@/components/ui/button";
-import { ArrowUpRightIcon, ArrowUpIcon, GitBranchIcon } from "lucide-react";
-
-<ComponentPreview>
-  <div className="flex flex-wrap items-center gap-2 md:flex-row">
-    <Button>Button</Button>
-    <Button variant="outline" size="icon" aria-label="Submit">
-      <ArrowUpIcon />
-    </Button>
-  </div>
-
-```tsx
-<div className="flex flex-wrap items-center gap-2 md:flex-row">
-  <Button>Button</Button>
-  <Button variant="outline" size="icon" aria-label="Submit">
-    <ArrowUpIcon />
-  </Button>
-</div>
-```
-
-</ComponentPreview>
+<ComponentPreview name="button/default" />
 
 ## Installation
 
@@ -48,14 +28,23 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json
 npm install @base-ui/react tailwind-variants clsx tailwind-merge
 ```
 
+<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
+
+```ts filename="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
 <Step>Copy and paste the following code into your project.</Step>
 
 <ComponentSource
   src="src/registry/base/button.tsx"
   title="components/ui/button.tsx"
 />
-
-  <Step>Update the import paths to match your project setup.</Step>
 </Steps>
 
   </TabsContent>
@@ -68,111 +57,68 @@ import { Button } from "@/components/ui/button";
 ```
 
 ```tsx
-<Button variant="outline">Button</Button>
+<Button>Get started</Button>
 ```
 
-## Variants
-
-### Default
-
-<ComponentPreview name="button-default-demo" title="button-default-demo.tsx">
-  <Button>Default</Button>
+The default variant uses the glossy treatment. Pass any valid CSS color to `color` to generate its gradient and ring.
 
 ```tsx
-import { Button } from "@/components/ui/button";
-
-export function ButtonDefault() {
-  return <Button>Default</Button>;
-}
+<Button className="text-white" color="#3b82f6">
+  Get started
+</Button>
 ```
 
-</ComponentPreview>
-
-### Secondary
-
-<ComponentPreview name="button-secondary-demo" title="button-secondary-demo.tsx">
-  <Button variant="secondary">Secondary</Button>
-
-```tsx
-import { Button } from "@/components/ui/button";
-
-export function ButtonSecondary() {
-  return <Button variant="secondary">Secondary</Button>;
-}
-```
-
-</ComponentPreview>
-
-### Outline
-
-<ComponentPreview name="button-outline-demo" title="button-outline-demo.tsx">
-  <Button variant="outline">Outline</Button>
-
-```tsx
-import { Button } from "@/components/ui/button";
-
-export function ButtonOutline() {
-  return <Button variant="outline">Outline</Button>;
-}
-```
-
-</ComponentPreview>
-
-### Ghost
-
-<ComponentPreview name="button-ghost-demo" title="button-ghost-demo.tsx">
-  <Button variant="ghost">Ghost</Button>
-
-```tsx
-import { Button } from "@/components/ui/button";
-
-export function ButtonGhost() {
-  return <Button variant="ghost">Ghost</Button>;
-}
-```
-
-</ComponentPreview>
-
-### Link
-
-<ComponentPreview name="button-link-demo" title="button-link-demo.tsx">
-  <Button variant="link">Link</Button>
-
-```tsx
-import { Button } from "@/components/ui/button";
-
-export function ButtonLink() {
-  return <Button variant="link">Link</Button>;
-}
-```
-
-</ComponentPreview>
-
-### Destructive
-
-<ComponentPreview name="button-destructive-demo" title="button-destructive-demo.tsx">
-  <Button variant="destructive">Destructive</Button>
-
-```tsx
-import { Button } from "@/components/ui/button";
-
-export function ButtonDestructive() {
-  return <Button variant="destructive">Destructive</Button>;
-}
-```
-
-</ComponentPreview>
+`color` is part of a discriminated union: it is available when `variant` is `"default"` or omitted, and TypeScript rejects it for every other variant.
 
 ## Examples
+
+### Variants
+
+<ComponentPreview name="button/variants" />
+
+### Custom Colors
+
+<ComponentPreview name="button/custom-colors" />
 
 ### Sizes
 
 <ComponentPreview name="button/sizes" />
 
-### With Icon
+### With Icons
 
-<ComponentPreview name="button/with-icon" />
+Use `leftSection` and `rightSection` to place icons beside the label with optical padding.
 
-### Icon Only
+<ComponentPreview name="button/with-icons" />
 
-<ComponentPreview name="button/icon-only" />
+### Loading
+
+Pass `disabled` with a spinner when an action is in progress.
+
+<ComponentPreview name="button/loading" />
+
+### Disabled
+
+<ComponentPreview name="button/disabled" />
+
+### As Link
+
+Use Base UI's `render` prop and set `nativeButton={false}` when the component renders as a link.
+
+<ComponentPreview name="button/as-link" />
+
+## Accessibility
+
+Give icon-only buttons an `aria-label`. Disabled buttons preserve their visual size and remove pointer interaction.
+
+## API Reference
+
+Button wraps Base UI's Button and accepts its props in addition to the props below.
+
+| Prop           | Type                                                                                                      | Default     | Description                                               |
+| -------------- | --------------------------------------------------------------------------------------------------------- | ----------- | --------------------------------------------------------- |
+| `variant`      | `"default" \| "secondary" \| "outline" \| "ghost" \| "link" \| "destructive"`                             | `"default"` | Controls the visual treatment.                            |
+| `color`        | `string`                                                                                                  | —           | Generates the default variant's glossy gradient and ring. |
+| `size`         | `"xs" \| "sm" \| "default" \| "lg" \| "xl" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg" \| "icon-xl"` | `"default"` | Controls button height and padding.                       |
+| `radius`       | `"none" \| "sm" \| "default" \| "lg" \| "xl" \| "full"`                                                   | `"default"` | Controls the corner radius.                               |
+| `leftSection`  | `ReactNode`                                                                                               | —           | Content rendered before the label.                        |
+| `rightSection` | `ReactNode`                                                                                               | —           | Content rendered after the label.                         |

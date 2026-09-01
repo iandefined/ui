@@ -3,9 +3,9 @@
 import type { ButtonProps } from "@/shared/components/ui/button";
 import { Button } from "@/shared/components/ui/button";
 
-interface ExternalLinkButtonProps extends ButtonProps {
+type ExternalLinkButtonProps = ButtonProps & {
   href: string;
-}
+};
 
 export const ExternalLinkButton = ({
   href,

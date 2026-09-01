@@ -3,7 +3,7 @@
 import * as React from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -94,7 +94,7 @@ function InputGroupButton({
   variant = "ghost",
   size = "xs",
   ...props
-}: Omit<React.ComponentProps<typeof Button>, "size"> &
+}: Omit<ButtonProps, "color" | "size"> &
   VariantProps<typeof inputGroupButtonVariants> & {
     type?: "submit" | "reset" | "button";
   }) {

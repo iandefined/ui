@@ -1,23 +1,24 @@
 import { LoaderCircleIcon } from "lucide-react";
 
-import { FancyButton } from "@/registry/base/fancy-button";
+import { Button } from "@/registry/base/button";
 
-export default function FancyButtonLoadingDemo() {
+export default function ButtonLoadingDemo() {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <FancyButton
+      <Button
         disabled
         leftSection={<LoaderCircleIcon className="animate-spin" />}
       >
         Loading
-      </FancyButton>
-      <FancyButton
+      </Button>
+      <Button
+        className="text-white"
         color="#3b82f6"
         disabled
         leftSection={<LoaderCircleIcon className="animate-spin" />}
       >
         Processing
-      </FancyButton>
+      </Button>
     </div>
   );
 }
