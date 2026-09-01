@@ -514,6 +514,41 @@
       ]
     },
     {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "title": "Input OTP",
+      "description": "An accessible one-time-code input with animated slots, invalid states, and masked entry.",
+      "dependencies": [
+        "input-otp",
+        "motion",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/input-otp.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/input-otp.tsx"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "--animate-caret-blink": "caret-blink 1s ease-out infinite"
+        }
+      },
+      "css": {
+        "@keyframes caret-blink": {
+          "0%, 70%, 100%": {
+            "opacity": "1"
+          },
+          "20%, 50%": {
+            "opacity": "0"
+          }
+        }
+      }
+    },
+    {
       "name": "number-field",
       "type": "registry:ui",
       "title": "Number Field",

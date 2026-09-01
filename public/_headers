@@ -40,6 +40,9 @@
 /docs/components/input-group.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/input-otp.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/kbd.md
   Content-Type: text/markdown; charset=utf-8
 
