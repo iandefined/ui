@@ -8,6 +8,7 @@
 - [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
 - [Avatar](https://ui.iandefined.com/docs/components/avatar.md) - An image element with a fallback for representing the user.
 - [Badge](https://ui.iandefined.com/docs/components/badge.md) - Compact labels for status, category, or metadata.
+- [Breadcrumbs](https://ui.iandefined.com/docs/components/breadcrumbs.md) - A responsive breadcrumb trail with surface variants, custom separators, and collapsed paths.
 - [Button](https://ui.iandefined.com/docs/components/button.md) - A button with a glossy default treatment, custom colors, variants, sections, and sizes.
 - [Button Group](https://ui.iandefined.com/docs/components/button-group.md) - A container that groups related buttons together with consistent styling.
 - [Card](https://ui.iandefined.com/docs/components/card.md) - A container with header, content, action, and footer regions.
