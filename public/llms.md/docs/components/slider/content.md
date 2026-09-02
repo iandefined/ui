@@ -84,3 +84,7 @@ Arrange the same label, value, and control parts inside or outside the slider su
 ### Variants
 
 ### Disabled
+
+### Without Tooltip
+
+Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's hover and drag feedback.

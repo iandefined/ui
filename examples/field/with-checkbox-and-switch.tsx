@@ -13,13 +13,13 @@ export default function FieldWithCheckboxAndSwitchDemo() {
   return (
     <div className="grid w-full max-w-sm gap-5">
       <Field name="terms">
-        <FieldLabel className="items-start">
+        <FieldLabel>
           <Checkbox checked={accepted} onCheckedChange={setAccepted} />
           <span>I accept the terms and privacy policy.</span>
         </FieldLabel>
       </Field>
 
-      <Field name="notifications">
+      <Field name="notifications" className="space-y-0">
         <FieldLabel className="justify-between">
           Product notifications
           <Switch checked={notifications} onCheckedChange={setNotifications} />

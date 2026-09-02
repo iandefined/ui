@@ -150,6 +150,8 @@ Examples must behave as their labels claim:
 - Calculate counters from the current value, such as `maxLength - value.length`; do not hardcode a character count that becomes stale while typing.
 - Use real loading, checked, selected, disabled, or open state where the interaction is the point of the example.
 - Ensure entered text uses the normal foreground color while placeholders use the muted placeholder color.
+- Structure validated fields as label, control, then one supporting message. When an error repeats or replaces the helper's guidance, hide the helper and show the actionable error in the same position; never stack helper text above an error.
+- Mark invalid controls with `aria-invalid`, connect the active helper or error through `aria-describedby`, and give errors a non-color cue such as an icon or distinct typography. Prefer a field primitive that manages these relationships automatically over hand-written IDs.
 - Avoid examples that differ only by decorative markup and teach no new API.
 
 ### Existing Example Baselines

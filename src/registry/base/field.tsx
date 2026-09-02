@@ -20,9 +20,8 @@ function FieldLabel({ className, ...props }: FieldPrimitive.Label.Props) {
   return (
     <FieldPrimitive.Label
       className={cn(
-        "flex items-center gap-2 text-sm/4 font-medium text-foreground select-none",
+        "flex items-center gap-2 text-sm/5 font-medium text-foreground select-none",
         "data-disabled:pointer-events-none data-disabled:opacity-60",
-        "data-invalid:text-destructive",
         className
       )}
       data-slot="field-label"
@@ -57,8 +56,9 @@ function FieldDescription({
 function FieldError({ className, ...props }: FieldPrimitive.Error.Props) {
   return (
     <FieldPrimitive.Error
-      className={cn("text-sm text-destructive", className)}
+      className={cn("text-sm font-medium text-destructive", className)}
       data-slot="field-error"
+      role="alert"
       {...props}
     />
   );

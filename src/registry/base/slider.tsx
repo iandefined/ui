@@ -31,6 +31,7 @@ interface SliderProps extends Omit<
   onValueCommitted?: (value: SliderValueType) => void;
   children?: React.ReactNode;
   formatValue?: (value: number) => string;
+  hideTooltip?: boolean;
   variant?: SliderVariant;
   showSteps?: boolean;
   reduceMotion?: boolean;
@@ -41,6 +42,7 @@ interface SliderContextValue {
   disabled: boolean;
   formatValue: (value: number) => string;
   getAriaLabel?: (index: number) => string;
+  hideTooltip: boolean;
   max: number;
   min: number;
   onValueChange: (value: SliderValueType) => void;
@@ -101,7 +103,7 @@ interface TrackPosition {
 }
 
 const COMPACT_INSET = 10;
-const COMPACT_RAIL_INSET = 7;
+const COMPACT_RAIL_INSET = 0;
 const DEFAULT_INSET = 12;
 
 const spring: Transition = {
@@ -524,6 +526,7 @@ function CompactSliderControl({
     disabled,
     formatValue,
     getAriaLabel,
+    hideTooltip,
     max,
     min,
     onValueChange,
@@ -628,19 +631,21 @@ function CompactSliderControl({
   };
   return (
     <div
-      className="relative w-full pt-5"
+      className="relative w-full"
       data-slot="slider-compact-wrapper"
       onPointerLeave={() => setPreview(null)}
       onPointerMove={updatePreview}
     >
-      <HoverValue
-        className="top-4"
-        formatValue={formatValue}
-        isPressed={isPressed}
-        position={getInsetPosition(preview?.percent ?? 0, COMPACT_INSET)}
-        preview={preview}
-        reduceMotion={reduceMotion}
-      />
+      {hideTooltip ? null : (
+        <HoverValue
+          className="-top-1"
+          formatValue={formatValue}
+          isPressed={isPressed}
+          position={getInsetPosition(preview?.percent ?? 0, COMPACT_INSET)}
+          preview={preview}
+          reduceMotion={reduceMotion}
+        />
+      )}
       <SliderPrimitive.Control
         {...props}
         className={cn(
@@ -703,7 +708,7 @@ function CompactSliderControl({
               className="pointer-events-none absolute inset-0 z-[3]"
               data-slot="slider-steps"
             >
-              {steps.map((stepValue) => (
+              {steps.slice(1, -1).map((stepValue) => (
                 <span
                   key={stepValue}
                   className={cn(
@@ -738,7 +743,7 @@ function CompactSliderControl({
               }
               index={index}
             >
-              <span className="relative z-10 size-4 rounded-full border border-black/5 bg-white shadow-[0_1px_3px_rgb(0_0_0/0.22)] transition-[width,height] duration-150 group-hover/compact-slider:size-4.5 group-focus-visible/compact-thumb:size-4.5" />
+              <span className="relative z-10 size-5 shrink-0 rounded-full border border-border bg-white shadow-md transition-transform duration-150 group-hover/compact-slider:scale-110 group-focus-visible/compact-thumb:scale-110" />
             </SliderPrimitive.Thumb>
           ))}
           {children}
@@ -760,6 +765,7 @@ function DefaultSliderControl({
     disabled,
     formatValue,
     getAriaLabel,
+    hideTooltip,
     max,
     min,
     reduceMotion,
@@ -796,23 +802,25 @@ function DefaultSliderControl({
 
   return (
     <div
-      className="relative w-full pt-7"
+      className="relative w-full"
       data-slot="slider-default-wrapper"
       onPointerLeave={() => setPreview(null)}
       onPointerMove={updatePreview}
     >
-      <HoverValue
-        className="top-6"
-        formatValue={formatValue}
-        isPressed={isPressed}
-        position={getInsetPosition(preview?.percent ?? 0, DEFAULT_INSET)}
-        preview={preview}
-        reduceMotion={reduceMotion}
-      />
+      {hideTooltip ? null : (
+        <HoverValue
+          className="-top-1"
+          formatValue={formatValue}
+          isPressed={isPressed}
+          position={getInsetPosition(preview?.percent ?? 0, DEFAULT_INSET)}
+          preview={preview}
+          reduceMotion={reduceMotion}
+        />
+      )}
       <SliderPrimitive.Control
         {...props}
         className={cn(
-          "group/default-slider relative flex h-9 w-full cursor-ew-resize touch-none items-center overflow-hidden rounded-lg border border-input/70 bg-background shadow-xs outline-none [transition:box-shadow_150ms_ease-out] has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-[1px] has-[input:focus-visible]:ring-border data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-64 dark:bg-input/32",
+          "group/default-slider relative flex h-9 w-full cursor-ew-resize touch-none items-center overflow-hidden rounded-lg border border-input/70 bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] has-[input:focus-visible]:border-ring has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-64 dark:bg-input/32",
           className
         )}
         data-slot="slider-control"
@@ -920,6 +928,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(function Slider(
     disabled = false,
     formatValue = String,
     getAriaLabel,
+    hideTooltip = false,
     max = 100,
     min = 0,
     onValueChange,
@@ -957,6 +966,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(function Slider(
         disabled,
         formatValue,
         getAriaLabel,
+        hideTooltip,
         max,
         min,
         onValueChange: updateValue,

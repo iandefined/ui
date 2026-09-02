@@ -31,9 +31,11 @@ export default function FieldValidationDemo() {
         placeholder="Ada Lovelace"
         value={value}
       />
-      <FieldDescription>Enter at least 3 characters.</FieldDescription>
+      {!invalid && (
+        <FieldDescription>Use at least 3 characters.</FieldDescription>
+      )}
       <FieldErrorSlot>
-        <FieldError match={invalid}>Display name is too short.</FieldError>
+        <FieldError match={invalid}>Enter at least 3 characters.</FieldError>
       </FieldErrorSlot>
     </Field>
   );

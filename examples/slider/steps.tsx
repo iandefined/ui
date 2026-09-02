@@ -24,7 +24,7 @@ export default function SliderStepsDemo() {
         onValueChange={(nextValue) => setCompactValue(nextValue as number)}
       >
         <SliderControl />
-        <div className="mt-2 flex items-center gap-1 px-1.75">
+        <div className="mt-2 flex items-center gap-1">
           <SliderLabel>Rating:</SliderLabel>
           <SliderValue editable={false} />
           <span aria-hidden="true">/ 4</span>

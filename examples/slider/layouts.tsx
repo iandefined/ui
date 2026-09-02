@@ -42,7 +42,7 @@ export default function SliderLayoutsDemo() {
         variant="compact"
         onValueChange={(value) => setVolume(value as number)}
       >
-        <div className="mb-2 grid grid-cols-[1fr_auto] items-end gap-x-4 px-1.75">
+        <div className="mb-2 grid grid-cols-[1fr_auto] items-end gap-x-4">
           <SliderLabel className="text-base text-foreground">
             Master volume
           </SliderLabel>

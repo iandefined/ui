@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 const checkboxRootStyles = tv({
   base: [
-    `group size-7 relative inline-flex items-center justify-center shrink-0 overflow-hidden outline-hidden focus:outline-hidden focus-visible:outline-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background`,
+    `group size-7 relative inline-flex items-center justify-center shrink-0 overflow-hidden shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid cursor-pointer transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50`,
     `data-disabled:cursor-not-allowed data-disabled:grayscale data-disabled:scale-100 data-disabled:opacity-50`,
-    `before:content-[''] before:absolute before:border-2 before:inset-0 before:border-border not-data-disabled:hover:before:bg-secondary/60`,
+    `before:content-[''] before:absolute before:border-1 before:inset-0 before:border-border aria-invalid:before:border-destructive data-invalid:before:border-destructive not-data-disabled:hover:before:bg-secondary/60`,
   ],
   variants: {
     size: {

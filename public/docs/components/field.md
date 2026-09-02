@@ -40,12 +40,17 @@ import {
 ```
 
 ```tsx
-<Field name="email">
+const invalid = Boolean(error);
+
+<Field invalid={invalid} name="email">
   <FieldLabel>Email</FieldLabel>
   <FieldControl type="email" />
-  <FieldDescription>We only use this for account updates.</FieldDescription>
-  <FieldError />
-</Field>
+  {invalid ? (
+    <FieldError match>{error}</FieldError>
+  ) : (
+    <FieldDescription>We only use this for account updates.</FieldDescription>
+  )}
+</Field>;
 ```
 
 ## Anatomy
@@ -54,10 +59,13 @@ import {
 <Field>
   <FieldLabel />
   <FieldControl />
-  <FieldDescription />
-  <FieldErrorSlot>
-    <FieldError />
-  </FieldErrorSlot>
+  {invalid ? (
+    <FieldErrorSlot>
+      <FieldError />
+    </FieldErrorSlot>
+  ) : (
+    <FieldDescription />
+  )}
   <FieldItem />
   <FieldValidity />
 </Field>
@@ -69,7 +77,7 @@ import {
 
 ### Validation
 
-Map validation state from a form library into `invalid`, `dirty`, and `touched`. `FieldErrorSlot` animates the error without reserving space while it is empty.
+Map validation state from a form library into `invalid`, `dirty`, and `touched`. Show either the helper or the error directly after the control so the message has one clear meaning. Field automatically applies `aria-invalid` and associates the active message through `aria-describedby`; errors also announce with `role="alert"`.
 
 ### Checkbox and Switch
 

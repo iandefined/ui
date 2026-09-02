@@ -23,7 +23,7 @@ export default function SliderRangeDemo() {
         setValue(nextValue as [number, number])
       }
     >
-      <div className="mb-2 flex items-center justify-between gap-4 px-1.75">
+      <div className="mb-2 flex items-center justify-between gap-4">
         <SliderLabel>Price range</SliderLabel>
         <SliderValue editable={false}>
           {(formattedValues) => `Range: ${formattedValues.join(" - ")}`}

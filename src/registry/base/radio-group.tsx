@@ -22,9 +22,9 @@ const radioGroupStyles = tv({
 
 const radioRootStyles = tv({
   base: [
-    "group relative isolate inline-flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full outline-hidden focus:outline-hidden focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    "group relative isolate inline-flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50",
     "data-disabled:cursor-not-allowed data-disabled:scale-100 data-disabled:opacity-50 data-disabled:grayscale",
-    "before:absolute before:inset-0 before:rounded-full before:border-2 before:border-border before:content-[''] not-data-disabled:hover:before:bg-secondary/60",
+    "before:absolute before:inset-0 before:rounded-full before:border-1 before:border-border before:content-[''] aria-invalid:before:border-destructive data-invalid:before:border-destructive not-data-disabled:hover:before:bg-secondary/60",
   ],
   variants: {
     size: {

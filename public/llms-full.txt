@@ -1040,12 +1040,17 @@ import {
 ```
 
 ```tsx
-<Field name="email">
+const invalid = Boolean(error);
+
+<Field invalid={invalid} name="email">
   <FieldLabel>Email</FieldLabel>
   <FieldControl type="email" />
-  <FieldDescription>We only use this for account updates.</FieldDescription>
-  <FieldError />
-</Field>
+  {invalid ? (
+    <FieldError match>{error}</FieldError>
+  ) : (
+    <FieldDescription>We only use this for account updates.</FieldDescription>
+  )}
+</Field>;
 ```
 
 ## Anatomy
@@ -1054,10 +1059,13 @@ import {
 <Field>
   <FieldLabel />
   <FieldControl />
-  <FieldDescription />
-  <FieldErrorSlot>
-    <FieldError />
-  </FieldErrorSlot>
+  {invalid ? (
+    <FieldErrorSlot>
+      <FieldError />
+    </FieldErrorSlot>
+  ) : (
+    <FieldDescription />
+  )}
   <FieldItem />
   <FieldValidity />
 </Field>
@@ -1069,7 +1077,7 @@ import {
 
 ### Validation
 
-Map validation state from a form library into `invalid`, `dirty`, and `touched`. `FieldErrorSlot` animates the error without reserving space while it is empty.
+Map validation state from a form library into `invalid`, `dirty`, and `touched`. Show either the helper or the error directly after the control so the message has one clear meaning. Field automatically applies `aria-invalid` and associates the active message through `aria-describedby`; errors also announce with `role="alert"`.
 
 ### Checkbox and Switch
 
@@ -1224,6 +1232,8 @@ const form = useForm({
 ```
 
 The component defaults to `noValidate` so TanStack Form remains the only validation layer. Pass `noValidate={false}` when native constraint validation is intentional.
+
+For fields with supporting guidance, render the helper while the field is valid and replace it with an actionable `FieldError` when validation fails. Keep that single active message directly after the control; Field connects it with `aria-describedby` and propagates `aria-invalid` from the external validation state.
 
 ## Examples
 
@@ -2260,6 +2270,10 @@ Arrange the same label, value, and control parts inside or outside the slider su
 ### Variants
 
 ### Disabled
+
+### Without Tooltip
+
+Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's hover and drag feedback.
 
 # Spinner
 

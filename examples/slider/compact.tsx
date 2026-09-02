@@ -22,7 +22,7 @@ export default function SliderCompactDemo() {
       onValueChange={(nextValue) => setBrightness(nextValue as number)}
     >
       <SliderControl />
-      <div className="mt-2 flex items-center justify-between px-1.75">
+      <div className="mt-2 flex items-center justify-between">
         <SliderLabel>Brightness</SliderLabel>
         <SliderValue />
       </div>

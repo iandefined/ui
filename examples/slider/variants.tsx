@@ -23,7 +23,7 @@ export default function SliderVariantsDemo() {
         onValueChange={(nextValue) => setCompactValue(nextValue as number)}
       >
         <SliderControl />
-        <div className="mt-2 flex items-center justify-between px-1.75">
+        <div className="mt-2 flex items-center justify-between">
           <SliderLabel>Compact</SliderLabel>
           <SliderValue />
         </div>

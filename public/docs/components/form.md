@@ -68,6 +68,8 @@ const form = useForm({
 
 The component defaults to `noValidate` so TanStack Form remains the only validation layer. Pass `noValidate={false}` when native constraint validation is intentional.
 
+For fields with supporting guidance, render the helper while the field is valid and replace it with an actionable `FieldError` when validation fails. Keep that single active message directly after the control; Field connects it with `aria-describedby` and propagates `aria-invalid` from the external validation state.
+
 ## Examples
 
 ### Complete Form

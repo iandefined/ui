@@ -1,7 +1,7 @@
 "use client";
 
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { z } from "zod";
 
 import { Button } from "@/registry/base/button";
@@ -19,7 +19,6 @@ import { Input } from "@/registry/base/input";
 import { Radio, RadioGroup } from "@/registry/base/radio-group";
 import {
   Slider,
-  SliderContent,
   SliderControl,
   SliderLabel,
   SliderValue,
@@ -28,21 +27,23 @@ import { Switch } from "@/registry/base/switch";
 import { Textarea } from "@/registry/base/textarea";
 
 const profileSchema = z.object({
-  bio: z.string().trim().min(10, "Tell us a little more about yourself."),
+  bio: z.string().trim().min(10, "Please enter at least 10 characters."),
   experience: z.number().min(1, "Choose at least one year."),
   name: z.string().trim().min(3, "Name must be at least 3 characters."),
-  plan: z.enum(["starter", "pro", "business"]),
+  plan: z
+    .union([z.enum(["starter", "pro", "business"]), z.literal("")])
+    .refine((value) => value !== "", "Choose a plan."),
   productUpdates: z.boolean(),
   terms: z.boolean().refine(Boolean, "You must accept the terms."),
 });
 
-type ProfileValues = z.infer<typeof profileSchema>;
+type ProfileValues = z.input<typeof profileSchema>;
 
 const defaultValues: ProfileValues = {
   bio: "",
   experience: 3,
   name: "",
-  plan: "pro",
+  plan: "",
   productUpdates: true,
   terms: false,
 };
@@ -71,6 +72,8 @@ function getErrorMessage(error: unknown) {
 }
 
 export default function FormCompleteDemo() {
+  const planErrorId = useId();
+  const termsErrorId = useId();
   const [submittedValues, setSubmittedValues] = useState<ProfileValues>();
   const form = useForm({
     defaultValues,
@@ -144,63 +147,92 @@ export default function FormCompleteDemo() {
                 placeholder="Tell us what you are building."
                 value={field.state.value}
               />
-              <FieldDescription>At least 10 characters.</FieldDescription>
-              <FieldError match={Boolean(error)}>{error}</FieldError>
+              {error ? (
+                <FieldError match>{error}</FieldError>
+              ) : (
+                <FieldDescription>
+                  Tell us a little more about yourself.
+                </FieldDescription>
+              )}
             </Field>
           );
         }}
       </form.Field>
 
       <form.Field name="plan">
-        {(field) => (
-          <Field name={field.name}>
-            <Fieldset>
-              <FieldsetLegend>Plan</FieldsetLegend>
-              <RadioGroup
-                value={field.state.value}
-                onValueChange={(value) => {
-                  setSubmittedValues(undefined);
-                  field.handleChange(value);
-                }}
-              >
-                {plans.map((plan) => (
-                  <FieldItem key={plan.value}>
-                    <FieldLabel className="cursor-pointer items-start">
-                      <Radio value={plan.value} />
-                      <span className="grid gap-1">
-                        <span>{plan.label}</span>
-                        <span className="text-xs/4 font-normal text-muted-foreground">
-                          {plan.description}
+        {(field) => {
+          const error = field.state.meta.errors
+            .map(getErrorMessage)
+            .find(Boolean);
+
+          return (
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={Boolean(error)}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <Fieldset>
+                <FieldsetLegend>Plan</FieldsetLegend>
+                <RadioGroup
+                  aria-describedby={error ? planErrorId : undefined}
+                  aria-invalid={Boolean(error)}
+                  name={field.name}
+                  onValueChange={(value) => {
+                    setSubmittedValues(undefined);
+                    field.handleChange(value);
+                  }}
+                  required
+                  value={field.state.value}
+                >
+                  {plans.map((plan) => (
+                    <FieldItem key={plan.value}>
+                      <FieldLabel className="cursor-pointer items-start">
+                        <Radio value={plan.value} />
+                        <span className="grid gap-1">
+                          <span>{plan.label}</span>
+                          <span className="text-xs/4 font-normal text-muted-foreground">
+                            {plan.description}
+                          </span>
                         </span>
-                      </span>
-                    </FieldLabel>
-                  </FieldItem>
-                ))}
-              </RadioGroup>
-            </Fieldset>
-          </Field>
-        )}
+                      </FieldLabel>
+                    </FieldItem>
+                  ))}
+                </RadioGroup>
+              </Fieldset>
+              <FieldError id={planErrorId} match={Boolean(error)}>
+                {error}
+              </FieldError>
+            </Field>
+          );
+        }}
       </form.Field>
 
       <form.Field name="experience">
         {(field) => (
           <Field name={field.name}>
             <Slider
+              className="grid gap-2"
               formatValue={(value) => `${value} years`}
+              hideTooltip
               max={10}
               min={1}
+              variant="compact"
               value={field.state.value}
               onValueChange={(value) => {
                 setSubmittedValues(undefined);
-                field.handleChange(value as number);
+                field.handleChange(
+                  Array.isArray(value) ? (value[0] ?? 1) : value
+                );
               }}
             >
-              <SliderControl>
-                <SliderContent>
-                  <SliderLabel>Experience</SliderLabel>
-                  <SliderValue className="ms-auto" />
-                </SliderContent>
-              </SliderControl>
+              <div className="flex items-center">
+                <SliderLabel className="font-medium text-foreground">
+                  Experience
+                </SliderLabel>
+                <SliderValue className="ms-auto" />
+              </div>
+              <SliderControl />
             </Slider>
             <FieldDescription>
               How long have you worked with component libraries?
@@ -211,7 +243,7 @@ export default function FormCompleteDemo() {
 
       <form.Field name="productUpdates">
         {(field) => (
-          <Field name={field.name}>
+          <Field className="space-y-0" name={field.name}>
             <FieldLabel className="justify-between">
               Product updates
               <Switch
@@ -242,8 +274,10 @@ export default function FormCompleteDemo() {
               name={field.name}
               touched={field.state.meta.isTouched}
             >
-              <FieldLabel className="cursor-pointer items-start">
+              <FieldLabel className="cursor-pointer">
                 <Checkbox
+                  aria-describedby={error ? termsErrorId : undefined}
+                  aria-invalid={Boolean(error)}
                   checked={field.state.value}
                   onCheckedChange={(checked) => {
                     setSubmittedValues(undefined);
@@ -252,7 +286,9 @@ export default function FormCompleteDemo() {
                 />
                 I accept the terms and privacy policy.
               </FieldLabel>
-              <FieldError match={Boolean(error)}>{error}</FieldError>
+              <FieldError id={termsErrorId} match={Boolean(error)}>
+                {error}
+              </FieldError>
             </Field>
           );
         }}

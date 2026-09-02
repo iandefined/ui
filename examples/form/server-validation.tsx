@@ -16,11 +16,11 @@ async function validateUsername(value: string) {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   if (value === "admin") {
-    return "This username is reserved.";
+    return "This username is reserved. Choose another username.";
   }
 
   if (value.length < 3) {
-    return "Username must be at least 3 characters.";
+    return "Enter at least 3 characters.";
   }
 
   return undefined;
