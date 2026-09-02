@@ -6,7 +6,7 @@ export default function ButtonAsLinkDemo() {
   return (
     <Button
       className="text-white"
-      color="#3b82f6"
+      color="#2563eb"
       nativeButton={false}
       render={<a aria-label="Explore Button" href="#button" />}
       rightSection={<ArrowUpRightIcon />}

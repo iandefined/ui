@@ -1,11 +1,11 @@
 import { Button } from "@/registry/base/button";
 
 const COLORS = [
-  ["Blue", "#3b82f6"],
-  ["Green", "#10b981"],
-  ["Orange", "#e36323"],
-  ["Red", "#ef4444"],
-  ["Purple", "#8b5cf6"],
+  ["Blue", "#2563eb"],
+  ["Green", "#059669"],
+  ["Orange", "#ea580c"],
+  ["Red", "#dc2626"],
+  ["Purple", "#7c3aed"],
 ] as const;
 
 export default function ButtonCustomColorsDemo() {

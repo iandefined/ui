@@ -13,7 +13,7 @@ export default function ButtonLoadingDemo() {
       </Button>
       <Button
         className="text-white"
-        color="#3b82f6"
+        color="#2563eb"
         disabled
         leftSection={<LoaderCircleIcon className="animate-spin" />}
       >

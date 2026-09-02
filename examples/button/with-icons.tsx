@@ -8,14 +8,14 @@ export default function ButtonWithIconsDemo() {
       <Button leftSection={<DownloadIcon />}>Download</Button>
       <Button
         className="text-white"
-        color="#ef4444"
+        color="#dc2626"
         leftSection={<HeartIcon />}
       >
         Favorite
       </Button>
       <Button
         className="text-white"
-        color="#8b5cf6"
+        color="#7c3aed"
         rightSection={<ArrowRightIcon />}
       >
         Continue

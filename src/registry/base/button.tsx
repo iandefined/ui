@@ -24,12 +24,12 @@ const buttonVariants = tv({
       secondary:
         "border-secondary bg-secondary text-secondary-foreground hover:bg-secondary/90 data-pressed:bg-secondary/90",
       outline:
-        "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        "border border-border bg-background shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.02),0_3px_3px_-1.5px_rgb(0_0_0/0.04)] hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.44),0_3px_3px_-2px_rgb(0_0_0/0.40)] dark:hover:bg-input/50",
       ghost:
-        "text-primary hover:bg-primary/10 focus-vislbe:bg-primary/10 focus-visible:border-primary/25",
+        "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 focus-visible:bg-muted dark:focus-visible:bg-muted/50 focus-visible:border-primary/25",
       link: "text-primary hover:underline hover:underline-offset-4 hover:decoration-1 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-1",
       destructive:
-        "bg-destructive text-white hover:bg-destructive/90 focus-visible:border-destructive focus-visible:bg-destructive/90 focus-visible:ring-destructive bg-linear-to-t from-destructive/90 to-destructive",
+        "bg-destructive bg-linear-to-b from-[color-mix(in_oklch,var(--destructive),white_15%)] to-[var(--destructive)] font-medium text-destructive-foreground ring-1 ring-[color-mix(in_oklch,var(--destructive),black_18%)] shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--destructive),white_30%),0_1px_2px_oklch(0.1_0_0_/_0.1)] hover:from-[color-mix(in_oklch,var(--destructive),white_24%)] hover:to-[var(--destructive)] focus-visible:border-destructive focus-visible:bg-destructive/90 focus-visible:ring-destructive",
     },
     size: {
       default:
@@ -62,17 +62,17 @@ const buttonVariants = tv({
       variant: "default",
       customColor: false,
       class: [
-        "bg-linear-to-b from-[color-mix(in_oklch,var(--primary),white_6%)] to-[color-mix(in_oklch,var(--primary),black_10%)] ring-1 ring-[oklch(0.15_0_0)]",
-        "shadow-[inset_0_1px_1px_oklch(1_0_0_/_0.22),0_1px_2px_oklch(0.1_0_0_/_0.1),inset_0_-1px_1px_oklch(0_0_0_/_0.16)]",
-        "hover:from-[color-mix(in_oklch,var(--primary),black_5%)] hover:to-[color-mix(in_oklch,var(--primary),black_16%)]",
+        "bg-linear-to-b from-[color-mix(in_oklch,var(--primary),white_15%)] to-[var(--primary)] ring-1 ring-[oklch(0.15_0_0)]",
+        "shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--primary),white_30%),0_1px_2px_oklch(0.1_0_0_/_0.1)]",
+        "hover:from-[color-mix(in_oklch,var(--primary),white_24%)] hover:to-[var(--primary)]",
       ],
     },
     {
       variant: "default",
       customColor: true,
       class: [
-        "bg-linear-to-b from-[var(--button-from)] to-[var(--button-to)] ring-1 ring-[var(--button-ring)] hover:opacity-90",
-        "shadow-[inset_0_1px_1px_oklch(1_0_0_/_0.4),0_1px_2px_oklch(0.1_0_0_/_0.1),inset_0_-1px_1px_oklch(0_0_0_/_0.15)]",
+        "bg-linear-to-b from-[var(--button-from)] to-[var(--button-to)] ring-1 ring-[var(--button-ring)] hover:from-[var(--button-hover-from)] hover:to-[var(--button-to)]",
+        "shadow-[inset_0_1px_0_0_var(--button-emphasis-bg),0_1px_2px_oklch(0.1_0_0_/_0.1)]",
       ],
     },
   ],
@@ -91,7 +91,9 @@ type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
 type ButtonRadius = NonNullable<VariantProps<typeof buttonVariants>["radius"]>;
 
 type ButtonStyle = CSSProperties & {
+  "--button-emphasis-bg"?: string;
   "--button-from"?: string;
+  "--button-hover-from"?: string;
   "--button-ring"?: string;
   "--button-to"?: string;
 };
@@ -132,9 +134,11 @@ function Button({
   const hasCustomColor = variant === "default" && color !== undefined;
   const colorStyle: ButtonStyle | undefined = hasCustomColor
     ? {
-        "--button-from": `color-mix(in oklch, ${color}, white 6%)`,
+        "--button-emphasis-bg": `color-mix(in oklch, ${color}, white 30%)`,
+        "--button-from": `color-mix(in oklch, ${color}, white 15%)`,
+        "--button-hover-from": `color-mix(in oklch, ${color}, white 24%)`,
         "--button-ring": `color-mix(in oklch, ${color}, black 18%)`,
-        "--button-to": `color-mix(in oklch, ${color}, black 12%)`,
+        "--button-to": color,
       }
     : undefined;
 
