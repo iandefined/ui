@@ -189,7 +189,7 @@ function SelectTrigger({ className, ...props }: SelectTriggerProps) {
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input/70 bg-background px-3 py-2 text-sm text-foreground shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,background-color,outline-width,outline-offset,outline-color] duration-100 ease-out hover:bg-input/20 focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-visible:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
+        "group/select-trigger inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input/70 bg-background px-3 py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,background-color,outline-width,outline-offset,outline-color] duration-100 ease-out hover:bg-input/20 focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-visible:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
         className
       )}
       {...props}
@@ -311,7 +311,7 @@ function SelectPositioner({
         data-align-item-with-trigger={alignItemWithTrigger ? "" : undefined}
         data-slot="select-positioner"
         className={cn(
-          "z-50 select-none outline-none data-[align-item-with-trigger]:[&_[data-slot=select-item]]:px-1",
+          "z-50 select-none outline-none data-[align-item-with-trigger]:[&_[data-slot=select-item]]:px-2",
           className
         )}
         {...props}
@@ -522,7 +522,7 @@ function SelectItem({ className, ...props }: SelectItemProps) {
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full min-w-0 cursor-default select-none items-center gap-2 px-4 py-1.5 text-sm outline-none data-disabled:pointer-events-none data-disabled:opacity-50",
+        "relative flex w-full min-w-0 cursor-pointer select-none items-center gap-2 px-2 py-1.5 text-sm outline-none data-disabled:pointer-events-none data-disabled:opacity-50",
         `data-highlighted:z-0 data-highlighted:before:absolute data-highlighted:before:inset-x-0 data-highlighted:before:inset-y-0 data-highlighted:before:z-[-1] data-highlighted:before:rounded-md data-highlighted:before:bg-accent/70 dark:data-highlighted:before:bg-accent data-highlighted:text-accent-foreground data-highlighted:before:border-border/30 data-highlighted:before:border`,
         className
       )}
