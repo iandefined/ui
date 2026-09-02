@@ -11,6 +11,7 @@ const checkboxRootStyles = tv({
     `group size-7 relative inline-flex items-center justify-center shrink-0 overflow-hidden shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid cursor-pointer transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50`,
     `data-disabled:cursor-not-allowed data-disabled:grayscale data-disabled:scale-100 data-disabled:opacity-50`,
     `before:content-[''] before:absolute before:border-1 before:inset-0 before:border-border aria-invalid:before:border-destructive data-invalid:before:border-destructive not-data-disabled:hover:before:bg-secondary/60`,
+    `after:content-[''] after:pointer-events-none after:absolute after:inset-0 after:z-0 after:origin-center after:rounded-[inherit] after:bg-linear-to-b after:from-primary after:to-[color-mix(in_oklch,var(--primary),black_10%)] dark:after:from-[color-mix(in_oklch,var(--primary),white_35%)] dark:after:to-[color-mix(in_oklch,var(--primary),white_5%)] after:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),black_16%),inset_0_2px_0_0_rgb(255_255_255_/_0.25)] dark:after:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),white_12%),inset_0_2px_0_0_rgb(255_255_255_/_0.55)] data-unchecked:after:scale-50 data-unchecked:after:opacity-0 data-checked:after:scale-100 data-checked:after:opacity-100`,
   ],
   variants: {
     size: {
@@ -26,31 +27,14 @@ const checkboxRootStyles = tv({
       full: "rounded-full before:rounded-full",
     },
     reduceMotion: {
-      true: "transition-none before:transition-none",
-      false: "before:transition-colors transition-transform",
+      true: "transition-none before:transition-none after:transition-none",
+      false:
+        "before:transition-colors transition-transform after:duration-100 after:ease-linear after:[transition-property:opacity,scale,transform]",
     },
   },
   defaultVariants: {
     size: "default",
     radius: "default",
-    reduceMotion: false,
-  },
-});
-
-const checkboxSelectedSurfaceStyles = tv({
-  base: [
-    "pointer-events-none absolute inset-0 z-0 origin-center rounded-[inherit] bg-linear-to-b from-primary to-[color-mix(in_oklch,var(--primary),black_10%)] dark:from-[color-mix(in_oklch,var(--primary),white_35%)] dark:to-[color-mix(in_oklch,var(--primary),white_5%)]",
-    "shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),black_16%),inset_0_2px_0_0_rgb(255_255_255_/_0.25)] dark:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),white_12%),inset_0_2px_0_0_rgb(255_255_255_/_0.55)]",
-    "data-checked:scale-100 data-checked:opacity-100 data-unchecked:scale-50 data-unchecked:opacity-0",
-  ],
-  variants: {
-    reduceMotion: {
-      true: "transition-none",
-      false:
-        "duration-100 ease-linear [transition-property:opacity,scale,transform]",
-    },
-  },
-  defaultVariants: {
     reduceMotion: false,
   },
 });
@@ -115,13 +99,11 @@ function CheckboxRoot({
   radius = "default",
   ...rest
 }: CheckboxRootProps) {
-  const [isChecked, setIsChecked] = useState(
-    checked ?? defaultChecked ?? false
+  const [internalChecked, setInternalChecked] = useState(
+    defaultChecked ?? false
   );
 
-  useEffect(() => {
-    if (checked !== undefined) setIsChecked(checked);
-  }, [checked]);
+  const isChecked = checked ?? internalChecked;
 
   const handleCheckedChange: CheckboxRootProps["onCheckedChange"] = (
     checked,
@@ -131,10 +113,9 @@ function CheckboxRoot({
       return;
     }
 
-    setIsChecked(checked);
+    setInternalChecked(checked);
     onCheckedChange?.(checked, eventDetails);
   };
-
   return (
     <CheckboxContext.Provider
       value={{
@@ -155,12 +136,6 @@ function CheckboxRoot({
         onCheckedChange={handleCheckedChange}
         {...rest}
       >
-        <CheckboxPrimitive.Indicator
-          aria-hidden
-          className={checkboxSelectedSurfaceStyles({ reduceMotion })}
-          data-slot="checkbox-selected-surface"
-          keepMounted
-        />
         {children}
       </CheckboxPrimitive.Root>
     </CheckboxContext.Provider>
@@ -178,7 +153,15 @@ function CheckboxIcon(props: CheckboxIconProps) {
 
   if (indeterminate) {
     return (
-      <svg stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24" {...rest}>
+      <svg
+        stroke="currentColor"
+        strokeWidth={3}
+        viewBox="0 0 24 24"
+        width="100%"
+        height="100%"
+        className="block"
+        {...rest}
+      >
         <line x1="21" x2="3" y1="12" y2="12" />
       </svg>
     );
@@ -200,6 +183,9 @@ function CheckboxIcon(props: CheckboxIconProps) {
         transitionDelay: reduceMotion ? "0ms" : `50ms`,
       }}
       viewBox="0 0 17 18"
+      width="100%"
+      height="100%"
+      className="block"
       {...rest}
     >
       <polyline points="1 9 7 14 15 4" />
@@ -215,7 +201,6 @@ interface CheckboxIndicatorProps extends React.ComponentProps<
 
 function CheckboxIndicator({
   className,
-  icon = CheckboxIcon,
   children,
   ...rest
 }: CheckboxIndicatorProps) {
