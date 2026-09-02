@@ -19,6 +19,14 @@ interface SwitchProps extends Omit<
 
 const METRICS = {
   sm: {
+    trackWidth: 32,
+    trackHeight: 20,
+    thumbSize: 12,
+    pillExtend: 1,
+    pressExtend: 2,
+    pressShrink: 2,
+  },
+  default: {
     trackWidth: 40,
     trackHeight: 24,
     thumbSize: 16,
@@ -26,21 +34,13 @@ const METRICS = {
     pressExtend: 3,
     pressShrink: 3,
   },
-  default: {
+  lg: {
     trackWidth: 48,
     trackHeight: 28,
     thumbSize: 20,
     pillExtend: 2,
     pressExtend: 4,
     pressShrink: 4,
-  },
-  lg: {
-    trackWidth: 56,
-    trackHeight: 32,
-    thumbSize: 24,
-    pillExtend: 3,
-    pressExtend: 5,
-    pressShrink: 5,
   },
 } as const;
 

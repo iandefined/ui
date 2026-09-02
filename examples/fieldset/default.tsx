@@ -1,6 +1,6 @@
+import { Field, FieldLabel } from "@/registry/base/field";
 import { Fieldset, FieldsetLegend } from "@/registry/base/fieldset";
 import { Input } from "@/registry/base/input";
-import { Label } from "@/registry/base/label";
 
 const fields = [
   { id: "first-name", label: "First name", placeholder: "John" },
@@ -13,14 +13,10 @@ export default function FieldsetDefaultDemo() {
     <Fieldset className="w-full max-w-sm">
       <FieldsetLegend>Shipping address</FieldsetLegend>
       {fields.map((field) => (
-        <div className="grid gap-2" key={field.id}>
-          <Label htmlFor={field.id}>{field.label}</Label>
-          <Input
-            id={field.id}
-            name={field.id}
-            placeholder={field.placeholder}
-          />
-        </div>
+        <Field key={field.id} name={field.id}>
+          <FieldLabel>{field.label}</FieldLabel>
+          <Input name={field.id} placeholder={field.placeholder} />
+        </Field>
       ))}
     </Fieldset>
   );

@@ -4,9 +4,13 @@ import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/registry/base/field";
 import { Form } from "@/registry/base/form";
-import { Input } from "@/registry/base/input";
-import { Label } from "@/registry/base/label";
 
 async function validateUsername(value: string) {
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -46,37 +50,25 @@ export default function FormServerValidationDemo() {
           const invalid = typeof error === "string";
 
           return (
-            <div className="grid gap-2">
-              <Label
-                className={invalid ? "text-destructive" : undefined}
-                htmlFor={field.name}
-              >
-                Username
-              </Label>
-              <Input
-                aria-describedby={invalid ? `${field.name}-error` : undefined}
-                aria-invalid={invalid || undefined}
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={invalid}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Username</FieldLabel>
+              <FieldControl
                 autoComplete="username"
-                id={field.name}
-                name={field.name}
                 onBlur={field.handleBlur}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setSubmitted(false);
-                  field.handleChange(event.target.value);
+                  field.handleChange(value);
                 }}
                 placeholder="Try admin"
                 value={field.state.value}
               />
-              {invalid && (
-                <p
-                  className="text-sm text-destructive"
-                  id={`${field.name}-error`}
-                  role="alert"
-                >
-                  {error}
-                </p>
-              )}
-            </div>
+              <FieldError match={invalid}>{error}</FieldError>
+            </Field>
           );
         }}
       </form.Field>

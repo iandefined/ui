@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 import { Checkbox } from "@/registry/base/checkbox";
+import { Field, FieldItem, FieldLabel } from "@/registry/base/field";
 import { Fieldset, FieldsetLegend } from "@/registry/base/fieldset";
-import { Label } from "@/registry/base/label";
 
 const notifications = [
   {
@@ -28,37 +28,38 @@ export default function FieldsetWithCheckboxGroupDemo() {
   const [value, setValue] = useState(["email", "in-app"]);
 
   return (
-    <Fieldset className="w-full max-w-sm">
-      <FieldsetLegend>Notifications</FieldsetLegend>
-      {notifications.map((notification) => {
-        const checked = value.includes(notification.value);
+    <Field className="w-full max-w-sm" name="notifications">
+      <Fieldset>
+        <FieldsetLegend>Notifications</FieldsetLegend>
+        {notifications.map((notification) => {
+          const checked = value.includes(notification.value);
 
-        return (
-          <Label
-            className="cursor-pointer items-start gap-3"
-            htmlFor={`notification-${notification.value}`}
-            key={notification.value}
-          >
-            <Checkbox
-              checked={checked}
-              id={`notification-${notification.value}`}
-              onCheckedChange={(nextChecked) => {
-                setValue((currentValue) =>
-                  nextChecked
-                    ? [...currentValue, notification.value]
-                    : currentValue.filter((item) => item !== notification.value)
-                );
-              }}
-            />
-            <span className="grid gap-1">
-              <span className="font-medium">{notification.label}</span>
-              <span className="text-xs/4 text-muted-foreground">
-                {notification.description}
-              </span>
-            </span>
-          </Label>
-        );
-      })}
-    </Fieldset>
+          return (
+            <FieldItem key={notification.value}>
+              <FieldLabel className="cursor-pointer items-start">
+                <Checkbox
+                  checked={checked}
+                  onCheckedChange={(nextChecked) => {
+                    setValue((currentValue) =>
+                      nextChecked
+                        ? [...currentValue, notification.value]
+                        : currentValue.filter(
+                            (item) => item !== notification.value
+                          )
+                    );
+                  }}
+                />
+                <span className="grid gap-1">
+                  <span>{notification.label}</span>
+                  <span className="text-xs/4 font-normal text-muted-foreground">
+                    {notification.description}
+                  </span>
+                </span>
+              </FieldLabel>
+            </FieldItem>
+          );
+        })}
+      </Fieldset>
+    </Field>
   );
 }

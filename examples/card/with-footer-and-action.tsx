@@ -22,8 +22,9 @@ export default function CardWithFooterAndActionDemo() {
             aria-label="More meeting options"
             size="icon-sm"
             variant="ghost"
+            className="relative bottom-2 left-2"
           >
-            <EllipsisVerticalIcon />
+            <EllipsisVerticalIcon className="size-3" />
           </Button>
         </CardAction>
       </CardHeader>

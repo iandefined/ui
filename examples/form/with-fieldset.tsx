@@ -5,10 +5,10 @@ import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
 import { Checkbox } from "@/registry/base/checkbox";
+import { Field, FieldLabel } from "@/registry/base/field";
 import { Fieldset, FieldsetLegend } from "@/registry/base/fieldset";
 import { Form } from "@/registry/base/form";
 import { Input } from "@/registry/base/input";
-import { Label } from "@/registry/base/label";
 
 export default function FormWithFieldsetDemo() {
   const [submitted, setSubmitted] = useState(false);
@@ -30,10 +30,9 @@ export default function FormWithFieldsetDemo() {
 
         <form.Field name="address">
           {(field) => (
-            <div className="grid gap-2">
-              <Label htmlFor={field.name}>Street address</Label>
+            <Field name={field.name}>
+              <FieldLabel>Street address</FieldLabel>
               <Input
-                id={field.name}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={(event) => {
@@ -43,16 +42,15 @@ export default function FormWithFieldsetDemo() {
                 placeholder="123 Main St"
                 value={field.state.value}
               />
-            </div>
+            </Field>
           )}
         </form.Field>
 
         <form.Field name="city">
           {(field) => (
-            <div className="grid gap-2">
-              <Label htmlFor={field.name}>City</Label>
+            <Field name={field.name}>
+              <FieldLabel>City</FieldLabel>
               <Input
-                id={field.name}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={(event) => {
@@ -62,28 +60,26 @@ export default function FormWithFieldsetDemo() {
                 placeholder="San Francisco"
                 value={field.state.value}
               />
-            </div>
+            </Field>
           )}
         </form.Field>
 
         <form.Field name="saveAddress">
           {(field) => (
-            <Label
-              className="w-fit cursor-pointer font-medium"
-              htmlFor={field.name}
-            >
-              <Checkbox
-                checked={field.state.value}
-                id={field.name}
-                name={field.name}
-                onBlur={field.handleBlur}
-                onCheckedChange={(checked) => {
-                  setSubmitted(false);
-                  field.handleChange(checked);
-                }}
-              />
-              Save this address
-            </Label>
+            <Field name={field.name}>
+              <FieldLabel className="w-fit cursor-pointer">
+                <Checkbox
+                  checked={field.state.value}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onCheckedChange={(checked) => {
+                    setSubmitted(false);
+                    field.handleChange(checked);
+                  }}
+                />
+                Save this address
+              </FieldLabel>
+            </Field>
           )}
         </form.Field>
       </Fieldset>

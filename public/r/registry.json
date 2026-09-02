@@ -536,6 +536,21 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "An accessible form field with automatic labels, descriptions, validation state, and error messages.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "registryDependencies": ["https://ui.iandefined.com/r/input.json"],
+      "files": [
+        {
+          "path": "src/registry/base/field.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/field.tsx"
+        }
+      ]
+    },
+    {
       "name": "form",
       "type": "registry:ui",
       "title": "Form",
@@ -544,9 +559,13 @@
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
         "https://ui.iandefined.com/r/checkbox.json",
+        "https://ui.iandefined.com/r/field.json",
         "https://ui.iandefined.com/r/fieldset.json",
         "https://ui.iandefined.com/r/input.json",
-        "https://ui.iandefined.com/r/label.json"
+        "https://ui.iandefined.com/r/radio-group.json",
+        "https://ui.iandefined.com/r/slider.json",
+        "https://ui.iandefined.com/r/switch.json",
+        "https://ui.iandefined.com/r/textarea.json"
       ],
       "files": [
         {
@@ -564,8 +583,8 @@
       "dependencies": ["clsx", "tailwind-merge"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/checkbox.json",
+        "https://ui.iandefined.com/r/field.json",
         "https://ui.iandefined.com/r/input.json",
-        "https://ui.iandefined.com/r/label.json",
         "https://ui.iandefined.com/r/radio-group.json"
       ],
       "files": [

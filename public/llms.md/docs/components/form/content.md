@@ -11,7 +11,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/form.json
 ```
 
 ```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/fieldset.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json
+npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/field.json https://ui.iandefined.com/r/fieldset.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/radio-group.json https://ui.iandefined.com/r/slider.json https://ui.iandefined.com/r/switch.json https://ui.iandefined.com/r/textarea.json
 ```
 
 ```bash
@@ -42,9 +42,8 @@ Create the form instance with TanStack Form, then pass it to `Form`. The wrapper
 ```tsx
 import { useForm } from "@tanstack/react-form";
 
+import { Field, FieldControl, FieldLabel } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 const form = useForm({
   defaultValues: { email: "" },
@@ -54,16 +53,14 @@ const form = useForm({
 <Form form={form}>
   <form.Field name="email">
     {(field) => (
-      <div className="grid gap-2">
-        <Label htmlFor={field.name}>Email</Label>
-        <Input
-          id={field.name}
-          name={field.name}
+      <Field name={field.name}>
+        <FieldLabel>Email</FieldLabel>
+        <FieldControl
           value={field.state.value}
           onBlur={field.handleBlur}
-          onChange={(event) => field.handleChange(event.target.value)}
+          onValueChange={field.handleChange}
         />
-      </div>
+      </Field>
     )}
   </form.Field>
 </Form>;
@@ -73,9 +70,13 @@ The component defaults to `noValidate` so TanStack Form remains the only validat
 
 ## Examples
 
+### Complete Form
+
+Compose Input, Textarea, Radio Group, Slider, Switch, and Checkbox fields in one profile form. It validates with Zod, revalidates as errors are corrected, handles an asynchronous submission, and reports the submitted result.
+
 ### With Fieldset
 
-Group related TanStack fields with the semantic Fieldset component and keep each control composed from the existing registry primitives.
+Group related TanStack fields with the semantic Fieldset component and use Field for automatic label association.
 
 ### Zod Validation
 

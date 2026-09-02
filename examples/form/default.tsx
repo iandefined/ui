@@ -4,9 +4,13 @@ import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/registry/base/field";
 import { Form } from "@/registry/base/form";
-import { Input } from "@/registry/base/input";
-import { Label } from "@/registry/base/label";
 
 function validateUrl(value: string) {
   if (!value) {
@@ -51,37 +55,27 @@ export default function FormDefaultDemo() {
           const invalid = !field.state.meta.isValid;
 
           return (
-            <div className="grid gap-2">
-              <Label
-                className={invalid ? "text-destructive" : undefined}
-                htmlFor={field.name}
-              >
-                Homepage
-              </Label>
-              <Input
-                aria-describedby={`${field.name}-error`}
-                aria-invalid={invalid || undefined}
-                id={field.name}
-                name={field.name}
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={invalid}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Homepage</FieldLabel>
+              <FieldControl
                 onBlur={field.handleBlur}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setSubmittedUrl(undefined);
-                  field.handleChange(event.target.value);
+                  field.handleChange(value);
                 }}
                 placeholder="https://your-site.com"
                 type="url"
                 value={field.state.value}
               />
-              {invalid && (
-                <p
-                  className="text-sm text-destructive"
-                  id={`${field.name}-error`}
-                  role="alert"
-                >
-                  {field.state.meta.errors.join(", ")}
-                </p>
-              )}
-            </div>
+              <FieldError match={invalid}>
+                {field.state.meta.errors.join(", ")}
+              </FieldError>
+            </Field>
           );
         }}
       </form.Field>

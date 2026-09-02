@@ -7,7 +7,7 @@ const cardVariants = tv({
   base: "flex flex-col rounded-xl border border-border bg-card text-card-foreground",
   variants: {
     variant: {
-      default: "gap-6 py-6",
+      default: "gap-4 py-4",
       inset: "p-1 bg-muted dark:bg-card",
     },
   },
@@ -38,7 +38,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 [[data-card-variant=default]>_&]:gap-1.5 [[data-card-variant=default]>_&]:px-6 [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:py-2 [[data-card-variant=inset]>_&]:pt-1",
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 gap-1 [[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:px-4 [[data-card-variant=inset]>_&]:py-3",
         className
       )}
       {...props}
@@ -50,10 +50,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn(
-        "font-semibold [[data-card-variant=default]_&]:leading-none",
-        className
-      )}
+      className={cn("font-semibold leading-none", className)}
       {...props}
     />
   );
@@ -87,7 +84,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-content"
       className={cn(
-        "[[data-card-variant=default]>_&]:px-6 [[data-card-variant=inset]>_&]:flex [[data-card-variant=inset]>_&]:flex-1 [[data-card-variant=inset]>_&]:flex-col [[data-card-variant=inset]>_&]:rounded-lg [[data-card-variant=inset]>_&]:bg-card dark:[[data-card-variant=inset]>_&]:bg-muted [[data-card-variant=inset]>_&]:p-4 [[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:[[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
+        "[[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:flex [[data-card-variant=inset]>_&]:flex-1 [[data-card-variant=inset]>_&]:flex-col [[data-card-variant=inset]>_&]:rounded-lg [[data-card-variant=inset]>_&]:bg-card dark:[[data-card-variant=inset]>_&]:bg-muted [[data-card-variant=inset]>_&]:p-4 [[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:[[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
         className
       )}
       {...props}
@@ -100,7 +97,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center [.border-t]:pt-6 [[data-card-variant=default]>_&]:px-6 [[data-card-variant=inset]>_&]:mt-auto [[data-card-variant=inset]>_&]:justify-end [[data-card-variant=inset]>_&]:pt-4",
+        "flex items-center [.border-t]:pt-4 [[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:mt-auto [[data-card-variant=inset]>_&]:justify-end [[data-card-variant=inset]>_&]:pt-4",
         className
       )}
       {...props}

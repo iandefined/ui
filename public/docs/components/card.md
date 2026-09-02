@@ -70,9 +70,10 @@ the header.
 
 Use `variant` to change how the card is framed.
 
-The `inset` variant keeps the outer frame on `card` and uses the lighter `muted`
-token for its nested content panel. It does not require surface levels or
-additional theme variables.
+The `inset` variant uses the `muted` token for its outer frame and the normal
+`card` background for its nested content panel in light mode. Dark mode keeps
+the existing surface pairing. It does not require surface levels or additional
+theme variables.
 
 ## API Reference
 

@@ -1,5 +1,5 @@
+import { Field, FieldItem, FieldLabel } from "@/registry/base/field";
 import { Fieldset, FieldsetLegend } from "@/registry/base/fieldset";
-import { Label } from "@/registry/base/label";
 import { Radio, RadioGroup } from "@/registry/base/radio-group";
 
 const plans = [
@@ -22,25 +22,25 @@ const plans = [
 
 export default function FieldsetWithRadioGroupDemo() {
   return (
-    <Fieldset className="w-full max-w-sm">
-      <FieldsetLegend>Choose a plan</FieldsetLegend>
-      <RadioGroup defaultValue="pro">
-        {plans.map((plan) => (
-          <Label
-            className="cursor-pointer items-start gap-3"
-            htmlFor={`plan-${plan.value}`}
-            key={plan.value}
-          >
-            <Radio id={`plan-${plan.value}`} value={plan.value} />
-            <span className="grid gap-1">
-              <span className="font-medium">{plan.label}</span>
-              <span className="text-xs/4 text-muted-foreground">
-                {plan.description}
-              </span>
-            </span>
-          </Label>
-        ))}
-      </RadioGroup>
-    </Fieldset>
+    <Field className="w-full max-w-sm" name="plan">
+      <Fieldset>
+        <FieldsetLegend>Choose a plan</FieldsetLegend>
+        <RadioGroup defaultValue="pro">
+          {plans.map((plan) => (
+            <FieldItem key={plan.value}>
+              <FieldLabel className="cursor-pointer items-start">
+                <Radio value={plan.value} />
+                <span className="grid gap-1">
+                  <span>{plan.label}</span>
+                  <span className="text-xs/4 font-normal text-muted-foreground">
+                    {plan.description}
+                  </span>
+                </span>
+              </FieldLabel>
+            </FieldItem>
+          ))}
+        </RadioGroup>
+      </Fieldset>
+    </Field>
   );
 }

@@ -5,9 +5,13 @@ import { useState } from "react";
 import { z } from "zod";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/registry/base/field";
 import { Form } from "@/registry/base/form";
-import { Input } from "@/registry/base/input";
-import { Label } from "@/registry/base/label";
 
 const accountSchema = z
   .object({
@@ -66,38 +70,26 @@ export default function FormZodValidationDemo() {
             .find(Boolean);
 
           return (
-            <div className="grid gap-2">
-              <Label
-                className={error ? "text-destructive" : undefined}
-                htmlFor={field.name}
-              >
-                Email
-              </Label>
-              <Input
-                aria-describedby={error ? `${field.name}-error` : undefined}
-                aria-invalid={Boolean(error) || undefined}
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={Boolean(error)}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Email</FieldLabel>
+              <FieldControl
                 autoComplete="email"
-                id={field.name}
-                name={field.name}
                 onBlur={field.handleBlur}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setSubmitted(false);
-                  field.handleChange(event.target.value);
+                  field.handleChange(value);
                 }}
                 placeholder="you@example.com"
                 type="email"
                 value={field.state.value}
               />
-              {error && (
-                <p
-                  className="text-sm text-destructive"
-                  id={`${field.name}-error`}
-                  role="alert"
-                >
-                  {error}
-                </p>
-              )}
-            </div>
+              <FieldError match={Boolean(error)}>{error}</FieldError>
+            </Field>
           );
         }}
       </form.Field>
@@ -109,37 +101,25 @@ export default function FormZodValidationDemo() {
             .find(Boolean);
 
           return (
-            <div className="grid gap-2">
-              <Label
-                className={error ? "text-destructive" : undefined}
-                htmlFor={field.name}
-              >
-                Password
-              </Label>
-              <Input
-                aria-describedby={error ? `${field.name}-error` : undefined}
-                aria-invalid={Boolean(error) || undefined}
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={Boolean(error)}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Password</FieldLabel>
+              <FieldControl
                 autoComplete="new-password"
-                id={field.name}
-                name={field.name}
                 onBlur={field.handleBlur}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setSubmitted(false);
-                  field.handleChange(event.target.value);
+                  field.handleChange(value);
                 }}
                 type="password"
                 value={field.state.value}
               />
-              {error && (
-                <p
-                  className="text-sm text-destructive"
-                  id={`${field.name}-error`}
-                  role="alert"
-                >
-                  {error}
-                </p>
-              )}
-            </div>
+              <FieldError match={Boolean(error)}>{error}</FieldError>
+            </Field>
           );
         }}
       </form.Field>
@@ -151,37 +131,25 @@ export default function FormZodValidationDemo() {
             .find(Boolean);
 
           return (
-            <div className="grid gap-2">
-              <Label
-                className={error ? "text-destructive" : undefined}
-                htmlFor={field.name}
-              >
-                Confirm password
-              </Label>
-              <Input
-                aria-describedby={error ? `${field.name}-error` : undefined}
-                aria-invalid={Boolean(error) || undefined}
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={Boolean(error)}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Confirm password</FieldLabel>
+              <FieldControl
                 autoComplete="new-password"
-                id={field.name}
-                name={field.name}
                 onBlur={field.handleBlur}
-                onChange={(event) => {
+                onValueChange={(value) => {
                   setSubmitted(false);
-                  field.handleChange(event.target.value);
+                  field.handleChange(value);
                 }}
                 type="password"
                 value={field.state.value}
               />
-              {error && (
-                <p
-                  className="text-sm text-destructive"
-                  id={`${field.name}-error`}
-                  role="alert"
-                >
-                  {error}
-                </p>
-              )}
-            </div>
+              <FieldError match={Boolean(error)}>{error}</FieldError>
+            </Field>
           );
         }}
       </form.Field>

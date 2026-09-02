@@ -15,6 +15,7 @@
 - [Checkbox](https://ui.iandefined.com/docs/components/checkbox.md) - A control that allows the user to toggle between checked and unchecked.
 - [Combobox](https://ui.iandefined.com/docs/components/combobox.md) - A filterable input for selecting one or more predefined values.
 - [Dropdown Menu](https://ui.iandefined.com/docs/components/dropdown-menu.md) - A list of actions in a dropdown, enhanced with keyboard navigation.
+- [Field](https://ui.iandefined.com/docs/components/field.md) - An accessible form field with automatic labels, descriptions, validation state, and error messages.
 - [Fieldset](https://ui.iandefined.com/docs/components/fieldset.md) - A semantic field group with a styled legend.
 - [Form](https://ui.iandefined.com/docs/components/form.md) - A TanStack Form submission wrapper for composing type-safe forms with registry controls.
 - [Input](https://ui.iandefined.com/docs/components/input.md) - A styled text input built on Base UI.
