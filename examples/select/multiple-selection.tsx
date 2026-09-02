@@ -56,12 +56,12 @@ export default function SelectMultipleSelectionDemo() {
         <SelectList>
           {values.map((value) => (
             <SelectItem key={value} value={value}>
-              <SelectItemIndicator className="self-start">
-                <CheckIcon className="size-3" />
-              </SelectItemIndicator>
               <SelectItemText className="flex flex-col items-start gap-0.5">
                 <span className="text-sm leading-6">{languages[value]}</span>
               </SelectItemText>
+              <SelectItemIndicator>
+                <CheckIcon className="size-3" />
+              </SelectItemIndicator>
             </SelectItem>
           ))}
         </SelectList>

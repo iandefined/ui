@@ -290,7 +290,7 @@ function DropdownMenuItem({
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:z-0 data-highlighted:text-accent-foreground data-highlighted:before:absolute data-highlighted:before:-inset-px data-highlighted:before:z-[-1] data-highlighted:before:rounded-[10px] data-highlighted:before:border data-highlighted:before:border-border/30 data-highlighted:before:bg-accent/70 dark:data-highlighted:before:bg-accent data-[variant=destructive]:text-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:z-0 data-highlighted:text-accent-foreground data-highlighted:before:absolute data-highlighted:before:-inset-px data-highlighted:before:z-[-1] data-highlighted:before:rounded-[10px] data-highlighted:before:border data-highlighted:before:border-border/30 data-highlighted:before:bg-accent/70 dark:data-highlighted:before:bg-accent data-[variant=destructive]:text-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-item"
@@ -308,7 +308,7 @@ function DropdownMenuCheckboxItem({
   return (
     <DropdownMenuPrimitive.CheckboxItem
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground dark:data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground dark:data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-checkbox-item"
@@ -350,7 +350,7 @@ function DropdownMenuRadioItem({
   return (
     <DropdownMenuPrimitive.RadioItem
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground dark:data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground dark:data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-radio-item"
@@ -412,7 +412,7 @@ function DropdownMenuSubTrigger({
   return (
     <DropdownMenuPrimitive.SubmenuTrigger
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground data-popup-open:border-border/30 data-popup-open:bg-accent/70 data-popup-open:text-accent-foreground dark:data-highlighted:bg-accent dark:data-popup-open:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground data-popup-open:border-border/30 data-popup-open:bg-accent/70 data-popup-open:text-accent-foreground dark:data-highlighted:bg-accent dark:data-popup-open:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-sub-trigger"
