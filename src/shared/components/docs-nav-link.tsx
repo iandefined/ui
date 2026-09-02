@@ -65,7 +65,9 @@ export const DocsNavLink = ({
         <TooltipContent className="pr-2 pl-3">
           <div className="flex items-center gap-3">
             {tooltip.title}
-            {tooltip.icon && <Kbd>{tooltip.icon}</Kbd>}
+            {tooltip.icon && (
+              <Kbd className="border-muted-foreground!">{tooltip.icon}</Kbd>
+            )}
           </div>
         </TooltipContent>
       </Tooltip>

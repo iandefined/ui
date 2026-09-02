@@ -32,7 +32,7 @@ export const ModeSwitcher = () => {
       <TooltipContent className="pr-2 pl-3">
         <div className="flex items-center gap-3">
           Toggle Mode
-          <Kbd>D</Kbd>
+          <Kbd className="border-muted-foreground">D</Kbd>
         </div>
       </TooltipContent>
     </Tooltip>
