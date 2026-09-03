@@ -655,7 +655,12 @@
       "type": "registry:ui",
       "title": "Number Field",
       "description": "A numeric input with increment, decrement, and scrub controls.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": [
+        "@base-ui/react",
+        "tailwind-variants",
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "src/registry/base/number-field.tsx",

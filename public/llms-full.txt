@@ -1842,6 +1842,8 @@ import {
 
 ## Examples
 
+### Sizes
+
 ### With Scrub
 
 Wrap a label in `NumberFieldScrubArea` to let people drag the label and adjust the value. Set `allowWheelScrub` to also allow mouse-wheel scrubbing while the input is focused.

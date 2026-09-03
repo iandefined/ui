@@ -51,7 +51,7 @@ export default function SelectGroupsDemo() {
           {groupedItems.map((group, index) => (
             <Fragment key={group.value}>
               <SelectGroup>
-                <SelectGroupLabel className="px-4 py-1.5 text-xs text-muted-foreground">
+                <SelectGroupLabel className="px-2 py-1.5 text-xs text-muted-foreground">
                   {group.value}
                 </SelectGroupLabel>
                 {group.items.map(({ label, value }) => (

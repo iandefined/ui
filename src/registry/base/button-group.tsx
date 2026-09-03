@@ -9,13 +9,13 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 const buttonGroupVariants = tv({
-  base: "isolate flex w-fit items-stretch [&>*:focus-visible]:relative [&>*:focus-visible]:z-10 [&>input]:flex-1 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&_button]:active:scale-100 [&_[data-slot=button]]:active:scale-100",
+  base: "isolate flex w-fit items-stretch [&>*:focus-visible]:relative [&>*:focus-visible]:z-20 [&>*:has(:focus-visible)]:relative [&>*:has(:focus-visible)]:z-20 [&>*:hover]:relative [&>*:hover]:z-10 [&>input]:flex-1 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&_button]:active:scale-100 [&_[data-slot=button]]:active:scale-100",
   variants: {
     orientation: {
       horizontal:
-        "[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 *:not-first:rounded-s-none *:not-nth-last-[1_of_:not([aria-hidden],span[data-base-ui-inert],span[data-base-ui-focus-guard],span[aria-owns])]:rounded-r-none",
+        "[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:-ms-px [&>[data-slot=button-group-separator]+*]:ms-0 *:not-first:rounded-s-none *:not-nth-last-[1_of_:not([aria-hidden],span[data-base-ui-inert],span[data-base-ui-focus-guard],span[aria-owns])]:rounded-r-none",
       vertical:
-        "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none",
+        "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:-mt-px [&>[data-slot=button-group-separator]+*]:mt-0 [&>*:not(:last-child)]:rounded-b-none",
     },
   },
   defaultVariants: {
