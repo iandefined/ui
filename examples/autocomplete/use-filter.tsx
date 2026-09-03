@@ -48,7 +48,7 @@ export default function AutocompleteUseFilterDemo() {
   return (
     <div className="flex w-full max-w-xs flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-medium text-muted-foreground">
+        <span className="text-sm">
           Matcher Strategy
         </span>
         <Tabs

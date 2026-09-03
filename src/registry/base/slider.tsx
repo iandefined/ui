@@ -820,7 +820,7 @@ function DefaultSliderControl({
       <SliderPrimitive.Control
         {...props}
         className={cn(
-          "group/default-slider relative flex h-9 w-full cursor-ew-resize touch-none items-center overflow-hidden rounded-lg border border-input/70 bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] has-[input:focus-visible]:border-ring has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-64 dark:bg-input/32",
+          "group/default-slider relative flex h-9 w-full cursor-ew-resize touch-none items-center overflow-hidden rounded-lg border border-input/70 not-dark:border-input bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] has-[input:focus-visible]:border-ring has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-64 dark:bg-input/32",
           className
         )}
         data-slot="slider-control"

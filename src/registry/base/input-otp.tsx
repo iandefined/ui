@@ -107,9 +107,9 @@ const inputOtpSlotVariants = tv({
     },
     variant: {
       bordered:
-        "rounded-lg border border-input/70 bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:outline-2 data-[active=true]:outline-offset-2 data-[active=true]:outline-ring/50 data-[invalid=true]:border-destructive data-[invalid=true]:outline-2 data-[invalid=true]:outline-offset-2 data-[invalid=true]:outline-destructive/50 data-[active=true]:data-[invalid=true]:border-destructive data-[active=true]:data-[invalid=true]:outline-destructive/50 dark:bg-input/32",
+        "rounded-lg border border-input/70 not-dark:border-input bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:outline-2 data-[active=true]:outline-offset-2 data-[active=true]:outline-ring/50 data-[invalid=true]:border-destructive data-[invalid=true]:outline-2 data-[invalid=true]:outline-offset-2 data-[invalid=true]:outline-destructive/50 data-[active=true]:data-[invalid=true]:border-destructive data-[active=true]:data-[invalid=true]:outline-destructive/50 dark:bg-input/32",
       underlined:
-        "border-b border-input/70 bg-transparent [transition:border-color_150ms_ease-out] data-[active=true]:border-ring data-[invalid=true]:border-destructive/64",
+        "border-b border-input/70 not-dark:border-input bg-transparent [transition:border-color_150ms_ease-out] data-[active=true]:border-ring data-[invalid=true]:border-destructive/64",
     },
   },
 });

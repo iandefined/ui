@@ -233,8 +233,8 @@ function AutocompletePopup({
         "group relative flex max-h-full origin-(--transform-origin) overflow-hidden rounded-[16px] border border-border bg-popover text-popover-foreground shadow-md transition-[scale,opacity] duration-100 will-change-[scale,opacity] data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0",
         "[--safe-offset:calc(var(--anchor-height)+7px)]",
         "[&:not(:has([data-slot=autocomplete-input]))]:pointer-events-none",
-        "data-[side=bottom]:not-has-data-[slot=autocomplete-input]:-translate-y-(--safe-offset) data-[side=bottom]:not-has-data-[slot=autocomplete-input]:pt-(--safe-offset)",
-        "data-[side=top]:not-has-data-[slot=autocomplete-input]:translate-y-(--safe-offset) data-[side=top]:not-has-data-[slot=autocomplete-input]:pb-(--safe-offset)",
+        "data-[side=bottom]:not-has-data-[slot=autocomplete-input]:-translate-y-(--safe-offset) data-[side=bottom]:not-has-data-[slot=autocomplete-input]:pt-[calc(var(--anchor-height)+4px)]",
+        "data-[side=top]:not-has-data-[slot=autocomplete-input]:translate-y-(--safe-offset) data-[side=top]:not-has-data-[slot=autocomplete-input]:pb-[calc(var(--anchor-height)+4px)]",
         className
       )}
       data-slot="autocomplete-popup"
@@ -336,14 +336,14 @@ function AutocompleteList({
 }: AutocompleteListProps) {
   return (
     <ScrollArea
-      className="min-h-0 flex-1 border-0 has-[[data-empty]]:hidden [&>[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&>[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      className="min-h-0 flex-1 border-0 has-[[data-empty]]:hidden [--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&>[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
       hideScrollbar={hideScrollbar}
       scrollShadow={scrollShadow}
     >
       <ScrollAreaContent>
         <BaseAutocomplete.List
           className={cn(
-            "not-empty:p-1 not-empty:scroll-py-1 data-[empty]:hidden",
+            "not-empty:px-1 not-empty:py-2 not-empty:scroll-py-2 data-[empty]:hidden",
             className
           )}
           data-slot="autocomplete-list"

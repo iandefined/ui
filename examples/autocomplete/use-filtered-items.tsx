@@ -9,6 +9,7 @@ import {
   AutocompleteRoot,
   useAutocompleteFilteredItems,
 } from "@/registry/base/autocomplete";
+import { Kbd } from "@/registry/base/kbd";
 import { Label } from "@/registry/base/label";
 
 interface Command {
@@ -120,11 +121,7 @@ export default function AutocompleteUseFilteredItemsDemo() {
                 <AutocompleteItem key={command.id} value={command}>
                   <div className="flex w-full items-center justify-between">
                     <span>{command.name}</span>
-                    {command.shortcut && (
-                      <kbd className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
-                        {command.shortcut}
-                      </kbd>
-                    )}
+                    {command.shortcut && <Kbd>{command.shortcut}</Kbd>}
                   </div>
                 </AutocompleteItem>
               )}
