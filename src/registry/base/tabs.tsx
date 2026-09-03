@@ -70,7 +70,7 @@ function TabsList({
       data-variant={variant}
       className={cn(
         "relative z-0 flex max-w-full w-fit items-center justify-start gap-x-0.5 text-muted-foreground data-[orientation=vertical]:flex-col max-sm:data-[orientation=horizontal]:overflow-x-auto max-sm:data-[orientation=horizontal]:overflow-y-hidden",
-        variant === "segmented" && "rounded-[12px] bg-muted p-1",
+        variant === "segmented" && "rounded-[12px] bg-muted dark:bg-card p-1",
         variant === "underline" &&
           "data-[orientation=vertical]:px-1 data-[orientation=horizontal]:py-1",
         variant === "card" && "p-1",

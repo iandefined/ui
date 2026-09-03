@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { cn } from "@/lib/utils";
 import {
   AutocompleteEmpty,
   AutocompleteInput,
@@ -13,6 +12,7 @@ import {
   useAutocompleteFilter,
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
+import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 
 interface Framework {
   id: string;
@@ -51,23 +51,22 @@ export default function AutocompleteUseFilterDemo() {
         <span className="text-xs font-medium text-muted-foreground">
           Matcher Strategy
         </span>
-        <div className="inline-flex rounded-lg border border-border bg-muted/30 p-0.5">
-          {(["startsWith", "contains", "endsWith"] as const).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setStrategy(mode)}
-              className={cn(
-                "flex-1 cursor-pointer rounded-md px-2 py-1 text-xs font-medium transition-colors",
-                strategy === mode
-                  ? "bg-background text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {mode}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          value={strategy}
+          onValueChange={(val) => setStrategy(val as MatchStrategy)}
+        >
+          <TabsList className="w-full">
+            <TabsTrigger className="flex-1 text-xs" value="startsWith">
+              startsWith
+            </TabsTrigger>
+            <TabsTrigger className="flex-1 text-xs" value="contains">
+              contains
+            </TabsTrigger>
+            <TabsTrigger className="flex-1 text-xs" value="endsWith">
+              endsWith
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <AutocompleteRoot

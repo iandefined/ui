@@ -335,7 +335,7 @@ function ComboboxPopup({
           data-slot="combobox-popup"
           {...props}
         >
-          <span className="pointer-events-auto flex min-w-0 max-h-[min(var(--available-height),20rem)] w-(--anchor-width) max-w-(--available-width) flex-col overflow-hidden">
+          <span className="pointer-events-auto flex min-w-0 max-h-[min(var(--available-height),20rem)] w-(--anchor-width) max-w-(--available-width) flex-col overflow-hidden not-has-data-[slot=combobox-input]:w-[calc(var(--anchor-width)+10px)] not-has-data-[slot=combobox-input]:max-w-[calc(var(--available-width)+10px)]">
             {children}
           </span>
         </ComboboxPrimitive.Popup>

@@ -15,7 +15,7 @@ export default function TabsAutoHeightDemo() {
           <TabsTrigger value="components">Components</TabsTrigger>
           <TabsTrigger value="blocks">Blocks</TabsTrigger>
         </TabsList>
-        <div className="mt-2 rounded-lg bg-muted p-4">
+        <div className="mt-2 rounded-lg bg-card p-4">
           <TabsPanelsWrapper>
             <TabsPanel value="docs">
               <div className="flex flex-col gap-2">

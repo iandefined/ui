@@ -9,7 +9,7 @@ export default function TabsPanelDemo() {
           <TabsTrigger value="components">Components</TabsTrigger>
           <TabsTrigger value="blocks">Blocks</TabsTrigger>
         </TabsList>
-        <div className="mt-2 rounded-lg bg-muted p-4">
+        <div className="mt-2 rounded-lg bg-card p-4">
           <TabsPanel value="docs">
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-medium">Docs</h3>

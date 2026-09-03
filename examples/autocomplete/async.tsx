@@ -14,6 +14,7 @@ import {
   useAutocompleteFilter,
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
+import { Spinner } from "@/registry/base/spinner";
 
 interface Movie {
   id: string;
@@ -126,13 +127,10 @@ export default function AutocompleteAsync() {
   let status: React.ReactNode = `${displayedResults.length} result${displayedResults.length === 1 ? "" : "s"} found`;
   if (effectiveLoading) {
     status = (
-      <div className="flex items-center gap-2">
-        <div
-          aria-hidden
-          className="border-muted-foreground border-t-foreground size-4 animate-spin rounded-full border-2"
-        />
+      <>
+        <Spinner size="sm" />
         Searching...
-      </div>
+      </>
     );
   } else if (displayedResults.length === 0 && searchValue) {
     status = `No results found for "${searchValue}"`;
@@ -158,7 +156,7 @@ export default function AutocompleteAsync() {
 
       {shouldRenderPopup && (
         <AutocompletePortal>
-          <AutocompletePositioner align="start">
+          <AutocompletePositioner>
             <AutocompletePopup aria-busy={effectiveLoading || undefined}>
               <AutocompleteStatus className="flex items-center gap-2">
                 {status}
