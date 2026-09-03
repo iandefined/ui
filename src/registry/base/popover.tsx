@@ -270,7 +270,7 @@ function PopoverPopup({
           <div
             key="popover-popup"
             className={cn(
-              "pointer-events-auto origin-(--transform-origin) not-[class*='w-']:w-72 bg-popover px-4 py-4 shadow-sm border border-border rounded-lg",
+              "pointer-events-auto origin-(--transform-origin) not-[class*='w-']:w-72 rounded-lg border border-border bg-popover px-4 py-4 text-popover-foreground shadow-md",
               transition,
               animation,
               className

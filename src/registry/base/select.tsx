@@ -346,7 +346,7 @@ function ArrowSvg(props: React.ComponentProps<"svg">) {
       />
       <path
         d="M10.3333 3.34539L5.47654 7.71648C4.55842 8.54279 3.36693 9 2.13172 9H0V8H2.13172C3.11989 8 4.07308 7.63423 4.80758 6.97318L9.66437 2.60207C10.0447 2.25979 10.622 2.2598 11.0023 2.60207L15.8591 6.97318C16.5936 7.63423 17.5468 8 18.5349 8H20V9H18.5349C17.2998 9 16.1083 8.54278 15.1901 7.71648L10.3333 3.34539Z"
-        className="fill-border/60"
+        className="fill-border/70"
       />
     </svg>
   );
@@ -505,7 +505,7 @@ function SelectList({ className, ...props }: SelectListProps) {
     <SelectPrimitive.List
       data-slot="select-list"
       className={cn(
-        "relative block box-border h-full max-h-[min(var(--available-height),260px)] w-max min-w-(--anchor-width) max-w-(--available-width) overflow-y-auto rounded-lg border border-foreground/15 bg-popover p-1 shadow-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+        "relative block box-border h-full max-h-[min(var(--available-height),260px)] w-max min-w-(--anchor-width) max-w-(--available-width) overflow-y-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-md [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
         className
       )}
       {...props}
@@ -577,7 +577,7 @@ interface SelectGroupLabelProps extends React.ComponentProps<
 function SelectGroupLabel({ className, ...props }: SelectGroupLabelProps) {
   return (
     <SelectPrimitive.GroupLabel
-      className={cn("px-4 py-1.5 text-xs text-muted-foreground", className)}
+      className={cn("px-2 py-1.5 text-xs text-muted-foreground", className)}
       data-slot="select-group-label"
       {...props}
     />

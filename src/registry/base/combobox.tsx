@@ -265,12 +265,15 @@ function ComboboxChipRemove({
 function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   return (
     <ScrollArea
-      className="min-h-0 flex-1 border-0 [&>[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&>[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      className="min-h-0 flex-1 border-0 has-[[data-empty]]:hidden [&>[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&>[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
       scrollShadow="vertical"
     >
       <ScrollAreaContent>
         <ComboboxPrimitive.List
-          className={cn("not-empty:scroll-py-1 not-empty:py-1", className)}
+          className={cn(
+            "not-empty:p-1 not-empty:scroll-py-1 data-[empty]:hidden",
+            className
+          )}
           data-slot="combobox-list"
           {...props}
         />
@@ -345,7 +348,7 @@ function ComboboxEmpty({ className, ...props }: ComboboxPrimitive.Empty.Props) {
   return (
     <ComboboxPrimitive.Empty
       className={cn(
-        "p-2 text-center text-sm text-muted-foreground empty:m-0 empty:p-0",
+        "px-2 py-2.5 text-center text-sm text-muted-foreground empty:m-0 empty:p-0",
         className
       )}
       data-slot="combobox-empty"
@@ -372,7 +375,9 @@ function ComboboxItem({
   return (
     <ComboboxPrimitive.Item
       className={cn(
-        "group grid w-full min-w-0 cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 px-3 py-1.5 pe-5 text-sm outline-none hover:bg-accent/70 data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
+        "group relative grid w-full min-w-0 cursor-pointer select-none grid-cols-[1rem_1fr] items-center gap-2 rounded-[12px] px-2 py-1.5 pe-4 text-sm outline-hidden data-disabled:pointer-events-none data-disabled:opacity-50",
+        "data-highlighted:z-0 data-highlighted:text-accent-foreground data-highlighted:before:absolute data-highlighted:before:-inset-px data-highlighted:before:z-[-1] data-highlighted:before:rounded-[12px] data-highlighted:before:border data-highlighted:before:border-border/30 data-highlighted:before:bg-accent/70 dark:data-highlighted:before:bg-accent",
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="combobox-item"

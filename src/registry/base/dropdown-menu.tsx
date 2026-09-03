@@ -146,7 +146,7 @@ function DropdownMenuArrow(props: React.ComponentProps<"svg">) {
         d="M9.664 2.602 4.808 6.973A3.946 3.946 0 0 1 2.132 8H0v2h20V8h-1.465a3.946 3.946 0 0 1-2.675-1.027l-4.857-4.371a1 1 0 0 0-1.339 0Z"
       />
       <path
-        className="fill-border/60"
+        className="fill-border/70"
         d="m10.333 3.345-4.856 4.37A4.946 4.946 0 0 1 2.132 9H0V8h2.132c.988 0 1.941-.366 2.676-1.027l4.856-4.37a1 1 0 0 1 1.34 0l4.856 4.37A3.946 3.946 0 0 0 18.535 8H20v1h-1.465a4.946 4.946 0 0 1-3.345-1.285l-4.857-4.37Z"
       />
     </svg>
@@ -216,7 +216,7 @@ function DropdownMenuContent({
           render={
             <div
               className={cn(
-                "pointer-events-auto w-[max(var(--anchor-width),226px)] origin-(--transform-origin) rounded-[12px] border border-border/60 bg-popover p-1 text-popover-foreground shadow-xs",
+                "pointer-events-auto w-[max(var(--anchor-width),226px)] origin-(--transform-origin) rounded-[12px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
                 transition,
                 animation,
                 className
@@ -451,7 +451,7 @@ function DropdownMenuSubContent({
           render={
             <div
               className={cn(
-                "pointer-events-auto min-w-[max(8rem,calc(var(--anchor-width)-1rem))]! origin-(--transform-origin) rounded-[12px] border border-border/60 bg-popover p-1 text-popover-foreground shadow-sm",
+                "pointer-events-auto min-w-[max(8rem,calc(var(--anchor-width)-1rem))]! origin-(--transform-origin) rounded-[12px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
                 transitionPresets.snappyOut,
                 animationPresets.scale,
                 className

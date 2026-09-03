@@ -6,6 +6,7 @@
 
 - [Introduction](https://ui.iandefined.com/docs.md) - Build, document, and deploy this custom shadcn registry.
 - [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
+- [Autocomplete](https://ui.iandefined.com/docs/components/autocomplete.md) - A filterable text input that suggests matching options while accepting free-form text.
 - [Avatar](https://ui.iandefined.com/docs/components/avatar.md) - An image element with a fallback for representing the user.
 - [Badge](https://ui.iandefined.com/docs/components/badge.md) - Compact labels for status, category, or metadata.
 - [Breadcrumbs](https://ui.iandefined.com/docs/components/breadcrumbs.md) - A responsive breadcrumb trail with surface variants, custom separators, and collapsed paths.

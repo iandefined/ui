@@ -823,6 +823,25 @@
       ]
     },
     {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "A filterable text input that suggests matching options while accepting free-form text.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/input.json",
+        "https://ui.iandefined.com/r/label.json",
+        "https://ui.iandefined.com/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/autocomplete.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/autocomplete.tsx"
+        }
+      ]
+    },
+    {
       "name": "use-fuzzy-filter",
       "type": "registry:hook",
       "title": "useFuzzyFilter",
