@@ -39,6 +39,7 @@
     "jotai": "catalog:",
     "lru-cache": "catalog:",
     "lucide-react": "catalog:",
+    "match-sorter": "^8.3.0",
     "motion": "catalog:",
     "next-themes": "catalog:",
     "postcss": "catalog:",

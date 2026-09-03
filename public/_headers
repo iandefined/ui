@@ -103,6 +103,9 @@
 /docs/extending.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/hooks/use-fuzzy-filter.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/installation.md
   Content-Type: text/markdown; charset=utf-8
 

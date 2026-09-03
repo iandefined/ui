@@ -38,11 +38,14 @@ type DemoModule = {
   default?: RegistryComponent;
 };
 
-const registrySources = import.meta.glob("../../registry/**/*.tsx", {
-  eager: true,
-  import: "default",
-  query: "?raw",
-}) as Record<string, string>;
+const registrySources = import.meta.glob(
+  ["../../registry/**/*.tsx", "../../registry/**/*.ts"],
+  {
+    eager: true,
+    import: "default",
+    query: "?raw",
+  }
+) as Record<string, string>;
 
 const exampleSources = import.meta.glob("../../../examples/**/*.tsx", {
   eager: true,

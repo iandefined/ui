@@ -821,6 +821,20 @@
           "target": "components/ui/combobox.tsx"
         }
       ]
+    },
+    {
+      "name": "use-fuzzy-filter",
+      "type": "registry:hook",
+      "title": "useFuzzyFilter",
+      "description": "Fuzzy matching hook for filtering and sorting items by relevance.",
+      "dependencies": ["match-sorter"],
+      "files": [
+        {
+          "path": "src/registry/base/use-fuzzy-filter.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-fuzzy-filter.ts"
+        }
+      ]
     }
   ]
 }

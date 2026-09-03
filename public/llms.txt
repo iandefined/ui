@@ -36,6 +36,7 @@
 - [Textarea](https://ui.iandefined.com/docs/components/textarea.md) - A styled multiline text control built on Base UI Field.
 - [Tooltip](https://ui.iandefined.com/docs/components/tooltip.md) - Displays contextual information when a user hovers or focuses an element.
 - [Extending](https://ui.iandefined.com/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
+- [useFuzzyFilter](https://ui.iandefined.com/docs/hooks/use-fuzzy-filter.md) - Fuzzy matching hook for filtering and sorting items by relevance.
 - [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
 - [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
 - [Styling](https://ui.iandefined.com/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.

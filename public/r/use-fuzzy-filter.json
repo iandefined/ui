@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-fuzzy-filter",
+  "title": "useFuzzyFilter",
+  "description": "Fuzzy matching hook for filtering and sorting items by relevance.",
+  "dependencies": [
+    "match-sorter"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/use-fuzzy-filter.ts",
+      "content": "import { matchSorter } from \"match-sorter\";\n\ntype Ranking = (typeof matchSorter.rankings)[keyof typeof matchSorter.rankings];\n\nexport type FuzzyThreshold =\n  | \"case-sensitive-equal\"\n  | \"equal\"\n  | \"starts-with\"\n  | \"word-starts-with\"\n  | \"contains\"\n  | \"acronym\"\n  | \"matches\";\n\nconst thresholdMap: Record<FuzzyThreshold, Ranking> = {\n  \"case-sensitive-equal\": matchSorter.rankings.CASE_SENSITIVE_EQUAL,\n  equal: matchSorter.rankings.EQUAL,\n  \"starts-with\": matchSorter.rankings.STARTS_WITH,\n  \"word-starts-with\": matchSorter.rankings.WORD_STARTS_WITH,\n  contains: matchSorter.rankings.CONTAINS,\n  acronym: matchSorter.rankings.ACRONYM,\n  matches: matchSorter.rankings.MATCHES,\n};\n\nfunction resolveThreshold(\n  threshold: FuzzyThreshold | undefined\n): Ranking | undefined {\n  if (!threshold) return undefined;\n  return thresholdMap[threshold];\n}\n\nexport interface UseFuzzyFilterOptions {\n  keys: Array<string | { key: string; threshold?: FuzzyThreshold }>;\n  threshold?: FuzzyThreshold;\n}\n\nexport function useFuzzyFilter<T>(options: UseFuzzyFilterOptions) {\n  const resolvedThreshold = resolveThreshold(options.threshold);\n  const resolvedKeys = options.keys.map((key) =>\n    typeof key === \"string\"\n      ? key\n      : { key: key.key, threshold: resolveThreshold(key.threshold) }\n  );\n\n  const filter = (items: T[], query: string): T[] => {\n    if (!query) {\n      return items;\n    }\n\n    return matchSorter(items, query, {\n      keys: resolvedKeys,\n      threshold: resolvedThreshold,\n    });\n  };\n\n  const filterItem = (item: T, query: string): boolean => {\n    if (!query) {\n      return true;\n    }\n\n    const results = matchSorter([item], query, {\n      keys: resolvedKeys,\n      threshold: resolvedThreshold,\n    });\n\n    return results.length > 0;\n  };\n\n  return { filter, filterItem };\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-fuzzy-filter.ts"
+    }
+  ],
+  "type": "registry:hook"
+}
