@@ -240,7 +240,7 @@ function AutocompletePopup({
       data-slot="autocomplete-popup"
       {...props}
     >
-      <span className="pointer-events-auto flex max-h-[min(var(--available-height),20rem)] w-(--anchor-width) max-w-(--available-width) flex-col overflow-hidden not-has-data-[slot=autocomplete-input]:w-[calc(var(--anchor-width)+10px)] not-has-data-[slot=autocomplete-input]:max-w-[calc(var(--available-width)+10px)]">
+      <span className="pointer-events-auto flex min-w-0 max-h-[min(var(--available-height),20rem)] w-(--anchor-width) max-w-(--available-width) flex-col overflow-hidden">
         {children}
       </span>
     </BaseAutocomplete.Popup>
