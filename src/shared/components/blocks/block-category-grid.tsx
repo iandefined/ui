@@ -428,7 +428,7 @@ const IntegrationsSkeleton = () => (
 
 const BannerSkeleton = () => (
   <div className="flex h-full flex-col gap-3 p-4">
-    <div className="flex items-center justify-center gap-3 rounded-lg bg-primary/5 px-4 py-2.5">
+    <div className="flex items-center justify-center gap-3 rounded-lg bg-primary/5 px-4 py-3">
       <Line className="grow" />
       <Btn className="w-16" />
     </div>

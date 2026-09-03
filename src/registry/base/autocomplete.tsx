@@ -154,7 +154,7 @@ function AutocompleteClear({
     <BaseAutocomplete.Clear
       aria-label="Clear selection"
       className={cn(
-        "absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none transition-[scale,opacity] data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4",
+        "absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none transition-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="autocomplete-clear"
@@ -230,7 +230,7 @@ function AutocompletePopup({
   const popupContent = (
     <BaseAutocomplete.Popup
       className={cn(
-        "group relative flex max-h-full origin-(--transform-origin) overflow-hidden rounded-[16px] border border-border bg-popover text-popover-foreground shadow-md transition-[scale,opacity] duration-100 will-change-[scale,opacity] data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0",
+        "group relative flex max-h-full origin-(--transform-origin) overflow-hidden rounded-[16px] border border-border bg-popover text-popover-foreground shadow-md transition-[scale,opacity] will-change-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0",
         "[--safe-offset:calc(var(--anchor-height)+7px)]",
         "[&:not(:has([data-slot=autocomplete-input]))]:pointer-events-none",
         "data-[side=bottom]:not-has-data-[slot=autocomplete-input]:-translate-y-(--safe-offset) data-[side=bottom]:not-has-data-[slot=autocomplete-input]:pt-[calc(var(--anchor-height)+4px)]",
@@ -314,7 +314,7 @@ function AutocompleteEmpty({
   return (
     <BaseAutocomplete.Empty
       className={cn(
-        "px-2 py-2.5 text-center text-sm text-muted-foreground empty:m-0 empty:p-0",
+        "px-2 py-3.5 text-center text-sm text-muted-foreground empty:m-0 empty:p-0",
         className
       )}
       data-slot="autocomplete-empty"
@@ -482,6 +482,7 @@ export {
   AutocompleteLabel,
   AutocompleteList,
   AutocompletePopup,
+  type AutocompletePopupProps,
   AutocompletePortal,
   AutocompletePositioner,
   AutocompleteRoot,
