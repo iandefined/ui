@@ -55,8 +55,8 @@ const data = {
           url: "/docs/llms",
         },
         {
-          title: "Styling",
-          url: "/docs/styling",
+          title: "Theming",
+          url: "/docs/theming",
         },
         {
           title: "Optimizing",
@@ -114,7 +114,7 @@ const data = {
         },
         {
           title: "Edge Runtime",
-          url: "/docs/styling",
+          url: "/docs/theming",
         },
       ],
     },

@@ -31,27 +31,6 @@ npm install @base-ui/react tailwind-variants clsx tailwind-merge
 npm install input-otp motion
 ```
 
-<Step>Add the caret animation to your CSS file:</Step>
-
-```css
-@theme inline {
-  --animate-caret-blink: caret-blink 1s ease-out infinite;
-}
-
-@keyframes caret-blink {
-  0%,
-  70%,
-  100% {
-    opacity: 1;
-  }
-
-  20%,
-  50% {
-    opacity: 0;
-  }
-}
-```
-
 <Step>Add the `cn` utility to `lib/utils.ts`:</Step>
 
 ```ts filename="lib/utils.ts"

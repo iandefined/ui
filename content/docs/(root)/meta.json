@@ -1,4 +1,4 @@
 {
-  "pages": ["index", "installation", "styling", "llms", "extending"],
+  "pages": ["index", "installation", "theming", "llms", "extending"],
   "title": "Get Started"
 }

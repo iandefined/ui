@@ -41,7 +41,7 @@
 - [useFuzzyFilter](https://ui.iandefined.com/docs/hooks/use-fuzzy-filter.md) - Fuzzy matching hook for filtering and sorting items by relevance.
 - [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
 - [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
-- [Styling](https://ui.iandefined.com/docs/styling.md) - Style registry components with Tailwind CSS v4 and shadcn tokens.
+- [Theming](https://ui.iandefined.com/docs/theming.md) - Customize the design system with CSS variables and global styles.
 - [Hitbox](https://ui.iandefined.com/docs/utilities/hitbox.md) - Expand hit areas of interactive elements without affecting layout.
 - [Icon Swap](https://ui.iandefined.com/docs/utilities/icon-swap.md) - Animate between keyed icons with a consistent scale, blur, and fade transition.
 - [Text Morph](https://ui.iandefined.com/docs/utilities/text-morph.md) - Animate changing text with Calligraph and smoothly follow its width.

@@ -4,6 +4,7 @@ import { createElement, type ElementType } from "react";
 import { Callout } from "@/shared/components/callout";
 import { CodeBlockCommand } from "@/shared/components/code-block-command";
 import { CodeTabs } from "@/shared/components/code-tabs";
+import { ColorCard } from "@/shared/components/color-card";
 import { ComponentPreview } from "@/shared/components/component-preview";
 import { ComponentSource } from "@/shared/components/component-source";
 import { ComponentsList } from "@/shared/components/components-list";
@@ -101,6 +102,7 @@ export const mdxComponents = {
   Button,
   Callout,
   CodeTabs,
+  ColorCard,
   ComponentPreview,
   ComponentSource,
   ComponentsList,

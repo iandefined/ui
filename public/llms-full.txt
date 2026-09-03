@@ -86,7 +86,7 @@ Use `pnpm registry:build` after registry changes, `pnpm static:build` after docs
 
 ## Next Steps
 
-Read [Installation](/docs/installation) to install registry components, [Styling](/docs/styling) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.
+Read [Installation](/docs/installation) to install registry components, [Theming](/docs/theming) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.
 
 # Components
 
@@ -1585,25 +1585,6 @@ npm install @base-ui/react tailwind-variants clsx tailwind-merge
 
 ```bash
 npm install input-otp motion
-```
-
-```css
-@theme inline {
-  --animate-caret-blink: caret-blink 1s ease-out infinite;
-}
-
-@keyframes caret-blink {
-  0%,
-  70%,
-  100% {
-    opacity: 1;
-  }
-
-  20%,
-  50% {
-    opacity: 0;
-  }
-}
 ```
 
 ```ts filename="lib/utils.ts"
@@ -3316,33 +3297,143 @@ https://ui.iandefined.com/llms.md/docs/components/button/content.md
 
 If AI-generated code misses a registry path, install command, or component example, update the source docs in `content/docs` and regenerate static assets with `pnpm static:build`.
 
-# Styling
+# Theming
 
-Style registry components with Tailwind CSS v4 and shadcn tokens.
+Customize the design system with CSS variables and global styles.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Overview
+Theming allows you to maintain a consistent look and feel across your application.
 
-Registry components are styled with Tailwind CSS v4 utility classes and shadcn-compatible CSS variables. The installed source expects your app to provide the standard theme tokens such as `background`, `foreground`, `primary`, `border`, `input`, `ring`, and `radius`.
+The registry uses CSS variables for theming. You can customize everything from colors to component styles using standard CSS.
 
-The registry uses one `base` source namespace. It keeps component source portable by using semantic utilities like `bg-primary`, `text-primary-foreground`, `border-input`, and radius tokens instead of hard-coded one-off colors.
+## How It Works
 
-## Prerequisites
+The registry's theming system is built on top of [Tailwind CSS v4](https://tailwindcss.com/docs/theme)'s theme:
 
-Before adding components, make sure your project has Tailwind CSS v4 and shadcn/ui initialized:
+1. Uses Tailwind's built-in color palettes (like `--color-red-*`, `--color-blue-*`)
+2. Maps them to semantic variables for intuitive reuse
+3. Automatically switches between light and dark themes
+4. Uses CSS layers and the `@theme inline` directive for clean token organization
 
-```bash
-npx shadcn@latest init
+The system follows a simple naming pattern:
+
+- Surface tokens without a suffix are fills or backgrounds (e.g., `--accent`, `--primary`)
+- Surface tokens with `--foreground` are for text and icons sitting on that fill (e.g., `--accent-foreground`, `--primary-foreground`)
+
+```tsx
+<div className="bg-accent text-accent-foreground">Hello</div>
 ```
 
-See [Installation](/docs/installation) for the registry install commands.
+## List of Variables
 
-## Theme tokens
+### UI Colors
 
-Tailwind v4 reads this project's shadcn tokens through `@theme inline`. If your app was initialized with shadcn/ui, you already have the same basic structure.
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+### More UI Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+### Chart Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+### Sidebar Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+## Global Styles
+
+Copy and paste the following styles into your `globals.css` file:
 
 ```css title="globals.css"
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║                       BASE COLORS                            ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.93 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.61 0.213 23.83);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.25 0 0);
+  --input: oklch(0.325 0 0);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -3363,33 +3454,91 @@ Tailwind v4 reads this project's shadcn tokens through `@theme inline`. If your 
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║                      MORE UI COLORS                          ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+   
+:root {
+  --error: var(--color-red-500);
+  --error-foreground: var(--color-red-700);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-blue-700);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-700);
+  --warning: var(--color-amber-500);
+  --warning-foreground: var(--color-amber-700);
+}
+
+.dark {
+  --error: var(--color-red-500);
+  --error-foreground: var(--color-red-400);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-blue-400);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-400);
+  --warning: var(--color-amber-500);
+  --warning-foreground: var(--color-amber-400);
+}
+
+@theme inline {
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
 }
 ```
 
-## Color convention
+## Radius Scale
 
-Each surface token has a matching foreground token. The base token is the fill color. The `-foreground` token is the text and icon color that should sit on that fill.
+The base `--radius` token controls the component radius scale:
 
-```tsx
-<div className="bg-primary text-primary-foreground" />
+```css title="globals.css"
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+}
 ```
 
-Use token pairs together when you create new component states:
+Components use this scale for size-specific corners, so changing `--radius` updates the shape of installed components across your application.
 
-- `bg-background text-foreground`
-- `bg-card text-card-foreground`
-- `bg-popover text-popover-foreground`
-- `bg-primary text-primary-foreground`
-- `bg-secondary text-secondary-foreground`
-- `bg-muted text-muted-foreground`
-- `bg-accent text-accent-foreground`
+## Customizing Colors
 
-## Customizing colors
-
-Override CSS variables on `:root` and `.dark`. Always update the foreground token when you change a fill token.
+Override CSS variables on `:root` and `.dark`. Always update the foreground token when you change a fill token:
 
 ```css title="globals.css"
 :root {
@@ -3405,9 +3554,9 @@ Override CSS variables on `:root` and `.dark`. Always update the foreground toke
 }
 ```
 
-## Adding tokens
+## Adding Tokens
 
-New variables need two pieces: a CSS variable and a Tailwind `--color-*` mapping inside `@theme inline`.
+New variables require two pieces: a CSS variable and a Tailwind `--color-*` mapping inside `@theme inline`:
 
 ```css title="globals.css"
 @theme inline {
@@ -3426,40 +3575,11 @@ New variables need two pieces: a CSS variable and a Tailwind `--color-*` mapping
 }
 ```
 
-Then use the token like any other Tailwind color:
+Then use the token like any other Tailwind color utility:
 
 ```tsx
-<div className="bg-brand text-brand-foreground" />
+<div className="bg-brand text-brand-foreground">Brand Content</div>
 ```
-
-## Radius scale
-
-The base `--radius` token controls the component radius scale.
-
-```css title="globals.css"
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
-:root {
-  --radius: 0.625rem;
-}
-```
-
-Button uses this scale for size-specific corners, so changing `--radius` updates the shape of installed components without editing component source.
-
-## Registry component notes
-
-Installed components are meant to live in your app. After installation, you can edit the copied source directly.
-
-Keep these rules in mind when changing styles:
-
-- Prefer semantic tokens over literal colors.
-- Keep hover, focus, disabled, and dark-mode states readable.
-- Use `ring` and `ring-offset` tokens for focus states.
 
 # Hitbox
 

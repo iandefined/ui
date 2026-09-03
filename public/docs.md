@@ -86,4 +86,4 @@ Use `pnpm registry:build` after registry changes, `pnpm static:build` after docs
 
 ## Next Steps
 
-Read [Installation](/docs/installation) to install registry components, [Styling](/docs/styling) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.
+Read [Installation](/docs/installation) to install registry components, [Theming](/docs/theming) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.

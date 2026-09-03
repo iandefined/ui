@@ -195,7 +195,17 @@ function FakeCaret() {
       aria-hidden
       className="pointer-events-none absolute inset-0 flex items-center justify-center"
     >
-      <span className="h-4.5 w-px bg-foreground motion-safe:animate-caret-blink" />
+      <motion.span
+        aria-hidden
+        animate={{ opacity: [1, 0, 0, 1, 1] }}
+        className="h-4.5 w-px bg-foreground"
+        transition={{
+          duration: 1,
+          ease: "easeOut",
+          repeat: Infinity,
+          times: [0, 0.2, 0.5, 0.7, 1],
+        }}
+      />
     </span>
   );
 }

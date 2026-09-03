@@ -1,10 +1,64 @@
+# Theming
+
+Customize the design system with CSS variables and global styles.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Theming allows you to maintain a consistent look and feel across your application.
+
+The registry uses CSS variables for theming. You can customize everything from colors to component styles using standard CSS.
+
+## How It Works
+
+The registry's theming system is built on top of [Tailwind CSS v4](https://tailwindcss.com/docs/theme)'s theme:
+
+1. Uses Tailwind's built-in color palettes (like `--color-red-*`, `--color-blue-*`)
+2. Maps them to semantic variables for intuitive reuse
+3. Automatically switches between light and dark themes
+4. Uses CSS layers and the `@theme inline` directive for clean token organization
+
+The system follows a simple naming pattern:
+
+- Surface tokens without a suffix are fills or backgrounds (e.g., `--accent`, `--primary`)
+- Surface tokens with `--foreground` are for text and icons sitting on that fill (e.g., `--accent-foreground`, `--primary-foreground`)
+
+```tsx
+<div className="bg-accent text-accent-foreground">Hello</div>
+```
+
+## List of Variables
+
+### UI Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+### More UI Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+### Chart Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+### Sidebar Colors
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 sm:gap-9 my-8">
+</div>
+
+## Global Styles
+
+Copy and paste the following styles into your `globals.css` file:
+
+```css title="globals.css"
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
 
 /* ╔══════════════════════════════════════════════════════════════╗
    ║                       BASE COLORS                            ║
@@ -162,3 +216,68 @@
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
 }
+```
+
+## Radius Scale
+
+The base `--radius` token controls the component radius scale:
+
+```css title="globals.css"
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+}
+```
+
+Components use this scale for size-specific corners, so changing `--radius` updates the shape of installed components across your application.
+
+## Customizing Colors
+
+Override CSS variables on `:root` and `.dark`. Always update the foreground token when you change a fill token:
+
+```css title="globals.css"
+:root {
+  --primary: oklch(0.62 0.18 250);
+  --primary-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.62 0.18 250);
+}
+
+.dark {
+  --primary: oklch(0.72 0.16 250);
+  --primary-foreground: oklch(0.16 0.02 250);
+  --ring: oklch(0.72 0.16 250);
+}
+```
+
+## Adding Tokens
+
+New variables require two pieces: a CSS variable and a Tailwind `--color-*` mapping inside `@theme inline`:
+
+```css title="globals.css"
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+}
+
+:root {
+  --brand: oklch(0.62 0.18 250);
+  --brand-foreground: oklch(0.99 0 0);
+}
+
+.dark {
+  --brand: oklch(0.72 0.16 250);
+  --brand-foreground: oklch(0.16 0.02 250);
+}
+```
+
+Then use the token like any other Tailwind color utility:
+
+```tsx
+<div className="bg-brand text-brand-foreground">Brand Content</div>
+```

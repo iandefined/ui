@@ -18,25 +18,6 @@ npm install @base-ui/react tailwind-variants clsx tailwind-merge
 npm install input-otp motion
 ```
 
-```css
-@theme inline {
-  --animate-caret-blink: caret-blink 1s ease-out infinite;
-}
-
-@keyframes caret-blink {
-  0%,
-  70%,
-  100% {
-    opacity: 1;
-  }
-
-  20%,
-  50% {
-    opacity: 0;
-  }
-}
-```
-
 ```ts filename="lib/utils.ts"
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
