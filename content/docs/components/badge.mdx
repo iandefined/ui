@@ -116,15 +116,6 @@ variants such as `success` and `warning` own their color and do not accept the
 </Badge>
 ```
 
-## API Reference
-
-| Prop      | Type                                                                                                                              | Default     | Description                                             |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
-| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent" \| "dot"` | `"default"` | Controls the semantic or palette-driven appearance.     |
-| `color`   | `BadgeColor`                                                                                                                      | `"gray"`    | Requires an explicit `translucent` or `dot` variant.    |
-| `size`    | `"default" \| "compact"`                                                                                                          | `"default"` | Controls the badge height, gap, padding, and type size. |
-| `render`  | `React.ReactElement`                                                                                                              | -           | Renders another element, such as a link, as the badge.  |
-
 ## Examples
 
 ### Semantic variants
@@ -150,3 +141,12 @@ variants such as `success` and `warning` own their color and do not accept the
 ### With Count
 
 <ComponentPreview name="badge/with-count" />
+
+## API Reference
+
+| Prop      | Type                                                                                                                              | Default     | Description                                             |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
+| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent" \| "dot"` | `"default"` | Controls the semantic or palette-driven appearance.     |
+| `color`   | `BadgeColor`                                                                                                                      | `"gray"`    | Requires an explicit `translucent` or `dot` variant.    |
+| `size`    | `"default" \| "compact"`                                                                                                          | `"default"` | Controls the badge height, gap, padding, and type size. |
+| `render`  | `React.ReactElement`                                                                                                              | —           | Renders another element, such as a link, as the badge.  |

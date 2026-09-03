@@ -62,7 +62,7 @@ export interface NumberFieldProps extends Omit<
   React.ComponentProps<typeof NumberFieldPrimitive.Root>,
   "size"
 > {
-  size?: NumberFieldSize | number;
+  size?: "sm" | "default" | "lg" | number;
 }
 
 const NumberField = ({

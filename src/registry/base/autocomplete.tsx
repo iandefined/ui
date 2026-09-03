@@ -373,14 +373,16 @@ function AutocompleteRow({ className, ...props }: BaseAutocomplete.Row.Props) {
   );
 }
 
+type AutocompleteItemProps = BaseAutocomplete.Item.Props & {
+  ref?: Ref<HTMLDivElement>;
+};
+
 function AutocompleteItem({
   className,
   children,
   ref,
   ...props
-}: BaseAutocomplete.Item.Props & {
-  ref?: Ref<HTMLDivElement>;
-}) {
+}: AutocompleteItemProps) {
   return (
     <BaseAutocomplete.Item
       className={cn(
@@ -398,10 +400,9 @@ function AutocompleteItem({
   );
 }
 
-function AutocompleteGroup({
-  className,
-  ...props
-}: BaseAutocomplete.Group.Props) {
+type AutocompleteGroupProps = BaseAutocomplete.Group.Props;
+
+function AutocompleteGroup({ className, ...props }: AutocompleteGroupProps) {
   return (
     <BaseAutocomplete.Group
       className={cn("text-foreground block", className)}
@@ -411,14 +412,16 @@ function AutocompleteGroup({
   );
 }
 
+type AutocompleteGroupLabelProps = BaseAutocomplete.GroupLabel.Props;
+
 function AutocompleteGroupLabel({
   className,
   ...props
-}: BaseAutocomplete.GroupLabel.Props) {
+}: AutocompleteGroupLabelProps) {
   return (
     <BaseAutocomplete.GroupLabel
       className={cn(
-        "sticky top-0 z-20 w-full bg-popover px-2 py-1.5 text-xs font-medium text-muted-foreground",
+        "sticky top-0 z-10 w-full bg-popover px-2 py-1.5 text-xs font-medium text-muted-foreground",
         className
       )}
       data-slot="autocomplete-group-label"
@@ -482,7 +485,6 @@ export {
   AutocompleteLabel,
   AutocompleteList,
   AutocompletePopup,
-  type AutocompletePopupProps,
   AutocompletePortal,
   AutocompletePositioner,
   AutocompleteRoot,
@@ -493,4 +495,13 @@ export {
   AutocompleteValue,
   useAutocompleteFilter,
   useAutocompleteFilteredItems,
+};
+export type {
+  AutocompleteGroupLabelProps,
+  AutocompleteGroupProps,
+  AutocompleteInputProps,
+  AutocompleteItemProps,
+  AutocompleteListProps,
+  AutocompletePopupProps,
+  AutocompletePositionerProps,
 };

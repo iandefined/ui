@@ -131,3 +131,18 @@ Arrange the same label, value, and control parts inside or outside the slider su
 Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's hover and drag feedback.
 
 <ComponentPreview name="slider/without-tooltip" />
+
+## API Reference
+
+### Slider
+
+Slider wraps Base UI's Slider Root and accepts its props in addition to those below.
+
+| Prop           | Type                        | Default     | Description                                          |
+| -------------- | --------------------------- | ----------- | ---------------------------------------------------- |
+| `variant`      | `"compact" \| "default"`    | `"default"` | Controls thumb and rail layout alignment.            |
+| `hideTooltip`  | `boolean`                   | `false`     | Hides the floating value tooltip during drag.        |
+| `formatValue`  | `(value: number) => string` | —           | Formats thumb value display in tooltips and values.  |
+| `showSteps`    | `boolean`                   | `false`     | Renders visible step tick dots along the track.      |
+| `reduceMotion` | `boolean`                   | `false`     | Disables spring transitions for thumb movement.      |
+| `getAriaLabel` | `(index: number) => string` | —           | Custom accessible name resolver for multiple thumbs. |

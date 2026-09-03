@@ -8,16 +8,10 @@
   ],
   "registryDependencies": [
     "https://ui.shadcn.com/r/styles/base-luma/sidebar.json",
-    "https://ui.shadcn.com/r/styles/base-luma/breadcrumb.json",
-    "https://ui.shadcn.com/r/styles/base-luma/separator.json",
+    "https://ui.iandefined.com/r/breadcrumbs.json",
+    "https://ui.iandefined.com/r/separator.json",
     "https://ui.iandefined.com/r/label.json",
-    "https://ui.shadcn.com/r/styles/base-luma/dropdown-menu.json",
-    "https://ui.shadcn.com/r/styles/base-luma/button.json",
-    "https://ui.shadcn.com/r/styles/base-luma/input.json",
-    "https://ui.shadcn.com/r/styles/base-luma/sheet.json",
-    "https://ui.shadcn.com/r/styles/base-luma/skeleton.json",
-    "https://ui.shadcn.com/r/styles/base-luma/tooltip.json",
-    "https://ui.shadcn.com/r/styles/base-luma/use-mobile.json"
+    "https://ui.iandefined.com/r/dropdown-menu.json"
   ],
   "files": [
     {

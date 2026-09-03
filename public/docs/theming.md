@@ -183,7 +183,7 @@ Copy and paste the following styles into your `globals.css` file:
 /* ╔══════════════════════════════════════════════════════════════╗
    ║                      MORE UI COLORS                          ║
    ╚══════════════════════════════════════════════════════════════╝ */
-   
+
 :root {
   --error: var(--color-red-500);
   --error-foreground: var(--color-red-700);

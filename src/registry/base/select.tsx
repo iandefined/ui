@@ -359,7 +359,16 @@ interface SelectPopupProps
       SelectPositionerProps,
       "side" | "sideOffset" | "align" | "alignOffset" | "alignItemWithTrigger"
     > {
-  animationPreset?: CSSAnimationPresets;
+  animationPreset?:
+    | "none"
+    | "scale"
+    | "fade"
+    | "slideOutside"
+    | "slideInside"
+    | "wipe"
+    | "wipeScale"
+    | "motion"
+    | "motionBlur";
   transitionPreset?: CSSTransitionPresets;
   reduceMotion?: boolean;
   showArrow?: boolean;
@@ -636,3 +645,4 @@ export {
   SelectScrollDownArrow,
   SelectSeparator,
 };
+export type { CSSAnimationPresets, CSSTransitionPresets };

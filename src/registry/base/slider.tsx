@@ -32,7 +32,7 @@ interface SliderProps extends Omit<
   children?: React.ReactNode;
   formatValue?: (value: number) => string;
   hideTooltip?: boolean;
-  variant?: SliderVariant;
+  variant?: "compact" | "default";
   showSteps?: boolean;
   reduceMotion?: boolean;
   getAriaLabel?: (index: number) => string;

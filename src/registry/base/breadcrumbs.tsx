@@ -11,8 +11,8 @@ type BreadcrumbVariant = "default" | "surface";
 type BreadcrumbSize = "sm" | "md" | "lg";
 
 type BreadcrumbProps = ComponentProps<"nav"> & {
-  size?: BreadcrumbSize;
-  variant?: BreadcrumbVariant;
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "surface";
 };
 
 function Breadcrumb({

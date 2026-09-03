@@ -1,5 +1,5 @@
 import type React from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
@@ -16,10 +16,10 @@ const cardVariants = tv({
   },
 });
 
-type CardVariant = NonNullable<VariantProps<typeof cardVariants>["variant"]>;
+type CardVariant = "default" | "inset";
 
 type CardProps = React.ComponentProps<"div"> & {
-  variant?: CardVariant;
+  variant?: "default" | "inset";
 };
 
 function Card({ className, variant = "default", ...props }: CardProps) {

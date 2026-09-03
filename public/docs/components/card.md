@@ -77,7 +77,6 @@ theme variables.
 
 ## API Reference
 
-| Prop        | Type                   | Default     | Description                        |
-| ----------- | ---------------------- | ----------- | ---------------------------------- |
-| `variant`   | `"default" \| "inset"` | `"default"` | Changes how the card is framed.    |
-| `className` | `string`               | -           | Adds styles to the card container. |
+| Prop      | Type                   | Default     | Description                     |
+| --------- | ---------------------- | ----------- | ------------------------------- |
+| `variant` | `"default" \| "inset"` | `"default"` | Changes how the card is framed. |

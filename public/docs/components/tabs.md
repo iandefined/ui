@@ -76,3 +76,19 @@ Render dedicated content for each tab using `TabsPanel`.
 ### Auto Height
 
 Wrap panels with `TabsPanelsWrapper` to smoothly animate the container height when switching between panels of varying height.
+
+## API Reference
+
+### Tabs
+
+Tabs wraps Base UI's Tabs Root and accepts its props in addition to those below.
+
+| Prop      | Type                                   | Default       | Description                   |
+| --------- | -------------------------------------- | ------------- | ----------------------------- |
+| `variant` | `"segmented" \| "underline" \| "card"` | `"segmented"` | Visual treatment of the tabs. |
+
+### TabsList
+
+| Prop      | Type                                   | Default   | Description                                   |
+| --------- | -------------------------------------- | --------- | --------------------------------------------- |
+| `variant` | `"segmented" \| "underline" \| "card"` | Inherited | Overrides the variant set on the parent Tabs. |

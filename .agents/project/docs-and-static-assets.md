@@ -1,6 +1,6 @@
 # Docs And Static Assets
 
-Use this when changing docs, file-like routes, public metadata, or generated static endpoints. For registry component-page structure and example selection, also read [writing-registry-pages.md](../projects/writing-registry-pages.md).
+Use this when changing docs, file-like routes, public metadata, or generated static endpoints. For component page authoring, MDX components, and API Reference standards, see [documentation.md](documentation.md).
 
 - Fumadocs content is authored in `content/docs`; TanStack file routes render it.
 - Docs navigation is filesystem-first: MDX files under `content/docs` become pages, and `meta.json` is optional metadata/custom ordering rather than a required manifest.

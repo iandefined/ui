@@ -20,16 +20,15 @@ Do not manually edit generated output: `src/routeTree.gen.ts`, `public/r/*`, `pu
 
 ## Cross-Cutting Guidance
 
-- Verification scope and when builds are warranted: [.agents/project/verification.md](.agents/project/verification.md)
-- Documentation, metadata, and generated static endpoints: [.agents/project/docs-and-static-assets.md](.agents/project/docs-and-static-assets.md)
-- Writing registry MDX pages and choosing examples: [.agents/projects/writing-registry-pages.md](.agents/projects/writing-registry-pages.md)
-- Animated text, icon swaps, and changing container bounds: [.agents/project/animation.md](.agents/project/animation.md)
-- Reusing project UI primitives instead of raw interactive HTML: [.agents/project/primitives.md](.agents/project/primitives.md)
+- Verification scope, tiered checks, and baseline failures: [.agents/project/verification.md](.agents/project/verification.md)
+- Interface, interaction, forms, motion, accessibility, and visual standards: [.agents/project/interface-and-interaction.md](.agents/project/interface-and-interaction.md)
+- Component documentation pages, API Reference tables, and MDX authoring vocabulary: [.agents/project/documentation.md](.agents/project/documentation.md)
 
 ## Task Entry Points
 
-- App code, routing, UI, or shared modules: [.agents/project/app.md](.agents/project/app.md)
-- shadcn registry components, previews, manifest wiring, or new entries: [.agents/project/registry-components.md](.agents/project/registry-components.md)
-- Cloudflare Workers deployment behavior: [.agents/project/cloudflare-workers.md](.agents/project/cloudflare-workers.md)
-- TanStack-specific API or framework questions: [.agents/project/tanstack-docs.md](.agents/project/tanstack-docs.md)
+- shadcn registry components, TypeScript prop standards, registry CSS, and manifest wiring: [.agents/project/registry-components.md](.agents/project/registry-components.md)
+- App code, routing, UI shell, and CSS architecture: [.agents/project/app.md](.agents/project/app.md)
+- Docs infrastructure, static asset generation, and public endpoints: [.agents/project/docs-and-static-assets.md](.agents/project/docs-and-static-assets.md)
+- Cloudflare Workers runtime and deployment behavior: [.agents/project/cloudflare-workers.md](.agents/project/cloudflare-workers.md)
+- TanStack-specific API or framework lookup: [.agents/project/tanstack-docs.md](.agents/project/tanstack-docs.md)
 - Registry launch submissions or announcements: [.agents/skills/launch-shadcn-registry/SKILL.md](.agents/skills/launch-shadcn-registry/SKILL.md)

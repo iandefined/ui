@@ -177,7 +177,16 @@ function TooltipPopup({
     TooltipPrimitive.Positioner.Props,
     "side" | "sideOffset" | "align" | "alignOffset"
   > & {
-    animationPreset?: TooltipAnimationPreset;
+    animationPreset?:
+      | "none"
+      | "scale"
+      | "fade"
+      | "slideOutside"
+      | "slideInside"
+      | "wipe"
+      | "wipeScale"
+      | "motion"
+      | "motionBlur";
     transitionPreset?: TooltipTransitionPreset;
     reduceMotion?: boolean;
     showArrow?: boolean;

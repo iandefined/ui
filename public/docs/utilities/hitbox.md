@@ -4,12 +4,10 @@ Expand hit areas of interactive elements without affecting layout.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
+npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
 ```
 
 ```css
@@ -35,145 +33,11 @@ pnpm dlx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
 }
 ```
 
+Import the stylesheet in your CSS entrypoint (e.g. `app.css` or
+`globals.css`):
+
 ```css
-@utility hitbox-debug {
-  position: relative;
-
-  &::before {
-    position: absolute;
-    top: var(--hitbox-t, 0px);
-    right: var(--hitbox-r, 0px);
-    bottom: var(--hitbox-b, 0px);
-    left: var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-    @apply border border-dashed border-info bg-info/10;
-  }
-
-  &:hover::before {
-    @apply border border-dashed border-success bg-success/10;
-  }
-}
-
-@utility hitbox {
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-* {
-  --hitbox-t: calc(--spacing(--value(integer)) * -1);
-  --hitbox-t: calc(--value([*]) * -1);
-  --hitbox-b: calc(--spacing(--value(integer)) * -1);
-  --hitbox-b: calc(--value([*]) * -1);
-  --hitbox-l: calc(--spacing(--value(integer)) * -1);
-  --hitbox-l: calc(--value([*]) * -1);
-  --hitbox-r: calc(--spacing(--value(integer)) * -1);
-  --hitbox-r: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-l-* {
-  --hitbox-l: calc(--spacing(--value(integer)) * -1);
-  --hitbox-l: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-r-* {
-  --hitbox-r: calc(--spacing(--value(integer)) * -1);
-  --hitbox-r: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-t-* {
-  --hitbox-t: calc(--spacing(--value(integer)) * -1);
-  --hitbox-t: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-b-* {
-  --hitbox-b: calc(--spacing(--value(integer)) * -1);
-  --hitbox-b: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-x-* {
-  --hitbox-l: calc(--spacing(--value(integer)) * -1);
-  --hitbox-l: calc(--value([*]) * -1);
-  --hitbox-r: calc(--spacing(--value(integer)) * -1);
-  --hitbox-r: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-y-* {
-  --hitbox-t: calc(--spacing(--value(integer)) * -1);
-  --hitbox-t: calc(--value([*]) * -1);
-  --hitbox-b: calc(--spacing(--value(integer)) * -1);
-  --hitbox-b: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
+@import "./styles/hitbox.css";
 ```
 
 ## Usage

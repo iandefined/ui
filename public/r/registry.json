@@ -236,6 +236,13 @@
       "type": "registry:style",
       "title": "Hitbox",
       "description": "Tailwind CSS v4 utilities that expand pointer hit areas without changing layout.",
+      "files": [
+        {
+          "path": "src/styles/hitbox.css",
+          "type": "registry:style",
+          "target": "styles/hitbox.css"
+        }
+      ],
       "cssVars": {
         "light": {
           "destructive-foreground": "var(--color-red-700)",
@@ -606,7 +613,6 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": ["https://ui.iandefined.com/r/text-morph.json"],
       "files": [
         {
           "path": "src/registry/base/input.tsx",
@@ -758,16 +764,10 @@
       "dependencies": ["@base-ui/react"],
       "registryDependencies": [
         "https://ui.shadcn.com/r/styles/base-luma/sidebar.json",
-        "https://ui.shadcn.com/r/styles/base-luma/breadcrumb.json",
-        "https://ui.shadcn.com/r/styles/base-luma/separator.json",
+        "https://ui.iandefined.com/r/breadcrumbs.json",
+        "https://ui.iandefined.com/r/separator.json",
         "https://ui.iandefined.com/r/label.json",
-        "https://ui.shadcn.com/r/styles/base-luma/dropdown-menu.json",
-        "https://ui.shadcn.com/r/styles/base-luma/button.json",
-        "https://ui.shadcn.com/r/styles/base-luma/input.json",
-        "https://ui.shadcn.com/r/styles/base-luma/sheet.json",
-        "https://ui.shadcn.com/r/styles/base-luma/skeleton.json",
-        "https://ui.shadcn.com/r/styles/base-luma/tooltip.json",
-        "https://ui.shadcn.com/r/styles/base-luma/use-mobile.json"
+        "https://ui.iandefined.com/r/dropdown-menu.json"
       ],
       "categories": ["sidebar"],
       "files": [

@@ -52,8 +52,8 @@ type InputOTPProps = Omit<InputOTPChildrenProps, "size"> & {
   /** Visually obscures entered characters while preserving the real input value. */
   mask?: boolean;
   /** Matches the heights of the corresponding Input sizes. */
-  size?: InputOTPSize;
-  variant?: InputOTPVariant;
+  size?: "sm" | "default" | "lg";
+  variant?: "bordered" | "underlined";
 };
 
 function InputOTP({

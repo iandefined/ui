@@ -423,15 +423,6 @@ variants such as `success` and `warning` own their color and do not accept the
 </Badge>
 ```
 
-## API Reference
-
-| Prop      | Type                                                                                                                              | Default     | Description                                             |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
-| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent" \| "dot"` | `"default"` | Controls the semantic or palette-driven appearance.     |
-| `color`   | `BadgeColor`                                                                                                                      | `"gray"`    | Requires an explicit `translucent` or `dot` variant.    |
-| `size`    | `"default" \| "compact"`                                                                                                          | `"default"` | Controls the badge height, gap, padding, and type size. |
-| `render`  | `React.ReactElement`                                                                                                              | -           | Renders another element, such as a link, as the badge.  |
-
 ## Examples
 
 ### Semantic variants
@@ -445,6 +436,15 @@ variants such as `success` and `warning` own their color and do not accept the
 ### With Link
 
 ### With Count
+
+## API Reference
+
+| Prop      | Type                                                                                                                              | Default     | Description                                             |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
+| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent" \| "dot"` | `"default"` | Controls the semantic or palette-driven appearance.     |
+| `color`   | `BadgeColor`                                                                                                                      | `"gray"`    | Requires an explicit `translucent` or `dot` variant.    |
+| `size`    | `"default" \| "compact"`                                                                                                          | `"default"` | Controls the badge height, gap, padding, and type size. |
+| `render`  | `React.ReactElement`                                                                                                              | —           | Renders another element, such as a link, as the badge.  |
 
 # Breadcrumbs
 
@@ -841,10 +841,9 @@ theme variables.
 
 ## API Reference
 
-| Prop        | Type                   | Default     | Description                        |
-| ----------- | ---------------------- | ----------- | ---------------------------------- |
-| `variant`   | `"default" \| "inset"` | `"default"` | Changes how the card is framed.    |
-| `className` | `string`               | -           | Adds styles to the card container. |
+| Prop      | Type                   | Default     | Description                     |
+| --------- | ---------------------- | ----------- | ------------------------------- |
+| `variant` | `"default" \| "inset"` | `"default"` | Changes how the card is framed. |
 
 # Checkbox
 
@@ -1687,7 +1686,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/kbd.json
 ```
 
 ```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
+npm install clsx tailwind-merge
 ```
 
 ```ts filename="lib/utils.ts"
@@ -2441,6 +2440,21 @@ Arrange the same label, value, and control parts inside or outside the slider su
 
 Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's hover and drag feedback.
 
+## API Reference
+
+### Slider
+
+Slider wraps Base UI's Slider Root and accepts its props in addition to those below.
+
+| Prop           | Type                        | Default     | Description                                          |
+| -------------- | --------------------------- | ----------- | ---------------------------------------------------- |
+| `variant`      | `"compact" \| "default"`    | `"default"` | Controls thumb and rail layout alignment.            |
+| `hideTooltip`  | `boolean`                   | `false`     | Hides the floating value tooltip during drag.        |
+| `formatValue`  | `(value: number) => string` | —           | Formats thumb value display in tooltips and values.  |
+| `showSteps`    | `boolean`                   | `false`     | Renders visible step tick dots along the track.      |
+| `reduceMotion` | `boolean`                   | `false`     | Disables spring transitions for thumb movement.      |
+| `getAriaLabel` | `(index: number) => string` | —           | Custom accessible name resolver for multiple thumbs. |
+
 # Spinner
 
 An SVG indicator for loading states.
@@ -2611,6 +2625,22 @@ Render dedicated content for each tab using `TabsPanel`.
 ### Auto Height
 
 Wrap panels with `TabsPanelsWrapper` to smoothly animate the container height when switching between panels of varying height.
+
+## API Reference
+
+### Tabs
+
+Tabs wraps Base UI's Tabs Root and accepts its props in addition to those below.
+
+| Prop      | Type                                   | Default       | Description                   |
+| --------- | -------------------------------------- | ------------- | ----------------------------- |
+| `variant` | `"segmented" \| "underline" \| "card"` | `"segmented"` | Visual treatment of the tabs. |
+
+### TabsList
+
+| Prop      | Type                                   | Default   | Description                                   |
+| --------- | -------------------------------------- | --------- | --------------------------------------------- |
+| `variant` | `"segmented" \| "underline" \| "card"` | Inherited | Overrides the variant set on the parent Tabs. |
 
 # Textarea
 
@@ -3482,7 +3512,7 @@ Copy and paste the following styles into your `globals.css` file:
 /* ╔══════════════════════════════════════════════════════════════╗
    ║                      MORE UI COLORS                          ║
    ╚══════════════════════════════════════════════════════════════╝ */
-   
+
 :root {
   --error: var(--color-red-500);
   --error-foreground: var(--color-red-700);
@@ -3587,12 +3617,10 @@ Expand hit areas of interactive elements without affecting layout.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-## Preview
-
 ## Installation
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
+npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
 ```
 
 ```css
@@ -3618,145 +3646,11 @@ pnpm dlx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
 }
 ```
 
+Import the stylesheet in your CSS entrypoint (e.g. `app.css` or
+`globals.css`):
+
 ```css
-@utility hitbox-debug {
-  position: relative;
-
-  &::before {
-    position: absolute;
-    top: var(--hitbox-t, 0px);
-    right: var(--hitbox-r, 0px);
-    bottom: var(--hitbox-b, 0px);
-    left: var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-    @apply border border-dashed border-info bg-info/10;
-  }
-
-  &:hover::before {
-    @apply border border-dashed border-success bg-success/10;
-  }
-}
-
-@utility hitbox {
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-* {
-  --hitbox-t: calc(--spacing(--value(integer)) * -1);
-  --hitbox-t: calc(--value([*]) * -1);
-  --hitbox-b: calc(--spacing(--value(integer)) * -1);
-  --hitbox-b: calc(--value([*]) * -1);
-  --hitbox-l: calc(--spacing(--value(integer)) * -1);
-  --hitbox-l: calc(--value([*]) * -1);
-  --hitbox-r: calc(--spacing(--value(integer)) * -1);
-  --hitbox-r: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-l-* {
-  --hitbox-l: calc(--spacing(--value(integer)) * -1);
-  --hitbox-l: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-r-* {
-  --hitbox-r: calc(--spacing(--value(integer)) * -1);
-  --hitbox-r: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-t-* {
-  --hitbox-t: calc(--spacing(--value(integer)) * -1);
-  --hitbox-t: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-b-* {
-  --hitbox-b: calc(--spacing(--value(integer)) * -1);
-  --hitbox-b: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-x-* {
-  --hitbox-l: calc(--spacing(--value(integer)) * -1);
-  --hitbox-l: calc(--value([*]) * -1);
-  --hitbox-r: calc(--spacing(--value(integer)) * -1);
-  --hitbox-r: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
-
-@utility hitbox-y-* {
-  --hitbox-t: calc(--spacing(--value(integer)) * -1);
-  --hitbox-t: calc(--value([*]) * -1);
-  --hitbox-b: calc(--spacing(--value(integer)) * -1);
-  --hitbox-b: calc(--value([*]) * -1);
-  position: relative;
-
-  &::before {
-    position: absolute;
-    inset: var(--hitbox-t, 0px) var(--hitbox-r, 0px) var(--hitbox-b, 0px)
-      var(--hitbox-l, 0px);
-    pointer-events: inherit;
-    content: "";
-  }
-}
+@import "./styles/hitbox.css";
 ```
 
 ## Usage

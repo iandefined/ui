@@ -403,7 +403,7 @@ function ComboboxGroupLabel({
   return (
     <ComboboxPrimitive.GroupLabel
       className={cn(
-        "sticky top-0 z-20 w-full bg-popover px-2 py-1.5 text-xs font-medium text-muted-foreground",
+        "sticky top-0 z-10 w-full bg-popover px-2 py-1.5 text-xs font-medium text-muted-foreground",
         className
       )}
       data-slot="combobox-group-label"

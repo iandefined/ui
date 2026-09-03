@@ -239,7 +239,16 @@ function PopoverPopup({
     PopoverPrimitive.Positioner.Props,
     "side" | "sideOffset" | "align" | "alignOffset"
   > & {
-    animationPreset?: PopoverAnimationPreset;
+    animationPreset?:
+      | "none"
+      | "scale"
+      | "fade"
+      | "slideOutside"
+      | "slideInside"
+      | "wipe"
+      | "wipeScale"
+      | "motion"
+      | "motionBlur";
     transitionPreset?: PopoverTransitionPreset;
     reduceMotion?: boolean;
     showArrow?: boolean;

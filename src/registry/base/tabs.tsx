@@ -31,7 +31,7 @@ function useTabs(): TabsContextValue {
 }
 
 interface TabsProps extends TabsPrimitive.Root.Props {
-  variant?: TabsVariant;
+  variant?: "segmented" | "underline" | "card";
 }
 
 function Tabs({ className, variant = "segmented", ...props }: TabsProps) {
@@ -52,7 +52,7 @@ function Tabs({ className, variant = "segmented", ...props }: TabsProps) {
 }
 
 interface TabsListProps extends TabsPrimitive.List.Props {
-  variant?: TabsVariant;
+  variant?: "segmented" | "underline" | "card";
 }
 
 function TabsList({

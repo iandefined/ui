@@ -1,16 +1,52 @@
-# App Conventions
+# Application Architecture and Platform Conventions
 
-Use this when changing app code, routing, UI, or shared modules.
+Use this guide when developing application code, routing, layouts, server routes, or shared modules outside the component registry.
 
-- Stack: TypeScript, React 19, TanStack Start, Vite, Tailwind CSS 4, shadcn/ui, Fumadocs, Cloudflare Workers, and static endpoint generation.
-- Use TanStack Router and Start APIs for navigation, routing, loaders, server functions, and server routes. This repo is not a Next.js app.
-- Put shared app code under `src/shared`.
-- Use `lucide-react` icons with the `Icon` suffix, for example `Loader2Icon`; use `react-icons/si` for brand icons.
-- Keep Node-only imports out of browser-bundled code. Vite externalizes modules such as `node:crypto`, `node:fs`, and `node:path` in client code.
-- Keep request-time Worker code free of real filesystem assumptions. Cloudflare `nodejs_compat` supports TanStack Start, but it does not make repo file walking work at the edge.
-- Avoid request-time Wasm compilation in Worker-rendered paths. For Shiki, use the JavaScript regex engine.
-- If shared component directories move, keep the `components.json` shadcn aliases in sync.
-- When a Base UI trigger should look and behave like a project button, compose the existing Button through the primitive's `render` prop instead of styling the trigger primitive directly.
-- Use a consistent layering scale: `z-10`/`z-20` for local component details and sticky side content, `z-30` for elevated non-portalled previews that must remain below app chrome, `z-40` for the sticky app header, and `z-50` for every portalled overlay primitive (including tooltips, menus, popovers, selects, and modal UI). Overlay primitives own their stacking; consumers should not add one-off z-index overrides. Keep backdrop elements before their overlay content in portal order and avoid `z-100`. A composite control whose open trigger must render above its own integrated `z-50` popup may use `z-[51]` only for that open state; do not keep ordinary page controls globally elevated.
-- Keep `globals.css` portable for installed registry components. Import app-only styles through `app.css`; put generic app utilities in `utilities.css`, registry-style utilities in their own stylesheet (for example `hitbox.css`), and repository-only selectors in `components.css`.
-- For custom SVG icons in UI components, always set explicit SVG `width`/`height` (attributes or classes); iOS Safari/WebKit can render unsized SVGs differently from Chromium even when the DOM and viewBox are correct.
+For registry items and components, see [registry-components.md](registry-components.md). For interface standards, forms, animations, stacking layers, and SVG sizing, see [interface-and-interaction.md](interface-and-interaction.md). For Cloudflare Workers runtime and deployment, see [cloudflare-workers.md](cloudflare-workers.md).
+
+---
+
+## 1. Application Technology Stack
+
+- **Framework**: TanStack Start with TanStack Router. This repository is **not** a Next.js application. Use TanStack APIs for routing, navigation, loaders, server functions, and head management.
+- **Runtime & Bundler**: Vite with React 19 and `@cloudflare/vite-plugin`.
+- **Styling**: Tailwind CSS v4 with PostCSS.
+- **Documentation**: Fumadocs MDX content layer with static pre-rendering.
+- **Deployment**: Cloudflare Workers with Worker Static Assets.
+
+---
+
+## 2. Directory Layout & Module Boundaries
+
+- `src/routes/`: TanStack file-based routes (`__root.tsx`, `index.tsx`, `docs/`, `blocks/`).
+- `src/shared/`: Shared application code:
+  * `components/`: Shell chrome, navigation, headers, footers, search dialogs, MDX components.
+  * `hooks/`: App-level React hooks (`use-config`, `use-copy-to-clipboard`).
+  * `lib/`: Registry loaders, Shiki highlighters, route helpers.
+  * `constants/`: Route paths, metadata, navigation structures.
+- `src/registry/base/`: Installable registry components and hooks (see [registry-components.md](registry-components.md)).
+- `content/docs/`: Authored Fumadocs MDX documentation pages (see [documentation.md](documentation.md)).
+- `examples/`: Reusable demo components for documentation previews.
+- `scripts/`: Build-time generators (`generate-static-assets.mjs`).
+
+---
+
+## 3. CSS Architecture and Stylesheet Separation
+
+To ensure installable components remain portable across different user projects, styling is separated into strict layers under `src/styles/`:
+
+1. **`globals.css`**: Core design system tokens (colors, radii, shadows), `@theme` extensions, and base Tailwind imports. Must remain 100% portable for external registry consumers.
+2. **`app.css`**: Application chrome, landing page hero styles, and documentation layout framing.
+3. **`utilities.css`**: Generic application-level CSS utility classes.
+4. **`components.css`**: Repository-only custom component overrides and Fumadocs layout tweaks.
+5. **Registry-specific stylesheets** (e.g. `hitbox.css`): Dedicated stylesheets that travel with registry items. See [Registry CSS Standards in registry-components.md](registry-components.md).
+
+---
+
+## 4. Platform and Runtime Boundaries
+
+- **Client vs Server Imports**: Vite externalizes Node modules (`node:crypto`, `node:fs`, `node:path`) for client bundles. Never import Node built-ins into browser-bundled components.
+- **Worker SSR Safety**: Code running on Cloudflare Workers during SSR must avoid `node:fs`, `process.cwd()`, or filesystem scanning.
+- **No Request-Time Wasm**: Shiki and syntax highlighting tools must use the JavaScript regex engine in Worker-rendered paths to avoid Wasm compilation at runtime.
+- **Icons**: Use `lucide-react` icons with the explicit `Icon` suffix (e.g. `CheckIcon`, `Loader2Icon`, `CopyIcon`). Brand icons come from `react-icons/si`.
+- **Shadcn Aliases**: If internal shared directories move, keep `components.json` path aliases synchronized.

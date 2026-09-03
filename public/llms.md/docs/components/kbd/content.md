@@ -11,7 +11,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/kbd.json
 ```
 
 ```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
+npm install clsx tailwind-merge
 ```
 
 ```ts filename="lib/utils.ts"

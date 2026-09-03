@@ -175,7 +175,16 @@ function DropdownMenuContent({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Popup> &
   DropdownMenuPositionerProps & {
-    animationPreset?: DropdownMenuAnimationPreset;
+    animationPreset?:
+      | "none"
+      | "scale"
+      | "fade"
+      | "slideOutside"
+      | "slideInside"
+      | "wipe"
+      | "wipeScale"
+      | "motion"
+      | "motionBlur";
     transitionPreset?: DropdownMenuTransitionPreset;
     reduceMotion?: boolean;
     showArrow?: boolean;
