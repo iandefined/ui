@@ -859,6 +859,20 @@
           "target": "hooks/use-fuzzy-filter.ts"
         }
       ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "A component for toggling between related panels on the same page.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/tabs.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tabs.tsx"
+        }
+      ]
     }
   ]
 }
