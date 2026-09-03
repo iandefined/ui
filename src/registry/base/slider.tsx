@@ -370,10 +370,13 @@ function SliderValueDisplay({
 }
 
 function SliderLabel({ className, ...props }: SliderLabelProps) {
+  const { variant } = useSlider();
+
   return (
     <SliderPrimitive.Label
       className={cn(
-        "text-sm text-muted-foreground transition-colors group-hover/default-slider:text-foreground",
+        "text-sm",
+        variant === "default" ? "text-foreground" : "text-muted-foreground",
         className
       )}
       data-slot="slider-label"
@@ -395,7 +398,7 @@ function SliderValue({
   return (
     <SliderPrimitive.Value
       className={cn(
-        "inline-flex shrink-0 items-center gap-1 text-sm tabular-nums text-muted-foreground transition-colors group-hover/default-slider:text-foreground",
+        "inline-flex shrink-0 items-center gap-1 text-sm tabular-nums text-muted-foreground",
         editable ? "pointer-events-auto" : "pointer-events-none",
         className
       )}
@@ -871,7 +874,7 @@ function DefaultSliderControl({
           <motion.span
             aria-hidden="true"
             animate={{ width: getDefaultFillWidth(valuePercent) }}
-            className="pointer-events-none absolute inset-y-0 start-0 z-[2] bg-muted-foreground/25 dark:bg-muted-foreground/22"
+            className="pointer-events-none absolute inset-y-0 start-0 z-[2] bg-(--slider-color)"
             data-slot="slider-indicator"
             initial={false}
             transition={reduceMotion ? { duration: 0 } : spring}
@@ -981,7 +984,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(function Slider(
       <SliderPrimitive.Root
         ref={ref}
         className={cn(
-          "w-full touch-none select-none text-sm text-muted-foreground",
+          "w-full touch-none select-none text-sm text-muted-foreground [--slider-color:color-mix(in_oklab,var(--muted-foreground)_25%,transparent)]",
           className
         )}
         data-disabled={disabled ? "" : undefined}
