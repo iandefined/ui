@@ -18,15 +18,26 @@ Do not manually edit generated output: `src/routeTree.gen.ts`, `public/r/*`, `pu
 - Record reusable rules and conventions. Do not preserve one-off implementation details that are unlikely to guide future work.
 - When guidance and the repository disagree, inspect the current code and scripts, update stale guidance, and mention any unresolved ambiguity.
 
+## Agent Delegation
+
+- Use Luna subagents at `xhigh` reasoning for parallel analysis and delegated implementation when available.
+- If Luna `xhigh` is unavailable, use the highest available Luna reasoning level; if Luna is unavailable, use Terra at `medium`.
+- Give each subagent a bounded task and exclusive file ownership. Keep shared infrastructure and final synthesis with one lead.
+
 ## Cross-Cutting Guidance
 
 - Verification scope, tiered checks, and baseline failures: [.agents/project/verification.md](.agents/project/verification.md)
+- Repository-wide TypeScript, React, imports, naming, and maintainability: [.agents/project/code-quality.md](.agents/project/code-quality.md)
 - Interface, interaction, forms, motion, accessibility, and visual standards: [.agents/project/interface-and-interaction.md](.agents/project/interface-and-interaction.md)
-- Component documentation pages, API Reference tables, and MDX authoring vocabulary: [.agents/project/documentation.md](.agents/project/documentation.md)
+- Documentation voice, page structure, examples, and concept guides: [.agents/project/docs-writing.md](.agents/project/docs-writing.md)
 
 ## Task Entry Points
 
-- shadcn registry components, TypeScript prop standards, registry CSS, and manifest wiring: [.agents/project/registry-components.md](.agents/project/registry-components.md)
+- API Reference content and prop inclusion rules: [.agents/project/api-reference.md](.agents/project/api-reference.md)
+- MDX components and authored documentation primitives: [.agents/project/mdx-authoring.md](.agents/project/mdx-authoring.md)
+- Registry manifests, dependencies, files, targets, blocks, CSS delivery, and publication: [.agents/project/registry-system.md](.agents/project/registry-system.md)
+- Registry component APIs, public prop types, state attributes, imports, and portability: [.agents/project/component-implementation.md](.agents/project/component-implementation.md)
+- Base UI wrappers, `render`, `useRender`, `mergeProps`, refs, and polymorphism: [.agents/project/base-ui-patterns.md](.agents/project/base-ui-patterns.md)
 - App code, routing, UI shell, and CSS architecture: [.agents/project/app.md](.agents/project/app.md)
 - Docs infrastructure, static asset generation, and public endpoints: [.agents/project/docs-and-static-assets.md](.agents/project/docs-and-static-assets.md)
 - Cloudflare Workers runtime and deployment behavior: [.agents/project/cloudflare-workers.md](.agents/project/cloudflare-workers.md)

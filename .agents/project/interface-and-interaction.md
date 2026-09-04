@@ -4,6 +4,8 @@ Use this guide when adding, editing, or evaluating interactive components, forms
 
 This document is the canonical repository standard for user interface conventions. It supersedes older ad-hoc guidance.
 
+For component API and portability rules, see [component-implementation.md](component-implementation.md). For Base UI composition, see [base-ui-patterns.md](base-ui-patterns.md). For Worker runtime restrictions, see [cloudflare-workers.md](cloudflare-workers.md).
+
 ---
 
 ## Standard Structure: Rule Levels
@@ -19,28 +21,22 @@ Every rule in this document is explicitly categorized into one of three levels:
 
 ### [HARD REQUIREMENT] Prefer Existing Registry Primitives
 - Always search the repository for an existing primitive before introducing raw HTML interactive elements.
-- Use `Button`, `Input`, `Textarea`, `Checkbox`, `Select`, `DropdownMenu`, `Popover`, `Tooltip`, `Collapsible`, and `Tabs` instead of raw `<button>`, `<input>`, `<textarea>`, `<select>`, `<details>`, or custom overlay markup.
+- Use a published registry primitive such as `Button`, `Input`, `Textarea`, `Checkbox`, `Select`, `DropdownMenu`, `Popover`, `Tooltip`, or `Tabs` instead of recreating its behavior with raw elements.
 - In registry examples and documentation previews, always import primitives from `@/registry/base/*` to verify that examples run against the exact public code consumers install.
 
-### [HARD REQUIREMENT] Base UI `render` Prop Composition
-- When a Base UI trigger primitive must look or behave like a project button, compose the registry `Button` through Base UI's `render` prop:
-  ```tsx
-  <ComponentTrigger render={<Button variant="outline" />}>
-    Open menu
-  </ComponentTrigger>
-  ```
-- Never write ad-hoc button utility classes (`inline-flex items-center justify-center rounded-md border...`) directly on trigger primitives merely to simulate a button.
-- Keep `nativeButton` semantics accurate: if `render` supplies a button, let it remain a button; set `nativeButton={false}` only when rendering an anchor link or non-button element.
+### [HARD REQUIREMENT] Compose Existing Trigger Treatments
+- Compose registry controls through Base UI's `render` contract instead of duplicating their visual classes on triggers.
+- Follow [base-ui-patterns.md](base-ui-patterns.md) for element semantics, `nativeButton`, prop merging, refs, and callback render forms.
 
 ### [SITUATIONAL GUIDANCE] Raw HTML Elements
-- Raw HTML is strictly reserved for non-interactive structural markup (`h1`–`h6`, `p`, `ul`, `ol`, `li`, `blockquote`, `nav`, `main`, `footer`).
-- If native browser behavior is explicitly required for an interactive element (e.g. an invisible native file input trigger), record the reason in a comment.
+- Use raw semantic elements for document structure and native form structure, including `form`, `fieldset`, `legend`, headings, paragraphs, lists, landmarks, and media.
+- Use a raw interactive control only when no published registry primitive applies or native browser behavior is explicitly required (e.g. an invisible native file input trigger). Record the reason in a comment when it is not obvious.
 
 ---
 
 ## 2. Forms and Input States
 
-### [HARD REQUIREMENT] Cubby UI 2-2-50 Input State Pattern
+### [HARD REQUIREMENT] Offset Outline Input State Pattern
 All input-like controls (`Input`, `Textarea`, `Select` trigger, `NumberField` group, `Combobox` container, `InputGroup` shell, `InputOTP` slots) follow the 2-2-50 outline pattern:
 - **Outline Geometry**: `2px solid` outline with a `2px` offset (`focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50`).
 - **Invalid State Treatment**: When a control is invalid (`aria-invalid="true"` or `data-invalid`), the destructive outline and solid destructive border MUST remain visible even when unfocused:
@@ -128,10 +124,6 @@ For overlay wipe animations built with `clip-path: inset(...)` (Select, Dropdown
 - Composite animations using GPU-friendly properties: `transform`, `opacity`, and `clip-path`.
 - Apply `transform-gpu` and `will-change-transform` to animated overlay triggers and popup content.
 - Avoid animating layout-triggering properties (`width`, `height`, `top`, `left`, `margin`, `padding`) unless using the measured-bounds clip-path pattern.
-
-### [HARD REQUIREMENT] Zero Request-Time Edge Filesystem Operations
-- Code executed during Cloudflare Worker SSR or request handling must never import `node:fs`, call `process.cwd()`, or attempt dynamic directory walking.
-- Avoid request-time Wasm compilation in Worker rendering paths; use JavaScript-based syntax highlighting or pre-generate static content.
 
 ---
 
