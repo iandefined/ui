@@ -7,13 +7,13 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-type BreadcrumbVariant = "default" | "surface";
-type BreadcrumbSize = "sm" | "md" | "lg";
-
 type BreadcrumbProps = ComponentProps<"nav"> & {
   size?: "sm" | "md" | "lg";
   variant?: "default" | "surface";
 };
+
+type BreadcrumbVariant = NonNullable<BreadcrumbProps["variant"]>;
+type BreadcrumbSize = NonNullable<BreadcrumbProps["size"]>;
 
 function Breadcrumb({
   "aria-label": ariaLabel = "Breadcrumb",

@@ -4,24 +4,11 @@ A numeric input with increment, decrement, and scrub controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `NumberField` when people need to enter a numeric value or adjust it with dedicated controls.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/number-field.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -45,7 +32,7 @@ import {
 </NumberField>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <NumberField>
@@ -79,3 +66,12 @@ Use `min` and `max` to constrain the allowed values.
 ### Formatting
 
 Pass `Intl.NumberFormat` options through `format` to display values such as currency.
+
+## API Reference
+
+`NumberField` and its parts wrap the corresponding [Base UI Number Field primitives](https://base-ui.com/react/components/number-field). Supported Base UI props pass through.
+
+### Props
+
+Sets the styled size. A numeric value keeps the default visual size for
+compatibility with Base UI sizing.

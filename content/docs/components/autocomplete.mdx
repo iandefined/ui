@@ -3,58 +3,15 @@ title: Autocomplete
 description: A filterable text input that suggests matching options while accepting free-form text.
 ---
 
+Use `Autocomplete` when users benefit from suggestions but may enter any text.
+
+## Preview
+
 <ComponentPreview name="autocomplete/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/autocomplete.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-<Step>Install the Input, Label, and Scroll Area registry components:</Step>
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json https://ui.iandefined.com/r/scroll-area.json
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/autocomplete.tsx"
-  title="components/ui/autocomplete.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="autocomplete" />
 
 ## Usage
 
@@ -67,9 +24,7 @@ import {
   AutocompleteList,
   AutocompletePopup,
 } from "@/components/ui/autocomplete";
-```
 
-```tsx
 const tags = ["feature", "fix", "bug", "docs"];
 
 <Autocomplete items={tags}>
@@ -87,145 +42,129 @@ const tags = ["feature", "fix", "bug", "docs"];
 </Autocomplete>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<Autocomplete>
-  <AutocompleteLabel />
-  <AutocompleteInput />
-  <AutocompletePopup>
-    <AutocompleteEmpty />
-    <AutocompleteList>
-      <AutocompleteGroup>
-        <AutocompleteGroupLabel />
-        <AutocompleteCollection>
-          <AutocompleteItem />
-        </AutocompleteCollection>
-      </AutocompleteGroup>
-      <AutocompleteSeparator />
-    </AutocompleteList>
-  </AutocompletePopup>
-</Autocomplete>
-```
+Place the input and popup inside `Autocomplete`; use groups, collections, and separators to organize suggestions.
 
 ## Examples
 
 ### Auto Highlight
 
-Set `autoHighlight` on `AutocompleteRoot` (or `<Autocomplete>`) to automatically highlight the first matching suggestion while typing.
+Highlight the first matching suggestion while typing.
 
 <ComponentPreview name="autocomplete/auto-highlight" />
 
 ### Clearable Input
 
-Set `showClear` on `AutocompleteInput` to display an inline clear button when text has been entered.
+Show an inline clear action after text is entered.
 
 <ComponentPreview name="autocomplete/clear" />
 
 ### Trigger and Clear
 
-Set both `showTrigger` and `showClear` on `AutocompleteInput` to display both a dropdown toggle and a clear button.
+Show both the popup trigger and clear action.
 
 <ComponentPreview name="autocomplete/trigger" />
 
 ### Grouped Options
 
-Group related suggestions with `AutocompleteGroup`, `AutocompleteGroupLabel`, and `AutocompleteCollection`.
+Organize related suggestions into groups.
 
 <ComponentPreview name="autocomplete/grouped" />
 
 ### Inline Suggestions
 
-Set `mode="both"` on `AutocompleteRoot` to complete the input value inline with the first matching suggestion.
+Complete with the first matching suggestion.
 
 <ComponentPreview name="autocomplete/inline" />
 
 ### Limited Results
 
-Set `limit` on `AutocompleteRoot` to constrain the maximum number of suggestions rendered in the popup.
+Constrain the number of rendered suggestions.
 
 <ComponentPreview name="autocomplete/limit" />
 
 ### Async Loading
 
-Filter and fetch results asynchronously with debounce, loading indicator, and custom status messages using `useAutocompleteFilter`.
+Filter asynchronous results with status feedback.
 
 <ComponentPreview name="autocomplete/async" />
 
 ### Fuzzy Search
 
-Combine with `useFuzzyFilter` from `@/registry/base/use-fuzzy-filter` for loose fuzzy matching across titles, categories, and descriptions.
+Use loose matching across option fields.
 
 <ComponentPreview name="autocomplete/fuzzy" />
 
 ### Custom Matching Strategy
 
-Use `useAutocompleteFilter` to apply string matching strategies like `startsWith`, `contains`, or `endsWith` with locale-aware sensitivity options.
+Choose a string-matching strategy.
 
 <ComponentPreview name="autocomplete/use-filter" />
 
 ### Result Counter and Stats
 
-Use `useAutocompleteFilteredItems` inside an Autocomplete component tree to display real-time result counters, match percentages, or contextual summaries.
+Read the filtered item list for contextual summaries.
 
 <ComponentPreview name="autocomplete/use-filtered-items" />
 
 ## API Reference
 
-The Autocomplete component is built on top of [Base UI's Autocomplete](https://base-ui.com/react/components/autocomplete). All Base UI props are supported.
+`Autocomplete` wraps [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete). Supported Base UI props pass through.
 
-### AutocompleteInput
+### AutocompleteInput Props
 
-Text input with optional trigger and clear actions. Wraps Base UI's `Autocomplete.Input` with styled input and action buttons.
+<ApiPropsList>
+  <ApiProp name="showTrigger" fullType="boolean" defaultValue="false">
+    Shows a popup toggle button.
+  </ApiProp>
+  <ApiProp name="showClear" fullType="boolean" defaultValue="false">
+    Shows a clear action after text is entered.
+  </ApiProp>
+  <ApiProp name="isClearable" fullType="boolean" defaultValue="false">
+    Alias for `showClear`.
+  </ApiProp>
+</ApiPropsList>
 
-| Prop          | Type      | Default | Description                                                   |
-| ------------- | --------- | ------- | ------------------------------------------------------------- |
-| `showTrigger` | `boolean` | `false` | Shows a toggle button to open or close the suggestions popup. |
-| `showClear`   | `boolean` | `false` | Shows a clear button to reset input value when non-empty.     |
-| `isClearable` | `boolean` | `false` | Alias for `showClear`.                                        |
+### AutocompletePopup Props
 
-### AutocompletePopup
+<ApiPropsList>
+  <ApiProp
+    name="side"
+    fullType='"top" | "bottom"'
+    simpleType="string"
+    defaultValue='"bottom"'
+  >
+    Sets the preferred side of the input.
+  </ApiProp>
+  <ApiProp name="sideOffset" fullType="number" defaultValue="0">
+    Sets the distance from the input in pixels.
+  </ApiProp>
+  <ApiProp
+    name="align"
+    fullType='"start" | "center" | "end"'
+    simpleType="string"
+    defaultValue='"center"'
+  >
+    Sets alignment relative to the input.
+  </ApiProp>
+  <ApiProp name="alignOffset" fullType="number" defaultValue="0">
+    Offsets the popup along the alignment axis.
+  </ApiProp>
+</ApiPropsList>
 
-Popup container presenting suggestions with exit and entry animations. Can be used standalone or within `AutocompletePositioner`.
+### AutocompleteList Props
 
-| Prop         | Type                           | Default    | Description                                                  |
-| ------------ | ------------------------------ | ---------- | ------------------------------------------------------------ |
-| `side`       | `"top" \| "bottom"`            | `"bottom"` | Preferred side relative to anchor.                           |
-| `sideOffset` | `number`                       | `0`        | Distance in pixels between the input and the dropdown popup. |
-| `align`      | `"start" \| "center" \| "end"` | `"center"` | Alignment relative to anchor.                                |
-
-### AutocompleteList
-
-Scrollable list container wrapping `ScrollArea` and Base UI's `Autocomplete.List`.
-
-| Prop            | Type                                             | Default      | Description                                                       |
-| --------------- | ------------------------------------------------ | ------------ | ----------------------------------------------------------------- |
-| `scrollShadow`  | `"vertical" \| "horizontal" \| "both" \| "none"` | `"vertical"` | Directional gradient shadow indicating hidden scrollable content. |
-| `hideScrollbar` | `boolean`                                        | `false`      | Hides the custom scrollbar while preserving scroll functionality. |
-
-### Hooks
-
-#### `useAutocompleteFilter`
-
-Provides built-in string filter matchers (`contains`, `startsWith`, `endsWith`) from Base UI for custom filtering workflows.
-
-```tsx
-import { useAutocompleteFilter } from "@/components/ui/autocomplete";
-
-const { contains, startsWith, endsWith } = useAutocompleteFilter({
-  sensitivity: "base",
-});
-```
-
-#### `useAutocompleteFilteredItems`
-
-Returns the currently filtered items array directly from within an `<AutocompleteRoot>` context.
-
-```tsx
-import { useAutocompleteFilteredItems } from "@/components/ui/autocomplete";
-
-function MatchCount() {
-  const filteredItems = useAutocompleteFilteredItems<ItemType>();
-  return <span>{filteredItems.length} results</span>;
-}
-```
+<ApiPropsList>
+  <ApiProp
+    name="scrollShadow"
+    fullType='"vertical" | "horizontal" | "both" | "none"'
+    simpleType="string"
+    defaultValue='"vertical"'
+  >
+    Shows gradients for hidden scrollable content.
+  </ApiProp>
+  <ApiProp name="hideScrollbar" fullType="boolean" defaultValue="false">
+    Hides the scrollbar while preserving scrolling.
+  </ApiProp>
+</ApiPropsList>

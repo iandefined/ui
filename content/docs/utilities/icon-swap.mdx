@@ -3,49 +3,13 @@ title: Icon Swap
 description: Animate between keyed icons with a consistent scale, blur, and fade transition.
 ---
 
+`IconSwap` animates between keyed icons with one consistent scale, blur, fade, and spring transition. Use it when an icon represents a changing semantic state, such as copying, loading, or success.
+
 <ComponentPreview name="icon-swap/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-The CLI also installs the registry `Button` used by the default example.
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the [Button](/docs/components/button) registry dependency:</Step>
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json
-```
-
-<Step>Install Motion:</Step>
-
-```bash
-npm install motion
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/icon-swap.tsx"
-  title="components/ui/icon-swap.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="icon-swap" />
 
 ## Usage
 
@@ -66,3 +30,16 @@ When an interaction changes both an icon and text, derive both from the same sta
 ## Reset After Inactivity
 
 For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
+
+## API Reference
+
+`IconSwap` renders a Motion `span`. Supported [Motion span props](https://motion.dev/docs/react-motion-component) pass through to that element.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="state" fullType="React.Key" required>
+    Keys the currently displayed icon. Change it whenever the icon's semantic
+    state changes.
+  </ApiProp>
+</ApiPropsList>

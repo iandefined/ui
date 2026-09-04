@@ -3,52 +3,15 @@ title: Switch
 description: A draggable toggle with spring-based thumb animation.
 ---
 
+Use `Switch` for an immediate on or off setting.
+
+## Preview
+
 <ComponentPreview name="switch/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/switch.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react framer-motion clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/switch.tsx"
-  title="components/ui/switch.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="switch" />
 
 ## Usage
 
@@ -87,3 +50,23 @@ const [checked, setChecked] = useState(false);
 ### Custom Card Style
 
 <ComponentPreview name="switch/custom-card-style" />
+
+## API Reference
+
+`Switch` wraps the [Base UI Switch](https://base-ui.com/react/components/switch). Supported Base UI props pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg"'
+    simpleType="string"
+    defaultValue='"default"'
+  >
+    Sets the switch size.
+  </ApiProp>
+  <ApiProp name="thumbTransition" fullType="Transition" simpleType="object">
+    Overrides the Motion transition used for thumb movement.
+  </ApiProp>
+</ApiPropsList>

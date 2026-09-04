@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-type TabsVariant = "segmented" | "underline" | "card";
+type TabsVariant = NonNullable<TabsProps["variant"]>;
 
 function isValidVariant(variant: TabsVariant): variant is TabsVariant {
   return (
@@ -96,7 +96,7 @@ function TabsList({
 }
 
 interface TabsTriggerProps extends TabsPrimitive.Tab.Props {
-  variant?: TabsVariant;
+  variant?: "segmented" | "underline" | "card";
 }
 
 function TabsTrigger({

@@ -4,30 +4,11 @@ A styled text input built on Base UI.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Input` for concise, single-line text entry in forms and controls.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json
-```
-
-The CLI also installs `TextMorph` and its Calligraph and Motion dependencies for the animated controlled example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -41,12 +22,28 @@ import { Input } from "@/components/ui/input";
 
 ### Sizes
 
+Choose a size that aligns with adjacent controls.
+
 ### Input Types
+
+Use the native `type` attribute for specialized input behavior.
 
 ### File
 
+Use `type="file"` to accept selected files.
+
 ### Disabled
+
+Prevent interaction while retaining the entered value.
 
 ### Controlled
 
-The value preview uses the shared `TextMorph` abstraction instead of a component-specific text animation.
+Control the value from application state.
+
+## API Reference
+
+`Input` wraps [Base UI Input](https://base-ui.com/react/components/input). Supported Base UI and native input props pass through.
+
+### Props
+
+Sets a preset height, or a custom height in pixels.

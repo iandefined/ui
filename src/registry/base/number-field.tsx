@@ -6,7 +6,7 @@ import { tv } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
-type NumberFieldSize = "sm" | "default" | "lg";
+type NumberFieldSize = Exclude<NonNullable<NumberFieldProps["size"]>, number>;
 
 interface NumberFieldContextValue {
   size: NumberFieldSize;
@@ -92,7 +92,7 @@ export interface NumberFieldGroupProps extends Omit<
   React.ComponentProps<typeof NumberFieldPrimitive.Group>,
   "size"
 > {
-  size?: NumberFieldSize | number;
+  size?: "sm" | "default" | "lg" | number;
 }
 
 const NumberFieldGroup = ({
@@ -124,7 +124,7 @@ export interface NumberFieldInputProps extends Omit<
   React.ComponentProps<typeof NumberFieldPrimitive.Input>,
   "size"
 > {
-  size?: NumberFieldSize | number;
+  size?: "sm" | "default" | "lg" | number;
 }
 
 const NumberFieldInput = ({
@@ -154,7 +154,7 @@ export interface NumberFieldButtonProps extends Omit<
   React.ComponentProps<typeof NumberFieldPrimitive.Decrement>,
   "size"
 > {
-  size?: NumberFieldSize | number;
+  size?: "sm" | "default" | "lg" | number;
 }
 
 const NumberFieldDecrement = ({

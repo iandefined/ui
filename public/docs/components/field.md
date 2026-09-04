@@ -1,33 +1,18 @@
 # Field
 
-An accessible form field with automatic labels, descriptions, validation state, and error messages.
+An accessible field composition primitive for labels, descriptions, validation state, and errors.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Field` with either a native `<form>` or the TanStack Form `Form` adapter. The [Forms guide](/docs/forms) explains both paths and control-specific labeling patterns.
+
+## Preview
+
 ## Installation
 
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/field.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
 ## Usage
+
+Place a label and one control inside `Field`. Render a description while the field is valid and replace it with the active error when validation fails.
 
 ```tsx
 import {
@@ -37,62 +22,74 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-```
 
-```tsx
-const invalid = Boolean(error);
-
-<Field invalid={invalid} name="email">
+<Field invalid={Boolean(error)} name="email">
   <FieldLabel>Email</FieldLabel>
   <FieldControl type="email" />
-  {invalid ? (
+  {error ? (
     <FieldError match>{error}</FieldError>
   ) : (
-    <FieldDescription>We only use this for account updates.</FieldDescription>
+    <FieldDescription>We use this for account updates.</FieldDescription>
   )}
 </Field>;
 ```
 
-## Anatomy
+## Composition
+
+`FieldControl` is an Input-styled Base UI control. For registry controls with their own root or trigger, place the control inside `Field` and use the control's label pattern:
+
+- Wrap Checkbox and Switch in `FieldLabel` for an implicit label.
+- Put Radio Group options in `FieldItem` and use `Fieldset` for the group legend.
+- Use `SliderLabel` for Slider and the trigger label supplied by Select or Combobox.
+
+Pass `dirty`, `invalid`, and `touched` from TanStack Form field metadata. `Field` propagates these states, and its description/error primitives associate the active message with the control.
 
 ```tsx
-<Field>
-  <FieldLabel />
-  <FieldControl />
-  {invalid ? (
-    <FieldErrorSlot>
-      <FieldError />
-    </FieldErrorSlot>
-  ) : (
-    <FieldDescription />
-  )}
-  <FieldItem />
-  <FieldValidity />
+<Field
+  dirty={field.state.meta.isDirty}
+  invalid={Boolean(error)}
+  name={field.name}
+  touched={field.state.meta.isTouched}
+>
+  {/* control and active message */}
 </Field>
 ```
-
-`FieldControl` uses the same variants as Input. You can also place an existing Base UI control inside `Field`, which makes the component useful around Checkbox, Switch, Radio Group, Slider, and other registry controls.
 
 ## Examples
 
 ### Validation
 
-Map validation state from a form library into `invalid`, `dirty`, and `touched`. Show either the helper or the error directly after the control so the message has one clear meaning. Field automatically applies `aria-invalid` and associates the active message through `aria-describedby`; errors also announce with `role="alert"`.
+Map external validation state to `Field` and animate an error into the active message slot.
 
 ### Checkbox and Switch
 
-Place Checkbox or Switch inside `FieldLabel` for an implicit accessible label.
+Wrap each control in its label to preserve an accessible click target.
 
 ### Radio Group
 
-Combine Field, Fieldset, and `FieldItem` to label each option in a related choice group.
+Combine `Field`, `Fieldset`, and `FieldItem` for a related single-choice group.
 
 ### Slider
 
-Use the Slider's own `SliderLabel` because Slider is a trigger-based control.
+Use Slider's own label and value display for a trigger-based range control.
 
 ### Disabled
 
-Disabling Field cascades the disabled state to its Base UI controls.
+Disable Field to cascade the state to its Base UI controls.
 
-`FieldErrorSlot` uses `interpolate-size` for its height transition. Browsers without support still show and hide the error correctly, without the height animation.
+## Accessibility
+
+Keep one active description or error directly after the control. `FieldError` uses `role="alert"`, while `FieldErrorSlot` preserves that association during its reduced-motion-safe transition. Do not use label color alone to communicate an error.
+
+## API Reference
+
+`Field` and its Base UI parts accept their underlying Base UI props in addition to the registry-owned behavior below.
+
+Exposes dirty state to the field and its descendants.
+Exposes invalid state and associates the active error with the control.
+Identifies the field for label and message association.
+Exposes touched state to the field and its descendants.
+
+### FieldError
+
+Shows the error only when the enclosing field is invalid.

@@ -1,19 +1,79 @@
 <p align="center">
-  <img src="https://ui.iandefined.com/og.png" alt="tanstartercn" />
+  <img src="https://ui.iandefined.com/og.png" alt="iandefined/ui" width="100%" />
 </p>
 
 <p align="center">
-  Thoughtful components for product engineers.
+  <strong>Thoughtful components for product engineers and AI coding assistants.</strong>
+  <br />
+  Built with Base UI, Tailwind CSS v4, Motion, and TanStack Start.
   <br />
   <br />
   <a href="https://ui.iandefined.com">Documentation</a>
   ·
-  <a href="https://ui.iandefined.com/r/registry.json">Registry</a>
+  <a href="https://ui.iandefined.com/r/registry.json">Registry Manifest</a>
   ·
   <a href="https://ui.iandefined.com/llms.txt">LLMS.txt</a>
+  ·
+  <a href="https://ui.iandefined.com/blocks">Blocks Catalog</a>
 </p>
 
-## Development Setup
+---
+
+## Overview
+
+`iandefined/ui` is an open-source registry of accessible, animated React 19 components distributed through the [shadcn registry](https://ui.shadcn.com/docs/registry). Every component installs directly into your codebase so you have 100% ownership, zero runtime package lock-in, and complete freedom to customize.
+
+## Why iandefined/ui?
+
+- **Human Design, AI Compatible**: Clean contracts, predictable prop interfaces, stable `data-slot` hooks, and native machine-readable endpoints (`/llms.txt`, `/llms-full.txt`, and `/.well-known/agent-skills/index.json`) empower both product engineers and AI agents to build and refactor interfaces reliably.
+- **Base UI Primitives**: Built on [Base UI](https://base-ui.com) for unstyled accessibility, native HTML attribute forwarding, and clean render-prop composition (`render` and `useRender`), bypassing older `asChild` and cloneElement limitations.
+- **Crafted Motion**: Natural spring physics and micro-interactions powered by [Motion](https://motion.dev), with built-in `prefers-reduced-motion` compliance across all animated states.
+- **Tailwind CSS v4**: Styled using modern `@theme` OKLCH color tokens, container queries, and CSS variables.
+- **Copy, Paste, Own**: Components install directly into your app using the shadcn CLI. No runtime npm dependencies on a proprietary UI framework.
+
+---
+
+## Component Ecosystem
+
+The registry is divided into four functional layers:
+
+1. **Core UI**: Primitive interactive components including `Button`, `Badge`, `Card`, `Checkbox`, `Switch`, `Slider`, `Radio Group`, `Tooltip`, `Popover`, `Select`, `Dropdown Menu`, `Tabs`, `Accordion`, and `Breadcrumbs`.
+2. **Form System**: Comprehensive form composition integrating native `<form>` constraints and TanStack Form workflows with `Form`, `Field`, `Fieldset`, `Input`, `Textarea`, `Number Field`, `Input OTP`, `Input Group`, `Combobox`, and `Autocomplete`.
+3. **Blocks**: Multi-file, production-ready compositions like `Sidebar 01` (under `src/registry/base/blocks/<category>/<number>/`) featuring dashboard routing, stateful navigation, and responsive layouts.
+4. **Motion Utilities**: Specialized interactive utilities including `Hitbox` for accessible click targets, `IconSwap` for stateful icon morphs, and `TextMorph` for smooth text transitions.
+
+---
+
+## Quick Start
+
+Install any component directly into your project:
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
+```
+
+Or install complete multi-file blocks:
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/sidebar-01.json
+```
+
+---
+
+## AI & Agent Discovery
+
+This repository serves first-class endpoints for AI coding assistants and LLM agents:
+
+| Endpoint                                                                                                | Description                                                                      |
+| ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`/llms.txt`](https://ui.iandefined.com/llms.txt)                                                       | Compact index of all documentation pages, components, and guides.                |
+| [`/llms-full.txt`](https://ui.iandefined.com/llms-full.txt)                                             | Full concatenated markdown documentation for system prompts and context windows. |
+| [`/r/registry.json`](https://ui.iandefined.com/r/registry.json)                                         | Complete shadcn registry manifest with dependencies and file target mappings.    |
+| [`/.well-known/agent-skills/index.json`](https://ui.iandefined.com/.well-known/agent-skills/index.json) | Structured agent skill discovery manifest.                                       |
+
+---
+
+## Local Development
 
 Install dependencies:
 
@@ -21,132 +81,42 @@ Install dependencies:
 pnpm install
 ```
 
-Start the development server:
+Start the Vite development server:
 
 ```bash
 pnpm dev
 ```
 
-Build generated registry files:
+Build installable registry JSON (`public/r/*`):
 
 ```bash
 pnpm registry:build
 ```
 
-Build generated docs, LLM files, sitemap, OpenAPI, and discovery files:
+Build static documentation and LLM assets (`public/docs/*`, `public/llms*`):
 
 ```bash
 pnpm static:build
 ```
 
-Run checks:
+Run tests and verification:
 
 ```bash
-pnpm typecheck
-pnpm check
+pnpm typecheck   # Type checking with TypeScript
+pnpm docs:check   # Validate all 42 MDX pages and registry mappings
+pnpm check        # Format checking and Biome/Vite+ linter
+pnpm fix          # Auto-format and auto-fix linter issues
 ```
 
-Create a production build:
+Build and preview production bundle:
 
 ```bash
 pnpm build
-```
-
-Preview the production build locally:
-
-```bash
 pnpm preview
 ```
 
-Deploy to Cloudflare Workers (this also runs the production build):
-
-```bash
-pnpm deploy
-```
-
-## Adding Registry Components
-
-Put installable component source under the default style folder:
-
-```txt
-src/registry/base/my-component.tsx
-```
-
-Use shadcn-compatible imports in registry source. Installed code should import from paths that exist in a user's app, such as `@/lib/utils` and `@/components/ui/button`.
-
-Add the item to `registry.json`:
-
-```json
-{
-  "name": "my-component",
-  "type": "registry:ui",
-  "title": "My Component",
-  "description": "A concise description of what it provides.",
-  "files": [
-    {
-      "path": "src/registry/base/my-component.tsx",
-      "type": "registry:ui",
-      "target": "components/ui/my-component.tsx"
-    }
-  ]
-}
-```
-
-Then add a docs page under `content/docs/components/my-component.mdx` and wire any preview component in `src/shared/lib/registry.ts`.
-
-Do not edit generated output by hand:
-
-- `src/routeTree.gen.ts`
-- `public/r/*`
-- `.source/*`
-- `.tanstack/*`
-
-Regenerate generated files with the matching script instead.
-
-## Usage
-
-Users install published registry components with the shadcn CLI:
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json
-```
-
-## Project Structure
-
-```
-├── src/
-│   ├── registry/
-│   │   └── base/           # Registry component source
-│   │       └── button.tsx
-│   ├── routes/             # TanStack Start routes
-│   ├── shared/             # Shared components, hooks, lib, constants, SEO
-│   └── styles/             # Global CSS and themes
-├── examples/               # Reusable component previews
-├── scripts/                # Build-time static asset generation
-├── registry.json           # Component registry manifest
-├── content/docs/           # Documentation (MDX)
-└── public/r/               # Built registry files (auto-generated)
-```
-
-## Scripts
-
-| Command               | Description                                                   |
-| --------------------- | ------------------------------------------------------------- |
-| `pnpm dev`            | Start the development server on port 3000.                    |
-| `pnpm typecheck`      | Type-check the project without writing output.                |
-| `pnpm check`          | Check formatting and linting.                                 |
-| `pnpm fix`            | Apply available formatting and lint fixes.                    |
-| `pnpm registry:build` | Rebuild `public/r` from `registry.json`.                      |
-| `pnpm static:build`   | Generate static docs, discovery, sitemap, and OpenAPI assets. |
-| `pnpm build`          | Build the registry, static assets, and production app.        |
-| `pnpm preview`        | Serve the production build locally.                           |
-| `pnpm cf-typegen`     | Regenerate Cloudflare Worker bindings.                        |
-| `pnpm deploy`         | Build and deploy to Cloudflare Workers.                       |
-
-## Acknowledgements
-
-- This project was originally forked from [tanstartercn](https://tanstartercn.tsu.moe/).
+---
 
 ## License
 
-[MIT](./LICENSE)
+MIT © [Ian de Jesus](https://iandefined.com)

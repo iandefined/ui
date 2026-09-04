@@ -3,7 +3,7 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type * as React from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -23,8 +23,9 @@ const buttonGroupVariants = tv({
   },
 });
 
-type ButtonGroupProps = React.ComponentProps<"div"> &
-  VariantProps<typeof buttonGroupVariants>;
+type ButtonGroupProps = React.ComponentProps<"div"> & {
+  orientation?: "horizontal" | "vertical";
+};
 
 function ButtonGroup({
   className,

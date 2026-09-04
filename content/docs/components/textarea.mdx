@@ -3,46 +3,15 @@ title: Textarea
 description: A styled multiline text control built on Base UI Field.
 ---
 
+Use `Textarea` when people need to enter multiple lines of text.
+
+## Preview
+
 <ComponentPreview name="textarea/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList><TabsTrigger value="cli">Command</TabsTrigger><TabsTrigger value="manual">Manual</TabsTrigger></TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/textarea.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy the component into your project.</Step>
-
-<ComponentSource src="src/registry/base/textarea.tsx" title="components/ui/textarea.tsx" />
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="textarea" />
 
 ## Usage
 
@@ -65,3 +34,20 @@ import { Textarea } from "@/components/ui/textarea";
 ### Controlled
 
 <ComponentPreview name="textarea/controlled" />
+
+## API Reference
+
+`Textarea` wraps the native `<textarea>` element. Standard textarea attributes pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg" | number'
+    simpleType="string | number"
+    defaultValue='"default"'
+  >
+    Sets the textarea's padding and text size.
+  </ApiProp>
+</ApiPropsList>

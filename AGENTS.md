@@ -35,7 +35,7 @@ Do not manually edit generated output: `src/routeTree.gen.ts`, `public/r/*`, `pu
 
 - API Reference content and prop inclusion rules: [.agents/project/api-reference.md](.agents/project/api-reference.md)
 - MDX components and authored documentation primitives: [.agents/project/mdx-authoring.md](.agents/project/mdx-authoring.md)
-- Registry manifests, dependencies, files, targets, blocks, CSS delivery, and publication: [.agents/project/registry-system.md](.agents/project/registry-system.md)
+- Registry manifests, dependencies, files, targets, block organization and categorization, CSS delivery, and publication: [.agents/project/registry-system.md](.agents/project/registry-system.md)
 - Registry component APIs, public prop types, state attributes, imports, and portability: [.agents/project/component-implementation.md](.agents/project/component-implementation.md)
 - Base UI wrappers, `render`, `useRender`, `mergeProps`, refs, and polymorphism: [.agents/project/base-ui-patterns.md](.agents/project/base-ui-patterns.md)
 - App code, routing, UI shell, and CSS architecture: [.agents/project/app.md](.agents/project/app.md)

@@ -5,7 +5,6 @@
   "description": "A visual or semantic divider with horizontal and vertical orientations.",
   "dependencies": [
     "@base-ui/react",
-    "tailwind-variants",
     "clsx",
     "tailwind-merge"
   ],

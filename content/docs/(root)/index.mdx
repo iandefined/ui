@@ -1,88 +1,53 @@
 ---
 title: Introduction
-description: Build, document, and deploy this custom shadcn registry.
+description: A modern shadcn registry built on Base UI, Tailwind CSS v4, and Motion for product engineers and AI coding assistants.
 ---
 
-This repository publishes a custom [shadcn registry](https://ui.shadcn.com/docs/registry) with a documentation site, live component previews, generated registry JSON, and machine-readable docs for AI coding assistants.
+`iandefined/ui` is an open-source registry of accessible, animated UI components crafted for product engineers. Built on [Base UI](https://base-ui.com), [Tailwind CSS v4](https://tailwindcss.com), [Motion](https://motion.dev), and [TanStack Start](https://tanstack.com/start), every item is distributed through a custom [shadcn registry](https://ui.shadcn.com/docs/registry) so you copy, paste, and own your source code.
 
-The app is a static-hostable TanStack Start SPA deployed to Cloudflare Workers with Worker Static Assets. Component docs are authored in MDX with Fumadocs, registry items are built from `registry.json`, and generated files are served from stable public URLs.
+## Why iandefined/ui?
 
-## What this repo includes
+Modern web interfaces need accessible foundations, natural motion, and clean architecture without heavy framework lock-in or fragile abstraction layers.
 
-- **Fumadocs documentation** in `content/docs`, discovered from the filesystem.
-- **shadcn registry output** generated from `registry.json` into `public/r`.
-- **Live component previews** that can render examples from `examples` or inline MDX.
-- **A single `base` registry namespace** for new components, plus the current placeholder item.
-- **Static AI documentation endpoints** such as `/llms.txt`, `/llms-full.txt`, and `/llms.md/...`.
-- **Cloudflare Workers deployment** using Worker Static Assets.
+- **Human Design, AI Compatible**: Component contracts feature predictable prop surfaces, semantic `data-slot` hooks, and machine-readable endpoints (`/llms.txt`, `/llms-full.txt`, and `/.well-known/agent-skills/index.json`). Both human engineers and AI coding assistants can generate, refactor, and reason about interface code with precision.
+- **Base UI Primitives, Not Radix Legacy**: Base UI provides unstyled accessibility, native HTML attribute forwarding, and clean render-prop composition through `render` and `useRender`. This avoids the `asChild` cloning pitfalls and ref issues common to older primitive libraries.
+- **Motion and Polish Built-In**: Micro-interactions, spring physics, and animated transitions are designed as core primitives rather than afterthought overlays, respecting `prefers-reduced-motion` across every animated component.
+- **Full Code Ownership**: Components install directly into your project via the `shadcn` CLI. There are no runtime package dependencies on a proprietary UI library, no theme lock-in, and no closed-source black boxes.
 
-## Tech Stack
+## Component Ecosystem
 
-- `TanStack Start`
-- `TanStack Router`
-- `React 19` + `TypeScript`
-- `Vite`
-- `Tailwind CSS 4`
-- `Fumadocs`
-- `shadcn/ui`
-- `motion`
-- `shiki` + `rehype-pretty-code`
-- `Cloudflare Workers`
+The registry is organized across four functional layers:
 
-## How It Works
+- **Core UI**: Foundational interactive primitives including `Button`, `Badge`, `Card`, `Checkbox`, `Switch`, `Slider`, `Radio Group`, `Tooltip`, `Popover`, `Select`, `Dropdown Menu`, `Tabs`, `Accordion`, and `Breadcrumbs`.
+- **Form System**: Integrated form composition pairing native `<form>` semantics and TanStack Form workflows with `Form`, `Field`, `Fieldset`, `Input`, `Textarea`, `Number Field`, `Input OTP`, `Input Group`, `Combobox`, and `Autocomplete`.
+- **Blocks**: Multi-file, production-ready application layouts such as `Sidebar 01` (located under `src/registry/base/blocks/<category>/<number>/`) that demonstrate complete compositions with dashboard routing, navigation state, and responsive behavior.
+- **Motion Utilities**: Standalone styling and animation primitives including `Hitbox` for accessible touch targets, `IconSwap` for stateful icon transitions, and `TextMorph` for fluid text animations.
 
-1. Add or edit registry source in `src/registry/base`.
-2. Add the registry item to `registry.json`.
-3. Document the component in `content/docs/components`.
-4. Render a preview with `ComponentPreview`.
-5. Build the generated registry files with `pnpm registry:build`.
-6. Build generated docs and agent files with `pnpm static:build`.
+## Quick Start
 
-Once deployed, users can install registry items with the shadcn CLI:
+Install individual components into your project using the official `shadcn` CLI:
 
 ```bash
 npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
-## Important Paths
-
-- `content/docs` - MDX documentation pages.
-- `examples` - reusable preview examples.
-- `src/registry/base` - installable registry component source.
-- `src/shared/components` - app and docs UI.
-- `src/shared/components/ui` - complete shadcn/ui primitives used by the site.
-- `src/shared/lib/registry.ts` - preview/component lookup wiring.
-- `registry.json` - shadcn registry manifest.
-- `public/r` - generated registry JSON files.
-- `scripts/generate-static-assets.mjs` - generated docs, LLM, sitemap, and discovery files.
-
-Do not edit generated output by hand. Regenerate it with the matching script instead.
-
-## Public Endpoints
-
-- `/r/registry.json` - registry index.
-- `/r/button.json` - individual registry item.
-- `/llms.txt` - quick AI docs index.
-- `/llms-full.txt` - complete generated docs.
-- `/openapi.json` - machine-readable endpoint catalog.
-- `/.well-known/agent-skills/index.json` - agent skill discovery.
-
-The production origin comes from `FALLBACK_SITE_ORIGIN` in `src/shared/constants/site.ts`, unless `SITE_URL` is provided at build time.
-
-## Common Commands
+Or install complete multi-file blocks:
 
 ```bash
-pnpm dev
-pnpm registry:build
-pnpm static:build
-pnpm typecheck
-pnpm check
-pnpm build
-pnpm deploy
+npx shadcn@latest add https://ui.iandefined.com/r/sidebar-01.json
 ```
 
-Use `pnpm registry:build` after registry changes, `pnpm static:build` after docs or static endpoint changes, and `pnpm build` before deploy.
+## AI Coding Integration
+
+`iandefined/ui` provides dedicated, build-time static endpoints for AI coding agents and developer tooling:
+
+- [`/llms.txt`](/llms.txt): Lightweight sitemap and index designed for fast retrieval.
+- [`/llms-full.txt`](/llms-full.txt): Complete, concatenated documentation text for context injection.
+- [`/r/registry.json`](/r/registry.json): Standard shadcn registry manifest describing all public components, dependencies, and file targets.
 
 ## Next Steps
 
-Read [Installation](/docs/installation) to install registry components, [Theming](/docs/theming) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.
+- Follow the [Installation](/docs/installation) guide to set up Tailwind CSS v4 and the `cn()` utility in your project.
+- Explore [Theming](/docs/theming) to customize OKLCH color tokens, spring physics, and border radii.
+- Read the [Forms Guide](/docs/forms) to compose validated form experiences.
+- Check out [Extending](/docs/extending) to author new components, blocks, or documentation pages.

@@ -4,59 +4,58 @@ A control that allows the user to toggle between checked and unchecked.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Checkbox` for independent boolean choices, including optional indeterminate states.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Checkbox } from "@/components/ui/checkbox";
+
+<Checkbox aria-label="Receive updates" />;
 ```
 
-```tsx
-<Checkbox />
-```
+## Composition
 
-## Anatomy
+Use `CheckboxRoot` and `CheckboxIndicator` when a custom composition needs separate parts.
 
 ```tsx
-import {
-  Checkbox,
-  CheckboxIndicator,
-  CheckboxRoot,
-} from "@/components/ui/checkbox";
-
-// Option #1. Basic usage:
-<Checkbox />;
-
-// Option #2. Custom usage:
 <CheckboxRoot>
   <CheckboxIndicator />
-</CheckboxRoot>;
+</CheckboxRoot>
 ```
 
 ## Examples
 
 ### Disabled
 
+Prevent changes while retaining the current state.
+
 ### Sizes
+
+Align the checkbox with nearby controls.
 
 ### Radius
 
+Adjust the checkmark container's corner radius.
+
 ### Custom Icons
+
+Provide an icon for checked and indeterminate states.
+
+## Accessibility
+
+Give an unlabeled checkbox an `aria-label`, or associate it with a visible `<label>`.
+
+## API Reference
+
+`Checkbox` wraps [Base UI Checkbox](https://base-ui.com/react/components/checkbox). Supported Base UI props pass through.
+
+### Props
+
+Sets the control dimensions.
+Sets the indicator corner radius.
+Disables the indicator animation.

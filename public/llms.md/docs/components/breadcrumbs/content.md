@@ -4,28 +4,11 @@ A responsive breadcrumb trail with surface variants, custom separators, and coll
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Breadcrumb` to show a page's position in a hierarchy and provide parent navigation.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/breadcrumbs.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefined.com/r/dropdown-menu.json
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -38,9 +21,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumbs";
-```
 
-```tsx
 <Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
@@ -51,78 +32,56 @@ import {
       <BreadcrumbPage>Breadcrumbs</BreadcrumbPage>
     </BreadcrumbItem>
   </BreadcrumbList>
-</Breadcrumb>
+</Breadcrumb>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink />
-      <BreadcrumbPage />
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbEllipsis />
-  </BreadcrumbList>
-</Breadcrumb>
-```
+Use `BreadcrumbItem` for each location, `BreadcrumbLink` for navigable ancestors, and `BreadcrumbPage` for the current page.
 
 ## Examples
 
 ### Dropdown
 
-Compose the ellipsis with Dropdown Menu to collapse part of a long path into an accessible menu.
+Collapse intermediate locations into a dropdown.
 
 ### Basic
 
+Show a short path.
+
 ### Variants
 
-Use `variant="surface"` for a framed breadcrumb track with an elevated current-page item.
+Use `surface` for a framed trail.
 
 ### Sizes
 
-| Value | Description          |
-| ----- | -------------------- |
-| `sm`  | Compact breadcrumb.  |
-| `md`  | Default breadcrumb.  |
-| `lg`  | Spacious breadcrumb. |
+Adjust density for the surrounding layout.
 
 ### Custom Separator
 
-Pass an icon through `separator` or render it as a child. This example uses Lucide's `SlashIcon`.
+Replace the default divider.
 
 ### With Icons
 
+Add recognizable location icons.
+
 ### With Ellipsis
 
-Use `BreadcrumbEllipsis` to represent collapsed items in a long path.
+Represent omitted locations with `BreadcrumbEllipsis`.
 
 ## Accessibility
 
-Breadcrumb renders a `nav` labeled “Breadcrumb” by default. `BreadcrumbPage` marks the current location with `aria-current="page"`, and separators are hidden from assistive technology. When `BreadcrumbEllipsis` is inside an icon-only menu trigger, give the Button an explicit `aria-label`.
+`Breadcrumb` renders a `nav` labeled “Breadcrumb” by default. `BreadcrumbPage` sets `aria-current="page"`; label an icon-only ellipsis trigger explicitly.
 
 ## API Reference
 
-### Breadcrumb
+`BreadcrumbLink` supports [Base UI `useRender`](https://base-ui.com/react/utils/use-render); all parts otherwise accept their standard HTML props.
 
-| Prop         | Type                     | Default        | Description                           |
-| ------------ | ------------------------ | -------------- | ------------------------------------- |
-| `variant`    | `"default" \| "surface"` | `"default"`    | Controls the breadcrumb presentation. |
-| `size`       | `"sm" \| "md" \| "lg"`   | `"md"`         | Controls spacing and text size.       |
-| `aria-label` | `string`                 | `"Breadcrumb"` | Labels the navigation landmark.       |
+### Breadcrumb Props
 
-### BreadcrumbLink
+Sets the breadcrumb presentation.
+Sets spacing and text size.
 
-Accepts anchor props and Base UI's polymorphic `render` prop.
+### BreadcrumbSeparator Props
 
-### BreadcrumbSeparator
-
-| Prop        | Type        | Default              | Description                        |
-| ----------- | ----------- | -------------------- | ---------------------------------- |
-| `separator` | `ReactNode` | `<ChevronRightIcon>` | Replaces the default divider icon. |
-
-### BreadcrumbEllipsis
-
-Represents omitted breadcrumb items. Label the interactive control that contains it when it is used as a trigger.
+Replaces the default divider icon.

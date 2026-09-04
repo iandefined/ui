@@ -1,55 +1,18 @@
 "use client";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
-import { animate, motion, useMotionValue, type Transition } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  type Transition,
+} from "motion/react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-interface SwitchProps extends Omit<
-  SwitchPrimitive.Root.Props,
-  "checked" | "defaultChecked" | "onCheckedChange"
-> {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-  thumbTransition?: Transition;
-  size?: "sm" | "default" | "lg";
-}
-
-const METRICS = {
-  sm: {
-    trackWidth: 32,
-    trackHeight: 20,
-    thumbSize: 12,
-    pillExtend: 1,
-    pressExtend: 2,
-    pressShrink: 2,
-  },
-  default: {
-    trackWidth: 40,
-    trackHeight: 24,
-    thumbSize: 16,
-    pillExtend: 2,
-    pressExtend: 3,
-    pressShrink: 3,
-  },
-  lg: {
-    trackWidth: 48,
-    trackHeight: 28,
-    thumbSize: 20,
-    pillExtend: 2,
-    pressExtend: 4,
-    pressShrink: 4,
-  },
-} as const;
-
-const THUMB_OFFSET = 4;
-const DRAG_DEAD_ZONE = 2;
-
-type SwitchPointerEvent = Parameters<
-  NonNullable<SwitchPrimitive.Root.Props["onPointerDown"]>
->[0];
+const REDUCED_TRANSITION: Transition = { duration: 0 };
 
 const spring = {
   moderate: {
@@ -59,17 +22,72 @@ const spring = {
   },
 };
 
+interface SwitchProps extends Omit<
+  React.ComponentProps<typeof SwitchPrimitive.Root>,
+  "checked" | "defaultChecked" | "onCheckedChange" | "children"
+> {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+  thumbTransition?: Transition;
+  size?: "sm" | "default" | "lg";
+}
+
+type SwitchSize = NonNullable<SwitchProps["size"]>;
+
+const METRICS = {
+  sm: {
+    trackWidth: 32,
+    trackHeight: 18,
+    thumbSize: 14,
+    pillExtend: 2,
+    pressExtend: 3,
+    pressShrink: 1,
+  },
+  default: {
+    trackWidth: 40,
+    trackHeight: 22,
+    thumbSize: 18,
+    pillExtend: 3,
+    pressExtend: 4,
+    pressShrink: 2,
+  },
+  lg: {
+    trackWidth: 48,
+    trackHeight: 26,
+    thumbSize: 22,
+    pillExtend: 4,
+    pressExtend: 5,
+    pressShrink: 2,
+  },
+} as const;
+
+const THUMB_OFFSET = 2;
+const DRAG_DEAD_ZONE = 2;
+
+type SwitchPointerEvent = Parameters<
+  NonNullable<SwitchPrimitive.Root.Props["onPointerDown"]>
+>[0];
+
 function Switch({
   checked,
   defaultChecked = false,
-  disabled = false,
   onCheckedChange,
+  disabled,
   thumbTransition,
   size = "default",
   className,
   ...props
 }: SwitchProps) {
   const hasMounted = useRef(false);
+  const shouldReduceMotion = useReducedMotion();
+  const effectiveTransition = useMemo(
+    () =>
+      shouldReduceMotion
+        ? REDUCED_TRANSITION
+        : (thumbTransition ?? spring.moderate),
+    [shouldReduceMotion, thumbTransition]
+  );
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
@@ -117,9 +135,9 @@ function Switch({
     if (!hasMounted.current) {
       motionX.set(thumbX);
     } else {
-      animate(motionX, thumbX, thumbTransition ?? spring.moderate);
+      animate(motionX, thumbX, effectiveTransition);
     }
-  }, [motionX, thumbTransition, thumbX]);
+  }, [effectiveTransition, motionX, thumbX]);
 
   const handleCheckedChange = useCallback(
     (nextChecked: boolean) => {
@@ -198,7 +216,7 @@ function Switch({
         const snapTarget = isChecked
           ? THUMB_OFFSET + thumbTravel
           : THUMB_OFFSET;
-        animate(motionX, snapTarget, thumbTransition ?? spring.moderate);
+        animate(motionX, snapTarget, effectiveTransition);
       }
 
       requestAnimationFrame(() => {
@@ -208,11 +226,11 @@ function Switch({
 
     pointerStart.current = null;
   }, [
+    effectiveTransition,
     handleCheckedChange,
     isChecked,
     metrics,
     motionX,
-    thumbTransition,
     thumbTravel,
   ]);
 
@@ -226,18 +244,20 @@ function Switch({
     if (dragging.current) {
       dragging.current = false;
       const snapTarget = isChecked ? THUMB_OFFSET + thumbTravel : THUMB_OFFSET;
-      animate(motionX, snapTarget, thumbTransition ?? spring.moderate);
+      animate(motionX, snapTarget, effectiveTransition);
     }
 
     pointerStart.current = null;
-  }, [isChecked, motionX, thumbTransition, thumbTravel]);
+  }, [effectiveTransition, isChecked, motionX, thumbTravel]);
 
   return (
     <SwitchPrimitive.Root
       {...props}
+      data-slot="switch"
+      data-size={size}
       checked={isChecked}
       className={cn(
-        "relative inline-flex shrink-0 cursor-pointer touch-none select-none rounded-full bg-input outline-none transition-colors duration-80 data-checked:bg-primary data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),black_16%),inset_0_1px_0_0_rgb(255_255_255_/_0.25)] dark:data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),white_12%),inset_0_1px_0_0_rgb(255_255_255_/_0.55)] data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        "relative inline-flex shrink-0 cursor-pointer touch-none select-none rounded-full bg-input outline-none transition-colors duration-80 data-checked:bg-primary data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),black_16%),inset_0_1px_0_0_rgb(255_255_255_/_0.25)] dark:data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),white_12%),inset_0_1px_0_0_rgb(255_255_255_/_0.55)] data-disabled:cursor-not-allowed data-disabled:opacity-50 motion-reduce:transition-none",
         "focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className
       )}
@@ -281,21 +301,20 @@ function Switch({
           return (
             <motion.span
               {...rest}
+              data-slot="switch-thumb"
               animate={{
                 y: thumbY,
                 width: thumbWidth,
                 height: thumbHeight,
               }}
-              className="absolute top-0 left-0 block rounded-full bg-white shadow-sm data-checked:bg-primary-foreground"
+              className="absolute top-0 left-0 block rounded-full bg-white shadow-sm data-checked:bg-primary-foreground motion-reduce:transition-none"
               initial={false}
               style={{
                 ...(baseStyle as React.CSSProperties | undefined),
                 x: motionX,
               }}
               transition={
-                hasMounted.current
-                  ? (thumbTransition ?? spring.moderate)
-                  : { duration: 0 }
+                hasMounted.current ? effectiveTransition : { duration: 0 }
               }
             />
           );
@@ -306,4 +325,4 @@ function Switch({
 }
 
 export { Switch };
-export type { SwitchProps };
+export type { SwitchProps, SwitchSize };

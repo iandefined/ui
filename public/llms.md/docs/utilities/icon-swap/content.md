@@ -4,21 +4,9 @@ Animate between keyed icons with a consistent scale, blur, and fade transition.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`IconSwap` animates between keyed icons with one consistent scale, blur, fade, and spring transition. Use it when an icon represents a changing semantic state, such as copying, loading, or success.
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-The CLI also installs the registry `Button` used by the default example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json
-```
-
-```bash
-npm install motion
-```
 
 ## Usage
 
@@ -39,3 +27,12 @@ When an interaction changes both an icon and text, derive both from the same sta
 ## Reset After Inactivity
 
 For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
+
+## API Reference
+
+`IconSwap` renders a Motion `span`. Supported [Motion span props](https://motion.dev/docs/react-motion-component) pass through to that element.
+
+### Props
+
+Keys the currently displayed icon. Change it whenever the icon's semantic
+state changes.

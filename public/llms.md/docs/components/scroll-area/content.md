@@ -4,24 +4,11 @@ A scrollable region with custom scrollbars and optional background fades.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `ScrollArea` for a bounded region that needs styled scrolling and optional overflow fades.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/scroll-area.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -37,7 +24,7 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 
 `scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
 
-## Anatomy
+## Composition
 
 ```tsx
 <ScrollArea>
@@ -66,3 +53,12 @@ Set `scrollShadow` independently of the scrollbar orientation to fade only the o
 ### Hide Scrollbar
 
 Set `hideScrollbar` to keep the scroll area and edge fades while removing the custom scrollbar.
+
+## API Reference
+
+`ScrollArea` and `ScrollAreaContent` wrap [Base UI Scroll Area primitives](https://base-ui.com/react/components/scroll-area). Supported Base UI props pass through.
+
+### Props
+
+Adds fades at overflowing horizontal, vertical, or both edges.
+Hides the custom scrollbar while keeping the scroll region available.

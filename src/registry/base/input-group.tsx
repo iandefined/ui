@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,11 +47,15 @@ const inputGroupAddonVariants = tv({
   defaultVariants: { align: "inline-start" },
 });
 
+type InputGroupAddonProps = React.ComponentProps<"div"> & {
+  align?: "inline-start" | "inline-end" | "block-start" | "block-end";
+};
+
 function InputGroupAddon({
   className,
   align = "inline-start",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+}: InputGroupAddonProps) {
   return (
     <div
       className={cn(inputGroupAddonVariants({ align }), className)}
@@ -88,16 +92,18 @@ const inputGroupButtonVariants = tv({
   defaultVariants: { size: "xs" },
 });
 
+type InputGroupButtonProps = Omit<ButtonProps, "color" | "size"> & {
+  size?: "xs" | "sm" | "icon-xs" | "icon-sm";
+  type?: "submit" | "reset" | "button";
+};
+
 function InputGroupButton({
   className,
   type = "button",
   variant = "ghost",
   size = "xs",
   ...props
-}: Omit<ButtonProps, "color" | "size"> &
-  VariantProps<typeof inputGroupButtonVariants> & {
-    type?: "submit" | "reset" | "button";
-  }) {
+}: InputGroupButtonProps) {
   return (
     <Button
       className={cn(inputGroupButtonVariants({ size }), className)}

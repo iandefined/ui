@@ -3,49 +3,15 @@ title: Tooltip
 description: Displays contextual information when a user hovers or focuses an element.
 ---
 
+Use `Tooltip` for a short, supplementary description of a control.
+
+## Preview
+
 <ComponentPreview name="tooltip/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/tooltip.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy the component into your project.</Step>
-
-<ComponentSource src="src/registry/base/tooltip.tsx" title="components/ui/tooltip.tsx" />
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="tooltip" />
 
 ## Usage
 
@@ -67,7 +33,7 @@ import {
 
 Wrap related tooltips in `TooltipProvider` so adjacent tooltips open instantly after the first one.
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -138,3 +104,36 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 <ComponentPreview name="tooltip/animation" />
+
+## API Reference
+
+`Tooltip` and its parts wrap the corresponding [Base UI Tooltip primitives](https://base-ui.com/react/components/tooltip). Supported Base UI props pass through.
+
+### Props
+
+#### TooltipProvider
+
+<ApiPropsList>
+  <ApiProp name="delay" fullType="number" defaultValue="300">
+    Sets the delay before a tooltip in the provider group opens.
+  </ApiProp>
+</ApiPropsList>
+
+#### TooltipPopup
+
+<ApiPropsList>
+  <ApiProp
+    name="animationPreset"
+    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "wipe" | "wipeScale" | "motion" | "motionBlur"'
+    simpleType="string"
+    defaultValue='"scale"'
+  >
+    Sets the popup enter and exit animation.
+  </ApiProp>
+  <ApiProp name="reduceMotion" fullType="boolean" defaultValue="false">
+    Disables popup animation.
+  </ApiProp>
+  <ApiProp name="showArrow" fullType="boolean" defaultValue="false">
+    Renders an arrow pointing at the trigger.
+  </ApiProp>
+</ApiPropsList>

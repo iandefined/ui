@@ -86,7 +86,7 @@ function DropdownMenu({
   backdrop = "transparent",
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
-  backdrop?: DropdownMenuBackdrop;
+  backdrop?: "opaque" | "blur" | "transparent";
 }) {
   return (
     <DropdownMenuContext.Provider value={{ backdrop }}>
@@ -185,7 +185,15 @@ function DropdownMenuContent({
       | "wipeScale"
       | "motion"
       | "motionBlur";
-    transitionPreset?: DropdownMenuTransitionPreset;
+    transitionPreset?:
+      | "inExpo"
+      | "outExpo"
+      | "inOutExpo"
+      | "anticipate"
+      | "quickOut"
+      | "overshootOut"
+      | "swiftOut"
+      | "snappyOut";
     reduceMotion?: boolean;
     showArrow?: boolean;
   }) {

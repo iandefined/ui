@@ -5,7 +5,7 @@ import {
   type ButtonProps as BaseButtonProps,
 } from "@base-ui/react/button";
 import type { CSSProperties, ReactNode } from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
@@ -84,12 +84,6 @@ const buttonVariants = tv({
   },
 });
 
-type ButtonVariant = NonNullable<
-  VariantProps<typeof buttonVariants>["variant"]
->;
-type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
-type ButtonRadius = NonNullable<VariantProps<typeof buttonVariants>["radius"]>;
-
 type ButtonStyle = CSSProperties & {
   "--button-emphasis-bg"?: string;
   "--button-from"?: string;
@@ -100,9 +94,19 @@ type ButtonStyle = CSSProperties & {
 
 type SharedButtonProps = Omit<BaseButtonProps, "color" | "style"> & {
   leftSection?: ReactNode;
-  radius?: ButtonRadius;
+  radius?: "none" | "sm" | "default" | "lg" | "xl" | "full";
   rightSection?: ReactNode;
-  size?: ButtonSize;
+  size?:
+    | "default"
+    | "xs"
+    | "sm"
+    | "lg"
+    | "xl"
+    | "icon-xs"
+    | "icon-sm"
+    | "icon"
+    | "icon-lg"
+    | "icon-xl";
   style?: ButtonStyle;
 };
 
@@ -115,9 +119,19 @@ type ButtonProps = SharedButtonProps &
       }
     | {
         color?: never;
-        variant?: ButtonVariant;
+        variant?:
+          | "default"
+          | "secondary"
+          | "outline"
+          | "ghost"
+          | "link"
+          | "destructive";
       }
   );
+
+type ButtonVariant = NonNullable<ButtonProps["variant"]>;
+type ButtonSize = NonNullable<ButtonProps["size"]>;
+type ButtonRadius = NonNullable<ButtonProps["radius"]>;
 
 function Button({
   children,

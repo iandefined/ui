@@ -6,19 +6,7 @@
   "dependencies": [
     "@tanstack/react-form",
     "clsx",
-    "tailwind-merge",
-    "zod"
-  ],
-  "registryDependencies": [
-    "https://ui.iandefined.com/r/button.json",
-    "https://ui.iandefined.com/r/checkbox.json",
-    "https://ui.iandefined.com/r/field.json",
-    "https://ui.iandefined.com/r/fieldset.json",
-    "https://ui.iandefined.com/r/input.json",
-    "https://ui.iandefined.com/r/radio-group.json",
-    "https://ui.iandefined.com/r/slider.json",
-    "https://ui.iandefined.com/r/switch.json",
-    "https://ui.iandefined.com/r/textarea.json"
+    "tailwind-merge"
   ],
   "files": [
     {

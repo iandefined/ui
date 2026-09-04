@@ -4,24 +4,11 @@ Displays textual keyboard input and shortcut combinations.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Kbd` for individual keys and `KbdGroup` for shortcuts shown in instructions or controls.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/kbd.json
-```
-
-```bash
-npm install clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -45,3 +32,7 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 ### Tooltip
 
 ### Input Group
+
+## API Reference
+
+`Kbd` and `KbdGroup` wrap native `<kbd>` elements. Their standard HTML attributes pass through.

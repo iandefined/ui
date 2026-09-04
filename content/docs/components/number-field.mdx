@@ -3,52 +3,15 @@ title: Number Field
 description: A numeric input with increment, decrement, and scrub controls.
 ---
 
+Use `NumberField` when people need to enter a numeric value or adjust it with dedicated controls.
+
+## Preview
+
 <ComponentPreview name="number-field/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/number-field.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/number-field.tsx"
-  title="components/ui/number-field.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="number-field" />
 
 ## Usage
 
@@ -72,7 +35,7 @@ import {
 </NumberField>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <NumberField>
@@ -120,3 +83,21 @@ Use `min` and `max` to constrain the allowed values.
 Pass `Intl.NumberFormat` options through `format` to display values such as currency.
 
 <ComponentPreview name="number-field/formatting" />
+
+## API Reference
+
+`NumberField` and its parts wrap the corresponding [Base UI Number Field primitives](https://base-ui.com/react/components/number-field). Supported Base UI props pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg" | number'
+    simpleType="string | number"
+    defaultValue='"default"'
+  >
+    Sets the styled size. A numeric value keeps the default visual size for
+    compatibility with Base UI sizing.
+  </ApiProp>
+</ApiPropsList>

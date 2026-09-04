@@ -10,6 +10,7 @@
     "deploy": "pnpm build && wrangler deploy",
     "cf-typegen": "wrangler types",
     "typecheck": "tsc --noEmit",
+    "docs:check": "node scripts/check-docs.mjs",
     "registry:build": "shadcn build registry.json --output ./public/r",
     "static:build": "node scripts/generate-static-assets.mjs",
     "postinstall": "fumadocs-mdx",

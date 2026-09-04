@@ -1,10 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import { createElement, type ElementType } from "react";
 
+import { ApiProp, ApiPropsList } from "@/shared/components/api-prop";
 import { Callout } from "@/shared/components/callout";
 import { CodeBlockCommand } from "@/shared/components/code-block-command";
 import { CodeTabs } from "@/shared/components/code-tabs";
 import { ColorCard } from "@/shared/components/color-card";
+import { ComponentInstall } from "@/shared/components/component-install";
 import { ComponentPreview } from "@/shared/components/component-preview";
 import { ComponentSource } from "@/shared/components/component-source";
 import { ComponentsList } from "@/shared/components/components-list";
@@ -74,7 +76,7 @@ function MdxTable({ className, ...props }: React.ComponentProps<"table">) {
     <table
       className={mdxClassName(
         isPreview,
-        "relative w-full overflow-hidden border-none text-sm [&_tbody_tr:last-child]:border-b-0",
+        "w-full border-collapse text-left text-sm [&_thead]:bg-muted/50 [&_thead]:border-b [&_thead]:border-border [&_tbody_tr:last-child]:border-b-0",
         className
       )}
       {...props}
@@ -84,7 +86,7 @@ function MdxTable({ className, ...props }: React.ComponentProps<"table">) {
   return isPreview ? (
     table
   ) : (
-    <div className="my-6 no-scrollbar w-full overflow-y-auto rounded-xl border">
+    <div className="not-prose my-6 no-scrollbar w-full overflow-x-auto rounded-xl border border-border">
       {table}
     </div>
   );
@@ -99,11 +101,14 @@ export const mdxComponents = {
   AlertDescription,
   AlertTitle,
   AspectRatio,
+  ApiProp,
+  ApiPropsList,
   Button,
   Callout,
   CodeTabs,
   ColorCard,
   ComponentPreview,
+  ComponentInstall,
   ComponentSource,
   ComponentsList,
   FeatureCard: ({
@@ -251,19 +256,6 @@ export const mdxComponents = {
       return <code className={className} {...props} />;
     }
 
-    // Inline Code.
-    if (typeof props.children === "string") {
-      return (
-        <code
-          className={cn(
-            "bg-muted relative rounded-md px-[0.3rem] py-[0.2rem] font-mono text-[0.8rem] break-words outline-none",
-            className
-          )}
-          {...props}
-        />
-      );
-    }
-
     // npm command.
     const isNpmCommand = __npm__ && __yarn__ && __pnpm__ && __bun__;
     if (isNpmCommand) {
@@ -278,13 +270,30 @@ export const mdxComponents = {
     }
 
     // Default codeblock.
+    if (
+      __raw__ ||
+      (typeof className === "string" && className.includes("language-")) ||
+      Boolean("data-language" in props && props["data-language"])
+    ) {
+      return (
+        <>
+          {__raw__ && (
+            <CopyButton value={__raw__} src={__src__} event="copy_usage_code" />
+          )}
+          <code className={className} {...props} />
+        </>
+      );
+    }
+
+    // Inline Code.
     return (
-      <>
-        {__raw__ && (
-          <CopyButton value={__raw__} src={__src__} event="copy_usage_code" />
+      <code
+        className={cn(
+          "bg-muted relative rounded-md px-[0.3rem] py-[0.2rem] font-mono text-[0.8rem] whitespace-nowrap outline-none",
+          className
         )}
-        <code {...props} />
-      </>
+        {...props}
+      />
     );
   },
   figcaption: ({
@@ -395,22 +404,40 @@ export const mdxComponents = {
     <MdxElement as="strong" mdxClasses="font-medium" {...props} />
   ),
   table: MdxTable,
+  tbody: (props: React.ComponentProps<"tbody">) => (
+    <MdxElement
+      as="tbody"
+      mdxClasses="[&_tr:last-child]:border-b-0"
+      {...props}
+    />
+  ),
   td: (props: React.ComponentProps<"td">) => (
     <MdxElement
       as="td"
-      mdxClasses="px-4 py-2 text-left whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right"
+      mdxClasses="px-4 py-3 text-left text-sm align-middle leading-normal text-foreground first:font-medium [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:whitespace-nowrap [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-border [&_a:hover]:decoration-current [&_a:hover]:text-primary [&_a]:transition-colors [[align=center]]:text-center [[align=right]]:text-right"
       {...props}
     />
   ),
   th: (props: React.ComponentProps<"th">) => (
     <MdxElement
       as="th"
-      mdxClasses="px-4 py-2 text-left font-bold [[align=center]]:text-center [[align=right]]:text-right"
+      mdxClasses="border-b border-border px-4 py-2.5 text-left text-sm font-medium text-muted-foreground first:text-foreground [[align=center]]:text-center [[align=right]]:text-right"
+      {...props}
+    />
+  ),
+  thead: (props: React.ComponentProps<"thead">) => (
+    <MdxElement
+      as="thead"
+      mdxClasses="bg-muted/50 border-b border-border"
       {...props}
     />
   ),
   tr: (props: React.ComponentProps<"tr">) => (
-    <MdxElement as="tr" mdxClasses="m-0 border-b" {...props} />
+    <MdxElement
+      as="tr"
+      mdxClasses="m-0 border-b border-border transition-colors hover:bg-muted/60"
+      {...props}
+    />
   ),
   ul: (props: React.ComponentProps<"ul">) => (
     <MdxElement as="ul" mdxClasses="my-6 ml-6 list-disc" {...props} />

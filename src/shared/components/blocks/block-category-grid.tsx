@@ -658,11 +658,11 @@ function CategoryCard({
 
   return (
     <Link
-      className="group flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-200 hover:border-primary/40 hover:shadow-md"
+      className="group flex flex-col overflow-hidden rounded-xl border bg-card outline-0 outline-offset-0 outline-transparent outline-solid [transition:outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out,box-shadow_200ms_ease-out] hover:outline-2 hover:outline-offset-2 hover:outline-ring/50 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50"
       href={`/blocks?category=${encodeURIComponent(name)}`}
     >
       <div className="relative aspect-video w-full overflow-hidden bg-muted/30">
-        <div className="absolute inset-0 transition-opacity duration-200 group-hover:opacity-80">
+        <div className="absolute inset-0">
           <SkeletonPreview />
         </div>
         <div className="absolute inset-0 bg-linear-to-t from-card/20 to-transparent" />

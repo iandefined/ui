@@ -3,54 +3,15 @@ title: Input
 description: A styled text input built on Base UI.
 ---
 
+Use `Input` for concise, single-line text entry in forms and controls.
+
+## Preview
+
 <ComponentPreview name="input/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList><TabsTrigger value="cli">Command</TabsTrigger><TabsTrigger value="manual">Manual</TabsTrigger></TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json
-```
-
-The CLI also installs `TextMorph` and its Calligraph and Motion dependencies for the animated controlled example.
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the [Text Morph](/docs/utilities/text-morph) registry dependency:</Step>
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
-```
-
-<Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy the component into your project.</Step>
-
-<ComponentSource src="src/registry/base/input.tsx" title="components/ui/input.tsx" />
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="input" />
 
 ## Usage
 
@@ -64,22 +25,47 @@ import { Input } from "@/components/ui/input";
 
 ### Sizes
 
+Choose a size that aligns with adjacent controls.
+
 <ComponentPreview name="input/sizes" />
 
 ### Input Types
+
+Use the native `type` attribute for specialized input behavior.
 
 <ComponentPreview name="input/types" />
 
 ### File
 
+Use `type="file"` to accept selected files.
+
 <ComponentPreview name="input/file" />
 
 ### Disabled
+
+Prevent interaction while retaining the entered value.
 
 <ComponentPreview name="input/disabled" />
 
 ### Controlled
 
-The value preview uses the shared `TextMorph` abstraction instead of a component-specific text animation.
+Control the value from application state.
 
 <ComponentPreview name="input/controlled" />
+
+## API Reference
+
+`Input` wraps [Base UI Input](https://base-ui.com/react/components/input). Supported Base UI and native input props pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg" | number'
+    simpleType="string | number"
+    defaultValue='"default"'
+  >
+    Sets a preset height, or a custom height in pixels.
+  </ApiProp>
+</ApiPropsList>

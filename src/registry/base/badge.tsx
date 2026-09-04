@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import type React from "react";
 
 import { cn } from "@/lib/utils";
@@ -79,24 +79,32 @@ const badgeVariants = cva(
   }
 );
 
-type BadgeColor = keyof typeof badgeColors;
-type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>["variant"]>;
-type BadgeSize = VariantProps<typeof badgeVariants>["size"];
 type BadgeBaseProps = Omit<useRender.ComponentProps<"span">, "color"> & {
-  size?: BadgeSize;
+  size?: "default" | "compact";
 };
 
 type SemanticBadgeProps = BadgeBaseProps & {
-  variant?: Exclude<BadgeVariant, "translucent" | "dot">;
+  variant?:
+    | "default"
+    | "secondary"
+    | "outline"
+    | "destructive"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
   color?: never;
 };
 
 type PaletteBadgeProps = BadgeBaseProps & {
-  variant: Extract<BadgeVariant, "translucent" | "dot">;
-  color?: BadgeColor;
+  variant: "translucent" | "dot";
+  color?: keyof typeof badgeColors;
 };
 
 type BadgeProps = SemanticBadgeProps | PaletteBadgeProps;
+type BadgeColor = NonNullable<BadgeProps["color"]>;
+type BadgeVariant = NonNullable<BadgeProps["variant"]>;
+type BadgeSize = NonNullable<BadgeProps["size"]>;
 
 function Badge({
   className,
@@ -122,6 +130,7 @@ function Badge({
   const defaultProps = {
     className: cn(badgeVariants({ variant, size }), className),
     "data-color": isPaletteVariant ? resolvedColor : undefined,
+    "data-size": size,
     "data-slot": "badge",
     "data-variant": variant,
     style: { ...badgeStyle, ...style },
@@ -150,4 +159,4 @@ function Badge({
 }
 
 export { Badge, badgeColors, badgeVariants };
-export type { BadgeColor, BadgeProps, BadgeVariant };
+export type { BadgeColor, BadgeProps, BadgeSize, BadgeVariant };

@@ -4,32 +4,11 @@ Compose inputs and textareas with icons, text, buttons, and menus.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `InputGroup` to attach context and actions directly to an input or textarea.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input-group.json
-```
-
-The CLI also installs `IconSwap` and Motion for the copy-button example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-Install or add Button, Input, and Textarea before using Input Group.
 
 ## Usage
 
@@ -37,41 +16,56 @@ Install or add Button, Input, and Textarea before using Input Group.
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
   InputGroupText,
-  InputGroupTextarea,
 } from "@/components/ui/input-group";
-```
 
-## Anatomy
-
-```tsx
 <InputGroup>
   <InputGroupAddon>
     <InputGroupText>https://</InputGroupText>
   </InputGroupAddon>
   <InputGroupInput placeholder="example.com" />
-  <InputGroupAddon align="inline-end">
-    <InputGroupButton>Search</InputGroupButton>
-  </InputGroupAddon>
-</InputGroup>
+</InputGroup>;
 ```
 
-Use `InputGroupTextarea` in place of `InputGroupInput` when you need a multiline control. Addons can be placed at `inline-start`, `inline-end`, `block-start`, or `block-end`.
+## Composition
+
+Use `InputGroupInput` or `InputGroupTextarea` as the control. Place `InputGroupAddon` at `inline-start`, `inline-end`, `block-start`, or `block-end`.
 
 ## Examples
 
-### Basic
-
 ### Text
+
+Add a textual prefix or suffix.
 
 ### Icons
 
+Add a contextual icon without changing the input semantics.
+
 ### Buttons
+
+Place related actions inside an addon.
 
 ### Spinner
 
+Indicate in-progress input work.
+
 ### Tooltip
 
+Explain icon-only controls.
+
 ### Menu
+
+Expose additional input actions through a menu.
+
+## API Reference
+
+`InputGroup` and its parts are styled HTML elements. Standard element props pass through.
+
+### InputGroupAddon Props
+
+Sets the addon's position around the control.
+
+### InputGroupButton Props
+
+Sets the embedded button size.

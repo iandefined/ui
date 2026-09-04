@@ -4,24 +4,11 @@ A styled multiline text control built on Base UI Field.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Textarea` when people need to enter multiple lines of text.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/textarea.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -38,3 +25,11 @@ import { Textarea } from "@/components/ui/textarea";
 ### Disabled
 
 ### Controlled
+
+## API Reference
+
+`Textarea` wraps the native `<textarea>` element. Standard textarea attributes pass through.
+
+### Props
+
+Sets the textarea's padding and text size.

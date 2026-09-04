@@ -16,11 +16,11 @@ const cardVariants = tv({
   },
 });
 
-type CardVariant = "default" | "inset";
-
 type CardProps = React.ComponentProps<"div"> & {
   variant?: "default" | "inset";
 };
+
+type CardVariant = NonNullable<CardProps["variant"]>;
 
 function Card({ className, variant = "default", ...props }: CardProps) {
   return (

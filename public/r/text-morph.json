@@ -4,11 +4,7 @@
   "title": "Text Morph",
   "description": "The standard animated-text primitive, powered by Calligraph with smooth container resizing.",
   "dependencies": [
-    "calligraph",
-    "motion"
-  ],
-  "registryDependencies": [
-    "https://ui.iandefined.com/r/icon-swap.json"
+    "calligraph"
   ],
   "files": [
     {

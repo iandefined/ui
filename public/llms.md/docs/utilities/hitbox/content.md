@@ -4,11 +4,27 @@ Expand hit areas of interactive elements without affecting layout.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`Hitbox` is a Tailwind CSS v4 utility set that enlarges an element's pointer target without changing its visual size or layout. Use it on compact controls when their visible dimensions alone are difficult to target.
+
 ## Installation
 
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
+## Portable CSS
+
+The installer adds `styles/hitbox.css`. Import that file from the consumer CSS entrypoint after Tailwind CSS so its `@utility` declarations are processed.
+
+```css
+@import "tailwindcss";
+@import "./styles/hitbox.css";
 ```
+
+`hitbox-debug` uses the semantic `info` and `success` colors. Define the following theme values when you use the debugging utility.
+
+| Theme value            | Light value                | Dark value                 | Used by                                       |
+| :--------------------- | :------------------------- | :------------------------- | :-------------------------------------------- |
+| `--info`               | `var(--color-blue-500)`    | `var(--color-blue-500)`    | Default debug border and background.          |
+| `--info-foreground`    | `var(--color-blue-700)`    | `var(--color-blue-400)`    | Foreground companion for the `info` color.    |
+| `--success`            | `var(--color-emerald-500)` | `var(--color-emerald-500)` | Hovered debug border and background.          |
+| `--success-foreground` | `var(--color-emerald-700)` | `var(--color-emerald-400)` | Foreground companion for the `success` color. |
 
 ```css
 @theme inline {
@@ -33,13 +49,6 @@ npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
 }
 ```
 
-Import the stylesheet in your CSS entrypoint (e.g. `app.css` or
-`globals.css`):
-
-```css
-@import "./styles/hitbox.css";
-```
-
 ## Usage
 
 Use `hitbox-*` to extend the hit area uniformly on all sides. Directional variants let you expand only one side or one axis.
@@ -53,6 +62,8 @@ Use `hitbox-*` to extend the hit area uniformly on all sides. Directional varian
   Link
 </a>
 ```
+
+The utilities create a positioned `::before` pseudo-element whose negative inset values expand the area that receives pointer events. Do not apply them to elements that already use `::before` for other content or decoration.
 
 ## Examples
 
@@ -167,3 +178,28 @@ Hover the target
 ```tsx
 <Button className="hitbox-6 hitbox-debug">Hover the target</Button>
 ```
+
+## API Reference
+
+### Utility classes
+
+| Class pattern       | Expansion                                                           |
+| :------------------ | :------------------------------------------------------------------ |
+| `hitbox`            | Uses any previously set `--hitbox-*` values without setting a size. |
+| `hitbox-{n}`        | All four sides by Tailwind spacing value `n`.                       |
+| `hitbox-{side}-{n}` | One side, where `{side}` is `l`, `r`, `t`, or `b`.                  |
+| `hitbox-x-{n}`      | Left and right sides.                                               |
+| `hitbox-y-{n}`      | Top and bottom sides.                                               |
+| `hitbox-[value]`    | All four sides by an arbitrary CSS length, such as `hitbox-[18px]`. |
+| `hitbox-debug`      | Draws the expanded area and changes its color on hover.             |
+
+All size patterns accept an integer spacing value or an arbitrary value. Directional arbitrary values follow the same syntax, such as `hitbox-l-[12px]`.
+
+### CSS variables
+
+| Variable     | Purpose                                       |
+| :----------- | :-------------------------------------------- |
+| `--hitbox-t` | Negative top inset for the pseudo-element.    |
+| `--hitbox-r` | Negative right inset for the pseudo-element.  |
+| `--hitbox-b` | Negative bottom inset for the pseudo-element. |
+| `--hitbox-l` | Negative left inset for the pseudo-element.   |

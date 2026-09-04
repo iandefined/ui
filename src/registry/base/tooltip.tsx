@@ -187,7 +187,36 @@ function TooltipPopup({
       | "wipeScale"
       | "motion"
       | "motionBlur";
-    transitionPreset?: TooltipTransitionPreset;
+    transitionPreset?:
+      | "inExpo"
+      | "outExpo"
+      | "inOutExpo"
+      | "anticipate"
+      | "quickOut"
+      | "overshootOut"
+      | "swiftOut"
+      | "snappyOut"
+      | "in"
+      | "out"
+      | "inOut"
+      | "outIn"
+      | "inQuad"
+      | "outQuad"
+      | "inOutQuad"
+      | "inCubic"
+      | "outCubic"
+      | "inOutCubic"
+      | "inQuart"
+      | "outQuart"
+      | "inOutQuart"
+      | "inQuint"
+      | "outQuint"
+      | "inOutQuint"
+      | "inCirc"
+      | "outCirc"
+      | "inOutCirc"
+      | "inOutBase"
+      | "none";
     reduceMotion?: boolean;
     showArrow?: boolean;
   }) {

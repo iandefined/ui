@@ -53,10 +53,6 @@
         "clsx",
         "tailwind-merge"
       ],
-      "registryDependencies": [
-        "https://ui.iandefined.com/r/button.json",
-        "https://ui.iandefined.com/r/dropdown-menu.json"
-      ],
       "files": [
         {
           "path": "src/registry/base/breadcrumbs.tsx",
@@ -86,7 +82,7 @@
       "description": "A Base UI checkbox component with sizes, radius variants, and a snappy indicator animation.",
       "dependencies": [
         "@base-ui/react",
-        "class-variance-authority",
+        "tailwind-variants",
         "clsx",
         "tailwind-merge"
       ],
@@ -432,7 +428,6 @@
       "title": "Icon Swap",
       "description": "A consistent keyed scale, blur, and fade transition for changing icons.",
       "dependencies": ["motion"],
-      "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
       "files": [
         {
           "path": "src/registry/base/icon-swap.tsx",
@@ -446,8 +441,7 @@
       "type": "registry:ui",
       "title": "Text Morph",
       "description": "The standard animated-text primitive, powered by Calligraph with smooth container resizing.",
-      "dependencies": ["calligraph", "motion"],
-      "registryDependencies": ["https://ui.iandefined.com/r/icon-swap.json"],
+      "dependencies": ["calligraph"],
       "files": [
         {
           "path": "src/registry/base/text-morph.tsx",
@@ -477,7 +471,6 @@
       "description": "A keyboard-navigable menu with checkbox, radio, and submenu items.",
       "dependencies": [
         "@base-ui/react",
-        "tailwind-variants",
         "clsx",
         "tailwind-merge",
         "lucide-react"
@@ -495,12 +488,7 @@
       "type": "registry:ui",
       "title": "Spinner",
       "description": "An SVG loading indicator with four sizes and a rotating arc.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["tailwind-variants", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/registry/base/spinner.tsx",
@@ -514,12 +502,7 @@
       "type": "registry:ui",
       "title": "Separator",
       "description": "A visual or semantic divider with horizontal and vertical orientations.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/registry/base/separator.tsx",
@@ -562,18 +545,7 @@
       "type": "registry:ui",
       "title": "Form",
       "description": "A TanStack Form submission wrapper for composing type-safe forms with registry controls.",
-      "dependencies": ["@tanstack/react-form", "clsx", "tailwind-merge", "zod"],
-      "registryDependencies": [
-        "https://ui.iandefined.com/r/button.json",
-        "https://ui.iandefined.com/r/checkbox.json",
-        "https://ui.iandefined.com/r/field.json",
-        "https://ui.iandefined.com/r/fieldset.json",
-        "https://ui.iandefined.com/r/input.json",
-        "https://ui.iandefined.com/r/radio-group.json",
-        "https://ui.iandefined.com/r/slider.json",
-        "https://ui.iandefined.com/r/switch.json",
-        "https://ui.iandefined.com/r/textarea.json"
-      ],
+      "dependencies": ["@tanstack/react-form", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/registry/base/form.tsx",
@@ -588,12 +560,6 @@
       "title": "Fieldset",
       "description": "A semantic field group with a styled legend.",
       "dependencies": ["clsx", "tailwind-merge"],
-      "registryDependencies": [
-        "https://ui.iandefined.com/r/checkbox.json",
-        "https://ui.iandefined.com/r/field.json",
-        "https://ui.iandefined.com/r/input.json",
-        "https://ui.iandefined.com/r/radio-group.json"
-      ],
       "files": [
         {
           "path": "src/registry/base/fieldset.tsx",
@@ -665,12 +631,7 @@
       "type": "registry:ui",
       "title": "Textarea",
       "description": "A styled Base UI multiline text control with size variants.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/registry/base/textarea.tsx",
@@ -684,15 +645,9 @@
       "type": "registry:ui",
       "title": "Input Group",
       "description": "Composable input and textarea controls with addons and buttons.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["tailwind-variants", "clsx", "tailwind-merge"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
-        "https://ui.iandefined.com/r/icon-swap.json",
         "https://ui.iandefined.com/r/input.json",
         "https://ui.iandefined.com/r/textarea.json"
       ],
@@ -709,12 +664,7 @@
       "type": "registry:ui",
       "title": "Tooltip",
       "description": "Contextual information shown on hover or focus.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/registry/base/tooltip.tsx",
@@ -761,7 +711,7 @@
       "type": "registry:block",
       "title": "Sidebar 01",
       "description": "A simple sidebar with navigation grouped by section.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": ["lucide-react"],
       "registryDependencies": [
         "https://ui.shadcn.com/r/styles/base-luma/sidebar.json",
         "https://ui.iandefined.com/r/breadcrumbs.json",
@@ -772,22 +722,22 @@
       "categories": ["sidebar"],
       "files": [
         {
-          "path": "src/registry/base/sidebar-01/page.tsx",
+          "path": "src/registry/base/blocks/sidebar/01/page.tsx",
           "type": "registry:page",
           "target": "app/dashboard/page.tsx"
         },
         {
-          "path": "src/registry/base/sidebar-01/components/app-sidebar.tsx",
+          "path": "src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx",
           "type": "registry:component",
           "target": "components/app-sidebar.tsx"
         },
         {
-          "path": "src/registry/base/sidebar-01/components/search-form.tsx",
+          "path": "src/registry/base/blocks/sidebar/01/components/search-form.tsx",
           "type": "registry:component",
           "target": "components/search-form.tsx"
         },
         {
-          "path": "src/registry/base/sidebar-01/components/version-switcher.tsx",
+          "path": "src/registry/base/blocks/sidebar/01/components/version-switcher.tsx",
           "type": "registry:component",
           "target": "components/version-switcher.tsx"
         }

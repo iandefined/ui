@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { TooltipSurface } from "./tooltip";
 
 type SliderValueType = number | [number, number];
-type SliderVariant = "compact" | "default";
+type SliderVariant = NonNullable<SliderProps["variant"]>;
 
 interface SliderProps extends Omit<
   SliderPrimitive.Root.Props<SliderValueType>,

@@ -4,24 +4,11 @@ A container with header, content, action, and footer regions.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Card` to group related content and actions into a distinct surface.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/card.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -33,19 +20,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-```
 
-```tsx
 <Card>
   <CardHeader>
     <CardTitle>Card Title</CardTitle>
     <CardDescription>Card description.</CardDescription>
   </CardHeader>
   <CardContent>Card content.</CardContent>
-</Card>
+</Card>;
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <Card>
@@ -63,20 +48,16 @@ import {
 
 ### With Footer and Action
 
-Use `CardFooter` for actions below the content and `CardAction` for a control in
-the header.
+Use `CardFooter` below the content and `CardAction` for a header control.
 
 ### Variants
 
-Use `variant` to change how the card is framed.
-
-The `inset` variant uses the `muted` token for its outer frame and the normal
-`card` background for its nested content panel in light mode. Dark mode keeps
-the existing surface pairing. It does not require surface levels or additional
-theme variables.
+Use `inset` to place nested content on a card surface inside a muted frame.
 
 ## API Reference
 
-| Prop      | Type                   | Default     | Description                     |
-| --------- | ---------------------- | ----------- | ------------------------------- |
-| `variant` | `"default" \| "inset"` | `"default"` | Changes how the card is framed. |
+`Card` is a styled `div`; standard HTML props pass through.
+
+### Props
+
+Changes how the card is framed.

@@ -1,65 +1,57 @@
 # Fieldset
 
-A semantic field group with a styled legend.
+A native semantic group for related fields with a styled legend.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Fieldset` to group related controls in native or TanStack Form compositions. See the [Forms guide](/docs/forms) for group validation and choice-control patterns.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/fieldset.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/field.json https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/radio-group.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
-```tsx
-import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
-import { Field, FieldLabel } from "@/components/ui/field";
-```
+Compose `Field` inside `Fieldset` when controls share a visible group label. The underlying native `fieldset` and `legend` preserve the group relationship without a form library.
 
 ```tsx
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+
 <Fieldset>
   <FieldsetLegend>Shipping address</FieldsetLegend>
   <Field name="street">
     <FieldLabel>Street address</FieldLabel>
-    {/* Input */}
+    <Input autoComplete="street-address" />
   </Field>
-</Fieldset>
+</Fieldset>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<Fieldset>
-  <FieldsetLegend />
-</Fieldset>
-```
+Use one `FieldsetLegend` for a related group. For a Radio Group, put `aria-invalid` and `aria-describedby` on the group root and render one group-level `FieldError` after its options. For multiple checkboxes, keep each checkbox independently labelable while the fieldset supplies the shared context.
 
-Fieldset uses native `fieldset` and `legend` elements, so related controls retain their semantic grouping without another form library. Compose Field inside it for labels, descriptions, and validation messages.
+`Fieldset` only provides native grouping and layout. Use `Field` for descriptions, error messages, and state mapping from TanStack Form.
 
 ## Examples
 
-### With Radio Group
+### Radio Group
 
-Place a Radio Group inside Fieldset when the user must choose exactly one option. Use `FieldItem` and `FieldLabel` for each choice.
+Use a legend and option labels to describe one required choice.
 
-### With Checkbox Group
+### Checkbox Group
 
-Use several controlled Checkbox components when the user can choose multiple related options. The surrounding Field shares one name and the items remain independently labelable.
+Group several independently labeled checkbox choices under one legend.
+
+### TanStack Form Fields
+
+Combine fieldset semantics with registered fields in a submit-capable form.
+
+## Accessibility
+
+Use `FieldsetLegend` rather than a visually similar heading whenever controls form one conceptual group. Keep each choice label adjacent to and associated with its own control; a legend supplements rather than replaces those labels.
+
+## API Reference
+
+`Fieldset` accepts native `<fieldset>` attributes, and `FieldsetLegend` accepts native `<legend>` attributes. Both add their documented `data-slot` attributes for styling and composition.

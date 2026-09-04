@@ -117,6 +117,10 @@
       "calt" 0;
   }
 
+  :not(pre) > code {
+    white-space: nowrap;
+  }
+
   [data-slot="collapsible-content"] > [data-rehype-pretty-code-figure] {
     margin-top: 0;
     margin-inline: 0;

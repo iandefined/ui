@@ -4,24 +4,11 @@ A list of actions in a dropdown, enhanced with keyboard navigation.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `DropdownMenu` to expose contextual actions without permanently occupying space.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/dropdown-menu.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -32,93 +19,52 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-```
-
-## Anatomy
-
-```tsx
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuGroupLabel,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 <DropdownMenu>
-  <DropdownMenuTrigger />
+  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
   <DropdownMenuContent>
-    <DropdownMenuItem />
-    <DropdownMenuSeparator />
-    <DropdownMenuGroup>
-      <DropdownMenuGroupLabel />
-      <DropdownMenuItem />
-    </DropdownMenuGroup>
-    <DropdownMenuCheckboxItem />
-    <DropdownMenuRadioGroup>
-      <DropdownMenuRadioItem />
-    </DropdownMenuRadioGroup>
-    <DropdownMenuSub>
-      <DropdownMenuSubTrigger />
-      <DropdownMenuSubContent />
-    </DropdownMenuSub>
+    <DropdownMenuItem>Account settings</DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>;
 ```
 
-## Examples
+## Composition
 
-### Basic
+Compose items, groups, checkbox or radio groups, separators, and nested submenus inside `DropdownMenuContent`.
+
+## Examples
 
 ### With Arrow
 
-Set `showArrow` on the content. Keep `sideOffset` at 8 or more so the arrow has room.
+Set `showArrow` on the content.
 
 ### Sides
 
-Set `side` on the content to control where the menu opens. The default is `bottom`.
+Set `side` to control the opening direction.
 
 ### Open on Hover
 
-Set `openOnHover` on the trigger to open the menu on hover instead of click.
+Set `openOnHover` on the trigger.
 
 ### Checkboxes
 
-Checkbox items stay open when clicked by default. Set `closeOnClick` to close the menu after a selection.
-
-```tsx
-<DropdownMenuCheckboxItem closeOnClick>
-  Show status bar
-</DropdownMenuCheckboxItem>
-```
+Checkbox items remain open by default; set `closeOnClick` to close after selection.
 
 ### Radio Group
 
-Radio items also stay open by default. Set `closeOnClick` to close the menu after choosing an item.
-
-```tsx
-<DropdownMenuRadioItem closeOnClick value="light">
-  Light
-</DropdownMenuRadioItem>
-```
-
-Pass `activeIcon` to the radio group to replace the default dot indicator.
+Radio items remain open by default and support a custom `activeIcon`.
 
 ### With Groups
 
+Organize related actions.
+
 ### Nested Menu
+
+Use a submenu for secondary actions.
 
 ### Navigate to Another Page
 
-Compose a menu item with an anchor using Base UI’s `render` prop.
+Use Base UI's `render` prop to make an item a link.
 
 ```tsx
 <DropdownMenuItem render={<a href="/projects" />}>
@@ -128,7 +74,7 @@ Compose a menu item with an anchor using Base UI’s `render` prop.
 
 ### Open a Dialog
 
-Control the dialog state and open it from the menu item’s `onClick` handler.
+Open application state from an item's `onClick` handler.
 
 ```tsx
 <DropdownMenuItem onClick={() => setDialogOpen(true)}>
@@ -136,20 +82,27 @@ Control the dialog state and open it from the menu item’s `onClick` handler.
 </DropdownMenuItem>
 ```
 
-## Popup Animation
+### Popup Animations
 
-Set `animationPreset` on the content. The default is `scale`.
+Choose an animation preset for the menu content.
 
-### Scale
+## Accessibility
 
-### Wipe
+Use clear item labels. Give an icon-only trigger an `aria-label`, and keep destructive actions visually and verbally distinct.
 
-### Wipe Scale
+## API Reference
 
-### Motion
+`DropdownMenu` wraps [Base UI Menu](https://base-ui.com/react/components/menu). Supported Base UI menu props pass through.
 
-### Motion Blur
+### DropdownMenuContent Props
 
-### Slide Outside
+Sets the entry and exit animation.
+Sets the modal backdrop treatment.
 
-### Slide Inside
+### DropdownMenuItem Props
+
+Sets the item treatment.
+
+### DropdownMenuRadioGroup Props
+
+Replaces the default selected-item indicator.

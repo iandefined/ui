@@ -1,92 +1,57 @@
 # Introduction
 
-Build, document, and deploy this custom shadcn registry.
+A modern shadcn registry built on Base UI, Tailwind CSS v4, and Motion for product engineers and AI coding assistants.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-This repository publishes a custom [shadcn registry](https://ui.shadcn.com/docs/registry) with a documentation site, live component previews, generated registry JSON, and machine-readable docs for AI coding assistants.
+`iandefined/ui` is an open-source registry of accessible, animated UI components crafted for product engineers. Built on [Base UI](https://base-ui.com), [Tailwind CSS v4](https://tailwindcss.com), [Motion](https://motion.dev), and [TanStack Start](https://tanstack.com/start), every item is distributed through a custom [shadcn registry](https://ui.shadcn.com/docs/registry) so you copy, paste, and own your source code.
 
-The app is a static-hostable TanStack Start SPA deployed to Cloudflare Workers with Worker Static Assets. Component docs are authored in MDX with Fumadocs, registry items are built from `registry.json`, and generated files are served from stable public URLs.
+## Why iandefined/ui?
 
-## What this repo includes
+Modern web interfaces need accessible foundations, natural motion, and clean architecture without heavy framework lock-in or fragile abstraction layers.
 
-- **Fumadocs documentation** in `content/docs`, discovered from the filesystem.
-- **shadcn registry output** generated from `registry.json` into `public/r`.
-- **Live component previews** that can render examples from `examples` or inline MDX.
-- **A single `base` registry namespace** for new components, plus the current placeholder item.
-- **Static AI documentation endpoints** such as `/llms.txt`, `/llms-full.txt`, and `/llms.md/...`.
-- **Cloudflare Workers deployment** using Worker Static Assets.
+- **Human Design, AI Compatible**: Component contracts feature predictable prop surfaces, semantic `data-slot` hooks, and machine-readable endpoints (`/llms.txt`, `/llms-full.txt`, and `/.well-known/agent-skills/index.json`). Both human engineers and AI coding assistants can generate, refactor, and reason about interface code with precision.
+- **Base UI Primitives, Not Radix Legacy**: Base UI provides unstyled accessibility, native HTML attribute forwarding, and clean render-prop composition through `render` and `useRender`. This avoids the `asChild` cloning pitfalls and ref issues common to older primitive libraries.
+- **Motion and Polish Built-In**: Micro-interactions, spring physics, and animated transitions are designed as core primitives rather than afterthought overlays, respecting `prefers-reduced-motion` across every animated component.
+- **Full Code Ownership**: Components install directly into your project via the `shadcn` CLI. There are no runtime package dependencies on a proprietary UI library, no theme lock-in, and no closed-source black boxes.
 
-## Tech Stack
+## Component Ecosystem
 
-- `TanStack Start`
-- `TanStack Router`
-- `React 19` + `TypeScript`
-- `Vite`
-- `Tailwind CSS 4`
-- `Fumadocs`
-- `shadcn/ui`
-- `motion`
-- `shiki` + `rehype-pretty-code`
-- `Cloudflare Workers`
+The registry is organized across four functional layers:
 
-## How It Works
+- **Core UI**: Foundational interactive primitives including `Button`, `Badge`, `Card`, `Checkbox`, `Switch`, `Slider`, `Radio Group`, `Tooltip`, `Popover`, `Select`, `Dropdown Menu`, `Tabs`, `Accordion`, and `Breadcrumbs`.
+- **Form System**: Integrated form composition pairing native `<form>` semantics and TanStack Form workflows with `Form`, `Field`, `Fieldset`, `Input`, `Textarea`, `Number Field`, `Input OTP`, `Input Group`, `Combobox`, and `Autocomplete`.
+- **Blocks**: Multi-file, production-ready application layouts such as `Sidebar 01` (located under `src/registry/base/blocks/<category>/<number>/`) that demonstrate complete compositions with dashboard routing, navigation state, and responsive behavior.
+- **Motion Utilities**: Standalone styling and animation primitives including `Hitbox` for accessible touch targets, `IconSwap` for stateful icon transitions, and `TextMorph` for fluid text animations.
 
-1. Add or edit registry source in `src/registry/base`.
-2. Add the registry item to `registry.json`.
-3. Document the component in `content/docs/components`.
-4. Render a preview with `ComponentPreview`.
-5. Build the generated registry files with `pnpm registry:build`.
-6. Build generated docs and agent files with `pnpm static:build`.
+## Quick Start
 
-Once deployed, users can install registry items with the shadcn CLI:
+Install individual components into your project using the official `shadcn` CLI:
 
 ```bash
 npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
-## Important Paths
-
-- `content/docs` - MDX documentation pages.
-- `examples` - reusable preview examples.
-- `src/registry/base` - installable registry component source.
-- `src/shared/components` - app and docs UI.
-- `src/shared/components/ui` - complete shadcn/ui primitives used by the site.
-- `src/shared/lib/registry.ts` - preview/component lookup wiring.
-- `registry.json` - shadcn registry manifest.
-- `public/r` - generated registry JSON files.
-- `scripts/generate-static-assets.mjs` - generated docs, LLM, sitemap, and discovery files.
-
-Do not edit generated output by hand. Regenerate it with the matching script instead.
-
-## Public Endpoints
-
-- `/r/registry.json` - registry index.
-- `/r/button.json` - individual registry item.
-- `/llms.txt` - quick AI docs index.
-- `/llms-full.txt` - complete generated docs.
-- `/openapi.json` - machine-readable endpoint catalog.
-- `/.well-known/agent-skills/index.json` - agent skill discovery.
-
-The production origin comes from `FALLBACK_SITE_ORIGIN` in `src/shared/constants/site.ts`, unless `SITE_URL` is provided at build time.
-
-## Common Commands
+Or install complete multi-file blocks:
 
 ```bash
-pnpm dev
-pnpm registry:build
-pnpm static:build
-pnpm typecheck
-pnpm check
-pnpm build
-pnpm deploy
+npx shadcn@latest add https://ui.iandefined.com/r/sidebar-01.json
 ```
 
-Use `pnpm registry:build` after registry changes, `pnpm static:build` after docs or static endpoint changes, and `pnpm build` before deploy.
+## AI Coding Integration
+
+`iandefined/ui` provides dedicated, build-time static endpoints for AI coding agents and developer tooling:
+
+- [`/llms.txt`](/llms.txt): Lightweight sitemap and index designed for fast retrieval.
+- [`/llms-full.txt`](/llms-full.txt): Complete, concatenated documentation text for context injection.
+- [`/r/registry.json`](/r/registry.json): Standard shadcn registry manifest describing all public components, dependencies, and file targets.
 
 ## Next Steps
 
-Read [Installation](/docs/installation) to install registry components, [Theming](/docs/theming) to customize tokens, [Components](/docs/components) to browse registry items, and [Extending](/docs/extending) to add new docs pages or components.
+- Follow the [Installation](/docs/installation) guide to set up Tailwind CSS v4 and the `cn()` utility in your project.
+- Explore [Theming](/docs/theming) to customize OKLCH color tokens, spring physics, and border radii.
+- Read the [Forms Guide](/docs/forms) to compose validated form experiences.
+- Check out [Extending](/docs/extending) to author new components, blocks, or documentation pages.
 
 # Components
 
@@ -100,28 +65,11 @@ A filterable text input that suggests matching options while accepting free-form
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Autocomplete` when users benefit from suggestions but may enter any text.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/autocomplete.json
-```
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json https://ui.iandefined.com/r/scroll-area.json
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -134,9 +82,7 @@ import {
   AutocompleteList,
   AutocompletePopup,
 } from "@/components/ui/autocomplete";
-```
 
-```tsx
 const tags = ["feature", "fix", "bug", "docs"];
 
 <Autocomplete items={tags}>
@@ -154,128 +100,73 @@ const tags = ["feature", "fix", "bug", "docs"];
 </Autocomplete>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<Autocomplete>
-  <AutocompleteLabel />
-  <AutocompleteInput />
-  <AutocompletePopup>
-    <AutocompleteEmpty />
-    <AutocompleteList>
-      <AutocompleteGroup>
-        <AutocompleteGroupLabel />
-        <AutocompleteCollection>
-          <AutocompleteItem />
-        </AutocompleteCollection>
-      </AutocompleteGroup>
-      <AutocompleteSeparator />
-    </AutocompleteList>
-  </AutocompletePopup>
-</Autocomplete>
-```
+Place the input and popup inside `Autocomplete`; use groups, collections, and separators to organize suggestions.
 
 ## Examples
 
 ### Auto Highlight
 
-Set `autoHighlight` on `AutocompleteRoot` (or `<Autocomplete>`) to automatically highlight the first matching suggestion while typing.
+Highlight the first matching suggestion while typing.
 
 ### Clearable Input
 
-Set `showClear` on `AutocompleteInput` to display an inline clear button when text has been entered.
+Show an inline clear action after text is entered.
 
 ### Trigger and Clear
 
-Set both `showTrigger` and `showClear` on `AutocompleteInput` to display both a dropdown toggle and a clear button.
+Show both the popup trigger and clear action.
 
 ### Grouped Options
 
-Group related suggestions with `AutocompleteGroup`, `AutocompleteGroupLabel`, and `AutocompleteCollection`.
+Organize related suggestions into groups.
 
 ### Inline Suggestions
 
-Set `mode="both"` on `AutocompleteRoot` to complete the input value inline with the first matching suggestion.
+Complete with the first matching suggestion.
 
 ### Limited Results
 
-Set `limit` on `AutocompleteRoot` to constrain the maximum number of suggestions rendered in the popup.
+Constrain the number of rendered suggestions.
 
 ### Async Loading
 
-Filter and fetch results asynchronously with debounce, loading indicator, and custom status messages using `useAutocompleteFilter`.
+Filter asynchronous results with status feedback.
 
 ### Fuzzy Search
 
-Combine with `useFuzzyFilter` from `@/registry/base/use-fuzzy-filter` for loose fuzzy matching across titles, categories, and descriptions.
+Use loose matching across option fields.
 
 ### Custom Matching Strategy
 
-Use `useAutocompleteFilter` to apply string matching strategies like `startsWith`, `contains`, or `endsWith` with locale-aware sensitivity options.
+Choose a string-matching strategy.
 
 ### Result Counter and Stats
 
-Use `useAutocompleteFilteredItems` inside an Autocomplete component tree to display real-time result counters, match percentages, or contextual summaries.
+Read the filtered item list for contextual summaries.
 
 ## API Reference
 
-The Autocomplete component is built on top of [Base UI's Autocomplete](https://base-ui.com/react/components/autocomplete). All Base UI props are supported.
+`Autocomplete` wraps [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete). Supported Base UI props pass through.
 
-### AutocompleteInput
+### AutocompleteInput Props
 
-Text input with optional trigger and clear actions. Wraps Base UI's `Autocomplete.Input` with styled input and action buttons.
+Shows a popup toggle button.
+Shows a clear action after text is entered.
+Alias for `showClear`.
 
-| Prop          | Type      | Default | Description                                                   |
-| ------------- | --------- | ------- | ------------------------------------------------------------- |
-| `showTrigger` | `boolean` | `false` | Shows a toggle button to open or close the suggestions popup. |
-| `showClear`   | `boolean` | `false` | Shows a clear button to reset input value when non-empty.     |
-| `isClearable` | `boolean` | `false` | Alias for `showClear`.                                        |
+### AutocompletePopup Props
 
-### AutocompletePopup
+Sets the preferred side of the input.
+Sets the distance from the input in pixels.
+Sets alignment relative to the input.
+Offsets the popup along the alignment axis.
 
-Popup container presenting suggestions with exit and entry animations. Can be used standalone or within `AutocompletePositioner`.
+### AutocompleteList Props
 
-| Prop         | Type                           | Default    | Description                                                  |
-| ------------ | ------------------------------ | ---------- | ------------------------------------------------------------ |
-| `side`       | `"top" \| "bottom"`            | `"bottom"` | Preferred side relative to anchor.                           |
-| `sideOffset` | `number`                       | `0`        | Distance in pixels between the input and the dropdown popup. |
-| `align`      | `"start" \| "center" \| "end"` | `"center"` | Alignment relative to anchor.                                |
-
-### AutocompleteList
-
-Scrollable list container wrapping `ScrollArea` and Base UI's `Autocomplete.List`.
-
-| Prop            | Type                                             | Default      | Description                                                       |
-| --------------- | ------------------------------------------------ | ------------ | ----------------------------------------------------------------- |
-| `scrollShadow`  | `"vertical" \| "horizontal" \| "both" \| "none"` | `"vertical"` | Directional gradient shadow indicating hidden scrollable content. |
-| `hideScrollbar` | `boolean`                                        | `false`      | Hides the custom scrollbar while preserving scroll functionality. |
-
-### Hooks
-
-#### `useAutocompleteFilter`
-
-Provides built-in string filter matchers (`contains`, `startsWith`, `endsWith`) from Base UI for custom filtering workflows.
-
-```tsx
-import { useAutocompleteFilter } from "@/components/ui/autocomplete";
-
-const { contains, startsWith, endsWith } = useAutocompleteFilter({
-  sensitivity: "base",
-});
-```
-
-#### `useAutocompleteFilteredItems`
-
-Returns the currently filtered items array directly from within an `<AutocompleteRoot>` context.
-
-```tsx
-import { useAutocompleteFilteredItems } from "@/components/ui/autocomplete";
-
-function MatchCount() {
-  const filteredItems = useAutocompleteFilteredItems<ItemType>();
-  return <span>{filteredItems.length} results</span>;
-}
-```
+Shows gradients for hidden scrollable content.
+Hides the scrollbar while preserving scrolling.
 
 # Avatar
 
@@ -283,39 +174,24 @@ An image element with a fallback for representing the user.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Avatar` to represent a person, team, or account when an image may be unavailable.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/avatar.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-```
 
-```tsx
 <Avatar>
   <AvatarImage src="/avatars/01.png" alt="User avatar" />
   <AvatarFallback>JD</AvatarFallback>
-</Avatar>
+</Avatar>;
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <Avatar>
@@ -328,11 +204,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 ### Fallback Only
 
+Use a short, recognizable fallback when no image is available.
+
 ### Sizes
+
+Use a size appropriate to the surrounding content.
 
 ### Radius
 
+Change the image shape for the context.
+
 ### Group Avatars
+
+Stack related people or accounts.
+
+## API Reference
+
+`Avatar` wraps [Base UI Avatar](https://base-ui.com/react/components/avatar). Supported Base UI props pass through; this registry item owns no additional props.
 
 # Badge
 
@@ -340,111 +228,59 @@ Compact labels for status, category, or metadata.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Badge` to communicate concise status, category, or count information.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/badge.json
-```
-
-```bash
-npm install @base-ui/react class-variance-authority clsx tailwind-merge
-```
-
-```css
-@theme inline {
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-error: var(--error);
-  --color-error-foreground: var(--error-foreground);
-  --color-info: var(--info);
-  --color-info-foreground: var(--info-foreground);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-}
-
-:root {
-  --destructive-foreground: var(--color-white);
-  --error: var(--color-red-500);
-  --error-foreground: var(--color-red-700);
-  --info: var(--color-blue-500);
-  --info-foreground: var(--color-blue-700);
-  --success: var(--color-emerald-500);
-  --success-foreground: var(--color-emerald-700);
-  --warning: var(--color-amber-500);
-  --warning-foreground: var(--color-amber-700);
-}
-
-.dark {
-  --destructive-foreground: var(--color-white);
-  --error: var(--color-red-500);
-  --error-foreground: var(--color-red-400);
-  --info: var(--color-blue-500);
-  --info-foreground: var(--color-blue-400);
-  --success: var(--color-emerald-500);
-  --success-foreground: var(--color-emerald-400);
-  --warning: var(--color-amber-500);
-  --warning-foreground: var(--color-amber-400);
-}
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Badge } from "@/components/ui/badge";
+
+<Badge>Badge</Badge>;
 ```
 
-```tsx
-<Badge>Badge</Badge>
-```
+## Features
 
-## Palette colors
-
-Set `color` only with an explicit `translucent` or `dot` variant. Semantic
-variants such as `success` and `warning` own their color and do not accept the
-`color` prop.
-
-```tsx
-<Badge color="violet" variant="translucent">
-  Fiction
-</Badge>
-
-<Badge color="emerald" variant="dot">
-  Online
-</Badge>
-```
+Set `color` only with `translucent` or `dot`. Semantic variants such as `success` and `warning` own their color.
 
 ## Examples
 
 ### Semantic variants
 
+Choose a semantic state.
+
 ### Palette colors
+
+Use a palette color with a palette-driven variant.
 
 ### Sizes
 
+Use compact badges in dense layouts.
+
 ### With Icon
+
+Add a small, meaningful icon.
 
 ### With Link
 
+Render a navigation target through `render`.
+
 ### With Count
+
+Communicate a compact count.
 
 ## API Reference
 
-| Prop      | Type                                                                                                                              | Default     | Description                                             |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
-| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent" \| "dot"` | `"default"` | Controls the semantic or palette-driven appearance.     |
-| `color`   | `BadgeColor`                                                                                                                      | `"gray"`    | Requires an explicit `translucent` or `dot` variant.    |
-| `size`    | `"default" \| "compact"`                                                                                                          | `"default"` | Controls the badge height, gap, padding, and type size. |
-| `render`  | `React.ReactElement`                                                                                                              | —           | Renders another element, such as a link, as the badge.  |
+`Badge` uses Base UI's [`useRender`](https://base-ui.com/react/utils/use-render) for polymorphic rendering. Standard element props pass through.
+
+### Props
+
+Sets the semantic or palette-driven appearance.
+Sets a palette color when `variant` is `"translucent"` or `"dot"`.
+Sets the badge height and spacing.
 
 # Breadcrumbs
 
@@ -452,28 +288,11 @@ A responsive breadcrumb trail with surface variants, custom separators, and coll
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Breadcrumb` to show a page's position in a hierarchy and provide parent navigation.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/breadcrumbs.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefined.com/r/dropdown-menu.json
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -486,9 +305,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumbs";
-```
 
-```tsx
 <Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
@@ -499,81 +316,59 @@ import {
       <BreadcrumbPage>Breadcrumbs</BreadcrumbPage>
     </BreadcrumbItem>
   </BreadcrumbList>
-</Breadcrumb>
+</Breadcrumb>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink />
-      <BreadcrumbPage />
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbEllipsis />
-  </BreadcrumbList>
-</Breadcrumb>
-```
+Use `BreadcrumbItem` for each location, `BreadcrumbLink` for navigable ancestors, and `BreadcrumbPage` for the current page.
 
 ## Examples
 
 ### Dropdown
 
-Compose the ellipsis with Dropdown Menu to collapse part of a long path into an accessible menu.
+Collapse intermediate locations into a dropdown.
 
 ### Basic
 
+Show a short path.
+
 ### Variants
 
-Use `variant="surface"` for a framed breadcrumb track with an elevated current-page item.
+Use `surface` for a framed trail.
 
 ### Sizes
 
-| Value | Description          |
-| ----- | -------------------- |
-| `sm`  | Compact breadcrumb.  |
-| `md`  | Default breadcrumb.  |
-| `lg`  | Spacious breadcrumb. |
+Adjust density for the surrounding layout.
 
 ### Custom Separator
 
-Pass an icon through `separator` or render it as a child. This example uses Lucide's `SlashIcon`.
+Replace the default divider.
 
 ### With Icons
 
+Add recognizable location icons.
+
 ### With Ellipsis
 
-Use `BreadcrumbEllipsis` to represent collapsed items in a long path.
+Represent omitted locations with `BreadcrumbEllipsis`.
 
 ## Accessibility
 
-Breadcrumb renders a `nav` labeled “Breadcrumb” by default. `BreadcrumbPage` marks the current location with `aria-current="page"`, and separators are hidden from assistive technology. When `BreadcrumbEllipsis` is inside an icon-only menu trigger, give the Button an explicit `aria-label`.
+`Breadcrumb` renders a `nav` labeled “Breadcrumb” by default. `BreadcrumbPage` sets `aria-current="page"`; label an icon-only ellipsis trigger explicitly.
 
 ## API Reference
 
-### Breadcrumb
+`BreadcrumbLink` supports [Base UI `useRender`](https://base-ui.com/react/utils/use-render); all parts otherwise accept their standard HTML props.
 
-| Prop         | Type                     | Default        | Description                           |
-| ------------ | ------------------------ | -------------- | ------------------------------------- |
-| `variant`    | `"default" \| "surface"` | `"default"`    | Controls the breadcrumb presentation. |
-| `size`       | `"sm" \| "md" \| "lg"`   | `"md"`         | Controls spacing and text size.       |
-| `aria-label` | `string`                 | `"Breadcrumb"` | Labels the navigation landmark.       |
+### Breadcrumb Props
 
-### BreadcrumbLink
+Sets the breadcrumb presentation.
+Sets spacing and text size.
 
-Accepts anchor props and Base UI's polymorphic `render` prop.
+### BreadcrumbSeparator Props
 
-### BreadcrumbSeparator
-
-| Prop        | Type        | Default              | Description                        |
-| ----------- | ----------- | -------------------- | ---------------------------------- |
-| `separator` | `ReactNode` | `<ChevronRightIcon>` | Replaces the default divider icon. |
-
-### BreadcrumbEllipsis
-
-Represents omitted breadcrumb items. Label the interactive control that contains it when it is used as a trigger.
+Replaces the default divider icon.
 
 # Button
 
@@ -581,36 +376,21 @@ A button with a glossy default treatment, custom colors, variants, sections, and
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Button` for actions that submit, confirm, navigate, or change application state.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Button } from "@/components/ui/button";
+
+<Button>Get started</Button>;
 ```
 
-```tsx
-<Button>Get started</Button>
-```
-
-The default variant uses the glossy treatment. Pass any valid CSS color to `color` to generate its gradient and ring.
+The default variant uses the glossy treatment. Pass a CSS color to `color` to generate its gradient and ring.
 
 ```tsx
 <Button className="text-white" color="#2563eb">
@@ -618,46 +398,53 @@ The default variant uses the glossy treatment. Pass any valid CSS color to `colo
 </Button>
 ```
 
-`color` is part of a discriminated union: it is available when `variant` is `"default"` or omitted, and TypeScript rejects it for every other variant.
-
 ## Examples
 
 ### Variants
 
+Choose a visual treatment for the action.
+
 ### Custom Colors
+
+Apply `color` to the default variant.
 
 ### Sizes
 
+Match the button to its surrounding controls.
+
 ### With Icons
 
-Use `leftSection` and `rightSection` to place icons beside the label with optical padding.
+Use `leftSection` and `rightSection` to place icons beside the label.
 
 ### Loading
 
-Pass `disabled` with a spinner when an action is in progress.
+Disable the action while work is in progress.
 
 ### Disabled
 
+Show an unavailable action without changing its layout.
+
 ### As Link
 
-Use Base UI's `render` prop and set `nativeButton={false}` when the component renders as a link.
+Use Base UI's `render` prop and set `nativeButton={false}` when rendering a link.
 
 ## Accessibility
 
-Give icon-only buttons an `aria-label`. Disabled buttons preserve their visual size and remove pointer interaction.
+Give icon-only buttons an `aria-label`. Use `nativeButton={false}` only when `render` supplies a real non-button target.
 
 ## API Reference
 
-Button wraps Base UI's Button and accepts its props in addition to the props below.
+`Button` wraps [Base UI Button](https://base-ui.com/react/components/button). Supported Base UI props pass through.
 
-| Prop           | Type                                                                                                      | Default     | Description                                               |
-| -------------- | --------------------------------------------------------------------------------------------------------- | ----------- | --------------------------------------------------------- |
-| `variant`      | `"default" \| "secondary" \| "outline" \| "ghost" \| "link" \| "destructive"`                             | `"default"` | Controls the visual treatment.                            |
-| `color`        | `string`                                                                                                  | —           | Generates the default variant's glossy gradient and ring. |
-| `size`         | `"xs" \| "sm" \| "default" \| "lg" \| "xl" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg" \| "icon-xl"` | `"default"` | Controls button height and padding.                       |
-| `radius`       | `"none" \| "sm" \| "default" \| "lg" \| "xl" \| "full"`                                                   | `"default"` | Controls the corner radius.                               |
-| `leftSection`  | `ReactNode`                                                                                               | —           | Content rendered before the label.                        |
-| `rightSection` | `ReactNode`                                                                                               | —           | Content rendered after the label.                         |
+### Props
+
+Sets the visual treatment. `color` is available only when this is
+`"default"` or omitted.
+Generates the glossy gradient and ring for the default variant.
+Sets the button dimensions.
+Sets the corner radius.
+Renders content before the label.
+Renders content after the label.
 
 # Button Group
 
@@ -665,48 +452,25 @@ A container that groups related buttons together with consistent styling.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `ButtonGroup` when adjacent actions belong to the same task or control.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button-group.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/separator.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Button } from "@/components/ui/button";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-  ButtonGroupText,
-} from "@/components/ui/button-group";
-```
+import { ButtonGroup } from "@/components/ui/button-group";
 
-```tsx
 <ButtonGroup>
   <Button>Button 1</Button>
   <Button>Button 2</Button>
-</ButtonGroup>
+</ButtonGroup>;
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <ButtonGroup>
@@ -720,47 +484,55 @@ import {
 
 ### Basic
 
+Group related actions.
+
 ### Orientation
 
-Set the `orientation` prop to change the button group layout.
+Set `orientation` to stack actions vertically.
 
 ### Sizes
 
-Control the size of buttons using the `size` prop on individual buttons.
+Size each contained button for the context.
 
 ### Nested
 
-Nest `ButtonGroup` components to create button groups with spacing.
+Nest groups to separate related action clusters.
 
 ### Separator
 
-The `ButtonGroupSeparator` component visually divides buttons within a group.
-
-Buttons with variant `outline` do not need a separator because they have a border. For other variants, a separator improves the visual hierarchy.
+Use `ButtonGroupSeparator` where adjacent button borders do not provide separation.
 
 ### Split
 
-Create a split button group by adding two buttons separated by a `ButtonGroupSeparator`.
+Pair a primary action with a secondary control.
 
 ### Input
 
-Wrap an Input component with buttons.
+Combine an input with related actions.
 
 ### Input Group
 
-Wrap an Input Group component to create complex input layouts.
+Compose a more complex input control.
 
 ### Menu
 
-Create a split button group with a Dropdown Menu component.
+Use a dropdown for secondary actions.
 
 ### Select
 
-Pair with a Select component.
+Pair a selection control with actions.
 
 ### Popover
 
-Use with a Popover component.
+Open supplemental controls from the group.
+
+## API Reference
+
+`ButtonGroup` is a styled `div`; standard HTML props pass through.
+
+### Props
+
+Sets the layout direction.
 
 # Card
 
@@ -768,24 +540,11 @@ A container with header, content, action, and footer regions.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Card` to group related content and actions into a distinct surface.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/card.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -797,19 +556,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-```
 
-```tsx
 <Card>
   <CardHeader>
     <CardTitle>Card Title</CardTitle>
     <CardDescription>Card description.</CardDescription>
   </CardHeader>
   <CardContent>Card content.</CardContent>
-</Card>
+</Card>;
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <Card>
@@ -827,23 +584,19 @@ import {
 
 ### With Footer and Action
 
-Use `CardFooter` for actions below the content and `CardAction` for a control in
-the header.
+Use `CardFooter` below the content and `CardAction` for a header control.
 
 ### Variants
 
-Use `variant` to change how the card is framed.
-
-The `inset` variant uses the `muted` token for its outer frame and the normal
-`card` background for its nested content panel in light mode. Dark mode keeps
-the existing surface pairing. It does not require surface levels or additional
-theme variables.
+Use `inset` to place nested content on a card surface inside a muted frame.
 
 ## API Reference
 
-| Prop      | Type                   | Default     | Description                     |
-| --------- | ---------------------- | ----------- | ------------------------------- |
-| `variant` | `"default" \| "inset"` | `"default"` | Changes how the card is framed. |
+`Card` is a styled `div`; standard HTML props pass through.
+
+### Props
+
+Changes how the card is framed.
 
 # Checkbox
 
@@ -851,62 +604,61 @@ A control that allows the user to toggle between checked and unchecked.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Checkbox` for independent boolean choices, including optional indeterminate states.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/checkbox.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Checkbox } from "@/components/ui/checkbox";
+
+<Checkbox aria-label="Receive updates" />;
 ```
 
-```tsx
-<Checkbox />
-```
+## Composition
 
-## Anatomy
+Use `CheckboxRoot` and `CheckboxIndicator` when a custom composition needs separate parts.
 
 ```tsx
-import {
-  Checkbox,
-  CheckboxIndicator,
-  CheckboxRoot,
-} from "@/components/ui/checkbox";
-
-// Option #1. Basic usage:
-<Checkbox />;
-
-// Option #2. Custom usage:
 <CheckboxRoot>
   <CheckboxIndicator />
-</CheckboxRoot>;
+</CheckboxRoot>
 ```
 
 ## Examples
 
 ### Disabled
 
+Prevent changes while retaining the current state.
+
 ### Sizes
+
+Align the checkbox with nearby controls.
 
 ### Radius
 
+Adjust the checkmark container's corner radius.
+
 ### Custom Icons
+
+Provide an icon for checked and indeterminate states.
+
+## Accessibility
+
+Give an unlabeled checkbox an `aria-label`, or associate it with a visible `<label>`.
+
+## API Reference
+
+`Checkbox` wraps [Base UI Checkbox](https://base-ui.com/react/components/checkbox). Supported Base UI props pass through.
+
+### Props
+
+Sets the control dimensions.
+Sets the indicator corner radius.
+Disables the indicator animation.
 
 # Combobox
 
@@ -914,28 +666,11 @@ A filterable input for selecting one or more predefined values.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Combobox` when users choose from a list and need to filter it first.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/combobox.json
-```
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json https://ui.iandefined.com/r/scroll-area.json
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -948,9 +683,7 @@ import {
   ComboboxList,
   ComboboxPopup,
 } from "@/components/ui/combobox";
-```
 
-```tsx
 const fruits = ["Apple", "Banana", "Orange"];
 
 <Combobox items={fruits}>
@@ -968,61 +701,55 @@ const fruits = ["Apple", "Banana", "Orange"];
 </Combobox>;
 ```
 
-The value passed to `ComboboxItem` must match the item type. When items are objects without a `label` property, provide `itemToStringLabel` so the selected value renders as useful input text.
+## Composition
 
-## Anatomy
-
-```tsx
-<Combobox>
-  <ComboboxLabel />
-  <ComboboxInput />
-  <ComboboxPopup>
-    <ComboboxEmpty />
-    <ComboboxList>
-      <ComboboxGroup>
-        <ComboboxGroupLabel />
-        <ComboboxCollection>
-          <ComboboxItem />
-        </ComboboxCollection>
-      </ComboboxGroup>
-      <ComboboxSeparator />
-    </ComboboxList>
-  </ComboboxPopup>
-</Combobox>
-```
-
-For multiple selection, replace the standalone input with `ComboboxChips`, render selected `ComboboxChip` values inside `ComboboxValue`, and keep `ComboboxInput` inside the chips container.
+Use `ComboboxChips`, `ComboboxValue`, and `ComboboxChip` for multiple selection; keep `ComboboxInput` inside the chips container.
 
 ## Examples
 
 ### Basic
 
-Primitive values can be passed directly. `autoHighlight` highlights the first match while filtering.
+Filter primitive values.
 
 ### Controlled Object Value
 
-Use `value` and `onValueChange` when application state owns the selection. `itemToStringLabel` controls how an object value appears in the input.
+Control object selections with `value` and `onValueChange`.
 
 ### With Label
 
-Give the input an `id` and connect a visible label with `htmlFor`.
+Associate a visible label with the input.
 
 ### Multiple Selection
 
-Set `multiple` and render removable selected values as chips.
+Render selected values as removable chips.
 
 ### Input Inside Popup
 
-Use `ComboboxTrigger` as the form control when the filter input belongs inside the popup. Set `showTrigger={false}` on that input so the combobox has only one trigger.
-Keep the trigger icon at the inline end with `ms-auto shrink-0`; its position then remains stable even when no value or placeholder is rendered.
+Move filtering into the popup when the trigger is the form control.
 
 ### Clearable Combobox
 
-Set `isClearable` on `ComboboxInput` to replace the toggle icon with a clear action after a value is selected.
+Replace the toggle with a clear action after selection.
 
 ### Groups
 
-This color-palette example follows Pure UI's grouped implementation: it derives `{ value, items }` color families, renders each family through `ComboboxCollection`, and shows the selected color's HEX and RGB values.
+Organize option families in collections.
+
+## API Reference
+
+`Combobox` wraps [Base UI Combobox](https://base-ui.com/react/components/combobox). Supported Base UI props pass through.
+
+### ComboboxInput Props
+
+Shows the popup toggle button.
+Shows a clear action after selection.
+
+### ComboboxPopup Props
+
+Sets the preferred side of the input.
+Sets the distance from the input in pixels.
+Sets alignment relative to the input.
+Offsets the popup along the alignment axis.
 
 # Dropdown Menu
 
@@ -1030,24 +757,11 @@ A list of actions in a dropdown, enhanced with keyboard navigation.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `DropdownMenu` to expose contextual actions without permanently occupying space.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/dropdown-menu.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1058,93 +772,52 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-```
-
-## Anatomy
-
-```tsx
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuGroupLabel,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 <DropdownMenu>
-  <DropdownMenuTrigger />
+  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
   <DropdownMenuContent>
-    <DropdownMenuItem />
-    <DropdownMenuSeparator />
-    <DropdownMenuGroup>
-      <DropdownMenuGroupLabel />
-      <DropdownMenuItem />
-    </DropdownMenuGroup>
-    <DropdownMenuCheckboxItem />
-    <DropdownMenuRadioGroup>
-      <DropdownMenuRadioItem />
-    </DropdownMenuRadioGroup>
-    <DropdownMenuSub>
-      <DropdownMenuSubTrigger />
-      <DropdownMenuSubContent />
-    </DropdownMenuSub>
+    <DropdownMenuItem>Account settings</DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>;
 ```
 
-## Examples
+## Composition
 
-### Basic
+Compose items, groups, checkbox or radio groups, separators, and nested submenus inside `DropdownMenuContent`.
+
+## Examples
 
 ### With Arrow
 
-Set `showArrow` on the content. Keep `sideOffset` at 8 or more so the arrow has room.
+Set `showArrow` on the content.
 
 ### Sides
 
-Set `side` on the content to control where the menu opens. The default is `bottom`.
+Set `side` to control the opening direction.
 
 ### Open on Hover
 
-Set `openOnHover` on the trigger to open the menu on hover instead of click.
+Set `openOnHover` on the trigger.
 
 ### Checkboxes
 
-Checkbox items stay open when clicked by default. Set `closeOnClick` to close the menu after a selection.
-
-```tsx
-<DropdownMenuCheckboxItem closeOnClick>
-  Show status bar
-</DropdownMenuCheckboxItem>
-```
+Checkbox items remain open by default; set `closeOnClick` to close after selection.
 
 ### Radio Group
 
-Radio items also stay open by default. Set `closeOnClick` to close the menu after choosing an item.
-
-```tsx
-<DropdownMenuRadioItem closeOnClick value="light">
-  Light
-</DropdownMenuRadioItem>
-```
-
-Pass `activeIcon` to the radio group to replace the default dot indicator.
+Radio items remain open by default and support a custom `activeIcon`.
 
 ### With Groups
 
+Organize related actions.
+
 ### Nested Menu
+
+Use a submenu for secondary actions.
 
 ### Navigate to Another Page
 
-Compose a menu item with an anchor using Base UI’s `render` prop.
+Use Base UI's `render` prop to make an item a link.
 
 ```tsx
 <DropdownMenuItem render={<a href="/projects" />}>
@@ -1154,7 +827,7 @@ Compose a menu item with an anchor using Base UI’s `render` prop.
 
 ### Open a Dialog
 
-Control the dialog state and open it from the menu item’s `onClick` handler.
+Open application state from an item's `onClick` handler.
 
 ```tsx
 <DropdownMenuItem onClick={() => setDialogOpen(true)}>
@@ -1162,54 +835,46 @@ Control the dialog state and open it from the menu item’s `onClick` handler.
 </DropdownMenuItem>
 ```
 
-## Popup Animation
+### Popup Animations
 
-Set `animationPreset` on the content. The default is `scale`.
+Choose an animation preset for the menu content.
 
-### Scale
+## Accessibility
 
-### Wipe
+Use clear item labels. Give an icon-only trigger an `aria-label`, and keep destructive actions visually and verbally distinct.
 
-### Wipe Scale
+## API Reference
 
-### Motion
+`DropdownMenu` wraps [Base UI Menu](https://base-ui.com/react/components/menu). Supported Base UI menu props pass through.
 
-### Motion Blur
+### DropdownMenuContent Props
 
-### Slide Outside
+Sets the entry and exit animation.
+Sets the modal backdrop treatment.
 
-### Slide Inside
+### DropdownMenuItem Props
+
+Sets the item treatment.
+
+### DropdownMenuRadioGroup Props
+
+Replaces the default selected-item indicator.
 
 # Field
 
-An accessible form field with automatic labels, descriptions, validation state, and error messages.
+An accessible field composition primitive for labels, descriptions, validation state, and errors.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Field` with either a native `<form>` or the TanStack Form `Form` adapter. The [Forms guide](/docs/forms) explains both paths and control-specific labeling patterns.
+
+## Preview
+
 ## Installation
 
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/field.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
 ## Usage
+
+Place a label and one control inside `Field`. Render a description while the field is valid and replace it with the active error when validation fails.
 
 ```tsx
 import {
@@ -1219,172 +884,151 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-```
 
-```tsx
-const invalid = Boolean(error);
-
-<Field invalid={invalid} name="email">
+<Field invalid={Boolean(error)} name="email">
   <FieldLabel>Email</FieldLabel>
   <FieldControl type="email" />
-  {invalid ? (
+  {error ? (
     <FieldError match>{error}</FieldError>
   ) : (
-    <FieldDescription>We only use this for account updates.</FieldDescription>
+    <FieldDescription>We use this for account updates.</FieldDescription>
   )}
 </Field>;
 ```
 
-## Anatomy
+## Composition
+
+`FieldControl` is an Input-styled Base UI control. For registry controls with their own root or trigger, place the control inside `Field` and use the control's label pattern:
+
+- Wrap Checkbox and Switch in `FieldLabel` for an implicit label.
+- Put Radio Group options in `FieldItem` and use `Fieldset` for the group legend.
+- Use `SliderLabel` for Slider and the trigger label supplied by Select or Combobox.
+
+Pass `dirty`, `invalid`, and `touched` from TanStack Form field metadata. `Field` propagates these states, and its description/error primitives associate the active message with the control.
 
 ```tsx
-<Field>
-  <FieldLabel />
-  <FieldControl />
-  {invalid ? (
-    <FieldErrorSlot>
-      <FieldError />
-    </FieldErrorSlot>
-  ) : (
-    <FieldDescription />
-  )}
-  <FieldItem />
-  <FieldValidity />
+<Field
+  dirty={field.state.meta.isDirty}
+  invalid={Boolean(error)}
+  name={field.name}
+  touched={field.state.meta.isTouched}
+>
+  {/* control and active message */}
 </Field>
 ```
-
-`FieldControl` uses the same variants as Input. You can also place an existing Base UI control inside `Field`, which makes the component useful around Checkbox, Switch, Radio Group, Slider, and other registry controls.
 
 ## Examples
 
 ### Validation
 
-Map validation state from a form library into `invalid`, `dirty`, and `touched`. Show either the helper or the error directly after the control so the message has one clear meaning. Field automatically applies `aria-invalid` and associates the active message through `aria-describedby`; errors also announce with `role="alert"`.
+Map external validation state to `Field` and animate an error into the active message slot.
 
 ### Checkbox and Switch
 
-Place Checkbox or Switch inside `FieldLabel` for an implicit accessible label.
+Wrap each control in its label to preserve an accessible click target.
 
 ### Radio Group
 
-Combine Field, Fieldset, and `FieldItem` to label each option in a related choice group.
+Combine `Field`, `Fieldset`, and `FieldItem` for a related single-choice group.
 
 ### Slider
 
-Use the Slider's own `SliderLabel` because Slider is a trigger-based control.
+Use Slider's own label and value display for a trigger-based range control.
 
 ### Disabled
 
-Disabling Field cascades the disabled state to its Base UI controls.
+Disable Field to cascade the state to its Base UI controls.
 
-`FieldErrorSlot` uses `interpolate-size` for its height transition. Browsers without support still show and hide the error correctly, without the height animation.
+## Accessibility
+
+Keep one active description or error directly after the control. `FieldError` uses `role="alert"`, while `FieldErrorSlot` preserves that association during its reduced-motion-safe transition. Do not use label color alone to communicate an error.
+
+## API Reference
+
+`Field` and its Base UI parts accept their underlying Base UI props in addition to the registry-owned behavior below.
+
+Exposes dirty state to the field and its descendants.
+Exposes invalid state and associates the active error with the control.
+Identifies the field for label and message association.
+Exposes touched state to the field and its descendants.
+
+### FieldError
+
+Shows the error only when the enclosing field is invalid.
 
 # Fieldset
 
-A semantic field group with a styled legend.
+A native semantic group for related fields with a styled legend.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Fieldset` to group related controls in native or TanStack Form compositions. See the [Forms guide](/docs/forms) for group validation and choice-control patterns.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/fieldset.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/field.json https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/radio-group.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
-```tsx
-import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
-import { Field, FieldLabel } from "@/components/ui/field";
-```
+Compose `Field` inside `Fieldset` when controls share a visible group label. The underlying native `fieldset` and `legend` preserve the group relationship without a form library.
 
 ```tsx
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+
 <Fieldset>
   <FieldsetLegend>Shipping address</FieldsetLegend>
   <Field name="street">
     <FieldLabel>Street address</FieldLabel>
-    {/* Input */}
+    <Input autoComplete="street-address" />
   </Field>
-</Fieldset>
+</Fieldset>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<Fieldset>
-  <FieldsetLegend />
-</Fieldset>
-```
+Use one `FieldsetLegend` for a related group. For a Radio Group, put `aria-invalid` and `aria-describedby` on the group root and render one group-level `FieldError` after its options. For multiple checkboxes, keep each checkbox independently labelable while the fieldset supplies the shared context.
 
-Fieldset uses native `fieldset` and `legend` elements, so related controls retain their semantic grouping without another form library. Compose Field inside it for labels, descriptions, and validation messages.
+`Fieldset` only provides native grouping and layout. Use `Field` for descriptions, error messages, and state mapping from TanStack Form.
 
 ## Examples
 
-### With Radio Group
+### Radio Group
 
-Place a Radio Group inside Fieldset when the user must choose exactly one option. Use `FieldItem` and `FieldLabel` for each choice.
+Use a legend and option labels to describe one required choice.
 
-### With Checkbox Group
+### Checkbox Group
 
-Use several controlled Checkbox components when the user can choose multiple related options. The surrounding Field shares one name and the items remain independently labelable.
+Group several independently labeled checkbox choices under one legend.
+
+### TanStack Form Fields
+
+Combine fieldset semantics with registered fields in a submit-capable form.
+
+## Accessibility
+
+Use `FieldsetLegend` rather than a visually similar heading whenever controls form one conceptual group. Keep each choice label adjacent to and associated with its own control; a legend supplements rather than replaces those labels.
+
+## API Reference
+
+`Fieldset` accepts native `<fieldset>` attributes, and `FieldsetLegend` accepts native `<legend>` attributes. Both add their documented `data-slot` attributes for styling and composition.
 
 # Form
 
-A TanStack Form submission wrapper for composing type-safe forms with registry controls.
+A TanStack Form submission adapter that composes registry controls into type-safe forms.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Form` when TanStack Form owns submission and validation. For native constraint validation, compose a native `<form>` with [Field](/docs/components/field) and [Fieldset](/docs/components/fieldset) instead. Read the [Forms guide](/docs/forms) for complete patterns.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/form.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/field.json https://ui.iandefined.com/r/fieldset.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/radio-group.json https://ui.iandefined.com/r/slider.json https://ui.iandefined.com/r/switch.json https://ui.iandefined.com/r/textarea.json
-```
-
-```bash
-npm install @tanstack/react-form
-```
-
-```bash
-npm install zod
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
-Create the form instance with TanStack Form, then pass it to `Form`. The wrapper prevents native submission and calls `form.handleSubmit()`.
+Create a TanStack Form instance, pass it to `Form`, and render fields through `form.Field`. `Form` prevents the browser submit event and calls `form.handleSubmit()`.
 
 ```tsx
 import { useForm } from "@tanstack/react-form";
@@ -1392,48 +1036,87 @@ import { useForm } from "@tanstack/react-form";
 import { Field, FieldControl, FieldLabel } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 
-const form = useForm({
-  defaultValues: { email: "" },
-  onSubmit: ({ value }) => console.info(value),
-});
+function ProfileForm() {
+  const form = useForm({
+    defaultValues: { email: "" },
+    onSubmit: ({ value }) => console.info(value),
+  });
 
-<Form form={form}>
-  <form.Field name="email">
-    {(field) => (
-      <Field name={field.name}>
-        <FieldLabel>Email</FieldLabel>
-        <FieldControl
-          value={field.state.value}
-          onBlur={field.handleBlur}
-          onValueChange={field.handleChange}
-        />
-      </Field>
-    )}
-  </form.Field>
-</Form>;
+  return (
+    <Form form={form}>
+      <form.Field name="email">
+        {(field) => (
+          <Field name={field.name}>
+            <FieldLabel>Email</FieldLabel>
+            <FieldControl
+              onBlur={field.handleBlur}
+              onValueChange={field.handleChange}
+              type="email"
+              value={field.state.value}
+            />
+          </Field>
+        )}
+      </form.Field>
+    </Form>
+  );
+}
 ```
 
-The component defaults to `noValidate` so TanStack Form remains the only validation layer. Pass `noValidate={false}` when native constraint validation is intentional.
+## Composition
 
-For fields with supporting guidance, render the helper while the field is valid and replace it with an actionable `FieldError` when validation fails. Keep that single active message directly after the control; Field connects it with `aria-describedby` and propagates `aria-invalid` from the external validation state.
+`Form` renders a native `<form>` and defaults `noValidate` to `true`, so TanStack Form is the validation authority. Set `noValidate={false}` only when intentionally combining native constraints with TanStack Form.
+
+Map each field's metadata to `Field` so controls receive the correct validation state and active message association.
+
+```tsx
+<Field
+  dirty={field.state.meta.isDirty}
+  invalid={Boolean(error)}
+  name={field.name}
+  touched={field.state.meta.isTouched}
+>
+  {/* label and control */}
+  <FieldError match={Boolean(error)}>{error}</FieldError>
+</Field>
+```
+
+Use `form.Subscribe` for submit availability and pending feedback. Disable the submit button while `isSubmitting` is true to prevent duplicate submissions.
 
 ## Examples
 
-### Complete Form
+### TanStack Form Quick Start
 
-Compose Input, Textarea, Radio Group, Slider, Switch, and Checkbox fields in one profile form. It validates with Zod, revalidates as errors are corrected, handles an asynchronous submission, and reports the submitted result.
+Use field-level validators, mapped metadata, pending submit feedback, and a submission result.
 
-### With Fieldset
+### Fieldset and Grouped Controls
 
-Group related TanStack fields with the semantic Fieldset component and use Field for automatic label association.
+Group related address fields with native fieldset semantics while TanStack Form manages their values.
 
-### Zod Validation
+### Schema Validation
 
-Pass a Zod schema to TanStack Form's dynamic validator. The form validates on submit, then revalidates as values change so errors clear while the user corrects them.
+Validate a complete value object with Zod after submit, then revalidate as the user corrects values.
 
-### Server Validation
+### Async Validation
 
-Use an asynchronous submit validator for checks that need a server round trip, such as reserved or already-used usernames. Try `admin` to see the server error.
+Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
+
+### Mixed Controls and Submission State
+
+Compose text, choice, range, switch, and checkbox controls in one form with Zod validation and pending-state feedback.
+
+## Accessibility
+
+Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics.
+
+## API Reference
+
+`Form` accepts native form attributes in addition to the prop below.
+
+<ApiProp fullType='Pick<AnyFormApi, "handleSubmit">' name="form" required>
+The TanStack Form API whose `handleSubmit` method runs when the form
+submits.
+Disables browser constraint validation by default so TanStack Form owns
+validation.
 
 # Input
 
@@ -1441,30 +1124,11 @@ A styled text input built on Base UI.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Input` for concise, single-line text entry in forms and controls.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json
-```
-
-The CLI also installs `TextMorph` and its Calligraph and Motion dependencies for the animated controlled example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1478,15 +1142,31 @@ import { Input } from "@/components/ui/input";
 
 ### Sizes
 
+Choose a size that aligns with adjacent controls.
+
 ### Input Types
+
+Use the native `type` attribute for specialized input behavior.
 
 ### File
 
+Use `type="file"` to accept selected files.
+
 ### Disabled
+
+Prevent interaction while retaining the entered value.
 
 ### Controlled
 
-The value preview uses the shared `TextMorph` abstraction instead of a component-specific text animation.
+Control the value from application state.
+
+## API Reference
+
+`Input` wraps [Base UI Input](https://base-ui.com/react/components/input). Supported Base UI and native input props pass through.
+
+### Props
+
+Sets a preset height, or a custom height in pixels.
 
 # Input Group
 
@@ -1494,32 +1174,11 @@ Compose inputs and textareas with icons, text, buttons, and menus.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `InputGroup` to attach context and actions directly to an input or textarea.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input-group.json
-```
-
-The CLI also installs `IconSwap` and Motion for the copy-button example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-Install or add Button, Input, and Textarea before using Input Group.
 
 ## Usage
 
@@ -1527,44 +1186,59 @@ Install or add Button, Input, and Textarea before using Input Group.
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
   InputGroupText,
-  InputGroupTextarea,
 } from "@/components/ui/input-group";
-```
 
-## Anatomy
-
-```tsx
 <InputGroup>
   <InputGroupAddon>
     <InputGroupText>https://</InputGroupText>
   </InputGroupAddon>
   <InputGroupInput placeholder="example.com" />
-  <InputGroupAddon align="inline-end">
-    <InputGroupButton>Search</InputGroupButton>
-  </InputGroupAddon>
-</InputGroup>
+</InputGroup>;
 ```
 
-Use `InputGroupTextarea` in place of `InputGroupInput` when you need a multiline control. Addons can be placed at `inline-start`, `inline-end`, `block-start`, or `block-end`.
+## Composition
+
+Use `InputGroupInput` or `InputGroupTextarea` as the control. Place `InputGroupAddon` at `inline-start`, `inline-end`, `block-start`, or `block-end`.
 
 ## Examples
 
-### Basic
-
 ### Text
+
+Add a textual prefix or suffix.
 
 ### Icons
 
+Add a contextual icon without changing the input semantics.
+
 ### Buttons
+
+Place related actions inside an addon.
 
 ### Spinner
 
+Indicate in-progress input work.
+
 ### Tooltip
 
+Explain icon-only controls.
+
 ### Menu
+
+Expose additional input actions through a menu.
+
+## API Reference
+
+`InputGroup` and its parts are styled HTML elements. Standard element props pass through.
+
+### InputGroupAddon Props
+
+Sets the addon's position around the control.
+
+### InputGroupButton Props
+
+Sets the embedded button size.
 
 # Input OTP
 
@@ -1572,28 +1246,11 @@ An accessible one-time-code input with animated slots, invalid states, and maske
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `InputOTP` for short verification codes that users enter or paste.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input-otp.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```bash
-npm install input-otp motion
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1604,9 +1261,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-```
 
-```tsx
 <InputOTP aria-label="Verification code" maxLength={6}>
   <InputOTPGroup>
     <InputOTPSlot index={0} />
@@ -1619,59 +1274,53 @@ import {
     <InputOTPSlot index={4} />
     <InputOTPSlot index={5} />
   </InputOTPGroup>
-</InputOTP>
+</InputOTP>;
 ```
 
-## Anatomy
+## Composition
 
-```tsx
-<InputOTP>
-  <InputOTPGroup>
-    <InputOTPSlot />
-  </InputOTPGroup>
-  <InputOTPSeparator />
-</InputOTP>
-```
-
-The default slots are `h-9`, matching the default [Input](/docs/components/input). The `sm` and `lg` sizes also share the Input component's `h-8` and `h-10` heights.
+Group slots with `InputOTPGroup` and use `InputOTPSeparator` between groups.
 
 ## Examples
 
 ### Variants
 
+Choose the slot treatment.
+
 ### Sizes
+
+Align slots with nearby inputs.
 
 ### Invalid
 
-Set `aria-invalid` on `InputOTP` to give every visual slot the destructive invalid state while preserving the native input's accessible state.
+Set `aria-invalid` to expose and style an invalid code.
 
 ### Masked Entry
 
-Use `mask` to obscure entered characters visually. The real input value remains unchanged for form submission and validation.
+Use `mask` to obscure entered characters without changing the submitted value.
 
 ### Disabled
 
+Prevent code entry while verification is unavailable.
+
+## Accessibility
+
+Provide an `aria-label` or associated visible label that explains the code being requested.
+
 ## API Reference
 
-### InputOTP
+`InputOTP` accepts [input-otp props](https://input-otp.rodz.dev/), including `value`, `onChange`, `onComplete`, `pattern`, and `pasteTransformer`.
 
-`InputOTP` accepts the props from the `input-otp` package, including `value`, `onChange`, `onComplete`, `pattern`, and `pasteTransformer`.
+### Props
 
-| Prop           | Type                         | Default      | Description                                                     |
-| -------------- | ---------------------------- | ------------ | --------------------------------------------------------------- |
-| `maxLength`    | `number`                     | —            | Required number of OTP slots.                                   |
-| `variant`      | `"bordered" \| "underlined"` | `"bordered"` | Visual treatment for every slot.                                |
-| `size`         | `"sm" \| "default" \| "lg"`  | `"default"`  | Slot size aligned with Input heights.                           |
-| `mask`         | `boolean`                    | `false`      | Visually obscures entered characters.                           |
-| `aria-invalid` | `boolean`                    | —            | Applies an accessible destructive state to the input and slots. |
+Sets the required number of OTP slots.
+Sets the visual treatment for every slot.
+Sets the slot size.
+Obscures entered characters visually.
 
-### InputOTPSlot
+#### InputOTPSlot
 
-Each `InputOTPSlot` requires an `index` matching its position in the root input.
-
-| Prop    | Type     | Description            |
-| ------- | -------- | ---------------------- |
-| `index` | `number` | Zero-based slot index. |
+Sets this slot's zero-based position.
 
 # Kbd
 
@@ -1679,24 +1328,11 @@ Displays textual keyboard input and shortcut combinations.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Kbd` for individual keys and `KbdGroup` for shortcuts shown in instructions or controls.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/kbd.json
-```
-
-```bash
-npm install clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1721,30 +1357,21 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
 ### Input Group
 
+## API Reference
+
+`Kbd` and `KbdGroup` wrap native `<kbd>` elements. Their standard HTML attributes pass through.
+
 # Label
 
 Renders an accessible label associated with controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Label` to give a control a visible, clickable name.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/label.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1760,30 +1387,25 @@ import { Label } from "@/components/ui/label";
 
 ### With Checkbox
 
+## Accessibility
+
+Associate the label with its control using `htmlFor` and the control's `id`, or nest the control inside `Label`.
+
+## API Reference
+
+`Label` wraps the native `<label>` element. Standard label attributes, including `htmlFor`, pass through.
+
 # Number Field
 
 A numeric input with increment, decrement, and scrub controls.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `NumberField` when people need to enter a numeric value or adjust it with dedicated controls.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/number-field.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1807,7 +1429,7 @@ import {
 </NumberField>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <NumberField>
@@ -1842,30 +1464,26 @@ Use `min` and `max` to constrain the allowed values.
 
 Pass `Intl.NumberFormat` options through `format` to display values such as currency.
 
+## API Reference
+
+`NumberField` and its parts wrap the corresponding [Base UI Number Field primitives](https://base-ui.com/react/components/number-field). Supported Base UI props pass through.
+
+### Props
+
+Sets the styled size. A numeric value keeps the default visual size for
+compatibility with Base UI sizing.
+
 # Popover
 
 An accessible popup anchored to a button.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Popover` to reveal contextual content anchored to a trigger without navigating away.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/popover.json
-```
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -1893,7 +1511,7 @@ import {
 </Popover>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -1963,30 +1581,29 @@ Pass `backdrop` to `Popover` to choose how the page appears while the popover is
 
 Use the `render` prop to compose a custom trigger. This example also uses `openOnHover` to open the popover when the trigger is hovered.
 
+## API Reference
+
+`Popover` and its parts wrap the corresponding [Base UI Popover primitives](https://base-ui.com/react/components/popover). Supported Base UI props pass through.
+
+### Props
+
+#### PopoverPopup
+
+Sets the popup enter and exit animation.
+Disables popup animation.
+Renders an arrow pointing at the trigger.
+
 # Radio Group
 
 A set of checkable buttons where only one item can be checked at a time.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `RadioGroup` when a person must choose exactly one option from a related set.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/radio-group.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2012,7 +1629,7 @@ import { Radio, RadioGroup } from "@/components/ui/radio-group";
 </RadioGroup>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -2057,30 +1674,27 @@ Control the selected value with the `value` prop and `onValueChange` callback.
 
 ### Custom Indicator
 
+## API Reference
+
+`RadioGroup`, `Radio`, and the composable radio parts wrap [Base UI Radio Group primitives](https://base-ui.com/react/components/radio-group). Supported Base UI props pass through.
+
+### Props
+
+#### Radio and RadioRoot
+
+Sets the radio control size.
+
 # Scroll Area
 
 A scrollable region with custom scrollbars and optional background fades.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `ScrollArea` for a bounded region that needs styled scrolling and optional overflow fades.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/scroll-area.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2096,7 +1710,7 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 
 `scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
 
-## Anatomy
+## Composition
 
 ```tsx
 <ScrollArea>
@@ -2126,30 +1740,26 @@ Set `scrollShadow` independently of the scrollbar orientation to fade only the o
 
 Set `hideScrollbar` to keep the scroll area and edge fades while removing the custom scrollbar.
 
+## API Reference
+
+`ScrollArea` and `ScrollAreaContent` wrap [Base UI Scroll Area primitives](https://base-ui.com/react/components/scroll-area). Supported Base UI props pass through.
+
+### Props
+
+Adds fades at overflowing horizontal, vertical, or both edges.
+Hides the custom scrollbar while keeping the scroll region available.
+
 # Select
 
 A form control for choosing one or more values from a popup list.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Select` to choose one or more values from a popup list.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/select.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2194,7 +1804,7 @@ const items = [
 
 Pass `items` to `Select` when `SelectValue` should resolve a selected value to its label. Without `items`, the value renders as-is. For a searchable list, use a combobox instead.
 
-## Anatomy
+## Composition
 
 ```tsx
 <Select>
@@ -2269,30 +1879,32 @@ Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup anim
 
 ### Motion Blur
 
+## API Reference
+
+`Select` and its parts wrap the corresponding [Base UI Select primitives](https://base-ui.com/react/components/select). Supported Base UI props pass through.
+
+### Props
+
+#### Select
+
+Sets the backdrop rendered while the popup is open.
+
+#### SelectPopup
+
+Sets the popup enter and exit animation.
+Disables the popup animation.
+
 # Separator
 
 Visually or semantically separates content.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Separator` to distinguish adjacent groups of content.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/separator.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2308,30 +1920,25 @@ import { Separator } from "@/components/ui/separator";
 </div>
 ```
 
+## Examples
+
+Use `orientation="vertical"` when the separator divides content arranged side by side.
+
+## API Reference
+
+`Separator` wraps the [Base UI Separator](https://base-ui.com/react/components/separator). Supported Base UI props pass through.
+
 # Skeleton
 
 A shimmer placeholder for loading content.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Skeleton` as a temporary shape that preserves a loading layout.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/skeleton.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2349,30 +1956,24 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 ### No animation
 
+## API Reference
+
+### Props
+
+Sets the placeholder corner radius.
+Controls the shimmer animation.
+
 # Slider
 
 A Base UI slider with compact track and rectangular control layouts, cursor previews, and editable values.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Slider` to choose a numeric value or range from a bounded track.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/slider.json
-```
-
-```bash
-npm install @base-ui/react framer-motion clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2405,7 +2006,7 @@ const [value, setValue] = useState(2);
 
 `SliderLabel` and `SliderValue` can be placed inside the control with `SliderContent` or arranged anywhere else within `Slider`. The displayed value is editable by default; select it to enter an exact number, then press Enter or move focus away to commit it.
 
-## Anatomy
+## Composition
 
 ```tsx
 <Slider>
@@ -2442,18 +2043,20 @@ Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's 
 
 ## API Reference
 
-### Slider
+`Slider` and its parts wrap the corresponding [Base UI Slider primitives](https://base-ui.com/react/components/slider). Supported Base UI props pass through.
 
-Slider wraps Base UI's Slider Root and accepts its props in addition to those below.
+### Props
 
-| Prop           | Type                        | Default     | Description                                          |
-| -------------- | --------------------------- | ----------- | ---------------------------------------------------- |
-| `variant`      | `"compact" \| "default"`    | `"default"` | Controls thumb and rail layout alignment.            |
-| `hideTooltip`  | `boolean`                   | `false`     | Hides the floating value tooltip during drag.        |
-| `formatValue`  | `(value: number) => string` | —           | Formats thumb value display in tooltips and values.  |
-| `showSteps`    | `boolean`                   | `false`     | Renders visible step tick dots along the track.      |
-| `reduceMotion` | `boolean`                   | `false`     | Disables spring transitions for thumb movement.      |
-| `getAriaLabel` | `(index: number) => string` | —           | Custom accessible name resolver for multiple thumbs. |
+Controls the thumb and rail layout.
+Hides the floating value tooltip during pointer interaction.
+simpleType="function"
+>
+Formats values shown in the tooltip and `SliderValue`.
+Renders step tick dots on the track.
+Disables spring transitions for thumb movement.
+simpleType="function"
+>
+Returns an accessible name for each thumb in a multi-thumb slider.
 
 # Spinner
 
@@ -2461,24 +2064,11 @@ An SVG indicator for loading states.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Spinner` to communicate that an action or content is loading.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/spinner.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2494,30 +2084,23 @@ import { Spinner } from "@/components/ui/spinner";
 
 ### Sizes
 
+## API Reference
+
+### Props
+
+Sets the spinner dimensions.
+
 # Switch
 
 A draggable toggle with spring-based thumb animation.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Switch` for an immediate on or off setting.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/switch.json
-```
-
-```bash
-npm install @base-ui/react framer-motion clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2547,30 +2130,26 @@ const [checked, setChecked] = useState(false);
 
 ### Custom Card Style
 
+## API Reference
+
+`Switch` wraps the [Base UI Switch](https://base-ui.com/react/components/switch). Supported Base UI props pass through.
+
+### Props
+
+Sets the switch size.
+Overrides the Motion transition used for thumb movement.
+
 # Tabs
 
 A component for toggling between related panels on the same page.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Tabs` to switch between related sections without leaving the current page.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/tabs.json
-```
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2589,7 +2168,7 @@ import { Tabs, TabsList, TabsPanel, TabsTrigger } from "@/components/ui/tabs";
 </Tabs>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <Tabs>
@@ -2628,19 +2207,17 @@ Wrap panels with `TabsPanelsWrapper` to smoothly animate the container height wh
 
 ## API Reference
 
-### Tabs
+`Tabs` and its parts wrap the corresponding [Base UI Tabs primitives](https://base-ui.com/react/components/tabs). Supported Base UI props pass through.
 
-Tabs wraps Base UI's Tabs Root and accepts its props in addition to those below.
+### Props
 
-| Prop      | Type                                   | Default       | Description                   |
-| --------- | -------------------------------------- | ------------- | ----------------------------- |
-| `variant` | `"segmented" \| "underline" \| "card"` | `"segmented"` | Visual treatment of the tabs. |
+#### Tabs
 
-### TabsList
+Sets the visual treatment for the tab set.
 
-| Prop      | Type                                   | Default   | Description                                   |
-| --------- | -------------------------------------- | --------- | --------------------------------------------- |
-| `variant` | `"segmented" \| "underline" \| "card"` | Inherited | Overrides the variant set on the parent Tabs. |
+#### TabsList and TabsTrigger
+
+Overrides the variant inherited from `Tabs`.
 
 # Textarea
 
@@ -2648,24 +2225,11 @@ A styled multiline text control built on Base UI Field.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Textarea` when people need to enter multiple lines of text.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/textarea.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2683,30 +2247,25 @@ import { Textarea } from "@/components/ui/textarea";
 
 ### Controlled
 
+## API Reference
+
+`Textarea` wraps the native `<textarea>` element. Standard textarea attributes pass through.
+
+### Props
+
+Sets the textarea's padding and text size.
+
 # Tooltip
 
 Displays contextual information when a user hovers or focuses an element.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Tooltip` for a short, supplementary description of a control.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/tooltip.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -2728,7 +2287,7 @@ import {
 
 Wrap related tooltips in `TooltipProvider` so adjacent tooltips open instantly after the first one.
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -2782,56 +2341,61 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 
 Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
+## API Reference
+
+`Tooltip` and its parts wrap the corresponding [Base UI Tooltip primitives](https://base-ui.com/react/components/tooltip). Supported Base UI props pass through.
+
+### Props
+
+#### TooltipProvider
+
+Sets the delay before a tooltip in the provider group opens.
+
+#### TooltipPopup
+
+Sets the popup enter and exit animation.
+Disables popup animation.
+Renders an arrow pointing at the trigger.
+
 # Extending
 
-How to add docs pages, registry components, previews, and clear examples.
+How to author docs pages, registry components, multi-file blocks, and examples.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-This project has two extension paths: documentation pages in `content/docs` and installable shadcn registry items in `src/registry`. Most changes should keep those paths connected so readers can see the component, copy the usage, and install the same source from `/r/<name>.json`.
+This section is for maintainers and contributors who are interested in helping develop, improve, and contribute to the repository.
 
-## Add a docs page
+## Getting Started
 
-Create MDX under `content/docs`. Put general guides in `content/docs/(root)` and component reference pages in `content/docs/components`.
+Clone the repository and install dependencies to begin local development:
 
-```txt
-content/docs/(root)/my-guide.mdx
-content/docs/components/my-component.mdx
+```bash
+git clone https://github.com/iandefined/ui.git
+cd ui
+pnpm install
 ```
 
-Every page should start with frontmatter:
+## Add a Registry Component
 
-```mdx
----
-title: My Guide
-description: A direct sentence that explains what the page helps with.
----
-```
-
-Pages are discovered automatically from the filesystem. The file name creates the route, and the frontmatter creates the label.
-
-```txt
-content/docs/(root)/extending.mdx -> /docs/extending
-content/docs/components/button.mdx -> /docs/components/button
-```
-
-Use `meta.json` only as an optional override for folder metadata or custom ordering. If a folder has no `meta.json`, the docs tree still includes every MDX file in that folder. Use short headings, small examples, and task-focused sections. A good page answers what to edit, where to put it, how to wire it, and how to verify it.
-
-## Add a registry component
-
-Put installable source under the single `base` registry folder.
+Installable component source belongs in the single `src/registry/base/` directory:
 
 ```txt
 src/registry/base/my-component.tsx
 ```
 
-Use shadcn-compatible imports in registry source. The installed code should import from paths that exist in a user's app, such as `@/lib/utils` and `@/components/ui/button`. If you need an upstream shadcn/ui primitive first, add it with:
+### Component Architecture Conventions
 
-```bash
-pnpm exec shadcn add <component>
-```
+Follow these repository standards when authoring components:
 
-Add the component to `registry.json`:
+- **Base UI Wrappers**: Wrap Base UI primitives and pass through supported attributes using `render` or `useRender` polymorphism.
+- **Semantic Slot Attributes**: Add a stable, kebab-case `data-slot="my-component"` attribute to every public part.
+- **Animation and Reduced Motion**: When using Motion springs, check `useReducedMotion()` and add `motion-reduce:transition-none` to ensure animations gracefully disable for users with motion sensitivities.
+- **Deterministic Rendering**: Avoid runtime randomness such as `Math.random()` to prevent SSR hydration mismatches and React Compiler purity warnings.
+- **Exported Types**: Export component prop interfaces and key type unions (such as `MyComponentSize` or `MyComponentVariant`).
+
+### Manifest Registration
+
+Add the component to the `items` array in `registry.json`:
 
 ```json
 {
@@ -2839,7 +2403,7 @@ Add the component to `registry.json`:
   "type": "registry:ui",
   "title": "My Component",
   "description": "A concise description of what it provides.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": ["@base-ui/react", "motion"],
   "files": [
     {
       "path": "src/registry/base/my-component.tsx",
@@ -2850,137 +2414,117 @@ Add the component to `registry.json`:
 }
 ```
 
-Use `dependencies` for npm packages the installed component needs. Use the file `target` for the path users should receive in their app.
+- `dependencies`: List external npm packages imported by the component.
+- `registryDependencies`: List other registry items imported by the component (for example: `["button"]`).
+- `files[].target`: Set the destination path where consumers receive the file in their project.
 
-Then wire the preview in `src/shared/lib/registry.ts`:
+Do not edit `public/r/*` by hand. Run `pnpm registry:build` after manifest changes.
 
-```tsx
-import { MyComponent } from "@/registry/base/my-component";
+## Add a Block to `/blocks`
 
-const registryComponents: Record<string, RegistryComponent> = {
-  "my-component": MyComponent as RegistryComponent,
-};
-```
+Blocks are multi-file, full-feature UI layouts or page compositions (such as sidebars, dashboard shells, or authentication screens) exposed on `/blocks`.
 
-Do not edit `public/r/*` by hand. Run `pnpm registry:build` after registry changes.
+### 1. Directory Structure
 
-## Add a block to `/blocks`
-
-Blocks are larger installable examples, such as full pages, dashboard shells, auth screens, or composed sections. They appear in the `/blocks` browser when an item in `registry.json` uses `type: "registry:block"`.
-
-Put block source under a named folder in the `base` registry:
+Place each block inside a category and two-digit numeric directory:
 
 ```txt
-src/registry/base/my-block/page.tsx
-src/registry/base/my-block/components/my-block-sidebar.tsx
+src/registry/base/blocks/<category>/<number>/page.tsx
+src/registry/base/blocks/<category>/<number>/components/my-subcomponent.tsx
 ```
 
-Use install-friendly imports inside block source, just like registry components. For example, a block should import primitives from `@/components/ui/button`, not from this site's `src/shared` paths. If the block needs upstream shadcn/ui primitives, add them first:
+For example: `src/registry/base/blocks/sidebar/01/page.tsx`.
 
-```bash
-pnpm exec shadcn add <component>
-```
+- `page.tsx`: The primary block entry point that exports the main composition as default export.
+- `components/`: Companion subcomponents used by the block layout.
 
-Then add the block to `registry.json`:
+### 2. Registry Manifest
+
+Add the block entry to `registry.json`:
 
 ```json
 {
-  "name": "my-block",
+  "name": "sidebar-01",
   "type": "registry:block",
-  "title": "My Block",
-  "description": "A concise description of the composed UI.",
-  "registryDependencies": ["button", "card"],
-  "categories": ["dashboard"],
+  "title": "Sidebar 01",
+  "description": "A simple sidebar with navigation and user menu.",
+  "categories": ["sidebar"],
+  "registryDependencies": ["sidebar", "button", "avatar"],
   "files": [
     {
-      "path": "src/registry/base/my-block/page.tsx",
+      "path": "src/registry/base/blocks/sidebar/01/page.tsx",
       "type": "registry:page",
       "target": "app/dashboard/page.tsx"
     },
     {
-      "path": "src/registry/base/my-block/components/my-block-sidebar.tsx",
+      "path": "src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx",
       "type": "registry:component",
-      "target": "components/my-block-sidebar.tsx"
+      "target": "components/app-sidebar.tsx"
     }
   ]
 }
 ```
 
-Use `registryDependencies` for shadcn registry items the block needs, such as `button`, `card`, `sidebar`, or `breadcrumb`. Use `dependencies` for npm packages.
+- `categories`: Must match the directory category name.
+- `files`: Declare every authored file in the block directory with appropriate `target` paths.
 
-Wire the live preview in `src/shared/lib/registry.ts`:
+### 3. Development Path Aliases
 
-```tsx
-import MyBlockPage from "@/registry/base/my-block/page";
-
-const registryComponents: Record<string, RegistryComponent> = {
-  "my-block": MyBlockPage as RegistryComponent,
-};
-```
-
-The `/blocks/<name>/preview` route renders that registered component in an iframe. The `/blocks` page reads its catalog from `registry.json`; `/blocks?category=<category>` opens the searchable category view, so you do not add a separate list item by hand.
-
-## Configure block categories
-
-Block categories come from each block item's `categories` array in `registry.json`.
+Because block companion components import each other using consumer-facing paths (such as `@/components/app-sidebar`), configure path mappings in `tsconfig.json` under `compilerOptions.paths`:
 
 ```json
-"categories": ["sidebar", "dashboard"]
+"@/components/app-sidebar": ["./src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx"]
 ```
 
-The category catalog is derived in `src/shared/lib/blocks.ts`. That file groups `registry:block` items, creates counts, and adds the special `all` category. If a category needs a custom display name, add it to `categoryTitles`:
+This allows Vite and `pnpm typecheck` to resolve files locally during development without modifying consumer-facing imports in the published code.
 
-```ts
-const categoryTitles: Record<string, string> = {
-  sidebar: "Sidebar",
-};
-```
+### 4. In-App Preview Registration
 
-If there is no custom title, the site title-cases the category name automatically. For example, `emptyState` becomes `Empty State`, and `order-confirmation` becomes `Order Confirmation`.
-
-## Customize block category preview art
-
-The preview art on `/blocks` lives in `src/shared/components/blocks/block-category-grid.tsx`. Each category can map to a small skeleton preview:
+Register the block's `page.tsx` default export in `src/shared/lib/registry.ts`:
 
 ```tsx
-const CATEGORY_SKELETONS: Record<string, React.ComponentType> = {
-  sidebar: SidebarSkeleton,
-  login: AuthSkeleton,
+import Sidebar01Page from "@/registry/base/blocks/sidebar/01/page";
+
+const registryComponents: Record<string, RegistryComponent> = {
+  "sidebar-01": Sidebar01Page as RegistryComponent,
 };
 ```
 
-Add a new skeleton component in that file when a category needs a distinct visual. Keep these previews decorative and generic: use muted skeleton shapes, small card layouts, and theme tokens rather than real app content or hard-coded brand colors. If a category is not mapped, it uses `DefaultSkeleton`.
+The `/blocks/<name>/preview` route renders this component in an isolated iframe.
 
-## How the block browser is wired
+### 5. Category Navigation
 
-The block browser is split across a few files:
+The block catalog is aggregated automatically from `registry.json` by `src/shared/lib/blocks.ts`. If a category requires a custom display label (such as `auth` becoming `Authentication`), add it to `categoryTitles` in `src/shared/lib/blocks.ts`. Otherwise, category names are title-cased automatically.
 
-- `src/routes/blocks.tsx` owns the blocks layout route and shared metadata.
-- `src/routes/blocks.index.tsx` renders the category grid when no category is selected and the searchable block list when `category` is present in the URL.
-- `src/routes/blocks.$block.preview.tsx` renders the iframe-only preview target.
-- `src/shared/components/blocks/block-preview-list.tsx` owns category filtering, search, empty state, and bottom navigation.
-- `src/shared/components/blocks/block-showcase.tsx` owns the preview/code tabs, responsive preview controls, reload button, fullscreen link, and copy command.
-- `src/shared/components/blocks/block-code-explorer.tsx` reads the files listed in `registry.json` and shows the code browser.
+## Write Component Documentation
 
-Most new blocks only require three edits: add files under `src/registry/base`, add the block item to `registry.json`, and register the preview in `src/shared/lib/registry.ts`. Add category titles or category art only when the defaults are not enough.
+Component documentation lives in `content/docs/components/<name>.mdx`. Every page should follow this structured sequence:
 
-## Write component docs
+1. **Frontmatter**: Title and concise one-sentence description.
+2. **Lede**: One or two sentences stating what the component does.
+3. **Preview**: Default interactive demo via `ComponentPreview`.
+4. **Installation**: Package-manager switcher via `ComponentInstall`.
+5. **Usage**: Clean code snippet showing consumer import from `@/components/ui/<name>`.
+6. **Examples**: Focused previews highlighting specific variations.
+7. **API Reference**: Documented props using `ApiPropsList` and `ApiProp`.
 
-Component docs should show the preview first, then installation, usage, and meaningful variants.
+### Template
 
 ````mdx
 ---
 title: My Component
-description: A concise description of what the component does.
+description: An accessible Base UI component with smooth spring animations.
 ---
 
-<ComponentPreview name="my-component/demo" />
+Use `MyComponent` to trigger actions or display state.
+
+## Preview
+
+<ComponentPreview name="button/default" />
 
 ## Installation
 
-```bash
-npx shadcn@latest add https://your-site.com/r/my-component.json
-```
+<ComponentInstall name="button" />
 
 ## Usage
 
@@ -2988,113 +2532,223 @@ npx shadcn@latest add https://your-site.com/r/my-component.json
 import { MyComponent } from "@/components/ui/my-component";
 ```
 
+````
+
 ```tsx
-<MyComponent />
+<MyComponent variant="default">Click me</MyComponent>
 ```
 
 ## Examples
 
-<ComponentPreview name="my-component/with-icon" />
-````
+### With Icon
 
-Pages are discovered automatically from the filesystem. Prefer real use cases over prop inventories. Good examples are named after the situation they demonstrate, such as "With icon", "Loading", "Form field", or "Empty state".
+Display an icon alongside the text label:
 
-## Preview from an examples file
+## API Reference
 
-Use an `examples` file when the same demo is reused or when the example is large enough to deserve its own module.
+`MyComponent` wraps the corresponding [Base UI primitive](https://base-ui.com). Supported Base UI props pass through.
 
-```txt
-examples/my-component/demo.tsx
+### Props
+
+Controls the visual presentation.
+Prevents user interaction when true.
 ```
 
-```tsx
-import { MyComponent } from "@/registry/base/my-component";
+### Demo Examples
 
-export default function MyComponentDemo() {
-  return <MyComponent>Save changes</MyComponent>;
+Reusable preview demos live in `examples/<component>/<example>.tsx`:
+
+```tsx
+
+export default function MyComponentDefault() {
+return <MyComponent>Default Example</MyComponent>;
 }
 ```
 
-Then reference it from MDX:
+The `examples/` directory is discovered dynamically by Vite, so `examples/my-component/default.tsx` is automatically referenced in MDX as `my-component/default`.
 
-```mdx
-<ComponentPreview name="my-component/demo" />
-```
+## Smoke-Test Registry Output
 
-The examples directory is loaded dynamically. Group demos by component and use the relative path without `.tsx` as the preview name, for example `examples/my-component/with-icon.tsx` becomes `my-component/with-icon`.
-
-If the demo is reused by multiple pages, import it in `src/shared/lib/registry.ts` and add it to `demoComponents`.
-
-## Preview inline
-
-Use inline previews when the example only belongs to one docs page.
-
-````mdx
-import { Button } from "@/registry/base/button";
-
-<ComponentPreview name="inline-button-example" title="inline-button-example.tsx">
-  <Button variant="outline">Inline example</Button>
-
-```tsx
-import { Button } from "@/components/ui/button";
-
-export function InlineButtonExample() {
-  return <Button variant="outline">Inline example</Button>;
-}
-```
-
-</ComponentPreview>
-````
-
-The JSX child renders the live preview. The fenced `tsx` block becomes the source panel users copy from.
-
-## Show source directly
-
-Use `ComponentSource` when the page needs to show the registry file itself.
-
-```mdx
-<ComponentSource
-  src="src/registry/base/button.tsx"
-  title="components/ui/button.tsx"
-/>
-```
-
-Use a `title` that matches the installed target path when possible.
-
-## Smoke-test registry output
-
-For a public registry, smoke-test generated files with the shadcn CLI:
+Test the installable registry JSON before deploying:
 
 ```bash
-npx shadcn@latest add https://your-site.com/r/my-component.json --dry-run
+npx shadcn@latest add https://ui.iandefined.com/r/my-component.json --dry-run
 ```
 
-Before deploy, confirm `/r/registry.json`, `/r/my-component.json`, the docs page, and `/llms-full.txt` resolve from the built app.
+Confirm that the payload contains valid code, dependencies, and file target mappings.
 
-## Documentation checklist
+## Verification Workflow
 
-Before finishing, check that the page has:
-
-- A specific title and description.
-- A working primary preview near the top.
-- Installation and usage snippets that match the registry target.
-- Examples that teach real decisions, not every possible prop.
-- Links or notes for dependencies when the user must install something extra.
-- A verification section only when it helps the reader complete the task.
-
-## Verification
-
-Run the checks that match the change:
+Run the verification suite to ensure all TypeScript types, documentation frontmatter, formatting, and linting rules pass:
 
 ```bash
 pnpm registry:build
 pnpm static:build
 pnpm typecheck
+pnpm docs:check
 pnpm check
-pnpm build
 ```
 
-Use `pnpm registry:build` for registry changes and `pnpm static:build` for docs changes. `pnpm build` runs both and verifies the deployable app.
+- `pnpm registry:build`: Rebuilds `public/r/*` registry payloads.
+- `pnpm static:build`: Synchronizes `public/docs/*`, `public/llms*`, and static endpoint assets.
+- `pnpm typecheck`: Validates TypeScript without compilation errors.
+- `pnpm docs:check`: Asserts that all 42 MDX pages have valid frontmatter, preview tags, and installation components.
+- `pnpm check`: Validates code formatting and Biome/Vite+ linter rules.
+
+# Forms
+
+Compose accessible native and TanStack Form workflows with registry controls.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Registry controls are composable rather than tied to one form library. Use a native `<form>` when browser constraints are enough, or use TanStack Form when fields need managed values, schemas, asynchronous validation, and submission state.
+
+## Preview
+
+## Choose a Form Model
+
+Use a native form for simple inputs and built-in browser validation. It requires no `Form` component or form-library state.
+
+Use TanStack Form when validation spans fields, a schema owns validation, values must be controlled, or submission and asynchronous errors need coordinated state. The registry `Form` component is a native form wrapper that calls `form.handleSubmit()`.
+
+## Native Constraint Validation
+
+Compose `Field`, `Fieldset`, and registry controls inside a native `<form>`. Native controls such as `FieldControl`, Input, and Textarea support standard `required`, `type`, and `pattern` constraints.
+
+```tsx
+import { Button } from "@/components/ui/button";
+import { Field, FieldControl, FieldLabel } from "@/components/ui/field";
+
+<form onSubmit={(event) => event.preventDefault()}>
+  <Field name="email">
+    <FieldLabel>Email</FieldLabel>
+    <FieldControl required type="email" />
+  </Field>
+  <Button type="submit">Continue</Button>
+</form>;
+```
+
+## TanStack Form Quick Start
+
+Create the form with `useForm`, connect each registry control to `form.Field`, and give the registry `Form` the form API.
+
+```tsx
+import { useForm } from "@tanstack/react-form";
+
+import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Form } from "@/components/ui/form";
+
+function NewsletterForm() {
+  const form = useForm({
+    defaultValues: { email: "" },
+    onSubmit: ({ value }) => console.info(value),
+  });
+
+  return (
+    <Form form={form}>
+      <form.Field
+        name="email"
+        validators={{
+          onBlur: ({ value }) =>
+            value.includes("@") ? undefined : "Enter a valid email address.",
+        }}
+      >
+        {(field) => {
+          const error = field.state.meta.errors[0];
+
+          return (
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={typeof error === "string"}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Email</FieldLabel>
+              <FieldControl
+                onBlur={field.handleBlur}
+                onValueChange={field.handleChange}
+                type="email"
+                value={field.state.value}
+              />
+              <FieldError match={typeof error === "string"}>{error}</FieldError>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Subscribe</Button>
+    </Form>
+  );
+}
+```
+
+## Labels, Descriptions, and Errors
+
+`Field` connects one control with its label and active description or error. Keep the active message immediately after the control. Map TanStack metadata into `dirty`, `invalid`, and `touched`; show a `FieldError` only when there is a current error.
+
+- Use `FieldLabel` with text controls, Input, Textarea, and Number Field.
+- Wrap Checkbox and Switch in `FieldLabel` for an implicit label.
+- Use `FieldsetLegend` for Radio Group and related checkbox groups, then label every choice with `FieldItem` and `FieldLabel`.
+- Use the built-in label/value composition for Slider and the trigger label supplied by Select or Combobox.
+- Put `aria-invalid` and the group error's `aria-describedby` on a group root such as Radio Group, not on every option.
+
+## Grouped Controls
+
+Use `Fieldset` for a shared context such as an address, plan, or notification preferences. `Fieldset` supplies native grouping while each nested `Field` keeps its own label and validation state.
+
+## Validation
+
+Use field validators for small local rules. Use a schema when rules depend on multiple values. The Zod example validates on submission, then revalidates when a value changes so corrected fields clear their errors.
+
+```tsx
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { z } from "zod";
+
+const accountSchema = z.object({
+  email: z.string().email("Enter a valid email address."),
+});
+
+const form = useForm({
+  defaultValues: { email: "" },
+  validationLogic: revalidateLogic({
+    mode: "submit",
+    modeAfterSubmission: "change",
+  }),
+  validators: { onDynamic: accountSchema },
+});
+```
+
+For availability and other server checks, use an asynchronous validator such as `onSubmitAsync`. Keep the field pending/submission state visible, and return an actionable message rather than a generic failure.
+
+## Submission State
+
+Use `form.Subscribe` to read `canSubmit` and `isSubmitting`. Disable submission while a request is pending, reset any success feedback when values change, and render a success or failure message in the form itself.
+
+```tsx
+<form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+  {([canSubmit, isSubmitting]) => (
+    <Button disabled={!canSubmit} type="submit">
+      {isSubmitting ? "Saving..." : "Save changes"}
+    </Button>
+  )}
+</form.Subscribe>
+```
+
+## Component Reference
+
+| Component                                                                                                             | Use it for                                           |
+| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [Form](/docs/components/form)                                                                                         | TanStack Form submission and native form attributes. |
+| [Field](/docs/components/field)                                                                                       | Labels, descriptions, validation state, and errors.  |
+| [Fieldset](/docs/components/fieldset)                                                                                 | Native semantic groups and legends.                  |
+| [Input](/docs/components/input), [Textarea](/docs/components/textarea), [Number Field](/docs/components/number-field) | Text and numeric entry.                              |
+| [Checkbox](/docs/components/checkbox), [Switch](/docs/components/switch), [Radio Group](/docs/components/radio-group) | Boolean and choice controls.                         |
+| [Select](/docs/components/select), [Combobox](/docs/components/combobox), [Slider](/docs/components/slider)           | Trigger-based, searchable, and range controls.       |
 
 # useFuzzyFilter
 
@@ -3102,25 +2756,13 @@ Fuzzy matching hook for filtering and sorting items by relevance.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`useFuzzyFilter` filters a collection against one or more fields and ranks matching items by relevance. Use it for search inputs that need a sorted result list or a reusable match predicate.
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/use-fuzzy-filter.json
-```
-
-```bash
-npm install match-sorter
-```
 
 ## Overview
 
-`useFuzzyFilter` provides fuzzy matching capabilities powered by [match-sorter](https://github.com/kentcdodds/match-sorter). It returns reusable filter functions that work with lists, Combobox, Command menus, and custom search inputs.
-
-### When to Use
-
-- **Multi-field search**: Search across title, description, tags, or nested keys simultaneously.
-- **Relevance sorting**: Automatically rank best matches first based on character adjacency, word boundaries, and acronyms.
-- **Flexible matching**: Match acronyms, prefix queries, partial substrings, and typo-tolerant words.
+The hook is powered by [match-sorter](https://github.com/kentcdodds/match-sorter). Configure a global threshold for every key, or set a threshold on an individual key when fields should match with different strictness.
 
 ## Usage
 
@@ -3141,9 +2783,9 @@ const results = filter(items, query);
 const matches = filterItem(item, query);
 ```
 
-## Filtering Patterns
+## Examples
 
-### External Filtering with Relevance Sorting
+### Filter and rank a collection
 
 Use `filter` when you want the returned array sorted by relevance:
 
@@ -3156,7 +2798,7 @@ const [query, setQuery] = useState("");
 const filteredItems = useMemo(() => filter(items, query), [filter, query]);
 ```
 
-### Internal Filtering (Boolean Check)
+### Provide a match predicate
 
 Use `filterItem` when integrating with primitives or components that take a boolean filter predicate:
 
@@ -3165,7 +2807,7 @@ const { filterItem } = useFuzzyFilter({
   keys: ["label"],
 });
 
-// In a component that expects a boolean filter callback:
+// Pass this to a component that expects a boolean filter callback.
 const matches = filterItem(item, query);
 ```
 
@@ -3173,24 +2815,26 @@ const matches = filterItem(item, query);
 
 ### Options
 
-| Prop        | Type                                                           | Default     | Description                                                     |
-| :---------- | :------------------------------------------------------------- | :---------- | :-------------------------------------------------------------- |
-| `keys`      | `Array<string \| { key: string; threshold?: FuzzyThreshold }>` | Required    | Property names or key configurations to match against.          |
-| `threshold` | `FuzzyThreshold`                                               | `"matches"` | Minimum ranking threshold required to consider an item a match. |
+| Option      | Type                                                           | Default  | Description                                                 |
+| :---------- | :------------------------------------------------------------- | :------- | :---------------------------------------------------------- |
+| `keys`      | `Array<string \| { key: string; threshold?: FuzzyThreshold }>` | Required | Property names or key configurations to match against.      |
+| `threshold` | `FuzzyThreshold`                                               | None     | Optional minimum ranking threshold for all configured keys. |
 
-### Threshold Rankings
+### Threshold values
 
 Thresholds range from strictest to loosest:
 
-- `case-sensitive-equal`: Exact match with matching casing.
-- `equal`: Case-insensitive exact match.
-- `starts-with`: Must start with the query string.
-- `word-starts-with`: Any word in the value starts with the query string.
-- `contains`: Value contains the query string anywhere.
-- `acronym`: Matches acronym initials (e.g. `tcr` matches `TanStack Router`).
-- `matches`: Default loose fuzzy match.
+| Value                  | Match behavior                                         |
+| :--------------------- | :----------------------------------------------------- |
+| `case-sensitive-equal` | Exact match with matching casing.                      |
+| `equal`                | Case-insensitive exact match.                          |
+| `starts-with`          | Value starts with the query.                           |
+| `word-starts-with`     | A word in the value starts with the query.             |
+| `contains`             | Value contains the query.                              |
+| `acronym`              | Matches initials, such as `tcr` for `TanStack Router`. |
+| `matches`              | Loose fuzzy matching.                                  |
 
-### Return Value
+### Returns
 
 | Property     | Type                                  | Description                                                                                  |
 | :----------- | :------------------------------------ | :------------------------------------------------------------------------------------------- |
@@ -3617,11 +3261,27 @@ Expand hit areas of interactive elements without affecting layout.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`Hitbox` is a Tailwind CSS v4 utility set that enlarges an element's pointer target without changing its visual size or layout. Use it on compact controls when their visible dimensions alone are difficult to target.
+
 ## Installation
 
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
+## Portable CSS
+
+The installer adds `styles/hitbox.css`. Import that file from the consumer CSS entrypoint after Tailwind CSS so its `@utility` declarations are processed.
+
+```css
+@import "tailwindcss";
+@import "./styles/hitbox.css";
 ```
+
+`hitbox-debug` uses the semantic `info` and `success` colors. Define the following theme values when you use the debugging utility.
+
+| Theme value            | Light value                | Dark value                 | Used by                                       |
+| :--------------------- | :------------------------- | :------------------------- | :-------------------------------------------- |
+| `--info`               | `var(--color-blue-500)`    | `var(--color-blue-500)`    | Default debug border and background.          |
+| `--info-foreground`    | `var(--color-blue-700)`    | `var(--color-blue-400)`    | Foreground companion for the `info` color.    |
+| `--success`            | `var(--color-emerald-500)` | `var(--color-emerald-500)` | Hovered debug border and background.          |
+| `--success-foreground` | `var(--color-emerald-700)` | `var(--color-emerald-400)` | Foreground companion for the `success` color. |
 
 ```css
 @theme inline {
@@ -3646,13 +3306,6 @@ npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
 }
 ```
 
-Import the stylesheet in your CSS entrypoint (e.g. `app.css` or
-`globals.css`):
-
-```css
-@import "./styles/hitbox.css";
-```
-
 ## Usage
 
 Use `hitbox-*` to extend the hit area uniformly on all sides. Directional variants let you expand only one side or one axis.
@@ -3666,6 +3319,8 @@ Use `hitbox-*` to extend the hit area uniformly on all sides. Directional varian
   Link
 </a>
 ```
+
+The utilities create a positioned `::before` pseudo-element whose negative inset values expand the area that receives pointer events. Do not apply them to elements that already use `::before` for other content or decoration.
 
 ## Examples
 
@@ -3781,27 +3436,40 @@ Hover the target
 <Button className="hitbox-6 hitbox-debug">Hover the target</Button>
 ```
 
+## API Reference
+
+### Utility classes
+
+| Class pattern       | Expansion                                                           |
+| :------------------ | :------------------------------------------------------------------ |
+| `hitbox`            | Uses any previously set `--hitbox-*` values without setting a size. |
+| `hitbox-{n}`        | All four sides by Tailwind spacing value `n`.                       |
+| `hitbox-{side}-{n}` | One side, where `{side}` is `l`, `r`, `t`, or `b`.                  |
+| `hitbox-x-{n}`      | Left and right sides.                                               |
+| `hitbox-y-{n}`      | Top and bottom sides.                                               |
+| `hitbox-[value]`    | All four sides by an arbitrary CSS length, such as `hitbox-[18px]`. |
+| `hitbox-debug`      | Draws the expanded area and changes its color on hover.             |
+
+All size patterns accept an integer spacing value or an arbitrary value. Directional arbitrary values follow the same syntax, such as `hitbox-l-[12px]`.
+
+### CSS variables
+
+| Variable     | Purpose                                       |
+| :----------- | :-------------------------------------------- |
+| `--hitbox-t` | Negative top inset for the pseudo-element.    |
+| `--hitbox-r` | Negative right inset for the pseudo-element.  |
+| `--hitbox-b` | Negative bottom inset for the pseudo-element. |
+| `--hitbox-l` | Negative left inset for the pseudo-element.   |
+
 # Icon Swap
 
 Animate between keyed icons with a consistent scale, blur, and fade transition.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`IconSwap` animates between keyed icons with one consistent scale, blur, fade, and spring transition. Use it when an icon represents a changing semantic state, such as copying, loading, or success.
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-The CLI also installs the registry `Button` used by the default example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json
-```
-
-```bash
-npm install motion
-```
 
 ## Usage
 
@@ -3823,27 +3491,24 @@ When an interaction changes both an icon and text, derive both from the same sta
 
 For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
 
+## API Reference
+
+`IconSwap` renders a Motion `span`. Supported [Motion span props](https://motion.dev/docs/react-motion-component) pass through to that element.
+
+### Props
+
+Keys the currently displayed icon. Change it whenever the icon's semantic
+state changes.
+
 # Text Morph
 
 Animate changing text with Calligraph and smoothly follow its width.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`TextMorph` animates changing text with Calligraph and can smoothly resize to follow its content. Use it for labels, statuses, and values that change in place.
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
-```
-
-The CLI also installs `IconSwap` and Motion for the coordinated status example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-```bash
-npm install calligraph motion
-```
 
 ## Usage
 
@@ -3873,7 +3538,7 @@ Use `autoSize={false}` only when the text lives in an intentionally fixed-width 
 
 When a status changes both an icon and its label, drive both from the same state. Use `TextMorph` for the label and [Icon Swap](/docs/utilities/icon-swap) for the icon. Do not recreate the underlying Motion presence or transition code in the consumer.
 
-The preview at the top demonstrates the complete sequence: **Fetch → Fetching → Data Fetched → Fetch**. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
+The preview at the top demonstrates the complete sequence: `Fetch` → `Fetching` → `Data Fetched` → `Fetch`. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
 
 ## Examples
 
@@ -3894,3 +3559,12 @@ Choose `default`, `smooth`, `snappy`, or `bouncy` with the `animation` prop. Tex
   {status}
 </TextMorph>
 ```
+
+## API Reference
+
+`TextMorph` wraps [Calligraph](https://calligraph.raphaelsalaja.com/). Supported Calligraph props, including `variant`, `animation`, `trend`, and `stagger`, pass through to Calligraph.
+
+### Props
+
+Measures the natural text width and animates the outer wrapper to that
+width. Set it to `false` in an intentionally fixed-width container.

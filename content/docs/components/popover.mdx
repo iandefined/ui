@@ -3,52 +3,15 @@ title: Popover
 description: An accessible popup anchored to a button.
 ---
 
+Use `Popover` to reveal contextual content anchored to a trigger without navigating away.
+
+## Preview
+
 <ComponentPreview name="popover/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/popover.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/popover.tsx"
-  title="components/ui/popover.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="popover" />
 
 ## Usage
 
@@ -76,7 +39,7 @@ import {
 </Popover>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -167,3 +130,28 @@ Pass `backdrop` to `Popover` to choose how the page appears while the popover is
 Use the `render` prop to compose a custom trigger. This example also uses `openOnHover` to open the popover when the trigger is hovered.
 
 <ComponentPreview name="popover/custom-trigger" />
+
+## API Reference
+
+`Popover` and its parts wrap the corresponding [Base UI Popover primitives](https://base-ui.com/react/components/popover). Supported Base UI props pass through.
+
+### Props
+
+#### PopoverPopup
+
+<ApiPropsList>
+  <ApiProp
+    name="animationPreset"
+    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "wipe" | "wipeScale" | "motion" | "motionBlur"'
+    simpleType="string"
+    defaultValue='"scale"'
+  >
+    Sets the popup enter and exit animation.
+  </ApiProp>
+  <ApiProp name="reduceMotion" fullType="boolean" defaultValue="false">
+    Disables popup animation.
+  </ApiProp>
+  <ApiProp name="showArrow" fullType="boolean" defaultValue="false">
+    Renders an arrow pointing at the trigger.
+  </ApiProp>
+</ApiPropsList>

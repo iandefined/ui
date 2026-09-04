@@ -3,52 +3,15 @@ title: Spinner
 description: An SVG indicator for loading states.
 ---
 
+Use `Spinner` to communicate that an action or content is loading.
+
+## Preview
+
 <ComponentPreview name="spinner/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/spinner.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/spinner.tsx"
-  title="components/ui/spinner.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="spinner" />
 
 ## Usage
 
@@ -65,3 +28,18 @@ import { Spinner } from "@/components/ui/spinner";
 ### Sizes
 
 <ComponentPreview name="spinner/sizes" />
+
+## API Reference
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "md" | "lg" | "xl"'
+    simpleType="string"
+    defaultValue='"md"'
+  >
+    Sets the spinner dimensions.
+  </ApiProp>
+</ApiPropsList>

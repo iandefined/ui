@@ -3,7 +3,7 @@
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { createContext, useContext, type ComponentProps } from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
@@ -82,7 +82,7 @@ const radioIndicatorStyles = tv({
   },
 });
 
-type RadioSize = VariantProps<typeof radioRootStyles>["size"];
+type RadioSize = NonNullable<RadioRootProps["size"]>;
 
 interface RadioContextType {
   reduceMotion?: boolean;
@@ -101,10 +101,11 @@ const useRadio = () => {
   return context;
 };
 
-interface RadioGroupProps<Value = string>
-  extends
-    RadioGroupPrimitive.Props<Value>,
-    VariantProps<typeof radioGroupStyles> {}
+interface RadioGroupProps<
+  Value = string,
+> extends RadioGroupPrimitive.Props<Value> {
+  orientation?: "horizontal" | "vertical";
+}
 
 function RadioGroup<Value = string>({
   className,
@@ -120,11 +121,11 @@ function RadioGroup<Value = string>({
   );
 }
 
-interface RadioRootProps<Value = string>
-  extends
-    RadioPrimitive.Root.Props<Value>,
-    VariantProps<typeof radioRootStyles> {
+interface RadioRootProps<
+  Value = string,
+> extends RadioPrimitive.Root.Props<Value> {
   reduceMotion?: boolean;
+  size?: "sm" | "default" | "lg";
 }
 
 function RadioRoot<Value = string>({

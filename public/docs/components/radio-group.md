@@ -4,24 +4,11 @@ A set of checkable buttons where only one item can be checked at a time.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `RadioGroup` when a person must choose exactly one option from a related set.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/radio-group.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -47,7 +34,7 @@ import { Radio, RadioGroup } from "@/components/ui/radio-group";
 </RadioGroup>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -91,3 +78,13 @@ Control the selected value with the `value` prop and `onValueChange` callback.
 ### Sizes
 
 ### Custom Indicator
+
+## API Reference
+
+`RadioGroup`, `Radio`, and the composable radio parts wrap [Base UI Radio Group primitives](https://base-ui.com/react/components/radio-group). Supported Base UI props pass through.
+
+### Props
+
+#### Radio and RadioRoot
+
+Sets the radio control size.

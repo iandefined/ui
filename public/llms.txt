@@ -1,47 +1,59 @@
 # iandefined/ui
 
-> Thoughtful components for product engineers. Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
+> An open-source component registry crafted for high-performance interfaces, predictable composition, and collaborative AI workflows. Built on Base UI, Tailwind CSS v4, and Motion.
 
-## Documentation
+## Getting Started
 
-- [Introduction](https://ui.iandefined.com/docs.md) - Build, document, and deploy this custom shadcn registry.
-- [Components](https://ui.iandefined.com/docs/components.md) - Browse the components available in this registry.
-- [Autocomplete](https://ui.iandefined.com/docs/components/autocomplete.md) - A filterable text input that suggests matching options while accepting free-form text.
+- [Introduction](https://ui.iandefined.com/docs.md) - A modern shadcn registry built on Base UI, Tailwind CSS v4, and Motion for product engineers and AI coding assistants.
+- [Extending](https://ui.iandefined.com/docs/extending.md) - How to author docs pages, registry components, multi-file blocks, and examples.
+- [Forms](https://ui.iandefined.com/docs/forms.md) - Compose accessible native and TanStack Form workflows with registry controls.
+- [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
+- [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
+- [Theming](https://ui.iandefined.com/docs/theming.md) - Customize the design system with CSS variables and global styles.
+
+## Components
+
 - [Avatar](https://ui.iandefined.com/docs/components/avatar.md) - An image element with a fallback for representing the user.
 - [Badge](https://ui.iandefined.com/docs/components/badge.md) - Compact labels for status, category, or metadata.
 - [Breadcrumbs](https://ui.iandefined.com/docs/components/breadcrumbs.md) - A responsive breadcrumb trail with surface variants, custom separators, and collapsed paths.
 - [Button](https://ui.iandefined.com/docs/components/button.md) - A button with a glossy default treatment, custom colors, variants, sections, and sizes.
 - [Button Group](https://ui.iandefined.com/docs/components/button-group.md) - A container that groups related buttons together with consistent styling.
 - [Card](https://ui.iandefined.com/docs/components/card.md) - A container with header, content, action, and footer regions.
+- [Dropdown Menu](https://ui.iandefined.com/docs/components/dropdown-menu.md) - A list of actions in a dropdown, enhanced with keyboard navigation.
+- [Kbd](https://ui.iandefined.com/docs/components/kbd.md) - Displays textual keyboard input and shortcut combinations.
+- [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
+- [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
+- [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
+- [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
+- [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
+- [Tabs](https://ui.iandefined.com/docs/components/tabs.md) - A component for toggling between related panels on the same page.
+- [Tooltip](https://ui.iandefined.com/docs/components/tooltip.md) - Displays contextual information when a user hovers or focuses an element.
+
+## Forms
+
+- [Autocomplete](https://ui.iandefined.com/docs/components/autocomplete.md) - A filterable text input that suggests matching options while accepting free-form text.
 - [Checkbox](https://ui.iandefined.com/docs/components/checkbox.md) - A control that allows the user to toggle between checked and unchecked.
 - [Combobox](https://ui.iandefined.com/docs/components/combobox.md) - A filterable input for selecting one or more predefined values.
-- [Dropdown Menu](https://ui.iandefined.com/docs/components/dropdown-menu.md) - A list of actions in a dropdown, enhanced with keyboard navigation.
-- [Field](https://ui.iandefined.com/docs/components/field.md) - An accessible form field with automatic labels, descriptions, validation state, and error messages.
-- [Fieldset](https://ui.iandefined.com/docs/components/fieldset.md) - A semantic field group with a styled legend.
-- [Form](https://ui.iandefined.com/docs/components/form.md) - A TanStack Form submission wrapper for composing type-safe forms with registry controls.
+- [Field](https://ui.iandefined.com/docs/components/field.md) - An accessible field composition primitive for labels, descriptions, validation state, and errors.
+- [Fieldset](https://ui.iandefined.com/docs/components/fieldset.md) - A native semantic group for related fields with a styled legend.
+- [Form](https://ui.iandefined.com/docs/components/form.md) - A TanStack Form submission adapter that composes registry controls into type-safe forms.
 - [Input](https://ui.iandefined.com/docs/components/input.md) - A styled text input built on Base UI.
 - [Input Group](https://ui.iandefined.com/docs/components/input-group.md) - Compose inputs and textareas with icons, text, buttons, and menus.
 - [Input OTP](https://ui.iandefined.com/docs/components/input-otp.md) - An accessible one-time-code input with animated slots, invalid states, and masked entry.
-- [Kbd](https://ui.iandefined.com/docs/components/kbd.md) - Displays textual keyboard input and shortcut combinations.
 - [Label](https://ui.iandefined.com/docs/components/label.md) - Renders an accessible label associated with controls.
 - [Number Field](https://ui.iandefined.com/docs/components/number-field.md) - A numeric input with increment, decrement, and scrub controls.
-- [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
 - [Radio Group](https://ui.iandefined.com/docs/components/radio-group.md) - A set of checkable buttons where only one item can be checked at a time.
-- [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
 - [Select](https://ui.iandefined.com/docs/components/select.md) - A form control for choosing one or more values from a popup list.
-- [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
-- [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
 - [Slider](https://ui.iandefined.com/docs/components/slider.md) - A Base UI slider with compact track and rectangular control layouts, cursor previews, and editable values.
-- [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
 - [Switch](https://ui.iandefined.com/docs/components/switch.md) - A draggable toggle with spring-based thumb animation.
-- [Tabs](https://ui.iandefined.com/docs/components/tabs.md) - A component for toggling between related panels on the same page.
 - [Textarea](https://ui.iandefined.com/docs/components/textarea.md) - A styled multiline text control built on Base UI Field.
-- [Tooltip](https://ui.iandefined.com/docs/components/tooltip.md) - Displays contextual information when a user hovers or focuses an element.
-- [Extending](https://ui.iandefined.com/docs/extending.md) - How to add docs pages, registry components, previews, and clear examples.
+
+## Hooks
+
 - [useFuzzyFilter](https://ui.iandefined.com/docs/hooks/use-fuzzy-filter.md) - Fuzzy matching hook for filtering and sorting items by relevance.
-- [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
-- [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
-- [Theming](https://ui.iandefined.com/docs/theming.md) - Customize the design system with CSS variables and global styles.
+
+## Utilities
+
 - [Hitbox](https://ui.iandefined.com/docs/utilities/hitbox.md) - Expand hit areas of interactive elements without affecting layout.
 - [Icon Swap](https://ui.iandefined.com/docs/utilities/icon-swap.md) - Animate between keyed icons with a consistent scale, blur, and fade transition.
 - [Text Morph](https://ui.iandefined.com/docs/utilities/text-morph.md) - Animate changing text with Calligraph and smoothly follow its width.
@@ -49,8 +61,10 @@
 ## Machine-readable Resources
 
 - [Full documentation](https://ui.iandefined.com/llms-full.txt)
+- [Registry catalog](https://ui.iandefined.com/r/registry.json)
 - [Homepage markdown](https://ui.iandefined.com/llms.md/content.md)
 - [OpenAPI description](https://ui.iandefined.com/openapi.json)
 - [API catalog](https://ui.iandefined.com/.well-known/api-catalog)
 - [Agent skill](https://ui.iandefined.com/.well-known/agent-skills/site-skill.md)
 - [shadcn MCP server documentation](https://ui.shadcn.com/docs/mcp)
+- [GitHub repository](https://github.com/iandefined/ui)

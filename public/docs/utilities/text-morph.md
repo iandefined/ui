@@ -4,21 +4,9 @@ Animate changing text with Calligraph and smoothly follow its width.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`TextMorph` animates changing text with Calligraph and can smoothly resize to follow its content. Use it for labels, statuses, and values that change in place.
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/text-morph.json
-```
-
-The CLI also installs `IconSwap` and Motion for the coordinated status example.
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
-```
-
-```bash
-npm install calligraph motion
-```
 
 ## Usage
 
@@ -48,7 +36,7 @@ Use `autoSize={false}` only when the text lives in an intentionally fixed-width 
 
 When a status changes both an icon and its label, drive both from the same state. Use `TextMorph` for the label and [Icon Swap](/docs/utilities/icon-swap) for the icon. Do not recreate the underlying Motion presence or transition code in the consumer.
 
-The preview at the top demonstrates the complete sequence: **Fetch → Fetching → Data Fetched → Fetch**. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
+The preview at the top demonstrates the complete sequence: `Fetch` → `Fetching` → `Data Fetched` → `Fetch`. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
 
 ## Examples
 
@@ -69,3 +57,12 @@ Choose `default`, `smooth`, `snappy`, or `bouncy` with the `animation` prop. Tex
   {status}
 </TextMorph>
 ```
+
+## API Reference
+
+`TextMorph` wraps [Calligraph](https://calligraph.raphaelsalaja.com/). Supported Calligraph props, including `variant`, `animation`, `trend`, and `stagger`, pass through to Calligraph.
+
+### Props
+
+Measures the natural text width and animates the outer wrapper to that
+width. Set it to `false` in an intentionally fixed-width container.

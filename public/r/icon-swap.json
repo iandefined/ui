@@ -6,9 +6,6 @@
   "dependencies": [
     "motion"
   ],
-  "registryDependencies": [
-    "https://ui.iandefined.com/r/button.json"
-  ],
   "files": [
     {
       "path": "src/registry/base/icon-swap.tsx",

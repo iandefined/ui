@@ -4,24 +4,11 @@ An accessible popup anchored to a button.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Popover` to reveal contextual content anchored to a trigger without navigating away.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/popover.json
-```
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -49,7 +36,7 @@ import {
 </Popover>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 import {
@@ -118,3 +105,15 @@ Pass `backdrop` to `Popover` to choose how the page appears while the popover is
 ### Custom Trigger
 
 Use the `render` prop to compose a custom trigger. This example also uses `openOnHover` to open the popover when the trigger is hovered.
+
+## API Reference
+
+`Popover` and its parts wrap the corresponding [Base UI Popover primitives](https://base-ui.com/react/components/popover). Supported Base UI props pass through.
+
+### Props
+
+#### PopoverPopup
+
+Sets the popup enter and exit animation.
+Disables popup animation.
+Renders an arrow pointing at the trigger.

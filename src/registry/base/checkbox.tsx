@@ -1,8 +1,8 @@
 "use client";
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import React, { createContext, useContext, useState } from "react";
+import { tv } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
@@ -60,19 +60,20 @@ const checkboxIndicatorStyles = tv({
   },
 });
 
-interface CheckboxRootProps
-  extends
-    React.ComponentProps<typeof CheckboxPrimitive.Root>,
-    VariantProps<typeof checkboxRootStyles> {
+interface CheckboxRootProps extends React.ComponentProps<
+  typeof CheckboxPrimitive.Root
+> {
   reduceMotion?: boolean;
+  radius?: "none" | "sm" | "default" | "lg" | "full";
+  size?: "sm" | "default" | "lg";
 }
 
 interface CheckboxContextType {
   checked: boolean;
   onCheckedChange: CheckboxRootProps["onCheckedChange"];
   indeterminate: boolean | undefined;
-  size: VariantProps<typeof checkboxRootStyles>["size"];
-  reduceMotion?: boolean; // Add this
+  size: NonNullable<CheckboxRootProps["size"]>;
+  reduceMotion?: boolean;
 }
 
 const CheckboxContext = createContext<CheckboxContextType | undefined>(
@@ -133,6 +134,7 @@ function CheckboxRoot({
           className
         )}
         indeterminate={indeterminate}
+        data-slot="checkbox"
         onCheckedChange={handleCheckedChange}
         {...rest}
       >
@@ -224,11 +226,12 @@ function CheckboxIndicator({
   );
 }
 
-interface CheckboxProps
-  extends
-    React.ComponentProps<typeof CheckboxPrimitive.Root>,
-    VariantProps<typeof checkboxRootStyles> {
+interface CheckboxProps extends React.ComponentProps<
+  typeof CheckboxPrimitive.Root
+> {
   reduceMotion?: boolean;
+  radius?: "none" | "sm" | "default" | "lg" | "full";
+  size?: "sm" | "default" | "lg";
 }
 
 function Checkbox({

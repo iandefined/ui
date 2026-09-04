@@ -22,8 +22,8 @@ import { tv } from "tailwind-variants";
 
 import { cn } from "@/lib/utils";
 
-type InputOTPSize = "sm" | "default" | "lg";
-type InputOTPVariant = "bordered" | "underlined";
+type InputOTPSize = NonNullable<InputOTPProps["size"]>;
+type InputOTPVariant = NonNullable<InputOTPProps["variant"]>;
 
 interface InputOTPContextValue {
   invalid: boolean;

@@ -4,24 +4,11 @@ A Base UI slider with compact track and rectangular control layouts, cursor prev
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Slider` to choose a numeric value or range from a bounded track.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/slider.json
-```
-
-```bash
-npm install @base-ui/react framer-motion clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -54,7 +41,7 @@ const [value, setValue] = useState(2);
 
 `SliderLabel` and `SliderValue` can be placed inside the control with `SliderContent` or arranged anywhere else within `Slider`. The displayed value is editable by default; select it to enter an exact number, then press Enter or move focus away to commit it.
 
-## Anatomy
+## Composition
 
 ```tsx
 <Slider>
@@ -91,15 +78,21 @@ Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's 
 
 ## API Reference
 
-### Slider
+`Slider` and its parts wrap the corresponding [Base UI Slider primitives](https://base-ui.com/react/components/slider). Supported Base UI props pass through.
 
-Slider wraps Base UI's Slider Root and accepts its props in addition to those below.
+### Props
 
-| Prop           | Type                        | Default     | Description                                          |
-| -------------- | --------------------------- | ----------- | ---------------------------------------------------- |
-| `variant`      | `"compact" \| "default"`    | `"default"` | Controls thumb and rail layout alignment.            |
-| `hideTooltip`  | `boolean`                   | `false`     | Hides the floating value tooltip during drag.        |
-| `formatValue`  | `(value: number) => string` | —           | Formats thumb value display in tooltips and values.  |
-| `showSteps`    | `boolean`                   | `false`     | Renders visible step tick dots along the track.      |
-| `reduceMotion` | `boolean`                   | `false`     | Disables spring transitions for thumb movement.      |
-| `getAriaLabel` | `(index: number) => string` | —           | Custom accessible name resolver for multiple thumbs. |
+Controls the thumb and rail layout.
+Hides the floating value tooltip during pointer interaction.
+simpleType="function"
+
+>
+
+Formats values shown in the tooltip and `SliderValue`.
+Renders step tick dots on the track.
+Disables spring transitions for thumb movement.
+simpleType="function"
+
+>
+
+Returns an accessible name for each thumb in a multi-thumb slider.

@@ -30,6 +30,53 @@ For component source contracts, see [component-implementation.md](component-impl
 ## Examples and blocks
 
 - Reusable demos live in `examples/<item>/<example>.tsx`, default-export a component, and import from `@/registry/base/*` so previews exercise publishable code.
-- A manifest block has a `page.tsx` entry and declares every installable source file. Its categories derive from `registry.json`.
+- Blocks are multi-file, full-feature UI layouts or page compositions (e.g., sidebars, dashboards, authentication screens) exposed on `/blocks`.
 - Register a component in `registryComponents` only when it needs lookup by registry item name. Examples are discovered automatically.
+
+## Adding and Categorizing Blocks
+
+Follow these conventions when adding new blocks:
+
+### 1. File Structure and Categorization
+- Place each block in its category and two-digit numeric subfolder:
+  `src/registry/base/blocks/<category>/<number>/`
+  For example: `src/registry/base/blocks/sidebar/01/`, `src/registry/base/blocks/dashboard/01/`, etc.
+  This mirrors how blocks are grouped and exposed under their respective category as Base UI components on `/blocks`.
+- Structure inside each block directory:
+  * `page.tsx`: The primary block entry point that exports the main composition as default export.
+  * `components/`: Companion subcomponents that belong to this block layout (e.g. `app-sidebar.tsx`, `nav-main.tsx`).
+
+### 2. Registry Manifest (`registry.json`)
+Add the block entry to the `items` array in `registry.json`:
+- `name`: Must follow `<category>-<number>` (e.g. `"sidebar-01"`).
+- `type`: `"registry:block"`.
+- `title`: Human-readable title (e.g. `"Sidebar 01"`).
+- `description`: Brief description of what the block demonstrates.
+- `categories`: Array with the category name (e.g. `["sidebar"]`). Must match the directory category name.
+- `dependencies`: Array of external npm dependencies required by the block.
+- `registryDependencies`: Array of installable registry UI components (e.g. `["sidebar", "button", "avatar"]`).
+- `files`: List every authored file within the block directory with appropriate types and consumer targets:
+  * `page.tsx`: `target: "app/<category>-<number>/page.tsx"` (or `app/dashboard/page.tsx`), `type: "registry:page"`.
+  * `components/*`: `target: "components/<file>.tsx"`, `type: "registry:component"`.
+
+### 3. Development Path Aliases (`tsconfig.json`)
+Because block code is authored to be consumer-portable, companion components import each other using standard consumer aliases (such as `@/components/app-sidebar` or `@/components/ui/breadcrumbs`).
+- To allow TypeScript (`pnpm typecheck`) and Vite to resolve these during development without altering consumer imports, register each companion alias in `tsconfig.json` under `compilerOptions.paths`:
+  ```json
+  "@/components/app-sidebar": ["./src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx"]
+  ```
+
+### 4. Category Title and Navigation (`src/shared/lib/blocks.ts`)
+- Block entries are automatically aggregated from `registry.json` by `registryBlocks`.
+- By default, category names are converted to titles using `toTitle()` (e.g. `sidebar` -> `Sidebar`).
+- If a category needs custom display text or capitalization (e.g. `auth` -> `Authentication`), add it to the `categoryTitles` dictionary in `src/shared/lib/blocks.ts`.
+
+### 5. In-App Preview Registration (`src/shared/lib/registry.ts`)
+- Import the block's `page.tsx` default export into `src/shared/lib/registry.ts`.
+- Add it to the `registryComponents` map under its canonical block name (e.g. `"sidebar-01"`).
+
+### 6. Compilation and Verification
+- Run `pnpm registry:build` to regenerate the installable registry payload in `public/r/<category>-<number>.json`.
+- Run `pnpm typecheck`, `pnpm docs:check`, and `pnpm check`.
+- Verify the block displays properly in `/blocks` (both under its category filter pill and in the catalog grid) and inspect the live preview at `/blocks/<category>-<number>`.
 

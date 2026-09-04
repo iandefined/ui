@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 
 import { Badge as BaseBadge } from "@/registry/base/badge";
+import Sidebar01Page from "@/registry/base/blocks/sidebar/01/page";
 import { Button as BaseButton } from "@/registry/base/button";
 import { Checkbox as BaseCheckbox } from "@/registry/base/checkbox";
 import { DropdownMenu as BaseDropdownMenu } from "@/registry/base/dropdown-menu";
@@ -8,7 +9,6 @@ import { Input as BaseInput } from "@/registry/base/input";
 import { InputGroup as BaseInputGroup } from "@/registry/base/input-group";
 import { RadioGroup as BaseRadioGroup } from "@/registry/base/radio-group";
 import { Separator as BaseSeparator } from "@/registry/base/separator";
-import Sidebar01Page from "@/registry/base/sidebar-01/page";
 import { Skeleton as BaseSkeleton } from "@/registry/base/skeleton";
 import { Spinner as BaseSpinner } from "@/registry/base/spinner";
 import { Textarea as BaseTextarea } from "@/registry/base/textarea";
@@ -16,20 +16,26 @@ import { Tooltip as BaseTooltip } from "@/registry/base/tooltip";
 
 import registryManifest from "../../../registry.json";
 
-type RegistryFile = {
+export type RegistryFile = {
   path: string;
   type: string;
   target?: string;
   content?: string;
 };
 
-type RegistryItem = {
+export type RegistryItem = {
   name: string;
   type: string;
   title?: string;
   description?: string;
   categories?: string[];
+  dependencies?: string[];
+  registryDependencies?: string[];
   files?: RegistryFile[];
+  cssVars?: {
+    light?: Record<string, string>;
+    dark?: Record<string, string>;
+  };
 };
 
 type RegistryComponent = ComponentType<Record<string, never>>;
@@ -39,7 +45,11 @@ type DemoModule = {
 };
 
 const registrySources = import.meta.glob(
-  ["../../registry/**/*.tsx", "../../registry/**/*.ts"],
+  [
+    "../../registry/**/*.tsx",
+    "../../registry/**/*.ts",
+    "../../styles/**/*.css",
+  ],
   {
     eager: true,
     import: "default",
@@ -67,6 +77,7 @@ const toDemoName = (filePath: string) =>
 const toRootPath = (filePath: string) =>
   normalizePath(filePath)
     .replace(/^\.\.\/\.\.\/registry\//, "src/registry/")
+    .replace(/^\.\.\/\.\.\/styles\//, "src/styles/")
     .replace(/^\.\.\/\.\.\/\.\.\/examples\//, "examples/");
 
 const sourceByRootPath = new Map<string, string>(
@@ -113,6 +124,12 @@ const withFileContent = (item: RegistryItem): RegistryItem => ({
   })),
 });
 
+export const getRegistryItemSync = (name: string): RegistryItem | null => {
+  const item = allRegistryItems[name];
+
+  return item ? withFileContent(item) : null;
+};
+
 export const readOptionalFromRoot = async (
   relativePath: string
 ): Promise<string | null> => {
@@ -157,8 +174,4 @@ export const getRegistryComponent = (name: string) => {
 
 export const getRegistryItem = async (
   name: string
-): Promise<RegistryItem | null> => {
-  const item = allRegistryItems[name];
-
-  return item ? withFileContent(item) : null;
-};
+): Promise<RegistryItem | null> => getRegistryItemSync(name);

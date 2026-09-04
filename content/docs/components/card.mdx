@@ -3,52 +3,15 @@ title: Card
 description: A container with header, content, action, and footer regions.
 ---
 
+Use `Card` to group related content and actions into a distinct surface.
+
+## Preview
+
 <ComponentPreview name="card/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/card.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/card.tsx"
-  title="components/ui/card.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="card" />
 
 ## Usage
 
@@ -60,19 +23,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-```
 
-```tsx
 <Card>
   <CardHeader>
     <CardTitle>Card Title</CardTitle>
     <CardDescription>Card description.</CardDescription>
   </CardHeader>
   <CardContent>Card content.</CardContent>
-</Card>
+</Card>;
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <Card>
@@ -90,24 +51,29 @@ import {
 
 ### With Footer and Action
 
-Use `CardFooter` for actions below the content and `CardAction` for a control in
-the header.
+Use `CardFooter` below the content and `CardAction` for a header control.
 
 <ComponentPreview name="card/with-footer-and-action" />
 
 ### Variants
 
-Use `variant` to change how the card is framed.
+Use `inset` to place nested content on a card surface inside a muted frame.
 
 <ComponentPreview name="card/variants" previewClassName="px-4 sm:px-10" />
 
-The `inset` variant uses the `muted` token for its outer frame and the normal
-`card` background for its nested content panel in light mode. Dark mode keeps
-the existing surface pairing. It does not require surface levels or additional
-theme variables.
-
 ## API Reference
 
-| Prop      | Type                   | Default     | Description                     |
-| --------- | ---------------------- | ----------- | ------------------------------- |
-| `variant` | `"default" \| "inset"` | `"default"` | Changes how the card is framed. |
+`Card` is a styled `div`; standard HTML props pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="variant"
+    fullType='"default" | "inset"'
+    simpleType="string"
+    defaultValue='"default"'
+  >
+    Changes how the card is framed.
+  </ApiProp>
+</ApiPropsList>

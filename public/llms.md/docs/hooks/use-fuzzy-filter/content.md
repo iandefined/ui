@@ -4,25 +4,13 @@ Fuzzy matching hook for filtering and sorting items by relevance.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+`useFuzzyFilter` filters a collection against one or more fields and ranks matching items by relevance. Use it for search inputs that need a sorted result list or a reusable match predicate.
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/use-fuzzy-filter.json
-```
-
-```bash
-npm install match-sorter
-```
 
 ## Overview
 
-`useFuzzyFilter` provides fuzzy matching capabilities powered by [match-sorter](https://github.com/kentcdodds/match-sorter). It returns reusable filter functions that work with lists, Combobox, Command menus, and custom search inputs.
-
-### When to Use
-
-- **Multi-field search**: Search across title, description, tags, or nested keys simultaneously.
-- **Relevance sorting**: Automatically rank best matches first based on character adjacency, word boundaries, and acronyms.
-- **Flexible matching**: Match acronyms, prefix queries, partial substrings, and typo-tolerant words.
+The hook is powered by [match-sorter](https://github.com/kentcdodds/match-sorter). Configure a global threshold for every key, or set a threshold on an individual key when fields should match with different strictness.
 
 ## Usage
 
@@ -43,9 +31,9 @@ const results = filter(items, query);
 const matches = filterItem(item, query);
 ```
 
-## Filtering Patterns
+## Examples
 
-### External Filtering with Relevance Sorting
+### Filter and rank a collection
 
 Use `filter` when you want the returned array sorted by relevance:
 
@@ -58,7 +46,7 @@ const [query, setQuery] = useState("");
 const filteredItems = useMemo(() => filter(items, query), [filter, query]);
 ```
 
-### Internal Filtering (Boolean Check)
+### Provide a match predicate
 
 Use `filterItem` when integrating with primitives or components that take a boolean filter predicate:
 
@@ -67,7 +55,7 @@ const { filterItem } = useFuzzyFilter({
   keys: ["label"],
 });
 
-// In a component that expects a boolean filter callback:
+// Pass this to a component that expects a boolean filter callback.
 const matches = filterItem(item, query);
 ```
 
@@ -75,24 +63,26 @@ const matches = filterItem(item, query);
 
 ### Options
 
-| Prop        | Type                                                           | Default     | Description                                                     |
-| :---------- | :------------------------------------------------------------- | :---------- | :-------------------------------------------------------------- |
-| `keys`      | `Array<string \| { key: string; threshold?: FuzzyThreshold }>` | Required    | Property names or key configurations to match against.          |
-| `threshold` | `FuzzyThreshold`                                               | `"matches"` | Minimum ranking threshold required to consider an item a match. |
+| Option      | Type                                                           | Default  | Description                                                 |
+| :---------- | :------------------------------------------------------------- | :------- | :---------------------------------------------------------- |
+| `keys`      | `Array<string \| { key: string; threshold?: FuzzyThreshold }>` | Required | Property names or key configurations to match against.      |
+| `threshold` | `FuzzyThreshold`                                               | None     | Optional minimum ranking threshold for all configured keys. |
 
-### Threshold Rankings
+### Threshold values
 
 Thresholds range from strictest to loosest:
 
-- `case-sensitive-equal`: Exact match with matching casing.
-- `equal`: Case-insensitive exact match.
-- `starts-with`: Must start with the query string.
-- `word-starts-with`: Any word in the value starts with the query string.
-- `contains`: Value contains the query string anywhere.
-- `acronym`: Matches acronym initials (e.g. `tcr` matches `TanStack Router`).
-- `matches`: Default loose fuzzy match.
+| Value                  | Match behavior                                         |
+| :--------------------- | :----------------------------------------------------- |
+| `case-sensitive-equal` | Exact match with matching casing.                      |
+| `equal`                | Case-insensitive exact match.                          |
+| `starts-with`          | Value starts with the query.                           |
+| `word-starts-with`     | A word in the value starts with the query.             |
+| `contains`             | Value contains the query.                              |
+| `acronym`              | Matches initials, such as `tcr` for `TanStack Router`. |
+| `matches`              | Loose fuzzy matching.                                  |
 
-### Return Value
+### Returns
 
 | Property     | Type                                  | Description                                                                                  |
 | :----------- | :------------------------------------ | :------------------------------------------------------------------------------------------- |

@@ -15,6 +15,10 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
+      "@/components/app-sidebar": [
+        "./src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx"
+      ],
+      "@/components/ui/breadcrumbs": ["./src/registry/base/breadcrumbs.tsx"],
       "@/components/*": ["./src/shared/components/*"],
       "@/hooks/*": ["./src/shared/hooks/*"],
       "@/lib/*": ["./src/shared/lib/*"],

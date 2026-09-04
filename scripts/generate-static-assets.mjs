@@ -68,11 +68,55 @@ const readSiteConfig = async () => {
   };
 };
 
+const readLinksConfig = async () => {
+  const linksConstants = await readFile(
+    path.join(root, "src", "shared", "constants", "links.ts"),
+    "utf8"
+  );
+
+  const readString = (pattern, label) => {
+    const match = linksConstants.match(pattern);
+    if (!match) {
+      throw new Error(
+        `Could not find ${label} in src/shared/constants/links.ts`
+      );
+    }
+
+    return match[1];
+  };
+
+  const branch = readString(/branch:\s*["']([^"']+)["']/, "GITHUB.branch");
+  const org = readString(/org:\s*["']([^"']+)["']/, "GITHUB.org");
+  const repo = readString(/repo:\s*["']([^"']+)["']/, "GITHUB.repo");
+  const user = readString(/user:\s*["']([^"']+)["']/, "GITHUB.user");
+  const github = `https://github.com/${user}/${repo}`;
+
+  return {
+    branch,
+    discord: readString(/DISCORD:\s*["']([^"']+)["']/, "LINK.DISCORD"),
+    github,
+    org,
+    portfolio: readString(/PORTFOLIO:\s*["']([^"']+)["']/, "LINK.PORTFOLIO"),
+    repo,
+    shadcnMcpDocs: readString(
+      /SHADCN_MCP_DOCS:\s*["']([^"']+)["']/,
+      "LINK.SHADCN_MCP_DOCS"
+    ),
+    user,
+    x: readString(/X:\s*["']([^"']+)["']/, "LINK.X"),
+  };
+};
+
 const siteConfig = await readSiteConfig();
+const linksConfig = await readLinksConfig();
 const siteOrigin = process.env.SITE_URL ?? siteConfig.fallbackOrigin;
 
 const LINK = {
-  SHADCN_MCP_DOCS: "https://ui.shadcn.com/docs/mcp",
+  DISCORD: linksConfig.discord,
+  GITHUB: linksConfig.github,
+  PORTFOLIO: linksConfig.portfolio,
+  SHADCN_MCP_DOCS: linksConfig.shadcnMcpDocs,
+  X: linksConfig.x,
 };
 
 const SITE = {
@@ -452,32 +496,108 @@ const markdownForPage = (page) => {
   return `# ${page.title}\n\n${sections.join("\n\n")}\n`;
 };
 
-const documentationIndex = (pages) =>
-  [
-    "## Documentation",
-    "",
-    ...pages.map((page) => {
+const FORM_COMPONENT_SLUGS = new Set([
+  "autocomplete",
+  "checkbox",
+  "combobox",
+  "field",
+  "fieldset",
+  "form",
+  "input",
+  "input-group",
+  "input-otp",
+  "label",
+  "number-field",
+  "radio-group",
+  "select",
+  "slider",
+  "switch",
+  "textarea",
+]);
+
+const renderPageList = (items) =>
+  items
+    .map((page) => {
       const mdRoute = `${page.url}.md`;
       const description = page.description ? ` - ${page.description}` : "";
 
       return `- [${page.title}](${siteUrl}${mdRoute})${description}`;
-    }),
-  ].join("\n");
+    })
+    .join("\n");
+
+const documentationIndex = (pages) => {
+  const gettingStartedPages = pages.filter(
+    (page) =>
+      page.slugs.length === 0 ||
+      (page.slugs.length === 1 &&
+        ["installation", "theming", "forms", "llms", "extending"].includes(
+          page.slugs[0]
+        ))
+  );
+
+  const formPages = pages.filter(
+    (page) =>
+      page.slugs.length === 2 &&
+      page.slugs[0] === "components" &&
+      FORM_COMPONENT_SLUGS.has(page.slugs[1])
+  );
+
+  const componentPages = pages.filter(
+    (page) =>
+      page.slugs.length === 2 &&
+      page.slugs[0] === "components" &&
+      !FORM_COMPONENT_SLUGS.has(page.slugs[1])
+  );
+
+  const hookPages = pages.filter(
+    (page) => page.slugs.length >= 1 && page.slugs[0] === "hooks"
+  );
+
+  const utilityPages = pages.filter(
+    (page) => page.slugs.length >= 1 && page.slugs[0] === "utilities"
+  );
+
+  const sections = [
+    "## Getting Started",
+    "",
+    renderPageList(gettingStartedPages),
+    "",
+    "## Components",
+    "",
+    renderPageList(componentPages),
+    "",
+    "## Forms",
+    "",
+    renderPageList(formPages),
+  ];
+
+  if (hookPages.length > 0) {
+    sections.push("", "## Hooks", "", renderPageList(hookPages));
+  }
+
+  if (utilityPages.length > 0) {
+    sections.push("", "## Utilities", "", renderPageList(utilityPages));
+  }
+
+  return sections.join("\n");
+};
 
 const docsIndex = (pages) => `# ${SITE.NAME}
 
-> ${SITE.DESCRIPTION.LONG} Use this index to discover the available documentation pages, markdown mirrors, and registry resources before browsing.
+> An open-source component registry crafted for high-performance interfaces, predictable composition, and collaborative AI workflows. Built on Base UI, Tailwind CSS v4, and Motion.
 
 ${documentationIndex(pages)}
 
 ## Machine-readable Resources
 
 - [Full documentation](${siteUrl}${ROUTES.LLMS_FULL})
+- [Registry catalog](${siteUrl}${ROUTES.REGISTRY})
 - [Homepage markdown](${siteUrl}${ROUTES.LLMS_MD}/content.md)
 - [OpenAPI description](${siteUrl}${ROUTES.OPENAPI})
 - [API catalog](${siteUrl}${ROUTES.API_CATALOG})
 - [Agent skill](${siteUrl}${ROUTES.AGENT_SKILLS_SITE_SKILL})
 - [shadcn MCP server documentation](${LINK.SHADCN_MCP_DOCS})
+- [GitHub repository](${LINK.GITHUB})
 `;
 
 const homepageMarkdown = () => `# ${SITE.NAME}

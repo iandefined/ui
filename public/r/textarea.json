@@ -5,7 +5,6 @@
   "description": "A styled Base UI multiline text control with size variants.",
   "dependencies": [
     "@base-ui/react",
-    "tailwind-variants",
     "clsx",
     "tailwind-merge"
   ],

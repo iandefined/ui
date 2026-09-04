@@ -31,21 +31,61 @@ const removeFolderIndexPage = (folder: PageTreeFolder) =>
 export const getDocsNavigationGroups = (
   tree: PageTreeRoot
 ): DocsNavigationGroup[] => {
-  return tree.children
-    .map((node, index) => {
-      if (node.type === "page") {
-        return makeGroup(`page-${index}`, null, [node]);
+  const groups: DocsNavigationGroup[] = [];
+
+  for (const node of tree.children) {
+    if (node.type === "page") {
+      const group = makeGroup(node.$id ?? node.url, null, [node]);
+      if (group) {
+        groups.push(group);
+      }
+      continue;
+    }
+
+    if (node.type === "folder") {
+      let currentGroupLabel: ReactNode = node.name;
+      let currentGroupId = folderId(node);
+      let currentPages: PageTreePage[] = [];
+
+      for (const child of node.children) {
+        if (child.type === "separator") {
+          if (currentPages.length > 0) {
+            const group = makeGroup(
+              currentGroupId,
+              currentGroupLabel,
+              currentPages
+            );
+            if (group) {
+              groups.push(group);
+            }
+            currentPages = [];
+          }
+          currentGroupLabel = child.name;
+          currentGroupId = `${folderId(node)}-${String(child.name).toLowerCase().replace(/\s+/g, "-")}`;
+        } else if (child.type === "page") {
+          if (
+            child.url !== node.index?.url &&
+            child.url !== ROUTES.DOCS_COMPONENTS
+          ) {
+            currentPages.push(child);
+          }
+        } else if (child.type === "folder") {
+          currentPages.push(...removeFolderIndexPage(child));
+        }
       }
 
-      if (node.type === "folder") {
-        return makeGroup(
-          folderId(node),
-          node.name,
-          removeFolderIndexPage(node)
+      if (currentPages.length > 0) {
+        const group = makeGroup(
+          currentGroupId,
+          currentGroupLabel,
+          currentPages
         );
+        if (group) {
+          groups.push(group);
+        }
       }
+    }
+  }
 
-      return null;
-    })
-    .filter((group): group is DocsNavigationGroup => Boolean(group));
+  return groups;
 };

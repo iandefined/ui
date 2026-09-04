@@ -4,24 +4,11 @@ A component for toggling between related panels on the same page.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Tabs` to switch between related sections without leaving the current page.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/tabs.json
-```
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
@@ -40,7 +27,7 @@ import { Tabs, TabsList, TabsPanel, TabsTrigger } from "@/components/ui/tabs";
 </Tabs>
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <Tabs>
@@ -79,16 +66,14 @@ Wrap panels with `TabsPanelsWrapper` to smoothly animate the container height wh
 
 ## API Reference
 
-### Tabs
+`Tabs` and its parts wrap the corresponding [Base UI Tabs primitives](https://base-ui.com/react/components/tabs). Supported Base UI props pass through.
 
-Tabs wraps Base UI's Tabs Root and accepts its props in addition to those below.
+### Props
 
-| Prop      | Type                                   | Default       | Description                   |
-| --------- | -------------------------------------- | ------------- | ----------------------------- |
-| `variant` | `"segmented" \| "underline" \| "card"` | `"segmented"` | Visual treatment of the tabs. |
+#### Tabs
 
-### TabsList
+Sets the visual treatment for the tab set.
 
-| Prop      | Type                                   | Default   | Description                                   |
-| --------- | -------------------------------------- | --------- | --------------------------------------------- |
-| `variant` | `"segmented" \| "underline" \| "card"` | Inherited | Overrides the variant set on the parent Tabs. |
+#### TabsList and TabsTrigger
+
+Overrides the variant inherited from `Tabs`.

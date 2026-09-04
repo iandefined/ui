@@ -1,43 +1,18 @@
 # Form
 
-A TanStack Form submission wrapper for composing type-safe forms with registry controls.
+A TanStack Form submission adapter that composes registry controls into type-safe forms.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `Form` when TanStack Form owns submission and validation. For native constraint validation, compose a native `<form>` with [Field](/docs/components/field) and [Fieldset](/docs/components/fieldset) instead. Read the [Forms guide](/docs/forms) for complete patterns.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/form.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button.json https://ui.iandefined.com/r/checkbox.json https://ui.iandefined.com/r/field.json https://ui.iandefined.com/r/fieldset.json https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/radio-group.json https://ui.iandefined.com/r/slider.json https://ui.iandefined.com/r/switch.json https://ui.iandefined.com/r/textarea.json
-```
-
-```bash
-npm install @tanstack/react-form
-```
-
-```bash
-npm install zod
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
-Create the form instance with TanStack Form, then pass it to `Form`. The wrapper prevents native submission and calls `form.handleSubmit()`.
+Create a TanStack Form instance, pass it to `Form`, and render fields through `form.Field`. `Form` prevents the browser submit event and calls `form.handleSubmit()`.
 
 ```tsx
 import { useForm } from "@tanstack/react-form";
@@ -45,45 +20,84 @@ import { useForm } from "@tanstack/react-form";
 import { Field, FieldControl, FieldLabel } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 
-const form = useForm({
-  defaultValues: { email: "" },
-  onSubmit: ({ value }) => console.info(value),
-});
+function ProfileForm() {
+  const form = useForm({
+    defaultValues: { email: "" },
+    onSubmit: ({ value }) => console.info(value),
+  });
 
-<Form form={form}>
-  <form.Field name="email">
-    {(field) => (
-      <Field name={field.name}>
-        <FieldLabel>Email</FieldLabel>
-        <FieldControl
-          value={field.state.value}
-          onBlur={field.handleBlur}
-          onValueChange={field.handleChange}
-        />
-      </Field>
-    )}
-  </form.Field>
-</Form>;
+  return (
+    <Form form={form}>
+      <form.Field name="email">
+        {(field) => (
+          <Field name={field.name}>
+            <FieldLabel>Email</FieldLabel>
+            <FieldControl
+              onBlur={field.handleBlur}
+              onValueChange={field.handleChange}
+              type="email"
+              value={field.state.value}
+            />
+          </Field>
+        )}
+      </form.Field>
+    </Form>
+  );
+}
 ```
 
-The component defaults to `noValidate` so TanStack Form remains the only validation layer. Pass `noValidate={false}` when native constraint validation is intentional.
+## Composition
 
-For fields with supporting guidance, render the helper while the field is valid and replace it with an actionable `FieldError` when validation fails. Keep that single active message directly after the control; Field connects it with `aria-describedby` and propagates `aria-invalid` from the external validation state.
+`Form` renders a native `<form>` and defaults `noValidate` to `true`, so TanStack Form is the validation authority. Set `noValidate={false}` only when intentionally combining native constraints with TanStack Form.
+
+Map each field's metadata to `Field` so controls receive the correct validation state and active message association.
+
+```tsx
+<Field
+  dirty={field.state.meta.isDirty}
+  invalid={Boolean(error)}
+  name={field.name}
+  touched={field.state.meta.isTouched}
+>
+  {/* label and control */}
+  <FieldError match={Boolean(error)}>{error}</FieldError>
+</Field>
+```
+
+Use `form.Subscribe` for submit availability and pending feedback. Disable the submit button while `isSubmitting` is true to prevent duplicate submissions.
 
 ## Examples
 
-### Complete Form
+### TanStack Form Quick Start
 
-Compose Input, Textarea, Radio Group, Slider, Switch, and Checkbox fields in one profile form. It validates with Zod, revalidates as errors are corrected, handles an asynchronous submission, and reports the submitted result.
+Use field-level validators, mapped metadata, pending submit feedback, and a submission result.
 
-### With Fieldset
+### Fieldset and Grouped Controls
 
-Group related TanStack fields with the semantic Fieldset component and use Field for automatic label association.
+Group related address fields with native fieldset semantics while TanStack Form manages their values.
 
-### Zod Validation
+### Schema Validation
 
-Pass a Zod schema to TanStack Form's dynamic validator. The form validates on submit, then revalidates as values change so errors clear while the user corrects them.
+Validate a complete value object with Zod after submit, then revalidate as the user corrects values.
 
-### Server Validation
+### Async Validation
 
-Use an asynchronous submit validator for checks that need a server round trip, such as reserved or already-used usernames. Try `admin` to see the server error.
+Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
+
+### Mixed Controls and Submission State
+
+Compose text, choice, range, switch, and checkbox controls in one form with Zod validation and pending-state feedback.
+
+## Accessibility
+
+Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics.
+
+## API Reference
+
+`Form` accepts native form attributes in addition to the prop below.
+
+<ApiProp fullType='Pick<AnyFormApi, "handleSubmit">' name="form" required>
+The TanStack Form API whose `handleSubmit` method runs when the form
+submits.
+Disables browser constraint validation by default so TanStack Form owns
+validation.

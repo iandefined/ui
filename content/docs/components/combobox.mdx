@@ -3,58 +3,15 @@ title: Combobox
 description: A filterable input for selecting one or more predefined values.
 ---
 
+Use `Combobox` when users choose from a list and need to filter it first.
+
+## Preview
+
 <ComponentPreview name="combobox/default" />
 
 ## Installation
 
-<CodeTabs>
-  <TabsList>
-    <TabsTrigger value="cli">Command</TabsTrigger>
-    <TabsTrigger value="manual">Manual</TabsTrigger>
-  </TabsList>
-  <TabsContent value="cli">
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/combobox.json
-```
-
-  </TabsContent>
-  <TabsContent value="manual">
-
-<Steps>
-  <Step>Install the following dependencies:</Step>
-
-```bash
-npm install @base-ui/react clsx tailwind-merge
-```
-
-<Step>Install the Input, Label, and Scroll Area registry components:</Step>
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/input.json https://ui.iandefined.com/r/label.json https://ui.iandefined.com/r/scroll-area.json
-```
-
-<Step>Add the `cn` utility to `lib/utils.ts`:</Step>
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource
-  src="src/registry/base/combobox.tsx"
-  title="components/ui/combobox.tsx"
-/>
-</Steps>
-
-  </TabsContent>
-</CodeTabs>
+<ComponentInstall name="combobox" />
 
 ## Usage
 
@@ -67,9 +24,7 @@ import {
   ComboboxList,
   ComboboxPopup,
 } from "@/components/ui/combobox";
-```
 
-```tsx
 const fruits = ["Apple", "Banana", "Orange"];
 
 <Combobox items={fruits}>
@@ -87,72 +42,92 @@ const fruits = ["Apple", "Banana", "Orange"];
 </Combobox>;
 ```
 
-The value passed to `ComboboxItem` must match the item type. When items are objects without a `label` property, provide `itemToStringLabel` so the selected value renders as useful input text.
+## Composition
 
-## Anatomy
-
-```tsx
-<Combobox>
-  <ComboboxLabel />
-  <ComboboxInput />
-  <ComboboxPopup>
-    <ComboboxEmpty />
-    <ComboboxList>
-      <ComboboxGroup>
-        <ComboboxGroupLabel />
-        <ComboboxCollection>
-          <ComboboxItem />
-        </ComboboxCollection>
-      </ComboboxGroup>
-      <ComboboxSeparator />
-    </ComboboxList>
-  </ComboboxPopup>
-</Combobox>
-```
-
-For multiple selection, replace the standalone input with `ComboboxChips`, render selected `ComboboxChip` values inside `ComboboxValue`, and keep `ComboboxInput` inside the chips container.
+Use `ComboboxChips`, `ComboboxValue`, and `ComboboxChip` for multiple selection; keep `ComboboxInput` inside the chips container.
 
 ## Examples
 
 ### Basic
 
-Primitive values can be passed directly. `autoHighlight` highlights the first match while filtering.
+Filter primitive values.
 
 <ComponentPreview name="combobox/basic" />
 
 ### Controlled Object Value
 
-Use `value` and `onValueChange` when application state owns the selection. `itemToStringLabel` controls how an object value appears in the input.
+Control object selections with `value` and `onValueChange`.
 
 <ComponentPreview name="combobox/controlled" />
 
 ### With Label
 
-Give the input an `id` and connect a visible label with `htmlFor`.
+Associate a visible label with the input.
 
 <ComponentPreview name="combobox/with-label" />
 
 ### Multiple Selection
 
-Set `multiple` and render removable selected values as chips.
+Render selected values as removable chips.
 
 <ComponentPreview name="combobox/multiple-selection" />
 
 ### Input Inside Popup
 
-Use `ComboboxTrigger` as the form control when the filter input belongs inside the popup. Set `showTrigger={false}` on that input so the combobox has only one trigger.
-Keep the trigger icon at the inline end with `ms-auto shrink-0`; its position then remains stable even when no value or placeholder is rendered.
+Move filtering into the popup when the trigger is the form control.
 
 <ComponentPreview name="combobox/input-inside-popup" />
 
 ### Clearable Combobox
 
-Set `isClearable` on `ComboboxInput` to replace the toggle icon with a clear action after a value is selected.
+Replace the toggle with a clear action after selection.
 
 <ComponentPreview name="combobox/clearable" />
 
 ### Groups
 
-This color-palette example follows Pure UI's grouped implementation: it derives `{ value, items }` color families, renders each family through `ComboboxCollection`, and shows the selected color's HEX and RGB values.
+Organize option families in collections.
 
 <ComponentPreview name="combobox/groups" />
+
+## API Reference
+
+`Combobox` wraps [Base UI Combobox](https://base-ui.com/react/components/combobox). Supported Base UI props pass through.
+
+### ComboboxInput Props
+
+<ApiPropsList>
+  <ApiProp name="showTrigger" fullType="boolean" defaultValue="true">
+    Shows the popup toggle button.
+  </ApiProp>
+  <ApiProp name="isClearable" fullType="boolean" defaultValue="false">
+    Shows a clear action after selection.
+  </ApiProp>
+</ApiPropsList>
+
+### ComboboxPopup Props
+
+<ApiPropsList>
+  <ApiProp
+    name="side"
+    fullType='"top" | "bottom"'
+    simpleType="string"
+    defaultValue='"bottom"'
+  >
+    Sets the preferred side of the input.
+  </ApiProp>
+  <ApiProp name="sideOffset" fullType="number" defaultValue="0">
+    Sets the distance from the input in pixels.
+  </ApiProp>
+  <ApiProp
+    name="align"
+    fullType='"start" | "center" | "end"'
+    simpleType="string"
+    defaultValue='"center"'
+  >
+    Sets alignment relative to the input.
+  </ApiProp>
+  <ApiProp name="alignOffset" fullType="number" defaultValue="0">
+    Offsets the popup along the alignment axis.
+  </ApiProp>
+</ApiPropsList>

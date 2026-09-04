@@ -169,7 +169,7 @@ function useSelect() {
 interface SelectRootProps extends React.ComponentProps<
   typeof SelectPrimitive.Root
 > {
-  backdrop?: Backdrop;
+  backdrop?: "opaque" | "blur" | "transparent";
 }
 
 function Select({ backdrop = "transparent", ...props }: SelectRootProps) {
@@ -369,7 +369,35 @@ interface SelectPopupProps
     | "wipeScale"
     | "motion"
     | "motionBlur";
-  transitionPreset?: CSSTransitionPresets;
+  transitionPreset?:
+    | "inExpo"
+    | "outExpo"
+    | "inOutExpo"
+    | "anticipate"
+    | "quickOut"
+    | "overshootOut"
+    | "swiftOut"
+    | "snappyOut"
+    | "in"
+    | "out"
+    | "inOut"
+    | "outIn"
+    | "inQuad"
+    | "outQuad"
+    | "inOutQuad"
+    | "inCubic"
+    | "outCubic"
+    | "inOutCubic"
+    | "inQuart"
+    | "outQuart"
+    | "inOutQuart"
+    | "inQuint"
+    | "outQuint"
+    | "inOutQuint"
+    | "inCirc"
+    | "outCirc"
+    | "inOutCirc"
+    | "inOutBase";
   reduceMotion?: boolean;
   showArrow?: boolean;
 }

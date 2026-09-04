@@ -4,48 +4,25 @@ A container that groups related buttons together with consistent styling.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+Use `ButtonGroup` when adjacent actions belong to the same task or control.
+
+## Preview
+
 ## Installation
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/button-group.json
-```
-
-```bash
-npx shadcn@latest add https://ui.iandefined.com/r/separator.json
-```
-
-```bash
-npm install @base-ui/react tailwind-variants clsx tailwind-merge
-```
-
-```ts filename="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
 
 ## Usage
 
 ```tsx
 import { Button } from "@/components/ui/button";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-  ButtonGroupText,
-} from "@/components/ui/button-group";
-```
+import { ButtonGroup } from "@/components/ui/button-group";
 
-```tsx
 <ButtonGroup>
   <Button>Button 1</Button>
   <Button>Button 2</Button>
-</ButtonGroup>
+</ButtonGroup>;
 ```
 
-## Anatomy
+## Composition
 
 ```tsx
 <ButtonGroup>
@@ -59,44 +36,52 @@ import {
 
 ### Basic
 
+Group related actions.
+
 ### Orientation
 
-Set the `orientation` prop to change the button group layout.
+Set `orientation` to stack actions vertically.
 
 ### Sizes
 
-Control the size of buttons using the `size` prop on individual buttons.
+Size each contained button for the context.
 
 ### Nested
 
-Nest `ButtonGroup` components to create button groups with spacing.
+Nest groups to separate related action clusters.
 
 ### Separator
 
-The `ButtonGroupSeparator` component visually divides buttons within a group.
-
-Buttons with variant `outline` do not need a separator because they have a border. For other variants, a separator improves the visual hierarchy.
+Use `ButtonGroupSeparator` where adjacent button borders do not provide separation.
 
 ### Split
 
-Create a split button group by adding two buttons separated by a `ButtonGroupSeparator`.
+Pair a primary action with a secondary control.
 
 ### Input
 
-Wrap an Input component with buttons.
+Combine an input with related actions.
 
 ### Input Group
 
-Wrap an Input Group component to create complex input layouts.
+Compose a more complex input control.
 
 ### Menu
 
-Create a split button group with a Dropdown Menu component.
+Use a dropdown for secondary actions.
 
 ### Select
 
-Pair with a Select component.
+Pair a selection control with actions.
 
 ### Popover
 
-Use with a Popover component.
+Open supplemental controls from the group.
+
+## API Reference
+
+`ButtonGroup` is a styled `div`; standard HTML props pass through.
+
+### Props
+
+Sets the layout direction.

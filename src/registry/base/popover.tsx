@@ -114,7 +114,7 @@ function usePopover() {
 }
 
 type PopoverProps<Payload = unknown> = PopoverPrimitive.Root.Props<Payload> & {
-  backdrop?: PopoverBackdropStyle;
+  backdrop?: "opaque" | "blur" | "transparent";
 };
 
 const Popover = Object.assign(
@@ -249,7 +249,36 @@ function PopoverPopup({
       | "wipeScale"
       | "motion"
       | "motionBlur";
-    transitionPreset?: PopoverTransitionPreset;
+    transitionPreset?:
+      | "inExpo"
+      | "outExpo"
+      | "inOutExpo"
+      | "anticipate"
+      | "quickOut"
+      | "overshootOut"
+      | "swiftOut"
+      | "snappyOut"
+      | "in"
+      | "out"
+      | "inOut"
+      | "outIn"
+      | "inQuad"
+      | "outQuad"
+      | "inOutQuad"
+      | "inCubic"
+      | "outCubic"
+      | "inOutCubic"
+      | "inQuart"
+      | "outQuart"
+      | "inOutQuart"
+      | "inQuint"
+      | "outQuint"
+      | "inOutQuint"
+      | "inCirc"
+      | "outCirc"
+      | "inOutCirc"
+      | "inOutBase"
+      | "none";
     reduceMotion?: boolean;
     showArrow?: boolean;
   }) {
