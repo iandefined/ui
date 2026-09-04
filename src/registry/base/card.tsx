@@ -38,7 +38,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 gap-1 [[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:px-4 [[data-card-variant=inset]>_&]:py-3",
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 gap-1 [[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:py-3",
         className
       )}
       {...props}
@@ -97,7 +97,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center [.border-t]:pt-4 [[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:mt-auto [[data-card-variant=inset]>_&]:justify-end [[data-card-variant=inset]>_&]:pt-4",
+        "flex items-center [[data-card-variant=default]>_&]:pt-4 mt-auto [[data-card-variant=default]>_&]:px-4 justify-end [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:pt-2 [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:pb-1",
         className
       )}
       {...props}
