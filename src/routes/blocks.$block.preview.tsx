@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createElement } from "react";
 
 import { getRegistryBlock } from "@/shared/lib/blocks";
 import { getRegistryComponent } from "@/shared/lib/registry";
@@ -32,7 +33,7 @@ function BlockPreviewRoute() {
 
   return (
     <main className="min-h-svh bg-background text-foreground">
-      <Component />
+      {createElement(Component)}
     </main>
   );
 }

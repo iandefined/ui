@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
+const getSnapshot = () =>
+  typeof navigator !== "undefined" &&
+  navigator.platform.toUpperCase().includes("MAC");
+const getServerSnapshot = () => true;
 
 export const useIsMac = () => {
-  const [isMac, setIsMac] = useState(true);
-
-  useEffect(() => {
-    setIsMac(navigator.platform.toUpperCase().includes("MAC"));
-  }, []);
-
-  return isMac;
+  return useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
 };

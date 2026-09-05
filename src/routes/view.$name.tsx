@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createElement } from "react";
 
 import { getRegistryComponent } from "@/shared/lib/registry";
 import { cn } from "@/shared/lib/utils";
@@ -15,7 +16,7 @@ function RegistryViewRoute() {
     <main className="min-h-svh bg-background text-foreground">
       {Component ? (
         <div className="mx-auto flex min-h-svh w-full items-center justify-center p-6">
-          <Component />
+          {createElement(Component)}
         </div>
       ) : (
         <div className="flex min-h-svh items-center justify-center p-6">

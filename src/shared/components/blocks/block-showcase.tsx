@@ -71,6 +71,12 @@ export function BlockShowcase({
   showTitle?: boolean;
 }) {
   const [screenSize, setScreenSize] = useState<ScreenSize>("desktop");
+  const [prevBlockName, setPrevBlockName] = useState(block.name);
+  if (prevBlockName !== block.name) {
+    setPrevBlockName(block.name);
+    setScreenSize("desktop");
+  }
+
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
   const [reloadKey, setReloadKey] = useState(0);
   const [isIframeHeightDefined, setIsIframeHeightDefined] = useState(false);
@@ -105,17 +111,6 @@ export function BlockShowcase({
   useEffect(() => {
     resizablePanelRef.current?.resize(`${activeScreen?.size ?? 100}%`);
   }, [activeScreen]);
-
-  useEffect(() => {
-    setScreenSize("desktop");
-    resizablePanelRef.current?.resize("100%");
-  }, [block.name]);
-
-  useEffect(() => {
-    if (isMobile) {
-      setActiveTab("preview");
-    }
-  }, [isMobile]);
 
   useEffect(() => {
     if (!isResizingPreview) {
@@ -189,7 +184,7 @@ export function BlockShowcase({
   return (
     <Tabs
       className="gap-0"
-      value={activeTab}
+      value={isMobile ? "preview" : activeTab}
       onValueChange={(value) => {
         if (!isMobile) {
           setActiveTab(value as "preview" | "code");

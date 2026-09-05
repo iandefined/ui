@@ -86,9 +86,11 @@ export function BlockPreviewList({
     );
   });
 
-  useEffect(() => {
+  const [prevFilter, setPrevFilter] = useState({ category, query });
+  if (prevFilter.category !== category || prevFilter.query !== query) {
+    setPrevFilter({ category, query });
     setVisibleCount(INITIAL_BLOCK_COUNT);
-  }, [category, query]);
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -277,10 +279,12 @@ function PreviewListSearch({
 }) {
   const navigate = useNavigate();
   const [value, setValue] = useState(query);
+  const [prevQuery, setPrevQuery] = useState(query);
 
-  useEffect(() => {
+  if (prevQuery !== query) {
+    setPrevQuery(query);
     setValue(query);
-  }, [query]);
+  }
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {

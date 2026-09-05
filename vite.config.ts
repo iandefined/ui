@@ -138,6 +138,8 @@ export default defineConfig({
     ],
     rules: {
       "eslint/no-console": ["warn", { allow: ["debug", "error", "warn"] }],
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/prefer-tag-over-role": "off",
       "typescript/consistent-type-imports": [
         "error",
         { fixStyle: "inline-type-imports", prefer: "type-imports" },

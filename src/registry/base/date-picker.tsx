@@ -280,7 +280,10 @@ function DatePickerChips({
   }, [shouldWrap, maxCount]);
 
   useEffect(() => {
-    checkOverflow();
+    const rafId = requestAnimationFrame(() => {
+      checkOverflow();
+    });
+    return () => cancelAnimationFrame(rafId);
   }, [checkOverflow, picker.value]);
 
   useEffect(() => {
@@ -1118,12 +1121,6 @@ function DatePickerTimer({
   const [selectedPeriod, setSelectedPeriod] = useState<"AM" | "PM">(
     parsed ? to12Hour(parsed.hour).period : "AM"
   );
-
-  useEffect(() => {
-    if (parsed) {
-      setSelectedPeriod(to12Hour(parsed.hour).period);
-    }
-  }, [parsed?.hour]);
 
   const activePeriod = parsed ? to12Hour(parsed.hour).period : selectedPeriod;
 

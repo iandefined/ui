@@ -138,20 +138,16 @@ export function BlockCodeExplorer({ block }: { block: RegistryBlock }) {
       })),
     [block]
   );
-  const [activePath, setActivePath] = useState(files[0]?.path ?? "");
+  const [selectedPath, setSelectedPath] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const [codeHtml, setCodeHtml] = useState("");
   const [isLoadingCode, setIsLoadingCode] = useState(false);
 
   const fileTree = useMemo(() => buildFileTree(files), [files]);
   const activeFile = useMemo(
-    () => files.find((file) => file.path === activePath) ?? files[0],
-    [activePath, files]
+    () => files.find((file) => file.path === selectedPath) ?? files[0],
+    [files, selectedPath]
   );
-
-  useEffect(() => {
-    setActivePath(files[0]?.path ?? "");
-  }, [files]);
 
   useEffect(() => {
     let isMounted = true;
@@ -201,9 +197,9 @@ export function BlockCodeExplorer({ block }: { block: RegistryBlock }) {
         </div>
         <div className="w-full p-2">
           <Tree
-            activePath={activeFile.path}
+            activePath={activeFile?.path ?? ""}
             isLoadingCode={isLoadingCode}
-            onSelectFile={setActivePath}
+            onSelectFile={setSelectedPath}
             tree={fileTree}
           />
         </div>

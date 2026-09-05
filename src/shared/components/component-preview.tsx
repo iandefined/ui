@@ -1,4 +1,4 @@
-import { Children, isValidElement } from "react";
+import { Children, createElement, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 
 import { ComponentPreviewTabs } from "@/shared/components/component-preview-tabs";
@@ -168,7 +168,7 @@ export function ComponentPreview({
         previewChildren ? (
           <MdxPreviewProvider>{previewChildren}</MdxPreviewProvider>
         ) : RegistryComponent ? (
-          <RegistryComponent />
+          createElement(RegistryComponent)
         ) : null
       }
       source={

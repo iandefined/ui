@@ -347,7 +347,10 @@ function ComboboxChips({
   }, [chipsRef, shouldWrap, maxCount]);
 
   useEffect(() => {
-    checkOverflow();
+    const rafId = requestAnimationFrame(() => {
+      checkOverflow();
+    });
+    return () => cancelAnimationFrame(rafId);
   }, [checkOverflow]);
 
   useEffect(() => {

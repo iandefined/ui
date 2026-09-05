@@ -34,14 +34,14 @@ type ComponentSourceData = {
 const sourceCache = new Map<string, Promise<ComponentSourceData | null>>();
 
 const ComponentCode = ({
-  code,
+  code: _code,
   copyCode,
   highlightedCode,
   language,
   title,
   connected,
 }: {
-  code: string;
+  code?: string;
   copyCode: string;
   highlightedCode: string;
   language: string;
