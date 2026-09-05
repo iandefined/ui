@@ -11,7 +11,7 @@ export default function CalendarRange() {
   ]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex min-w-0 max-w-full flex-col items-center gap-4">
       <Calendar
         onValueChange={(details) => setValue(details.value)}
         selectionMode="range"
@@ -19,7 +19,7 @@ export default function CalendarRange() {
       />
       <p aria-live="polite" className="text-sm text-muted-foreground">
         {value.length === 2
-          ? `${value[0].toLocaleDateString("en-US", { month: "short", day: "numeric" })} to ${value[1].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
+          ? `${value[0].toLocaleDateString("en-US", { month: "short", day: "numeric" })} – ${value[1].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
           : "Choose an end date."}
       </p>
     </div>

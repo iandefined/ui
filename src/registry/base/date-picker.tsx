@@ -8,7 +8,13 @@ import { Portal } from "@ark-ui/react/portal";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import { useRender } from "@base-ui/react/use-render";
-import { Calendar, Clock, XIcon } from "lucide-react";
+import {
+  Calendar,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  Clock,
+  XIcon,
+} from "lucide-react";
 import {
   createContext,
   useCallback,
@@ -24,17 +30,14 @@ import {
   CalendarContent,
   type CalendarContentProps,
 } from "@/components/ui/calendar";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+import { DateInput, type DateInputProps } from "@/components/ui/date-input";
 import { Label } from "@/components/ui/label";
 import {
   adaptDatePickerProps,
   formatDate,
   fromDateValue,
   toDateValue,
+  useResponsiveCalendarMonths,
   type DatePickerRootDateProps,
 } from "@/lib/date";
 import { cn } from "@/lib/utils";
@@ -42,6 +45,9 @@ import { cn } from "@/lib/utils";
 export type DatePickerProps = Omit<DatePickerRootDateProps, "inline">;
 
 const DatePickerControlContext = createContext(false);
+const DatePickerInputContext = createContext<
+  Pick<DatePickerProps, "locale" | "timeZone" | "min" | "max">
+>({});
 
 export type DatePickerControlProps = ComponentProps<
   typeof DatePickerPrimitive.Control
@@ -62,25 +68,37 @@ function DatePicker({
   className,
   selectionMode = "single",
   positioning,
+  numOfMonths,
   ...props
 }: DatePickerProps) {
+  const visibleMonths = useResponsiveCalendarMonths(numOfMonths);
   return (
-    <DatePickerPrimitive.Root
-      fixedWeeks
-      lazyMount
-      unmountOnExit
-      closeOnSelect={selectionMode !== "multiple"}
-      {...adaptDatePickerProps(props)}
-      selectionMode={selectionMode}
-      positioning={{ placement: "bottom-start", gutter: 4, ...positioning }}
-      className={cn(
-        selectionMode === "multiple"
-          ? "w-full max-w-sm space-y-2"
-          : "w-fit max-w-full space-y-2",
-        className
-      )}
-      data-slot="date-picker"
-    />
+    <DatePickerInputContext
+      value={{
+        locale: props.locale,
+        timeZone: props.timeZone,
+        min: props.min,
+        max: props.max,
+      }}
+    >
+      <DatePickerPrimitive.Root
+        fixedWeeks
+        lazyMount
+        unmountOnExit
+        closeOnSelect={selectionMode !== "multiple"}
+        {...adaptDatePickerProps(props)}
+        selectionMode={selectionMode}
+        numOfMonths={visibleMonths}
+        positioning={{ placement: "bottom-start", gutter: 4, ...positioning }}
+        className={cn(
+          selectionMode === "multiple"
+            ? "w-full max-w-sm space-y-2"
+            : "w-fit max-w-full space-y-2",
+          className
+        )}
+        data-slot="date-picker"
+      />
+    </DatePickerInputContext>
   );
 }
 
@@ -547,43 +565,97 @@ function DatePickerValue({
 }
 
 export type DatePickerInputProps = Omit<
-  ComponentProps<typeof DatePickerPrimitive.Input>,
-  "asChild" | "size"
+  DateInputProps,
+  | "value"
+  | "defaultValue"
+  | "onValueChange"
+  | "selectionMode"
+  | "locale"
+  | "timeZone"
+  | "min"
+  | "max"
+  | "isDateUnavailable"
+  | "endAdornment"
+  | "granularity"
+  | "timeOnly"
 > & {
-  size?: "sm" | "default" | "lg";
+  index?: number;
+  showTrigger?: boolean;
 };
 function DatePickerInput({
   className,
   size = "default",
   index = 0,
+  showTrigger,
   ...props
 }: DatePickerInputProps) {
   const hasControl = useContext(DatePickerControlContext);
+  const picker = useDatePickerContext();
+  const settings = useContext(DatePickerInputContext);
+  const inputProps = picker.getInputProps({ index });
+  const selectedValue = picker.value[index];
+  const shouldShowTrigger =
+    showTrigger ?? (picker.selectionMode === "range" || index === 0);
   const input = (
-    <InputGroup
-      className="flex w-full motion-reduce:transition-none"
-      data-slot="date-picker-input-group"
-    >
-      <DatePickerPrimitive.Input index={index} asChild>
-        <InputGroupInput
-          className={cn("tabular-nums", className)}
-          size={size}
-          {...props}
-        />
-      </DatePickerPrimitive.Input>
-      {index === 0 && (
-        <InputGroupAddon align="inline-end">
+    <DateInput
+      {...props}
+      {...settings}
+      className={className}
+      data-slot="date-picker-input"
+      size={size}
+      id={props.id ?? inputProps.id}
+      aria-labelledby={
+        props["aria-label"]
+          ? undefined
+          : (props["aria-labelledby"] ?? picker.getLabelProps({ index }).id)
+      }
+      disabled={picker.disabled || props.disabled}
+      readOnly={picker.readOnly || props.readOnly}
+      invalid={picker.invalid || props.invalid}
+      required={inputProps.required || props.required}
+      name={props.name ?? inputProps.name}
+      selectionMode="single"
+      value={selectedValue ? [fromDateValue(selectedValue)] : []}
+      defaultPlaceholderValue={fromDateValue(picker.focusedValue)}
+      isDateUnavailable={(date) => picker.isUnavailable(toDateValue(date))}
+      onValueChange={({ value }) => {
+        const nextValue = [...picker.value];
+        const date = value[0];
+        if (date) {
+          const nextDate = toDateValue(date);
+          // Retain a separately selected time when editing only the date segments.
+          nextValue[index] = selectedValue
+            ? selectedValue.set({
+                year: nextDate.year,
+                month: nextDate.month,
+                day: nextDate.day,
+              })
+            : nextDate;
+          picker.setValue(nextValue.filter(Boolean));
+          picker.setFocusedValue(nextValue[index]);
+        } else {
+          nextValue.splice(index, 1);
+          picker.setValue(nextValue);
+        }
+      }}
+      endAdornment={
+        shouldShowTrigger && (
           <DatePickerTrigger
-            aria-label="Open calendar"
-            className="hitbox-2"
+            aria-label={
+              index === 0
+                ? "Open start date calendar"
+                : "Open end date calendar"
+            }
+            className="-me-1 shrink-0 hitbox-2"
+            id={`${inputProps.id}-trigger`}
             size="icon-xs"
             variant="ghost"
           >
             <Calendar aria-hidden="true" />
           </DatePickerTrigger>
-        </InputGroupAddon>
-      )}
-    </InputGroup>
+        )
+      }
+    />
   );
   return hasControl ? input : <DatePickerControl>{input}</DatePickerControl>;
 }
@@ -605,7 +677,7 @@ function DatePickerContent({
       >
         <DatePickerPrimitive.Content
           className={cn(
-            "pointer-events-auto max-h-[var(--available-height)] max-w-[var(--available-width)] origin-(--transform-origin) overflow-auto rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none",
+            "pointer-events-auto z-50 max-h-[var(--available-height)] max-w-[var(--available-width)] origin-(--transform-origin) overflow-auto rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none",
             !reduceMotion &&
               "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80 duration-[0.35s] ease-[cubic-bezier(0.19,1,0.22,1)] motion-reduce:animate-none",
             className
@@ -657,6 +729,245 @@ function to24Hour(hour12: number, period: "AM" | "PM"): number {
   let h = hour12 % 12;
   if (period === "PM") h += 12;
   return h;
+}
+
+type DatePickerTimerScrollColumnProps = {
+  ariaLabel: string;
+  items: string[];
+  selectedValue: string;
+  onSelect: (value: string) => void;
+  itemClassName: string;
+  open: boolean;
+  reduceMotion: boolean;
+};
+
+function DatePickerTimerScrollColumn({
+  ariaLabel,
+  items,
+  selectedValue,
+  onSelect,
+  itemClassName,
+  open,
+  reduceMotion,
+}: DatePickerTimerScrollColumnProps) {
+  const columnRef = useRef<HTMLDivElement>(null);
+  const autoScrollTimeoutRef = useRef<number | null>(null);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
+
+  useEffect(() => {
+    const column = columnRef.current;
+    if (!column) return;
+
+    const updateScrollState = () => {
+      setCanScrollUp(column.scrollTop > 0);
+      setCanScrollDown(
+        column.scrollTop + column.clientHeight < column.scrollHeight - 1
+      );
+    };
+
+    updateScrollState();
+    column.addEventListener("scroll", updateScrollState, { passive: true });
+
+    const resizeObserver = new ResizeObserver(updateScrollState);
+    resizeObserver.observe(column);
+
+    return () => {
+      column.removeEventListener("scroll", updateScrollState);
+      resizeObserver.disconnect();
+    };
+  }, [items.length]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const frame = requestAnimationFrame(() => {
+      const column = columnRef.current;
+      const selected = column?.querySelector<HTMLElement>("[data-selected]");
+      if (!column || !selected) return;
+
+      column.scrollTop =
+        selected.offsetTop - (column.clientHeight - selected.clientHeight) / 2;
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [open, selectedValue]);
+
+  const stopAutoScroll = useCallback(() => {
+    if (autoScrollTimeoutRef.current !== null) {
+      window.clearTimeout(autoScrollTimeoutRef.current);
+      autoScrollTimeoutRef.current = null;
+    }
+  }, []);
+
+  const startAutoScroll = useCallback(
+    (direction: "up" | "down") => {
+      if (reduceMotion || autoScrollTimeoutRef.current !== null) return;
+
+      const scroll = () => {
+        const column = columnRef.current;
+        if (!column) return;
+
+        const maxScrollTop = Math.max(
+          0,
+          column.scrollHeight - column.clientHeight
+        );
+        const scrollTop = Math.min(Math.max(column.scrollTop, 0), maxScrollTop);
+        const isAtEdge = scrollTop === (direction === "up" ? 0 : maxScrollTop);
+        if (isAtEdge) {
+          stopAutoScroll();
+          return;
+        }
+
+        const items = Array.from(
+          column.querySelectorAll<HTMLElement>("[role=option]")
+        );
+        const scrollArrowHeight = 24;
+        let nextScrollTop = direction === "up" ? 0 : maxScrollTop;
+
+        if (direction === "up") {
+          let firstVisibleIndex = 0;
+          const visibleTop = scrollTop + scrollArrowHeight - 1;
+          for (let i = 0; i < items.length; i += 1) {
+            const item = items[i];
+            if (item && item.offsetTop >= visibleTop) {
+              firstVisibleIndex = i;
+              break;
+            }
+          }
+          const target = items[Math.max(0, firstVisibleIndex - 1)];
+          if (target) {
+            nextScrollTop = Math.max(0, target.offsetTop - scrollArrowHeight);
+          }
+        } else {
+          let lastVisibleIndex = items.length - 1;
+          const visibleBottom =
+            scrollTop + column.clientHeight - scrollArrowHeight + 1;
+          for (let i = 0; i < items.length; i += 1) {
+            const item = items[i];
+            if (item && item.offsetTop + item.offsetHeight > visibleBottom) {
+              lastVisibleIndex = Math.max(0, i - 1);
+              break;
+            }
+          }
+          const target =
+            items[Math.min(items.length - 1, lastVisibleIndex + 1)];
+          if (target) {
+            nextScrollTop = Math.min(
+              maxScrollTop,
+              target.offsetTop +
+                target.offsetHeight -
+                column.clientHeight +
+                scrollArrowHeight
+            );
+          }
+        }
+
+        if (nextScrollTop === scrollTop) {
+          stopAutoScroll();
+          return;
+        }
+
+        column.scrollTop = nextScrollTop;
+        autoScrollTimeoutRef.current = window.setTimeout(scroll, 40);
+      };
+
+      autoScrollTimeoutRef.current = window.setTimeout(scroll, 40);
+    },
+    [reduceMotion, stopAutoScroll]
+  );
+
+  useEffect(() => stopAutoScroll, [stopAutoScroll]);
+
+  const scrollColumn = (direction: "up" | "down") => {
+    const column = columnRef.current;
+    if (!column) return;
+
+    stopAutoScroll();
+    const distance = column.clientHeight / 2;
+    const nextTop = Math.min(
+      Math.max(
+        column.scrollTop + (direction === "up" ? -distance : distance),
+        0
+      ),
+      column.scrollHeight - column.clientHeight
+    );
+
+    column.scrollTo({
+      top: nextTop,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  };
+
+  return (
+    <div className="relative h-full py-1">
+      <div
+        ref={columnRef}
+        aria-label={ariaLabel}
+        role="listbox"
+        data-slot="date-picker-timer-column"
+        className="relative flex h-full flex-col gap-y-2 overflow-y-auto px-1 py-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {items.map((item) => {
+          const isSelected = selectedValue === item;
+          return (
+            <button
+              key={item}
+              type="button"
+              role="option"
+              aria-selected={isSelected}
+              data-selected={isSelected ? "" : undefined}
+              className={cn(
+                "cursor-pointer flex h-8 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
+                itemClassName,
+                "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
+                isSelected
+                  ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
+                  : "text-foreground"
+              )}
+              onClick={() => onSelect(item)}
+            >
+              {item}
+            </button>
+          );
+        })}
+      </div>
+
+      {canScrollUp && (
+        <button
+          type="button"
+          aria-label={`Scroll ${ariaLabel.toLowerCase()} up`}
+          className={cn(
+            "absolute inset-x-0 top-0 z-20 flex h-6 w-full cursor-default items-center justify-center text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 motion-reduce:transition-none",
+            "before:pointer-events-none before:absolute before:inset-x-px before:top-[-2px] before:h-[140%] before:rounded-t-[calc(var(--radius-lg)-1px)] before:bg-linear-to-b before:from-popover before:from-50%"
+          )}
+          data-slot="date-picker-timer-scroll-up-arrow"
+          onMouseMove={() => startAutoScroll("up")}
+          onMouseLeave={stopAutoScroll}
+          onClick={() => scrollColumn("up")}
+        >
+          <ChevronUpIcon className="relative size-4" aria-hidden="true" />
+        </button>
+      )}
+
+      {canScrollDown && (
+        <button
+          type="button"
+          aria-label={`Scroll ${ariaLabel.toLowerCase()} down`}
+          className={cn(
+            "absolute inset-x-0 bottom-0 z-20 flex h-6 w-full cursor-default items-center justify-center text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 motion-reduce:transition-none",
+            "before:pointer-events-none before:absolute before:inset-x-px before:bottom-[-2px] before:h-[140%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-popover before:from-50%"
+          )}
+          data-slot="date-picker-timer-scroll-down-arrow"
+          onMouseMove={() => startAutoScroll("down")}
+          onMouseLeave={stopAutoScroll}
+          onClick={() => scrollColumn("down")}
+        >
+          <ChevronDownIcon className="relative size-4" aria-hidden="true" />
+        </button>
+      )}
+    </div>
+  );
 }
 
 export type DatePickerTimerProps = Omit<
@@ -731,35 +1042,6 @@ function DatePickerTimer({
       ? `${String(parsed.hour).padStart(2, "0")}:${String(parsed.minute).padStart(2, "0")}`
       : `${to12Hour(parsed.hour).hour12}:${String(parsed.minute).padStart(2, "0")} ${to12Hour(parsed.hour).period}`
     : "";
-
-  const hoursColRef = useRef<HTMLDivElement>(null);
-  const minutesColRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (open) {
-      const frame = requestAnimationFrame(() => {
-        if (hoursColRef.current) {
-          const selected =
-            hoursColRef.current.querySelector<HTMLElement>("[data-selected]");
-          if (selected) {
-            hoursColRef.current.scrollTop =
-              selected.offsetTop -
-              (hoursColRef.current.clientHeight - selected.clientHeight) / 2;
-          }
-        }
-        if (minutesColRef.current) {
-          const selected =
-            minutesColRef.current.querySelector<HTMLElement>("[data-selected]");
-          if (selected) {
-            minutesColRef.current.scrollTop =
-              selected.offsetTop -
-              (minutesColRef.current.clientHeight - selected.clientHeight) / 2;
-          }
-        }
-      });
-      return () => cancelAnimationFrame(frame);
-    }
-  }, [open]);
 
   const commitTime = (h: number, m: number) => {
     const next24 = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
@@ -847,7 +1129,7 @@ function DatePickerTimer({
             disabled={disabled}
             aria-label={props["aria-label"] ?? "Choose time"}
             className={cn(
-              "h-9 min-w-36 justify-start gap-2 px-3 font-normal tabular-nums data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 motion-reduce:transition-none",
+              "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 motion-reduce:transition-none",
               size.startsWith("icon") && "hitbox-2",
               className
             )}
@@ -879,78 +1161,38 @@ function DatePickerTimer({
           <PopoverPrimitive.Popup
             data-slot="date-picker-timer-popup"
             className={cn(
-              "pointer-events-auto origin-(--transform-origin) rounded-lg border border-border bg-popover py-1.5 px-0 text-popover-foreground shadow-md outline-none",
+              "pointer-events-auto origin-(--transform-origin) rounded-lg border border-border bg-popover p-0 text-popover-foreground shadow-md outline-none",
               !reduceMotion &&
                 "[transition-property:scale,opacity] [will-change:scale,opacity] data-starting-style:scale-80 data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:scale-80 duration-[0.35s] ease-[cubic-bezier(0.19,1,0.22,1)] motion-reduce:transition-none",
               popupClassName
             )}
           >
             <div className="flex h-56 divide-x divide-border text-sm">
-              <div
-                ref={hoursColRef}
-                aria-label="Hours"
-                role="listbox"
-                className="relative flex flex-col gap-y-2 overflow-y-auto px-1 py-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-              >
-                {hours.map((h) => {
-                  const isSelected = activeHourStr === h;
-                  return (
-                    <button
-                      key={h}
-                      type="button"
-                      role="option"
-                      aria-selected={isSelected}
-                      data-selected={isSelected ? "" : undefined}
-                      className={cn(
-                        "cursor-pointer flex h-8 w-11 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
-                        "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
-                        isSelected
-                          ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
-                          : "text-foreground"
-                      )}
-                      onClick={() => handleHourSelect(h)}
-                    >
-                      {h}
-                    </button>
-                  );
-                })}
-              </div>
+              <DatePickerTimerScrollColumn
+                ariaLabel="Hours"
+                items={hours}
+                selectedValue={activeHourStr}
+                onSelect={handleHourSelect}
+                itemClassName="w-11"
+                open={open}
+                reduceMotion={reduceMotion}
+              />
 
-              <div
-                ref={minutesColRef}
-                aria-label="Minutes"
-                role="listbox"
-                className="relative flex flex-col gap-y-2 overflow-y-auto px-1 py-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-              >
-                {minutes.map((m) => {
-                  const isSelected = activeMinuteStr === m;
-                  return (
-                    <button
-                      key={m}
-                      type="button"
-                      role="option"
-                      aria-selected={isSelected}
-                      data-selected={isSelected ? "" : undefined}
-                      className={cn(
-                        "cursor-pointer flex h-8 w-11 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
-                        "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
-                        isSelected
-                          ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
-                          : "text-foreground"
-                      )}
-                      onClick={() => handleMinuteSelect(m)}
-                    >
-                      {m}
-                    </button>
-                  );
-                })}
-              </div>
+              <DatePickerTimerScrollColumn
+                ariaLabel="Minutes"
+                items={minutes}
+                selectedValue={activeMinuteStr}
+                onSelect={handleMinuteSelect}
+                itemClassName="w-11"
+                open={open}
+                reduceMotion={reduceMotion}
+              />
 
               {format === "12" && (
                 <div
                   aria-label="Period"
                   role="listbox"
-                  className="flex flex-col gap-y-2 px-1 py-0"
+                  className="flex flex-col gap-y-2 px-1 py-1"
                 >
                   {(["AM", "PM"] as const).map((p) => {
                     const isSelected = activePeriod === p;

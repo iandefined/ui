@@ -9,17 +9,18 @@ import {
 export default function DatePickerRange() {
   return (
     <DatePicker
+      className="max-w-xs"
       defaultValue={[new Date(2026, 8, 10), new Date(2026, 8, 17)]}
       numOfMonths={2}
       selectionMode="range"
     >
       <DatePickerLabel>Travel dates</DatePickerLabel>
       <DatePickerControl className="flex-wrap">
-        <DatePickerInput aria-label="Start date" index={0} />
+        <DatePickerInput aria-label="Start date" index={0} showTrigger />
         <span aria-hidden="true" className="text-muted-foreground">
-          to
+          –
         </span>
-        <DatePickerInput aria-label="End date" index={1} />
+        <DatePickerInput aria-label="End date" index={1} showTrigger />
       </DatePickerControl>
       <DatePickerContent />
     </DatePicker>

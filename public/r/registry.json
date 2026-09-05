@@ -44,7 +44,7 @@
       "registryDependencies": [
         "https://ui.iandefined.com/r/calendar.json",
         "https://ui.iandefined.com/r/button.json",
-        "https://ui.iandefined.com/r/input-group.json",
+        "https://ui.iandefined.com/r/date-input.json",
         "https://ui.iandefined.com/r/label.json"
       ],
       "files": [

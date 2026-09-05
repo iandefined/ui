@@ -8,7 +8,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { type ComponentProps } from "react";
 
 import { Button } from "@/components/ui/button";
-import { adaptDatePickerProps, type DatePickerRootDateProps } from "@/lib/date";
+import {
+  adaptDatePickerProps,
+  useResponsiveCalendarMonths,
+  type DatePickerRootDateProps,
+} from "@/lib/date";
 import { cn } from "@/lib/utils";
 
 interface CalendarProps extends Omit<
@@ -22,21 +26,24 @@ function Calendar({
   children,
   className,
   size = "default",
+  numOfMonths,
   ...props
 }: CalendarProps) {
+  const visibleMonths = useResponsiveCalendarMonths(numOfMonths);
   return (
     <CalendarPrimitive.Root
       data-slot="calendar"
       data-size={size}
       className={cn(
-        "w-fit max-w-full rounded-xl border border-border bg-background p-3 text-foreground [--calendar-cell-size:--spacing(10)]",
-        size === "sm" && "sm:[--calendar-cell-size:--spacing(7)]",
-        size === "default" && "sm:[--calendar-cell-size:--spacing(8)]",
-        size === "lg" && "sm:[--calendar-cell-size:--spacing(9)]",
+        "w-fit min-w-0 max-w-full rounded-xl border border-border bg-background p-3 text-foreground",
+        size === "sm" && "[--calendar-cell-size:--spacing(7)]",
+        size === "default" && "[--calendar-cell-size:--spacing(8)]",
+        size === "lg" && "[--calendar-cell-size:--spacing(9)]",
         className
       )}
       fixedWeeks
       {...adaptDatePickerProps(props)}
+      numOfMonths={visibleMonths}
       inline
       closeOnSelect={false}
     >
@@ -61,7 +68,7 @@ function CalendarContent({
     <div
       data-slot="calendar-content"
       className={cn(
-        "mx-auto w-fit max-w-full [--calendar-day-size:var(--calendar-cell-size,40px)] sm:[--calendar-day-size:var(--calendar-cell-size,32px)]",
+        "mx-auto w-fit min-w-0 max-w-full [--calendar-day-size:var(--calendar-cell-size,32px)]",
         className
       )}
       {...props}
@@ -113,7 +120,10 @@ function CalendarHeader({ className, ...props }: CalendarHeaderProps) {
   return (
     <CalendarPrimitive.ViewControl
       data-slot="calendar-header"
-      className={cn("flex items-center justify-between gap-1", className)}
+      className={cn(
+        "flex min-w-0 items-center justify-between gap-3",
+        className
+      )}
       {...props}
     />
   );
@@ -143,7 +153,7 @@ function CalendarPreviousButton({
           variant="ghost"
           size="icon"
           className={cn(
-            "size-10 touch-manipulation sm:size-8 motion-reduce:transition-none",
+            "size-8 hitbox-[6px] touch-manipulation motion-reduce:transition-none",
             className
           )}
         >
@@ -178,7 +188,7 @@ function CalendarNextButton({
           variant="ghost"
           size="icon"
           className={cn(
-            "size-10 touch-manipulation sm:size-8 motion-reduce:transition-none",
+            "size-8 hitbox-[6px] touch-manipulation motion-reduce:transition-none",
             className
           )}
         >
@@ -212,16 +222,28 @@ function CalendarHeading({
         <Button
           variant="ghost"
           className={cn(
-            "h-10 touch-manipulation px-2.5 font-medium tabular-nums sm:h-8 disabled:opacity-100 motion-reduce:transition-none",
+            "h-auto min-h-8 min-w-0 shrink hitbox-y-[6px] touch-manipulation whitespace-normal px-1 py-1 text-center text-sm leading-5 font-medium tabular-nums disabled:opacity-100 motion-reduce:transition-none",
             className
           )}
         >
-          {children ?? (
-            <CalendarPrimitive.RangeText data-slot="calendar-range-text" />
-          )}
+          {children ?? <CalendarRangeText />}
         </Button>
       )}
     </CalendarPrimitive.ViewTrigger>
+  );
+}
+
+function CalendarRangeText() {
+  const calendar = useDatePickerContext();
+  const { start, end } = calendar.visibleRangeText;
+  const visibleRangeText = [...new Set([start, end].filter(Boolean))].join(
+    " – "
+  );
+
+  return (
+    <div {...calendar.getRangeTextProps()} data-slot="calendar-range-text">
+      {visibleRangeText}
+    </div>
   );
 }
 
@@ -313,8 +335,8 @@ function CalendarCellButton({
         <Button
           variant="ghost"
           className={cn(
-            "relative mx-auto size-(--calendar-day-size) hitbox-1 touch-manipulation rounded-md p-0 font-normal tabular-nums motion-reduce:transition-none",
-            "data-[view=month]:h-14 data-[view=month]:w-full data-[view=year]:h-14 data-[view=year]:w-full",
+            "relative mx-auto h-(--calendar-day-size) w-full min-w-0 touch-manipulation rounded-md p-0 font-normal tabular-nums motion-reduce:transition-none",
+            "data-[view=month]:h-11 data-[view=year]:h-11",
             "data-outside-range:text-muted-foreground/50 data-disabled:pointer-events-none data-disabled:opacity-40 data-unavailable:line-through",
             "data-today:font-semibold data-today:after:absolute data-today:after:bottom-1 data-today:after:size-1 data-today:after:rounded-full data-today:after:bg-current",
             "data-in-range:rounded-none data-in-range:bg-accent data-in-hover-range:rounded-none data-in-hover-range:bg-accent/60",
@@ -334,7 +356,7 @@ function CalendarCellButton({
 function CalendarDayGrids() {
   const calendar = useDatePickerContext();
   return (
-    <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+    <div className="flex max-w-full flex-wrap items-start justify-center gap-4">
       {Array.from({ length: calendar.numOfMonths }, (_, index) => {
         const month = calendar.getOffset({ months: index });
         const visibleRange = {
@@ -347,7 +369,7 @@ function CalendarDayGrids() {
           <div
             key={month.visibleRange.start.toString()}
             className={cn(
-              "shrink-0",
+              "min-w-0 max-w-full",
               calendar.showWeekNumbers
                 ? "w-[calc(var(--calendar-day-size)*8)]"
                 : "w-[calc(var(--calendar-day-size)*7)]"
@@ -416,7 +438,7 @@ function CalendarDayGrids() {
                             <div
                               aria-hidden="true"
                               className={cn(
-                                "relative mx-auto flex size-(--calendar-day-size) items-center justify-center p-0 font-normal tabular-nums text-muted-foreground/50 select-none motion-reduce:transition-none",
+                                "relative mx-auto flex h-(--calendar-day-size) w-full items-center justify-center p-0 font-normal tabular-nums text-muted-foreground/50 select-none motion-reduce:transition-none",
                                 !isRangeActive && "rounded-md",
                                 isRangeActive && [
                                   "rounded-none bg-accent text-muted-foreground",
@@ -475,7 +497,7 @@ function CalendarPeriodGrid({ view }: { view: "month" | "year" }) {
   return (
     <CalendarGrid
       columns={3}
-      className="mx-auto w-[calc(var(--calendar-day-size)*7)]"
+      className="mx-auto w-[calc(var(--calendar-day-size)*7)] max-w-full"
     >
       <CalendarGridBody>
         {rows.map((row) => (

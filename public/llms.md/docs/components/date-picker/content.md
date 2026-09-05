@@ -4,7 +4,7 @@ A date selector with typed input, button triggers, and a calendar popup.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-Use `DatePicker` to browse a calendar or type a date into an input. The calendar heading opens month and year selection. Use [Calendar](./calendar) for an inline calendar or [Date Input](./date-input) for segmented entry without a popup.
+Use `DatePicker` to browse a calendar or type a date into a segmented input. The calendar heading opens month and year selection. Use [Calendar](./calendar) for an inline calendar or [Date Input](./date-input) for segmented entry without a popup.
 
 ## Preview
 
@@ -31,7 +31,7 @@ import {
 
 ## Composition
 
-Use `DatePickerTrigger` for a button or `DatePickerInput` for typed entry with an integrated calendar trigger. `DatePickerContent` renders the default calendar unless you supply children.
+Use `DatePickerTrigger` for a button or `DatePickerInput` for segmented entry with an integrated calendar trigger. `DatePickerInput` reuses [Date Input](./date-input), so each segment keeps its constrained keyboard values and locale-aware placeholder. `DatePickerContent` renders the default calendar unless you supply children.
 
 Wrap grouped inputs or triggers in one `DatePickerControl` so they share a popup anchor. A standalone input or trigger supplies this wrapper automatically.
 
@@ -50,7 +50,7 @@ Wrap grouped inputs or triggers in one `DatePickerControl` so they share a popup
 
 ### Typed input
 
-Use `DatePickerInput` to allow keyboard entry alongside the calendar popup.
+Use `DatePickerInput` to enter each date segment with Date Input's constrained keyboard behavior alongside the calendar popup. Segment placeholders follow the picker's locale.
 
 ### Controlled and clearable
 
@@ -104,6 +104,8 @@ Sets the initial selected dates for an uncontrolled picker.
 >
 Receives the selected Date values and serialized strings.
 Chooses single-date, independent multiple-date, or date-range selection.
+Sets the number of visible months on viewports at least 640px wide. Smaller
+viewports show one month while preserving the selected dates.
 Sets the earliest selectable date.
 Sets the latest selectable date.
 >
@@ -155,11 +157,14 @@ Formats selected dates with a format pattern such as `"MMM D, YYYY"`, an
 
 #### DatePickerInput
 
-Renders the Ark typed input inside a registry input group. Index `0` includes the calendar trigger; subsequent inputs share it. Supported input props reach the text input.
+Renders the registry [DateInput](./date-input) segmented field with an integrated calendar trigger. The picker supplies the value, selection mode, locale, time zone, date bounds, and unavailable-date handling. Remaining `DateInput` props pass through. Index `0` includes a calendar trigger by default, and both inputs include one in range mode.
 
 Sets the input shell and trigger size.
 Selects the date edited by this input. Use `0` for the start date and `1`
 for the end date in range mode.
+Controls whether this input renders a calendar trigger. It defaults to
+`true` for index `0` and for every input in range mode. Set it to `false` to
+hide a trigger when a custom range layout supplies its own control.
 
 #### DatePickerContent
 
@@ -196,4 +201,5 @@ Controls the time value in 24-hour format, such as `"14:30"`.
 Sets the initial time value for an uncontrolled timer.
 Chooses 12-hour or 24-hour time representation.
 Sets the minute increment in the minutes column.
-Sets the time trigger button size.
+Sets the time trigger button size. The trigger remains content-sized and can
+shrink within its container.

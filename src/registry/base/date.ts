@@ -5,6 +5,24 @@ import {
   GregorianCalendar,
   toCalendar,
 } from "@internationalized/date";
+import { useSyncExternalStore } from "react";
+
+function subscribeToCalendarViewport(onChange: () => void) {
+  const query = window.matchMedia("(min-width: 640px)");
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+// Change the machine's visible range too, so navigation and keyboard focus
+// never move into a second month that is merely hidden by CSS.
+export function useResponsiveCalendarMonths(numOfMonths = 1) {
+  const isWide = useSyncExternalStore(
+    subscribeToCalendarViewport,
+    () => window.matchMedia("(min-width: 640px)").matches,
+    () => false
+  );
+  return isWide ? numOfMonths : 1;
+}
 
 export function toDateValue(value: Date, includeTime = false): DateValue {
   if (!(value instanceof Date) || Number.isNaN(value.getTime())) {

@@ -7,7 +7,7 @@ Use `Calendar` for inline date selection. Click the month and year heading to sw
 
 ## Preview
 
-<ComponentPreview name="calendar/default" />
+<ComponentPreview name="calendar/default" previewClassName="px-2 sm:px-10" />
 
 ## Installation
 
@@ -40,43 +40,49 @@ import { Calendar } from "@/components/ui/calendar";
 
 Set `selectionMode="range"` and control the start and end dates through a `Date` array.
 
-<ComponentPreview name="calendar/range" />
+<ComponentPreview name="calendar/range" previewClassName="px-2 sm:px-10" />
 
 ### Multiple dates
 
 Set `selectionMode="multiple"` to toggle individual dates independently.
 
-<ComponentPreview name="calendar/multiple" />
+<ComponentPreview name="calendar/multiple" previewClassName="px-2 sm:px-10" />
 
 ### Multiple months
 
-Set `numOfMonths={2}` to display adjacent months for range selection.
+Set `numOfMonths={2}` to display adjacent months on wider screens; below 640px, navigate one month at a time while keeping the selected range.
 
-<ComponentPreview name="calendar/multi-month" />
+<ComponentPreview
+  name="calendar/multi-month"
+  previewClassName="px-2 sm:px-10"
+/>
 
 ### Date restrictions
 
 Use `min`, `max`, and `isDateUnavailable` to limit selectable dates.
 
-<ComponentPreview name="calendar/constraints" />
+<ComponentPreview
+  name="calendar/constraints"
+  previewClassName="px-2 sm:px-10"
+/>
 
 ### Today and presets
 
 Compose footer buttons and update the selected and focused dates to select a preset and display its month.
 
-<ComponentPreview name="calendar/presets" />
+<ComponentPreview name="calendar/presets" previewClassName="px-2 sm:px-10" />
 
 ### Sizes
 
-Set `size` to adjust calendar density on desktop; touch layouts retain larger date targets.
+Set `size` to adjust calendar density; all grids fit the available width.
 
-<ComponentPreview name="calendar/sizes" />
+<ComponentPreview name="calendar/sizes" previewClassName="px-2 sm:px-10" />
 
-| Size      | Description                  |
-| --------- | ---------------------------- |
-| `sm`      | Compact desktop date cells.  |
-| `default` | Standard desktop date cells. |
-| `lg`      | Larger desktop date cells.   |
+| Size      | Description               |
+| --------- | ------------------------- |
+| `sm`      | Compact 28px date cells.  |
+| `default` | Standard 32px date cells. |
+| `lg`      | Larger 36px date cells.   |
 
 ## API Reference
 
@@ -112,8 +118,11 @@ Set `size` to adjust calendar density on desktop; touch layouts retain larger da
     fullType='"sm" | "default" | "lg"'
     defaultValue='"default"'
   >
-    Sets desktop date-cell density while preserving touch target sizes on
-    smaller viewports.
+    Sets date-cell density. Cells shrink horizontally when space is limited.
+  </ApiProp>
+  <ApiProp name="numOfMonths" fullType="number" defaultValue="1">
+    Sets the number of visible months on viewports at least 640px wide. Smaller
+    viewports show one month while preserving the selected dates.
   </ApiProp>
   <ApiProp name="focusedValue" fullType="Date">
     Controls the focused date and the month shown in the calendar.

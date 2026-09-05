@@ -61,6 +61,7 @@ export interface DateInputProps extends Omit<
   endName?: string;
   startLabel?: string;
   endLabel?: string;
+  endAdornment?: React.ReactNode;
 }
 
 function DateInput({
@@ -85,6 +86,7 @@ function DateInput({
   endName,
   startLabel = "Start date",
   endLabel = "End date",
+  endAdornment,
   selectionMode = "single",
   locale = "en-US",
   timeZone = "UTC",
@@ -270,6 +272,7 @@ function DateInput({
                     <XIcon aria-hidden="true" />
                   </Button>
                 )}
+                {endAdornment}
               </InputGroup>
             </DateInputPrimitive.Control>
             <DateInputHiddenFields

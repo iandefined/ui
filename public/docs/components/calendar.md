@@ -43,7 +43,7 @@ Set `selectionMode="multiple"` to toggle individual dates independently.
 
 ### Multiple months
 
-Set `numOfMonths={2}` to display adjacent months for range selection.
+Set `numOfMonths={2}` to display adjacent months on wider screens; below 640px, navigate one month at a time while keeping the selected range.
 
 ### Date restrictions
 
@@ -55,13 +55,13 @@ Compose footer buttons and update the selected and focused dates to select a pre
 
 ### Sizes
 
-Set `size` to adjust calendar density on desktop; touch layouts retain larger date targets.
+Set `size` to adjust calendar density; all grids fit the available width.
 
-| Size      | Description                  |
-| --------- | ---------------------------- |
-| `sm`      | Compact desktop date cells.  |
-| `default` | Standard desktop date cells. |
-| `lg`      | Larger desktop date cells.   |
+| Size      | Description               |
+| --------- | ------------------------- |
+| `sm`      | Compact 28px date cells.  |
+| `default` | Standard 32px date cells. |
+| `lg`      | Larger 36px date cells.   |
 
 ## API Reference
 
@@ -77,8 +77,9 @@ Sets the initial selected dates for an uncontrolled calendar.
 >
 Receives the selected Date values and their serialized strings.
 Chooses single-date, independent multiple-date, or date-range selection.
-Sets desktop date-cell density while preserving touch target sizes on
-smaller viewports.
+Sets date-cell density. Cells shrink horizontally when space is limited.
+Sets the number of visible months on viewports at least 640px wide. Smaller
+viewports show one month while preserving the selected dates.
 Controls the focused date and the month shown in the calendar.
 Sets the initial focused date without selecting it.
 >

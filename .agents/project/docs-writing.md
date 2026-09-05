@@ -31,11 +31,12 @@ Keep the catalog flat: component pages remain at `/docs/components/<slug>`. Do n
 ### Voice and Examples
 
 - Use direct, present-tense, declarative prose. Every sentence must add information.
-- Do not use em dashes in user-facing documentation. Prefer commas, colons, parentheses, semicolons, or separate sentences.
+- Do not use em dashes in user-facing documentation. Date and calendar ranges may use a spaced en dash (`start – end`) as their visual separator. Prefer commas, colons, parentheses, semicolons, or separate sentences elsewhere.
 - Backtick component names, props, values, HTML elements, attributes, files, and CSS classes.
 - Use one concise sentence between an example heading and its preview. State what it demonstrates and how to use it.
 - Follow a set of variants or enum values with a compact value-to-description table.
 - Use relative Markdown links for related docs. Describe actual behavior rather than marketing qualities.
+- In date and calendar examples, join two rendered range values on the same line with an en dash and surrounding spaces (`start – end`). Keep `to` in labels, instructions, and other natural-language prose.
 - Keep Accessibility sections specific: consumer labeling, keyboard behavior, state communication, or focus requirements. Do not claim that a component is generically "accessible." Interface rules belong to [interface-and-interaction.md](interface-and-interaction.md).
 - End every component page with an API Reference. When a wrapper owns no props, document its upstream mapping without reproducing the pass-through API.
 

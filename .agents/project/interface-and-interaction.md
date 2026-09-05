@@ -23,6 +23,7 @@ Every rule in this document is explicitly categorized into one of three levels:
 - Always search the repository for an existing primitive before introducing raw HTML interactive elements.
 - Use a published registry primitive such as `Button`, `Input`, `Textarea`, `Checkbox`, `Select`, `DropdownMenu`, `Popover`, `Tooltip`, or `Tabs` instead of recreating its behavior with raw elements.
 - In registry examples and documentation previews, always import primitives from `@/registry/base/*` to verify that examples run against the exact public code consumers install.
+- Date and calendar range values use a spaced en dash (`start – end`) as the visual separator. Keep `to` or `through` for prose and accessible supplemental wording.
 - Use the registry `Select` for dropdown variants and examples; do not substitute a native `<select>`.
 - Date controls use Ark UI behavior with Day.js at the public value boundary. The default calendar heading switches between day, month, and year grids when clicked. Keep dropdown month/year navigation as an optional custom `Select` layout.
 
@@ -114,6 +115,8 @@ For overlay wipe animations built with `clip-path: inset(...)` (Select, Dropdown
   </Button>
   ```
 - Never add visual padding to small controls merely to increase their touch target; use `hitbox` to expand invisible click bounds without distorting visual alignment.
+- Calendar date grids use compact, non-overlapping cell targets to fit narrow containers. Do not expand adjacent date hitboxes into one another. Keep standalone calendar navigation targets at 44px, allow headings to wrap, and fit day, month, and year grids to their container.
+- Multi-month Calendar and Date Picker roots show one month below 640px by updating Ark UI's `numOfMonths`, preserving the selected range. Do not hide extra months only with CSS, which leaves keyboard navigation and visible-range state out of sync.
 
 ### [STRONG DEFAULT] Touch Action Hygiene
 - Add `touch-none` or `touch-manipulation` to draggable elements (Sliders, Canvas drawers) and rapid tap controls to prevent mobile browsers from triggering pinch-zoom or scrolling gestures during operation.
