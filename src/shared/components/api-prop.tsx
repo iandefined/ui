@@ -57,15 +57,17 @@ export function ApiProp({
         <div className="border-t bg-muted/40 px-4 py-4 text-sm">
           <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[7rem_minmax(0,1fr)]">
             <dt className="text-muted-foreground font-medium">Description</dt>
-            <dd className="min-w-0 leading-relaxed">{children}</dd>
+            <dd className="min-w-0 leading-relaxed flex items-center">
+              {children}
+            </dd>
             <dt className="text-muted-foreground font-medium">Type</dt>
-            <dd className="min-w-0 font-mono text-xs break-words">
+            <dd className="min-w-0 font-mono text-xs break-words flex items-center">
               {fullType}
             </dd>
             <dt className="text-muted-foreground font-medium md:hidden">
               Default
             </dt>
-            <dd className="min-w-0 font-mono text-xs break-words md:hidden">
+            <dd className="min-w-0 font-mono text-xs break-words md:hidden flex items-center">
               {displayedDefault}
             </dd>
           </dl>
