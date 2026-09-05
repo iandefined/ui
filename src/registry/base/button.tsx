@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = tv({
   base: [
-    "group relative isolate inline-flex w-fit shrink-0 touch-none cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap text-sm outline-hidden transform-gpu motion-reduce:transform-none",
-    "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-foreground",
+    "group relative isolate inline-flex w-fit shrink-0 touch-manipulation cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap text-sm outline-hidden transform-gpu motion-reduce:transform-none",
+    "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-foreground forced-colors:focus-visible:outline-[Highlight]",
     "disabled:pointer-events-none disabled:scale-100 disabled:cursor-not-allowed disabled:opacity-60",
     "[transition:scale_100ms,box-shadow_200ms,background_200ms,opacity_200ms,--tw-gradient-from_200ms,--tw-gradient-to_200ms,width_200ms] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] will-change-transform",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 active:scale-98",

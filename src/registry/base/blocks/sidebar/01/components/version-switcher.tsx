@@ -41,13 +41,13 @@ export function VersionSwitcher({
             }
           >
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-              <GalleryVerticalEndIcon className="size-4" />
+              <GalleryVerticalEndIcon aria-hidden="true" className="size-4" />
             </div>
             <div className="flex flex-col gap-0.5 leading-none">
               <span className="font-medium">Documentation</span>
               <span>v{selectedVersion}</span>
             </div>
-            <ChevronsUpDownIcon className="ml-auto" />
+            <ChevronsUpDownIcon aria-hidden="true" className="ml-auto" />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-(--anchor-width)" align="start">
             {versions.map((version) => (
@@ -57,7 +57,7 @@ export function VersionSwitcher({
               >
                 v{version}{" "}
                 {version === selectedVersion && (
-                  <CheckIcon className="ml-auto" />
+                  <CheckIcon aria-hidden="true" className="ml-auto" />
                 )}
               </DropdownMenuItem>
             ))}

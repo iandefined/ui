@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const checkboxRootStyles = tv({
   base: [
-    `group size-7 relative inline-flex items-center justify-center shrink-0 overflow-hidden shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid cursor-pointer transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50`,
+    `group size-7 relative inline-flex items-center justify-center shrink-0 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid cursor-pointer transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50`,
     `data-disabled:cursor-not-allowed data-disabled:grayscale data-disabled:scale-100 data-disabled:opacity-50`,
     `before:content-[''] before:absolute before:border-1 before:inset-0 before:border-border aria-invalid:before:border-destructive data-invalid:before:border-destructive not-data-disabled:hover:before:bg-secondary/60`,
     `after:content-[''] after:pointer-events-none after:absolute after:inset-0 after:z-0 after:origin-center after:rounded-[inherit] after:bg-linear-to-b after:from-primary after:to-[color-mix(in_oklch,var(--primary),black_10%)] dark:after:from-[color-mix(in_oklch,var(--primary),white_35%)] dark:after:to-[color-mix(in_oklch,var(--primary),white_5%)] after:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),black_16%),inset_0_2px_0_0_rgb(255_255_255_/_0.25)] dark:after:shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),white_12%),inset_0_2px_0_0_rgb(255_255_255_/_0.55)] data-unchecked:after:scale-50 data-unchecked:after:opacity-0 data-checked:after:scale-100 data-checked:after:opacity-100`,
@@ -29,7 +29,7 @@ const checkboxRootStyles = tv({
     reduceMotion: {
       true: "transition-none before:transition-none after:transition-none",
       false:
-        "before:transition-colors transition-transform after:duration-100 after:ease-linear after:[transition-property:opacity,scale,transform]",
+        "before:transition-colors transition-transform after:duration-100 after:ease-linear after:[transition-property:opacity,scale,transform] motion-reduce:transition-none motion-reduce:transform-none motion-reduce:before:transition-none motion-reduce:after:transition-none",
     },
   },
   defaultVariants: {
@@ -51,7 +51,7 @@ const checkboxIndicatorStyles = tv({
     },
     reduceMotion: {
       true: "transition-none",
-      false: "transition-opacity",
+      false: "transition-opacity motion-reduce:transition-none",
     },
   },
   defaultVariants: {
@@ -138,6 +138,10 @@ function CheckboxRoot({
         onCheckedChange={handleCheckedChange}
         {...rest}
       >
+        <span
+          className="absolute -inset-1 pointer-events-auto"
+          aria-hidden="true"
+        />
         {children}
       </CheckboxPrimitive.Root>
     </CheckboxContext.Provider>

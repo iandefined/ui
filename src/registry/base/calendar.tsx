@@ -254,7 +254,7 @@ function CalendarGrid({ className, ...props }: CalendarGridProps) {
     <CalendarPrimitive.Table
       data-slot="calendar-grid"
       className={cn(
-        "w-full table-fixed border-separate border-spacing-x-0 border-spacing-y-1 text-sm outline-none",
+        "w-full table-fixed border-separate border-spacing-1 text-sm outline-none",
         className
       )}
       {...props}
@@ -335,7 +335,7 @@ function CalendarCellButton({
         <Button
           variant="ghost"
           className={cn(
-            "relative mx-auto h-(--calendar-day-size) w-full min-w-0 touch-manipulation rounded-md p-0 font-normal tabular-nums motion-reduce:transition-none",
+            "relative h-(--calendar-day-size) w-full min-w-0 touch-manipulation rounded-md p-0 font-normal tabular-nums motion-reduce:transition-none",
             "data-[view=month]:h-11 data-[view=year]:h-11",
             "data-outside-range:text-muted-foreground/50 data-disabled:pointer-events-none data-disabled:opacity-40 data-unavailable:line-through",
             "data-today:font-semibold data-today:after:absolute data-today:after:bottom-1 data-today:after:size-1 data-today:after:rounded-full data-today:after:bg-current",
@@ -417,14 +417,30 @@ function CalendarDayGrids() {
                         calendar.numOfMonths > 1 && !isCurrentMonth;
                       const isRowStart = dayIndex === 0;
                       const isRowEnd = dayIndex === week.length - 1;
+                      const cellState = calendar.getDayTableCellState({
+                        value: day,
+                        visibleRange,
+                      });
+                      const isRangeActive =
+                        cellState.inRange || cellState.inHoveredRange;
+                      const isRangeStart = cellState.firstInRange;
+                      const isRangeEnd = cellState.lastInRange;
+                      const hasRange =
+                        isRangeActive || isRangeStart || isRangeEnd;
+                      const extendsRangeLeft =
+                        hasRange && !isRowStart && !isRangeStart;
+                      const extendsRangeRight =
+                        hasRange && !isRowEnd && !isRangeEnd;
+                      const rangeConnectionClassName = cn(
+                        extendsRangeLeft && "ms-[-0.125rem]",
+                        extendsRangeRight && "me-[-0.125rem]",
+                        extendsRangeLeft && extendsRangeRight
+                          ? "w-[calc(100%+0.25rem)]"
+                          : (extendsRangeLeft || extendsRangeRight) &&
+                              "w-[calc(100%+0.125rem)]"
+                      );
 
                       if (isOverlapping) {
-                        const cellState = calendar.getDayTableCellState({
-                          value: day,
-                          visibleRange,
-                        });
-                        const isRangeActive =
-                          cellState.inRange || cellState.inHoveredRange;
                         const isStart = cellState.firstInRange;
                         const isEnd = cellState.lastInRange;
 
@@ -438,7 +454,7 @@ function CalendarDayGrids() {
                             <div
                               aria-hidden="true"
                               className={cn(
-                                "relative mx-auto flex h-(--calendar-day-size) w-full items-center justify-center p-0 font-normal tabular-nums text-muted-foreground/50 select-none motion-reduce:transition-none",
+                                "relative flex h-(--calendar-day-size) w-full items-center justify-center p-0 font-normal tabular-nums text-muted-foreground/50 select-none motion-reduce:transition-none",
                                 !isRangeActive && "rounded-md",
                                 isRangeActive && [
                                   "rounded-none bg-accent text-muted-foreground",
@@ -449,7 +465,8 @@ function CalendarDayGrids() {
                                   (isEnd || isRowEnd) && "rounded-e-md",
                                 ],
                                 cellState.today &&
-                                  "font-semibold after:absolute after:bottom-1 after:size-1 after:rounded-full after:bg-current"
+                                  "font-semibold after:absolute after:bottom-1 after:size-1 after:rounded-full after:bg-current",
+                                rangeConnectionClassName
                               )}
                             >
                               {day.day}
@@ -469,7 +486,8 @@ function CalendarDayGrids() {
                               isRowStart &&
                                 "data-in-range:rounded-s-md data-in-hover-range:rounded-s-md data-range-end:rounded-s-md",
                               isRowEnd &&
-                                "data-in-range:rounded-e-md data-in-hover-range:rounded-e-md data-range-start:rounded-e-md"
+                                "data-in-range:rounded-e-md data-in-hover-range:rounded-e-md data-range-start:rounded-e-md",
+                              rangeConnectionClassName
                             )}
                           >
                             {day.day}

@@ -353,8 +353,9 @@ function SliderValueDisplay({
 
   return (
     <button
+      aria-label="Edit value"
       className={cn(
-        "bg-transparent text-right text-inherit tabular-nums outline-none disabled:cursor-default",
+        "rounded-sm bg-transparent text-right text-inherit tabular-nums outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] disabled:cursor-default",
         className
       )}
       disabled={disabled}
@@ -738,7 +739,7 @@ function CompactSliderControl({
           {values.map((_, index) => (
             <SliderPrimitive.Thumb
               key={index}
-              className="group/compact-thumb z-30 flex size-5 items-center justify-center rounded-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group/compact-thumb z-30 flex size-5 items-center justify-center rounded-full bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background forced-colors:focus-visible:outline-[Highlight]"
               data-slot="slider-thumb"
               getAriaLabel={getAriaLabel}
               getAriaValueText={(_formattedValue, nextValue) =>
@@ -889,7 +890,7 @@ function DefaultSliderControl({
             />
           ) : null}
           <SliderPrimitive.Thumb
-            className="absolute z-[4] size-5 opacity-0 outline-none"
+            className="absolute z-[4] size-5 rounded-full opacity-0 outline-none focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]"
             data-slot="slider-thumb"
             getAriaLabel={getAriaLabel}
             getAriaValueText={(_formattedValue, nextValue) =>

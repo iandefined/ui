@@ -134,7 +134,6 @@ function BreadcrumbEllipsis({
 }: BreadcrumbEllipsisProps) {
   return (
     <span
-      aria-hidden="true"
       className={cn(
         "flex size-9 items-center justify-center",
         "group-data-[size=sm]:size-7",
@@ -142,10 +141,12 @@ function BreadcrumbEllipsis({
         className
       )}
       data-slot="breadcrumb-ellipsis"
-      role="presentation"
       {...props}
     >
-      <EllipsisIcon className="size-4 group-data-[size=sm]:size-3 group-data-[size=lg]:size-5" />
+      <EllipsisIcon
+        aria-hidden="true"
+        className="size-4 group-data-[size=sm]:size-3 group-data-[size=lg]:size-5"
+      />
       <span className="sr-only">{ariaLabel}</span>
     </span>
   );

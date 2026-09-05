@@ -45,7 +45,7 @@ const numberFieldInputVariants = tv({
 });
 
 const numberFieldButtonVariants = tv({
-  base: "flex h-full shrink-0 cursor-pointer items-center justify-center transition-colors hover:bg-accent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-64",
+  base: "flex h-full shrink-0 cursor-pointer items-center justify-center outline-none transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-64",
   variants: {
     size: {
       sm: "px-2.5",

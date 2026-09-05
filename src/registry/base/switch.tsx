@@ -257,8 +257,9 @@ function Switch({
       data-size={size}
       checked={isChecked}
       className={cn(
-        "relative inline-flex shrink-0 cursor-pointer touch-none select-none rounded-full bg-input outline-none transition-colors duration-80 data-checked:bg-primary data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),black_16%),inset_0_1px_0_0_rgb(255_255_255_/_0.25)] dark:data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),white_12%),inset_0_1px_0_0_rgb(255_255_255_/_0.55)] data-disabled:cursor-not-allowed data-disabled:opacity-50 motion-reduce:transition-none",
-        "focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "relative inline-flex shrink-0 cursor-pointer touch-manipulation select-none rounded-full bg-input outline-none transition-colors duration-80 data-checked:bg-primary data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),black_16%),inset_0_1px_0_0_rgb(255_255_255_/_0.25)] dark:data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),white_12%),inset_0_1px_0_0_rgb(255_255_255_/_0.55)] data-disabled:cursor-not-allowed data-disabled:opacity-50 motion-reduce:transition-none",
+        "before:content-[''] before:absolute before:-inset-y-1.5 before:inset-x-0",
+        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background forced-colors:focus-visible:outline-[Highlight]",
         className
       )}
       disabled={disabled}

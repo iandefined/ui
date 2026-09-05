@@ -22,7 +22,7 @@ const radioGroupStyles = tv({
 
 const radioRootStyles = tv({
   base: [
-    "group relative isolate inline-flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50",
+    "group relative isolate inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50",
     "data-disabled:cursor-not-allowed data-disabled:scale-100 data-disabled:opacity-50 data-disabled:grayscale",
     "before:absolute before:inset-0 before:rounded-full before:border-1 before:border-border before:content-[''] aria-invalid:before:border-destructive data-invalid:before:border-destructive not-data-disabled:hover:before:bg-secondary/60",
   ],
@@ -34,7 +34,8 @@ const radioRootStyles = tv({
     },
     reduceMotion: {
       true: "transition-none before:transition-none",
-      false: "transition-transform before:transition-colors",
+      false:
+        "transition-transform before:transition-colors motion-reduce:transition-none motion-reduce:transform-none motion-reduce:before:transition-none",
     },
   },
   defaultVariants: {
@@ -53,7 +54,7 @@ const radioSelectedSurfaceStyles = tv({
     reduceMotion: {
       true: "transition-none",
       false:
-        "duration-100 ease-linear [transition-property:opacity,scale,transform]",
+        "duration-100 ease-linear [transition-property:opacity,scale,transform] motion-reduce:transition-none motion-reduce:transform-none",
     },
   },
   defaultVariants: {
@@ -73,7 +74,8 @@ const radioIndicatorStyles = tv({
     },
     reduceMotion: {
       true: "transition-none",
-      false: "[transition-property:opacity,scale] duration-100 ease-linear",
+      false:
+        "[transition-property:opacity,scale] duration-100 ease-linear motion-reduce:transition-none motion-reduce:transform-none",
     },
   },
   defaultVariants: {
@@ -142,6 +144,10 @@ function RadioRoot<Value = string>({
         data-slot="radio"
         {...props}
       >
+        <span
+          className="absolute -inset-1 pointer-events-auto"
+          aria-hidden="true"
+        />
         <RadioPrimitive.Indicator
           aria-hidden
           className={radioSelectedSurfaceStyles({ reduceMotion })}

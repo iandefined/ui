@@ -36,7 +36,7 @@ function Skeleton({
       {animate && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -translate-x-full"
+          className="pointer-events-none absolute inset-0 -translate-x-full motion-reduce:hidden"
           style={{
             animation: "shimmer 1.6s ease-in-out infinite",
             background:
@@ -44,7 +44,7 @@ function Skeleton({
           }}
         />
       )}
-      <style>{`@keyframes shimmer { to { transform: translateX(200%); } }`}</style>
+      <style>{`@keyframes shimmer { to { transform: translateX(200%); } } @media (prefers-reduced-motion: reduce) { [data-slot=skeleton] > span { display: none !important; } }`}</style>
     </div>
   );
 }

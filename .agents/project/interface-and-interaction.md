@@ -4,7 +4,7 @@ Use this guide when adding, editing, or evaluating interactive components, forms
 
 This document is the canonical repository standard for user interface conventions. It supersedes older ad-hoc guidance.
 
-For component API and portability rules, see [component-implementation.md](component-implementation.md). For Base UI composition, see [base-ui-patterns.md](base-ui-patterns.md). For Worker runtime restrictions, see [cloudflare-workers.md](cloudflare-workers.md).
+For deep accessibility, ARIA, keyboard navigation, and live regions, see [accessibility.md](accessibility.md). For component API and portability rules, see [component-implementation.md](component-implementation.md). For Base UI composition, see [base-ui-patterns.md](base-ui-patterns.md). For Worker runtime restrictions, see [cloudflare-workers.md](cloudflare-workers.md).
 
 ---
 
@@ -134,22 +134,13 @@ For overlay wipe animations built with `clip-path: inset(...)` (Select, Dropdown
 
 ## 6. Accessibility (a11y)
 
-### [HARD REQUIREMENT] Accessible Names for Icon Controls
-- Every icon-only button or interactive trigger MUST have an accessible name via `aria-label` or visually hidden text:
-  ```tsx
-  <Button size="icon" aria-label="Copy code">
-    <CopyIcon />
-  </Button>
-  ```
-
-### [HARD REQUIREMENT] Dynamic Status Communication
-- Any state-derived text message that updates dynamically (copy feedback, loading counters, form validation errors) must be announced to assistive technologies using `aria-live="polite"` or an appropriate role (`role="alert"` for errors, `role="status"` for progress).
-
-### [HARD REQUIREMENT] Non-Color Error and Status Cues
-- Never convey state solely through color. Accompany red error borders with an icon, distinct typography, or explicit error text. Accompany success states with check icons or label updates.
+For comprehensive accessibility rules, ARIA patterns, keyboard interaction, live regions, touch target geometry, and the pre-flight checklist, consult the dedicated guide at [accessibility.md](accessibility.md).
 
 ### [HARD REQUIREMENT] Explicit SVG Dimensions for WebKit
 - Every custom inline `<svg>` in components and icons MUST specify explicit `width` and `height` attributes or explicit Tailwind `size-*` / `w-* h-*` classes. Unsized SVGs render inconsistently in WebKit / iOS Safari even when `viewBox` is present.
+
+### [HARD REQUIREMENT] Core Accessibility Invariants
+- Adhere strictly to [accessibility.md](accessibility.md) for all interactive element accessible names (`aria-label`), visible focus rings (`focus-visible:`), non-color cues, reduced motion compliance (`motion-reduce:*`), and dynamic announcements (`aria-live="polite"`).
 
 ---
 

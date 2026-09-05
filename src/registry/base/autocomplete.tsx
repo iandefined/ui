@@ -121,7 +121,7 @@ function AutocompleteTrigger({
     <BaseAutocomplete.Trigger
       aria-label="Toggle options"
       className={cn(
-        "group absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none has-[+[data-slot=autocomplete-clear]]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4",
+        "group absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] has-[+[data-slot=autocomplete-clear]]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="autocomplete-trigger"
@@ -154,7 +154,7 @@ function AutocompleteClear({
     <BaseAutocomplete.Clear
       aria-label="Clear selection"
       className={cn(
-        "absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none transition-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4",
+        "absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] transition-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="autocomplete-clear"

@@ -28,7 +28,8 @@ Do not manually edit generated output: `src/routeTree.gen.ts`, `public/r/*`, `pu
 
 - Verification scope, tiered checks, and baseline failures: [.agents/project/verification.md](.agents/project/verification.md)
 - Repository-wide TypeScript, React, imports, naming, and maintainability: [.agents/project/code-quality.md](.agents/project/code-quality.md)
-- Interface, interaction, forms, motion, accessibility, and visual standards: [.agents/project/interface-and-interaction.md](.agents/project/interface-and-interaction.md)
+- Interface, interaction, forms, motion, and visual standards: [.agents/project/interface-and-interaction.md](.agents/project/interface-and-interaction.md)
+- Accessibility, keyboard flows, screen-reader semantics, and ARIA patterns: [.agents/project/accessibility.md](.agents/project/accessibility.md)
 - Documentation voice, page structure, examples, and concept guides: [.agents/project/docs-writing.md](.agents/project/docs-writing.md)
 
 ## Task Entry Points

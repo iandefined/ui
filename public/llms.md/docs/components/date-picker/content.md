@@ -135,7 +135,7 @@ Composes the Ark trigger with the registry [Button](./button). Button props set 
 
 #### DatePickerChips
 
-Renders a multi-chip container trigger for `selectionMode="multiple"`. Selected dates appear as removable pills with keyboard and pointer interactions.
+Renders a non-interactive multi-chip group for `selectionMode="multiple"`. Each selected date label and the remaining empty surface open the calendar, while each remove button remains a separate sibling control.
 
 Controls chip wrapping and single-line +X overflow compression.
 Explicit limit on visible chips before showing the +X overflow badge.

@@ -192,7 +192,7 @@ function DateInput({
               <InputGroup
                 aria-invalid={api.invalid || undefined}
                 className={cn(
-                  "flex w-full gap-2 px-3 text-base tabular-nums sm:text-sm focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-solid aria-invalid:outline-solid data-invalid:shadow-none aria-invalid:shadow-none focus-within:data-invalid:border-destructive focus-within:data-invalid:outline-destructive/50 focus-within:aria-invalid:border-destructive focus-within:aria-invalid:outline-destructive/50 data-disabled:opacity-64 motion-reduce:transition-none",
+                  "flex w-full gap-2 px-3 text-base tabular-nums sm:text-sm has-[[data-slot=date-input-segment]:focus-visible]:border-ring has-[[data-slot=date-input-segment]:focus-visible]:outline-2 has-[[data-slot=date-input-segment]:focus-visible]:outline-offset-2 has-[[data-slot=date-input-segment]:focus-visible]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-solid aria-invalid:outline-solid data-invalid:shadow-none aria-invalid:shadow-none focus-within:data-invalid:border-destructive focus-within:data-invalid:outline-destructive/50 focus-within:aria-invalid:border-destructive focus-within:aria-invalid:outline-destructive/50 data-disabled:opacity-64 motion-reduce:transition-none",
                   size === "sm"
                     ? "min-h-8"
                     : size === "lg"
@@ -254,7 +254,7 @@ function DateInput({
                           .getSegments({ index })
                           .map((segment, segmentIndex) => (
                             <DateInputPrimitive.Segment
-                              className="shrink-0 rounded-sm px-0.5 py-0.5 outline-none data-placeholder:text-muted-foreground data-[type=literal]:px-0 data-[type=literal]:text-muted-foreground data-[type=literal]:select-none data-[type=literal]:cursor-default data-[type=literal]:data-disabled:cursor-default focus:bg-accent focus:text-accent-foreground not-data-[type=literal]:data-disabled:cursor-not-allowed"
+                              className="shrink-0 rounded-sm px-0.5 py-0.5 outline-none data-placeholder:text-muted-foreground data-[type=literal]:px-0 data-[type=literal]:text-muted-foreground data-[type=literal]:select-none data-[type=literal]:cursor-default data-[type=literal]:data-disabled:cursor-default focus:bg-accent focus:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] not-data-[type=literal]:data-disabled:cursor-not-allowed"
                               data-slot="date-input-segment"
                               key={`${segment.type}-${segmentIndex}`}
                               segment={segment}
@@ -268,7 +268,7 @@ function DateInput({
                   <Button
                     aria-label={clearLabel}
                     className={cn(
-                      "shrink-0 rounded-[calc(var(--radius)-5px)] shadow-none text-muted-foreground hover:text-foreground",
+                      "hitbox-[1px] shrink-0 rounded-[calc(var(--radius)-5px)] shadow-none text-muted-foreground hover:text-foreground",
                       endAdornment ? "-me-1" : "-me-1.5"
                     )}
                     data-slot="date-input-clear"

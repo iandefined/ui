@@ -208,7 +208,7 @@ function ComboboxInput({
       {showTrigger && (
         <ComboboxTrigger
           aria-label="Toggle options"
-          className="group absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none has-[+[data-slot=combobox-clear]]:hidden in-data-[slot=combobox-chips]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4"
+          className="group absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] has-[+[data-slot=combobox-clear]]:hidden in-data-[slot=combobox-chips]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4"
         >
           <ChevronsUpDownIcon />
         </ComboboxTrigger>
@@ -216,7 +216,7 @@ function ComboboxInput({
       {isClearable && (
         <ComboboxClear
           aria-label="Clear selection"
-          className="absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none transition-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0 in-data-[slot=combobox-chips]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4"
+          className="absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] transition-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0 in-data-[slot=combobox-chips]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4"
         >
           <CloseIcon />
         </ComboboxClear>
@@ -443,7 +443,7 @@ function ComboboxChipRemove({
     <ComboboxPrimitive.ChipRemove
       aria-label="Remove"
       className={cn(
-        "cursor-pointer rounded-md p-0.5 text-inherit hover:bg-secondary/80 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+        "hitbox-[1px] cursor-pointer rounded-md p-0.5 text-inherit outline-none hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       data-slot="combobox-chip-remove"

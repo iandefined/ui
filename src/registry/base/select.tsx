@@ -82,7 +82,7 @@ const cssAnimationPresets = {
     `data-[side=inline-end]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
   ],
   motion: [
-    `[transition-property:translate,scale,opacity,rotateX,rotateY,transform] [will-change:translate,scale,opacity,rotateX,rotateY,transform]`,
+    `[transition-property:translate,scale,opacity,rotateX,rotateY,transform] [will-change:translate,scale,opacity,rotateX,rotateY,transform] motion-reduce:transition-none motion-reduce:transform-none`,
     `[transform:perspective(1000px)]`,
     // side=bottom
     `data-[side=bottom]:data-starting-style:translate-y-[7px] data-[side=bottom]:data-starting-style:opacity-0 data-[side=bottom]:data-starting-style:scale-[0.26] data-[side=bottom]:data-starting-style:rotate-x-[70deg] data-[side=bottom]:data-ending-style:translate-y-[7px] data-[side=bottom]:data-ending-style:opacity-0 data-[side=bottom]:data-ending-style:scale-[0.26] data-[side=bottom]:data-ending-style:rotate-x-[70deg]`,
@@ -98,7 +98,7 @@ const cssAnimationPresets = {
     `data-[side=inline-end]:data-starting-style:translate-x-[7px] data-[side=inline-end]:data-starting-style:opacity-0 data-[side=inline-end]:data-starting-style:scale-[0.26] data-[side=inline-end]:data-starting-style:rotate-y-[40deg] data-[side=inline-end]:data-ending-style:translate-x-[7px] data-[side=inline-end]:data-ending-style:opacity-0 data-[side=inline-end]:data-ending-style:scale-[0.26] data-[side=inline-end]:data-ending-style:rotate-y-[40deg]`,
   ],
   motionBlur: [
-    `[transition-property:translate,scale,opacity,rotateX,rotateY,transform,filter] [will-change:translate,scale,opacity,rotateX,rotateY,transform,filter]`,
+    `[transition-property:translate,scale,opacity,rotateX,rotateY,transform,filter] [will-change:translate,scale,opacity,rotateX,rotateY,transform,filter] motion-reduce:transition-none motion-reduce:transform-none motion-reduce:filter-none`,
     `[transform:perspective(1000px)]`,
     `data-starting-style:blur-[9px] data-ending-style:blur-[9px]`,
     // side=bottom
@@ -189,7 +189,7 @@ function SelectTrigger({ className, ...props }: SelectTriggerProps) {
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "group/select-trigger cursor-pointer inline-flex h-fit min-w-36 touch-none select-none items-center justify-between gap-3 rounded-lg border border-input/70 not-dark:border-input bg-background px-3 py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,background-color,outline-width,outline-offset,outline-color] duration-100 ease-out hover:bg-input/20 focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-visible:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
+        "group/select-trigger cursor-pointer inline-flex h-fit min-w-36 touch-manipulation select-none items-center justify-between gap-3 rounded-lg border border-input/70 not-dark:border-input bg-background px-3 py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,background-color,outline-width,outline-offset,outline-color] duration-100 ease-out hover:bg-input/20 focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-visible:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
         className
       )}
       {...props}

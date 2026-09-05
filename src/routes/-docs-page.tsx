@@ -172,7 +172,9 @@ export const DocsPage = ({ data }: { data: DocsPageData | undefined }) => {
   }
 
   const { doc, markdownUrl, neighbours, page } = data;
-  const showFooterNavigation = page.url !== `${ROUTES.DOCS}/components`;
+  const isComponentsCatalog = page.url === ROUTES.DOCS_COMPONENTS;
+  const showFooterNavigation = !isComponentsCatalog;
+  const showTocFooter = !isComponentsCatalog;
 
   return (
     <>
@@ -370,7 +372,9 @@ export const DocsPage = ({ data }: { data: DocsPageData | undefined }) => {
                 <DocsTableOfContents toc={doc.toc} />
               </div>
             ) : null}
-            <DocsTocFooter docId={page.path} className="mx-8" />
+            {showTocFooter && (
+              <DocsTocFooter docId={page.path} className="mx-8" />
+            )}
           </div>
         </div>
       </PageTransition>

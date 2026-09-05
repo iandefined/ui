@@ -24,6 +24,7 @@ import {
   useRef,
   useState,
   type ComponentProps,
+  type FocusEvent as ReactFocusEvent,
 } from "react";
 
 import { Button, type ButtonProps } from "@/components/ui/button";
@@ -59,6 +60,9 @@ const DatePickerInputContext = createContext<{
     | ((date: Date, details: { locale: string; timeZone: string }) => string);
   invalid?: boolean;
 }>({});
+const DatePickerChipsClickContext = createContext<
+  ComponentProps<"button">["onClick"] | undefined
+>(undefined);
 
 export type DatePickerControlProps = ComponentProps<
   typeof DatePickerPrimitive.Control
@@ -84,6 +88,65 @@ function DatePicker({
   ...props
 }: DatePickerProps) {
   const visibleMonths = useResponsiveCalendarMonths(numOfMonths);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const outsidePointerDownRef = useRef(false);
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      const root = rootRef.current;
+      const target = event.target;
+
+      if (!root || !(target instanceof Node)) {
+        outsidePointerDownRef.current = false;
+        return;
+      }
+
+      if (root.dataset.state !== "open") {
+        outsidePointerDownRef.current = false;
+        return;
+      }
+
+      const trigger = root.querySelector<HTMLElement>("[aria-controls]");
+      const contentId = trigger?.getAttribute("aria-controls");
+      const content = contentId ? document.getElementById(contentId) : null;
+
+      outsidePointerDownRef.current =
+        !root.contains(target) && !(content?.contains(target) ?? false);
+
+      if (outsidePointerDownRef.current) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            outsidePointerDownRef.current = false;
+          });
+        });
+      }
+    };
+
+    const handleFocusIn = (event: FocusEvent) => {
+      if (!outsidePointerDownRef.current) return;
+
+      outsidePointerDownRef.current = false;
+      const root = rootRef.current;
+      const target = event.target;
+
+      if (root && target instanceof HTMLElement && root.contains(target)) {
+        // Ignore Ark's pointer-dismiss focus restoration before chip focus
+        // handlers can expand the control and cause a visible layout shift.
+        target.blur();
+        event.stopPropagation();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    document.addEventListener("focusin", handleFocusIn, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+      document.removeEventListener("focusin", handleFocusIn, true);
+    };
+  }, []);
+
+  const adaptedProps = adaptDatePickerProps(props);
   return (
     <DatePickerInputContext
       value={{
@@ -96,11 +159,13 @@ function DatePicker({
       }}
     >
       <DatePickerPrimitive.Root
+        ref={rootRef}
         fixedWeeks
         lazyMount
         unmountOnExit
         closeOnSelect={selectionMode !== "multiple"}
-        {...adaptDatePickerProps(props)}
+        {...adaptedProps}
+        openOnClick={props.openOnClick ?? true}
         selectionMode={selectionMode}
         numOfMonths={visibleMonths}
         positioning={{ placement: "bottom-start", gutter: 4, ...positioning }}
@@ -164,10 +229,13 @@ function DatePickerTrigger({
         variant="outline"
         type="button"
         className={cn(
-          "gap-2 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none!",
-          size.startsWith("icon") ? "justify-center" : "justify-start",
+          "gap-2 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out motion-reduce:transition-none border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none!",
+          "data-[state=open]:border-ring! data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring/50 data-[state=open]:outline-solid",
+          size.startsWith("icon")
+            ? "justify-center hitbox-[1px]"
+            : "justify-start",
           size === "icon-xs" &&
-            "size-6 rounded-[calc(var(--radius)-5px)] border-0 p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50 data-invalid:border-0 data-invalid:outline-none aria-invalid:border-0 aria-invalid:outline-none focus-visible:ring-0 focus-visible:data-invalid:ring-0",
+            "size-6 hitbox-[1px] rounded-[calc(var(--radius)-5px)] border-0 p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50 data-invalid:border-0 aria-invalid:border-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
           className
         )}
         data-slot="date-picker-trigger"
@@ -200,16 +268,18 @@ function DatePickerTrigger({
   );
 }
 
-export type DatePickerChipsProps = ComponentProps<"div"> & {
+export type DatePickerChipsProps = Omit<ComponentProps<"div">, "onClick"> & {
   overflowBehavior?: "wrap" | "wrap-when-open" | "cutoff";
   maxCount?: number;
   invalid?: boolean;
+  onClick?: ComponentProps<"button">["onClick"];
 };
 function DatePickerChips({
   children,
   className,
   overflowBehavior = "wrap-when-open",
   maxCount,
+  onClick,
   onFocus,
   onBlur,
   invalid,
@@ -223,6 +293,8 @@ function DatePickerChips({
   const overflowBadgeRef = useRef<HTMLSpanElement | null>(null);
   const [overflowAmount, setOverflowAmount] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
+  const content = children ?? <DatePickerValue />;
+  const hasValue = picker.value.length > 0;
 
   const isSelecting = picker.open || isFocused;
   const shouldWrap =
@@ -330,59 +402,87 @@ function DatePickerChips({
     };
   }, [checkOverflow]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleFocusIn = (event: globalThis.FocusEvent) => {
+      setIsFocused(true);
+      onFocus?.(event as unknown as ReactFocusEvent<HTMLDivElement>);
+    };
+    const handleFocusOut = (event: globalThis.FocusEvent) => {
+      const relatedTarget = event.relatedTarget;
+      if (
+        !(relatedTarget instanceof Node) ||
+        !container.contains(relatedTarget)
+      ) {
+        setIsFocused(false);
+      }
+      onBlur?.(event as unknown as ReactFocusEvent<HTMLDivElement>);
+    };
+
+    container.addEventListener("focusin", handleFocusIn);
+    container.addEventListener("focusout", handleFocusOut);
+
+    return () => {
+      container.removeEventListener("focusin", handleFocusIn);
+      container.removeEventListener("focusout", handleFocusOut);
+    };
+  }, [onBlur, onFocus]);
+
   const chips = (
-    <DatePickerPrimitive.Trigger asChild>
+    <DatePickerChipsClickContext value={onClick}>
       <div
         ref={containerRef}
-        role="button"
-        tabIndex={picker.disabled ? undefined : 0}
+        role="group"
+        aria-label="Selected dates"
         data-slot="date-picker-chips"
         data-state={picker.open ? "open" : "closed"}
         data-invalid={isInvalid ? "" : undefined}
         data-disabled={picker.disabled || picker.readOnly ? "" : undefined}
         className={cn(
-          "relative inline-flex w-full min-w-48 cursor-pointer items-center gap-1 rounded-[12px] border border-input/70 not-dark:border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-[state=open]:z-[51] data-[state=open]:border-ring data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring/50 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-within:data-invalid:border-destructive! focus-within:data-invalid:outline-destructive/50! focus-within:aria-invalid:border-destructive! focus-within:aria-invalid:outline-destructive/50! data-[state=open]:data-invalid:border-destructive! data-[state=open]:data-invalid:outline-destructive/50! data-[state=open]:aria-invalid:border-destructive! data-[state=open]:aria-invalid:outline-destructive/50! [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32 sm:text-sm",
+          "relative inline-flex w-full min-w-48 items-center gap-1 rounded-[12px] border border-input/70 not-dark:border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid",
+          "transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out motion-reduce:transition-none has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50",
+          "data-[state=open]:z-[51] data-[state=open]:border-ring! data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring/50 data-[state=open]:outline-solid",
+          "data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none!",
+          "dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-within:data-invalid:border-destructive! focus-within:data-invalid:outline-destructive/50! focus-within:aria-invalid:border-destructive! focus-within:aria-invalid:outline-destructive/50!",
+          "data-[state=open]:data-invalid:border-destructive! data-[state=open]:data-invalid:outline-destructive/50! data-[state=open]:aria-invalid:border-destructive! data-[state=open]:aria-invalid:outline-destructive/50!",
+          "[[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50!",
+          "dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32 sm:text-sm",
           shouldWrap
             ? "min-h-9 flex-wrap"
             : "h-9 min-h-9 flex-nowrap overflow-hidden",
           className
         )}
-        onFocus={(e) => {
-          setIsFocused(true);
-          onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget)) {
-            setIsFocused(false);
-          }
-          onBlur?.(e);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            if (
-              (e.target as HTMLElement).closest(
-                "[data-slot=date-picker-chip-remove]"
-              )
-            ) {
-              return;
-            }
-            e.preventDefault();
-            picker.setOpen(!picker.open);
-          }
-        }}
         {...props}
       >
-        {children ?? <DatePickerValue />}
-        <span
-          ref={overflowBadgeRef}
-          data-slot="date-picker-overflow"
-          style={{ display: overflowAmount > 0 ? undefined : "none" }}
-          className="relative inline-flex h-6 shrink-0 items-center justify-center rounded-md border border-border bg-secondary px-2 text-xs tabular-nums select-none"
-        >
-          +{overflowAmount}
-        </span>
+        <DatePickerPrimitive.Trigger asChild>
+          <button
+            type="button"
+            aria-label={
+              hasValue ? "Open calendar to select more dates" : "Open calendar"
+            }
+            disabled={picker.disabled || picker.readOnly}
+            onClick={onClick}
+            className="absolute inset-0 z-0 flex cursor-pointer items-center rounded-[inherit] border-0 bg-transparent px-1.5 py-0 text-left text-xs leading-6 text-muted-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]"
+            data-slot="date-picker-chips-trigger"
+          >
+            {!hasValue && content}
+          </button>
+        </DatePickerPrimitive.Trigger>
+        {hasValue && content}
+        {hasValue && (
+          <span
+            ref={overflowBadgeRef}
+            data-slot="date-picker-overflow"
+            style={{ display: overflowAmount > 0 ? undefined : "none" }}
+            className="relative z-10 inline-flex h-6 shrink-0 pointer-events-none items-center justify-center rounded-md border border-border bg-secondary px-2 text-xs tabular-nums select-none"
+          >
+            +{overflowAmount}
+          </span>
+        )}
       </div>
-    </DatePickerPrimitive.Trigger>
+    </DatePickerChipsClickContext>
   );
 
   return hasControl ? (
@@ -392,31 +492,61 @@ function DatePickerChips({
   );
 }
 
-export type DatePickerChipProps = ComponentProps<"div"> & {
+export type DatePickerChipProps = Omit<ComponentProps<"div">, "onClick"> & {
+  onClick?: ComponentProps<"button">["onClick"];
   onRemove?: () => void;
   disabled?: boolean;
 };
 function DatePickerChip({
   className,
   children,
+  onClick,
   onRemove,
   disabled,
   ...props
 }: DatePickerChipProps) {
   const picker = useDatePickerContext();
+  const contextOnClick = useContext(DatePickerChipsClickContext);
   const isDisabled = disabled || picker.disabled || picker.readOnly;
+  const label = typeof children === "string" ? children : undefined;
+  const closedOnPointerDownRef = useRef(false);
   return (
     <div
       className={cn(
-        "relative flex h-6 shrink-0 items-center rounded-md bg-secondary border px-2 pr-1 text-xs tabular-nums select-none",
+        "relative z-10 flex h-6 shrink-0 items-center rounded-md bg-secondary border px-2 pr-1 text-xs tabular-nums select-none",
         className
       )}
       data-slot="date-picker-chip"
       {...props}
     >
-      {children}
+      <button
+        type="button"
+        aria-controls={picker.getContentProps().id}
+        aria-expanded={picker.open}
+        aria-haspopup="dialog"
+        aria-label={label ? `Open calendar for ${label}` : "Open calendar"}
+        data-state={picker.open ? "open" : "closed"}
+        disabled={isDisabled}
+        onPointerDown={(event) => {
+          if (event.button !== 0 || !picker.open) return;
+          closedOnPointerDownRef.current = true;
+          picker.setOpen(false);
+        }}
+        onClick={(event) => {
+          (onClick ?? contextOnClick)?.(event);
+          if (!event.defaultPrevented && !closedOnPointerDownRef.current) {
+            picker.setOpen(!picker.open);
+          }
+          closedOnPointerDownRef.current = false;
+        }}
+        className="min-w-0 flex-1 cursor-pointer truncate border-0 bg-transparent p-0 text-left text-xs leading-6 font-inherit text-inherit outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]"
+        data-slot="date-picker-chip-trigger"
+      >
+        {children}
+      </button>
       {onRemove && (
         <DatePickerChipRemove
+          aria-label={label ? `Remove ${label}` : "Remove date"}
           disabled={isDisabled}
           onClick={(e) => {
             e.preventDefault();
@@ -429,24 +559,46 @@ function DatePickerChip({
   );
 }
 
+function DatePickerChipCloseIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      height="24"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M18 6L6 18m12 0L6 6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
 export type DatePickerChipRemoveProps = ComponentProps<"button">;
 function DatePickerChipRemove({
   className,
   children,
+  "aria-label": ariaLabel = "Remove date",
   ...props
 }: DatePickerChipRemoveProps) {
   return (
     <button
       type="button"
-      aria-label="Remove"
+      aria-label={ariaLabel}
       className={cn(
-        "cursor-pointer rounded-md p-0.5 text-inherit hover:bg-secondary/80 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+        "hitbox-[1px] cursor-pointer rounded-md p-0.5 text-inherit outline-none hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       data-slot="date-picker-chip-remove"
       {...props}
     >
-      {children ?? <XIcon aria-hidden="true" />}
+      {children ?? <DatePickerChipCloseIcon />}
     </button>
   );
 }
@@ -704,15 +856,22 @@ function DatePickerInput({
   const settings = useContext(DatePickerInputContext);
   const inputProps = picker.getInputProps({ index });
   const selectedValue = picker.value[index];
+  const { format: contextFormat, ...dateInputSettings } = settings;
+  const format =
+    contextFormat === undefined
+      ? props.format
+      : (date: Date, details: { locale: string; timeZone: string }) =>
+          formatDate(date, contextFormat, details.locale, details.timeZone);
   const shouldShowTrigger =
     showTrigger ?? (picker.selectionMode === "range" || index === 0);
   const input = (
     <DateInput
       {...props}
-      {...settings}
+      {...dateInputSettings}
       className={className}
       data-slot="date-picker-input"
       size={size}
+      format={format}
       id={props.id ?? inputProps.id}
       aria-labelledby={
         props["aria-label"]
@@ -1014,28 +1173,60 @@ function DatePickerTimerScrollColumn({
       <div
         ref={columnRef}
         aria-label={ariaLabel}
+        aria-orientation="vertical"
         role="listbox"
         data-slot="date-picker-timer-column"
         className="relative flex h-full flex-col gap-y-2 overflow-y-auto px-1 py-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((item) => {
+        {items.map((item, itemIndex) => {
           const isSelected = selectedValue === item;
+          const activeIndex = Math.max(0, items.indexOf(selectedValue));
           return (
             <button
               key={item}
               type="button"
               role="option"
               aria-selected={isSelected}
+              aria-label={`${ariaLabel}: ${item}`}
+              tabIndex={itemIndex === activeIndex ? 0 : -1}
               data-selected={isSelected ? "" : undefined}
               className={cn(
-                "cursor-pointer flex h-8 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
+                "cursor-pointer flex h-8 hitbox-[1px] items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
                 itemClassName,
-                "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
+                "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
                 isSelected
                   ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
                   : "text-foreground"
               )}
               onClick={() => onSelect(item)}
+              onKeyDown={(event) => {
+                const isPrevious = event.key === "ArrowUp";
+                const isNext = event.key === "ArrowDown";
+                const isFirst = event.key === "Home";
+                const isLast = event.key === "End";
+                if (!isPrevious && !isNext && !isFirst && !isLast) {
+                  return;
+                }
+
+                const nextIndex = isFirst
+                  ? 0
+                  : isLast
+                    ? items.length - 1
+                    : Math.min(
+                        Math.max(itemIndex + (isNext ? 1 : -1), 0),
+                        items.length - 1
+                      );
+                if (nextIndex === itemIndex) return;
+
+                event.preventDefault();
+                const nextItem = items[nextIndex];
+                const nextOption =
+                  event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
+                    '[role="option"]'
+                  )[nextIndex];
+                nextOption?.focus();
+                if (nextItem) onSelect(nextItem);
+              }}
             >
               {item}
             </button>
@@ -1242,6 +1433,7 @@ function DatePickerTimer({
             }
             className={cn(
               "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! motion-reduce:transition-none",
+              size.startsWith("icon") && "hitbox-[1px]",
               className
             )}
             data-slot="date-picker-timer-trigger"
@@ -1305,10 +1497,11 @@ function DatePickerTimer({
               {format === "12" && (
                 <div
                   aria-label="Period"
+                  aria-orientation="vertical"
                   role="listbox"
                   className="flex flex-col gap-y-2 px-1 py-1"
                 >
-                  {(["AM", "PM"] as const).map((p) => {
+                  {(["AM", "PM"] as const).map((p, periodIndex) => {
                     const isSelected = activePeriod === p;
                     return (
                       <button
@@ -1316,15 +1509,49 @@ function DatePickerTimer({
                         type="button"
                         role="option"
                         aria-selected={isSelected}
+                        aria-label={`Period: ${p}`}
+                        tabIndex={
+                          periodIndex === (activePeriod === "AM" ? 0 : 1)
+                            ? 0
+                            : -1
+                        }
                         data-selected={isSelected ? "" : undefined}
                         className={cn(
-                          "cursor-pointer flex h-8 w-12 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
-                          "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground",
+                          "cursor-pointer flex h-8 hitbox-[1px] w-12 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
+                          "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
                           isSelected
                             ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
                             : "text-foreground"
                         )}
                         onClick={() => handlePeriodSelect(p)}
+                        onKeyDown={(event) => {
+                          const isPrevious = event.key === "ArrowUp";
+                          const isNext = event.key === "ArrowDown";
+                          const isFirst = event.key === "Home";
+                          const isLast = event.key === "End";
+                          if (!isPrevious && !isNext && !isFirst && !isLast) {
+                            return;
+                          }
+
+                          const nextIndex = isFirst
+                            ? 0
+                            : isLast
+                              ? 1
+                              : Math.min(
+                                  Math.max(periodIndex + (isNext ? 1 : -1), 0),
+                                  1
+                                );
+                          if (nextIndex === periodIndex) return;
+
+                          event.preventDefault();
+                          const nextPeriod = nextIndex === 0 ? "AM" : "PM";
+                          const nextOption =
+                            event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
+                              '[role="option"]'
+                            )[nextIndex];
+                          nextOption?.focus();
+                          handlePeriodSelect(nextPeriod);
+                        }}
                       >
                         {p}
                       </button>

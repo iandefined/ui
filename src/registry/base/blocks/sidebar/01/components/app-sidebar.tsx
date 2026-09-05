@@ -167,7 +167,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       render={(props) => (
-                        <a {...props} href={item.url} target="_top">
+                        <a
+                          {...props}
+                          href={item.url}
+                          target="_top"
+                          aria-current={item.isActive ? "page" : undefined}
+                        >
                           {props.children}
                         </a>
                       )}

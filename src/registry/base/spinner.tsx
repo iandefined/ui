@@ -35,7 +35,7 @@ function SpinnerPrimitive({ className, ...props }: SpinnerPrimitiveProps) {
 }
 
 const spinnerVariants = tv({
-  base: "pointer-events-none relative inline-block animate-spin [animation-duration:0.75s] text-current",
+  base: "pointer-events-none relative inline-block animate-spin [animation-duration:0.75s] text-current motion-reduce:animate-none",
   variants: {
     size: {
       sm: "size-4",
