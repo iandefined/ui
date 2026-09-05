@@ -59,11 +59,15 @@ export function fromDateValue(value: DateValue): Date {
 
 export function formatDate(
   date: Date,
-  format?: string | Intl.DateTimeFormatOptions | ((date: Date) => string),
-  locale = "en-US"
+  format?:
+    | string
+    | Intl.DateTimeFormatOptions
+    | ((date: Date, details: { locale: string; timeZone: string }) => string),
+  locale = "en-US",
+  timeZone = "UTC"
 ): string {
   if (typeof format === "function") {
-    return format(date);
+    return format(date, { locale, timeZone });
   }
   if (typeof format === "object" && format !== null) {
     return new Intl.DateTimeFormat(locale, format).format(date);
@@ -265,7 +269,17 @@ export function adaptDatePickerProps(
     isDateUnavailable:
       isDateUnavailable &&
       ((date, locale) => isDateUnavailable(fromDateValue(date), locale)),
-    format: format && ((date, details) => format(fromDateValue(date), details)),
+    format: format
+      ? (date, details) => format(fromDateValue(date), details)
+      : (date, details) => {
+          const jsDate = fromDateValue(date);
+          return new Intl.DateTimeFormat(details.locale, {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+            timeZone: details.timeZone,
+          }).format(jsDate);
+        },
     parse:
       parse &&
       ((text, details) => {

@@ -18,7 +18,7 @@ export default function DatePickerRange() {
       <DatePickerControl className="flex-wrap">
         <DatePickerInput aria-label="Start date" index={0} showTrigger />
         <span aria-hidden="true" className="text-muted-foreground">
-          –
+          to
         </span>
         <DatePickerInput aria-label="End date" index={1} showTrigger />
       </DatePickerControl>

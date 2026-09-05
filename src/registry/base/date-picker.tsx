@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import {
   createContext,
+  Fragment,
   useCallback,
   useContext,
   useEffect,
@@ -46,7 +47,7 @@ export type DatePickerProps = Omit<DatePickerRootDateProps, "inline">;
 
 const DatePickerControlContext = createContext(false);
 const DatePickerInputContext = createContext<
-  Pick<DatePickerProps, "locale" | "timeZone" | "min" | "max">
+  Pick<DatePickerProps, "locale" | "timeZone" | "min" | "max" | "format">
 >({});
 
 export type DatePickerControlProps = ComponentProps<
@@ -79,6 +80,7 @@ function DatePicker({
         timeZone: props.timeZone,
         min: props.min,
         max: props.max,
+        format: props.format,
       }}
     >
       <DatePickerPrimitive.Root
@@ -143,7 +145,9 @@ function DatePickerTrigger({
         type="button"
         className={cn(
           "gap-2 font-normal tabular-nums data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 motion-reduce:transition-none",
-          size.startsWith("icon") ? "justify-center hitbox-2" : "justify-start",
+          size.startsWith("icon") ? "justify-center" : "justify-start",
+          size === "icon-xs" &&
+            "size-6 rounded-[calc(var(--radius)-5px)] p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50",
           className
         )}
         data-slot="date-picker-trigger"
@@ -306,7 +310,7 @@ function DatePickerChips({
         data-invalid={picker.invalid ? "" : undefined}
         data-disabled={picker.disabled || picker.readOnly ? "" : undefined}
         className={cn(
-          "relative inline-flex w-full min-w-48 cursor-pointer items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-[state=open]:border-ring data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32 sm:text-sm",
+          "relative inline-flex w-full min-w-48 cursor-pointer items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-[state=open]:z-[51] data-[state=open]:border-ring data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 data-[state=open]:data-invalid:border-destructive data-[state=open]:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32 sm:text-sm",
           shouldWrap
             ? "min-h-9 flex-wrap"
             : "h-9 min-h-9 flex-nowrap overflow-hidden",
@@ -428,18 +432,25 @@ export type DatePickerValueProps = Omit<
         valueAsString: string;
         remove: () => void;
       }) => React.ReactNode);
-  format?: string | Intl.DateTimeFormatOptions | ((date: Date) => string);
+  format?:
+    | string
+    | Intl.DateTimeFormatOptions
+    | ((date: Date, details: { locale: string; timeZone: string }) => string);
 };
 function DatePickerValue({
   className,
   children,
-  format,
+  format: propFormat,
   placeholder = "Pick a date",
   separator,
   ...props
 }: DatePickerValueProps) {
   const picker = useDatePickerContext();
+  const settings = useContext(DatePickerInputContext);
+  const resolvedFormat = propFormat ?? settings.format;
   const hasValue = picker.value.length > 0;
+  const locale = settings.locale ?? "en-US";
+  const timeZone = settings.timeZone ?? "UTC";
 
   if (typeof children === "function") {
     if (!hasValue) {
@@ -486,8 +497,8 @@ function DatePickerValue({
       <>
         {picker.value.map((dateValue, index) => {
           const dateObj = fromDateValue(dateValue);
-          const label = format
-            ? formatDate(dateObj, format)
+          const label = resolvedFormat
+            ? formatDate(dateObj, resolvedFormat, locale, timeZone)
             : picker.valueAsString[index];
           return (
             <DatePickerChip
@@ -521,7 +532,7 @@ function DatePickerValue({
   const rangeSeparator =
     separator ?? (picker.selectionMode === "range" ? " – " : ", ");
 
-  if (format) {
+  if (resolvedFormat) {
     if (!hasValue) {
       return (
         <span
@@ -547,23 +558,88 @@ function DatePickerValue({
         {...props}
       >
         {picker.value
-          .map((dateValue) => formatDate(fromDateValue(dateValue), format))
+          .map((dateValue) =>
+            formatDate(
+              fromDateValue(dateValue),
+              resolvedFormat,
+              locale,
+              timeZone
+            )
+          )
           .join(rangeSeparator)}
       </span>
     );
   }
 
+  if (!hasValue) {
+    return (
+      <span
+        data-scope="date-picker"
+        data-part="value-text"
+        data-slot="date-picker-value"
+        className={cn(
+          "min-w-0 truncate tabular-nums text-muted-foreground",
+          className
+        )}
+        {...props}
+      >
+        {placeholder}
+      </span>
+    );
+  }
+
   return (
-    <DatePickerPrimitive.ValueText
+    <span
+      data-scope="date-picker"
+      data-part="value-text"
       data-slot="date-picker-value"
       className={cn(
-        "min-w-0 truncate tabular-nums data-placeholder:text-muted-foreground",
+        "inline-flex min-w-0 items-center whitespace-pre tabular-nums",
         className
       )}
-      placeholder={placeholder}
-      separator={rangeSeparator}
       {...props}
-    />
+    >
+      {picker.value.map((dateValue, index) => {
+        const date = fromDateValue(dateValue);
+        const formatter = new Intl.DateTimeFormat(locale, {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+          timeZone,
+        });
+        const parts = formatter.formatToParts(date);
+        return (
+          <Fragment key={dateValue.toString()}>
+            {index > 0 && (
+              <span
+                aria-hidden="true"
+                className="shrink-0 text-muted-foreground select-none cursor-default"
+              >
+                {rangeSeparator}
+              </span>
+            )}
+            {parts.map((part, partIndex) =>
+              part.type === "literal" ? (
+                <span
+                  key={partIndex}
+                  aria-hidden="true"
+                  className="shrink-0 text-muted-foreground select-none cursor-default"
+                >
+                  {part.value}
+                </span>
+              ) : (
+                <span
+                  key={partIndex}
+                  className="shrink-0 rounded-sm px-0.5 py-0.5"
+                >
+                  {part.value}
+                </span>
+              )
+            )}
+          </Fragment>
+        );
+      })}
+    </span>
   );
 }
 
@@ -649,7 +725,7 @@ function DatePickerInput({
                 ? "Open start date calendar"
                 : "Open end date calendar"
             }
-            className="-me-1 shrink-0 hitbox-2"
+            className="-me-1.5 size-6 rounded-[calc(var(--radius)-5px)] p-0 text-muted-foreground shadow-none hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50 shrink-0"
             id={`${inputProps.id}-trigger`}
             size="icon-xs"
             variant="ghost"
@@ -1133,7 +1209,6 @@ function DatePickerTimer({
             aria-label={props["aria-label"] ?? "Choose time"}
             className={cn(
               "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 motion-reduce:transition-none",
-              size.startsWith("icon") && "hitbox-2",
               className
             )}
             data-slot="date-picker-timer-trigger"
@@ -1167,7 +1242,7 @@ function DatePickerTimer({
           <PopoverPrimitive.Popup
             data-slot="date-picker-timer-popup"
             className={cn(
-              "pointer-events-auto origin-(--transform-origin) rounded-lg border border-border bg-popover p-0 text-popover-foreground shadow-md outline-none",
+              "pointer-events-auto origin-(--transform-origin) overflow-hidden rounded-lg border border-border bg-popover p-0 text-popover-foreground shadow-md outline-none",
               !reduceMotion &&
                 "[transition-property:scale,opacity] [will-change:scale,opacity] data-starting-style:scale-80 data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:scale-80 duration-[0.35s] ease-[cubic-bezier(0.19,1,0.22,1)] motion-reduce:transition-none",
               popupClassName

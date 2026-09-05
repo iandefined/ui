@@ -62,6 +62,7 @@ export interface DateInputProps extends Omit<
   startLabel?: string;
   endLabel?: string;
   endAdornment?: React.ReactNode;
+  shouldForceLeadingZeros?: boolean;
 }
 
 function DateInput({
@@ -94,6 +95,7 @@ function DateInput({
   formatter,
   name,
   readOnly,
+  shouldForceLeadingZeros = true,
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledBy,
   "aria-describedby": ariaDescribedBy,
@@ -129,6 +131,7 @@ function DateInput({
       className={cn("w-full", className)}
       data-size={size}
       data-slot="date-input"
+      shouldForceLeadingZeros={shouldForceLeadingZeros}
       defaultPlaceholderValue={
         defaultPlaceholderValue
           ? toDateValue(defaultPlaceholderValue, includeTime)
@@ -264,7 +267,10 @@ function DateInput({
                 {clearable && !api.disabled && !readOnly && (
                   <Button
                     aria-label={clearLabel}
-                    className="-me-1 shrink-0 text-muted-foreground"
+                    className={cn(
+                      "shrink-0 rounded-[calc(var(--radius)-5px)] shadow-none text-muted-foreground hover:text-foreground",
+                      endAdornment ? "-me-1" : "-me-1.5"
+                    )}
                     data-slot="date-input-clear"
                     onClick={() => {
                       api.clearValue();
