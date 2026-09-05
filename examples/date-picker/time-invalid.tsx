@@ -44,8 +44,9 @@ export default function DatePickerTimeInvalid() {
           }}
           value={value}
         >
-          <FieldLabel>Date</FieldLabel>
+          <FieldLabel htmlFor="appointment-date-invalid">Date</FieldLabel>
           <DatePickerTrigger
+            id="appointment-date-invalid"
             aria-describedby={
               isDateInvalid ? "invalid-appointment-date-message" : undefined
             }

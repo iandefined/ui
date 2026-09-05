@@ -43,12 +43,22 @@ import {
 } from "@/lib/date";
 import { cn } from "@/lib/utils";
 
-export type DatePickerProps = Omit<DatePickerRootDateProps, "inline">;
+export type DatePickerProps = Omit<DatePickerRootDateProps, "inline"> & {
+  invalid?: boolean;
+};
 
 const DatePickerControlContext = createContext(false);
-const DatePickerInputContext = createContext<
-  Pick<DatePickerProps, "locale" | "timeZone" | "min" | "max" | "format">
->({});
+const DatePickerInputContext = createContext<{
+  locale?: string;
+  timeZone?: string;
+  min?: Date;
+  max?: Date;
+  format?:
+    | string
+    | Intl.DateTimeFormatOptions
+    | ((date: Date, details: { locale: string; timeZone: string }) => string);
+  invalid?: boolean;
+}>({});
 
 export type DatePickerControlProps = ComponentProps<
   typeof DatePickerPrimitive.Control
@@ -70,6 +80,7 @@ function DatePicker({
   selectionMode = "single",
   positioning,
   numOfMonths,
+  invalid,
   ...props
 }: DatePickerProps) {
   const visibleMonths = useResponsiveCalendarMonths(numOfMonths);
@@ -81,6 +92,7 @@ function DatePicker({
         min: props.min,
         max: props.max,
         format: props.format,
+        invalid,
       }}
     >
       <DatePickerPrimitive.Root
@@ -92,6 +104,7 @@ function DatePicker({
         selectionMode={selectionMode}
         numOfMonths={visibleMonths}
         positioning={{ placement: "bottom-start", gutter: 4, ...positioning }}
+        data-invalid={invalid ? "" : undefined}
         className={cn(
           selectionMode === "multiple"
             ? "w-full max-w-sm space-y-2"
@@ -129,13 +142,15 @@ function DatePickerTrigger({
 }: DatePickerTriggerProps) {
   const hasControl = useContext(DatePickerControlContext);
   const picker = useDatePickerContext();
-  const isInvalid = invalid ?? picker.invalid;
+  const settings = useContext(DatePickerInputContext);
+  const isInvalid = invalid ?? settings.invalid ?? picker.invalid;
 
   if (picker.selectionMode === "multiple") {
     return (
       <DatePickerChips
         className={typeof className === "function" ? undefined : className}
         data-invalid={isInvalid ? "" : undefined}
+        invalid={isInvalid}
         {...(props as DatePickerChipsProps)}
       >
         {children ?? <DatePickerValue />}
@@ -149,7 +164,7 @@ function DatePickerTrigger({
         variant="outline"
         type="button"
         className={cn(
-          "gap-2 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-invalid:outline-solid data-invalid:shadow-none aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 aria-invalid:outline-solid aria-invalid:shadow-none focus-visible:data-invalid:ring-destructive/50 focus-visible:aria-invalid:ring-destructive/50 focus-visible:data-invalid:border-destructive focus-visible:aria-invalid:border-destructive motion-reduce:transition-none",
+          "gap-2 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none!",
           size.startsWith("icon") ? "justify-center" : "justify-start",
           size === "icon-xs" &&
             "size-6 rounded-[calc(var(--radius)-5px)] border-0 p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50 data-invalid:border-0 data-invalid:outline-none aria-invalid:border-0 aria-invalid:outline-none focus-visible:ring-0 focus-visible:data-invalid:ring-0",
@@ -188,6 +203,7 @@ function DatePickerTrigger({
 export type DatePickerChipsProps = ComponentProps<"div"> & {
   overflowBehavior?: "wrap" | "wrap-when-open" | "cutoff";
   maxCount?: number;
+  invalid?: boolean;
 };
 function DatePickerChips({
   children,
@@ -196,10 +212,13 @@ function DatePickerChips({
   maxCount,
   onFocus,
   onBlur,
+  invalid,
   ...props
 }: DatePickerChipsProps) {
   const hasControl = useContext(DatePickerControlContext);
   const picker = useDatePickerContext();
+  const settings = useContext(DatePickerInputContext);
+  const isInvalid = invalid ?? settings.invalid ?? picker.invalid;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overflowBadgeRef = useRef<HTMLSpanElement | null>(null);
   const [overflowAmount, setOverflowAmount] = useState(0);
@@ -319,10 +338,10 @@ function DatePickerChips({
         tabIndex={picker.disabled ? undefined : 0}
         data-slot="date-picker-chips"
         data-state={picker.open ? "open" : "closed"}
-        data-invalid={picker.invalid ? "" : undefined}
+        data-invalid={isInvalid ? "" : undefined}
         data-disabled={picker.disabled || picker.readOnly ? "" : undefined}
         className={cn(
-          "relative inline-flex w-full min-w-48 cursor-pointer items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-[state=open]:z-[51] data-[state=open]:border-ring data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 data-[state=open]:data-invalid:border-destructive data-[state=open]:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32 sm:text-sm",
+          "relative inline-flex w-full min-w-48 cursor-pointer items-center gap-1 rounded-[12px] border border-input/70 not-dark:border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-[state=open]:z-[51] data-[state=open]:border-ring data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-ring/50 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-within:data-invalid:border-destructive! focus-within:data-invalid:outline-destructive/50! focus-within:aria-invalid:border-destructive! focus-within:aria-invalid:outline-destructive/50! data-[state=open]:data-invalid:border-destructive! data-[state=open]:data-invalid:outline-destructive/50! data-[state=open]:aria-invalid:border-destructive! data-[state=open]:aria-invalid:outline-destructive/50! [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! data-disabled:pointer-events-none data-disabled:opacity-64 dark:bg-input/32 sm:text-sm",
           shouldWrap
             ? "min-h-9 flex-wrap"
             : "h-9 min-h-9 flex-nowrap overflow-hidden",
@@ -1222,7 +1241,7 @@ function DatePickerTimer({
                 | undefined) ?? (invalid ? "" : undefined)
             }
             className={cn(
-              "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-invalid:outline-solid data-invalid:shadow-none aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 aria-invalid:outline-solid aria-invalid:shadow-none focus-visible:data-invalid:ring-destructive/50 focus-visible:aria-invalid:ring-destructive/50 focus-visible:data-invalid:border-destructive focus-visible:aria-invalid:border-destructive motion-reduce:transition-none",
+              "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! motion-reduce:transition-none",
               className
             )}
             data-slot="date-picker-timer-trigger"
