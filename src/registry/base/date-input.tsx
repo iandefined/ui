@@ -199,13 +199,18 @@ function DateInput({
                 data-size={size}
                 data-slot="date-input-control"
               >
-                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1 py-1">
+                <div
+                  className={cn(
+                    "flex min-w-0 flex-1 items-center gap-x-2 gap-y-1 overflow-hidden py-1",
+                    selectionMode === "range" && "flex-wrap"
+                  )}
+                >
                   {(selectionMode === "range" ? [0, 1] : [0]).map((index) => (
                     <React.Fragment key={index}>
                       {index === 1 && (
                         <span
                           aria-hidden="true"
-                          className="text-muted-foreground select-none cursor-default"
+                          className="shrink-0 text-muted-foreground select-none cursor-default"
                           data-slot="date-input-separator"
                         >
                           –
@@ -238,7 +243,7 @@ function DateInput({
                               : ariaLabelledBy
                             : undefined
                         }
-                        className="inline-flex min-w-0 items-center whitespace-pre tabular-nums"
+                        className="inline-flex shrink-0 items-center whitespace-pre tabular-nums"
                         data-slot="date-input-segment-group"
                         index={index}
                       >
@@ -246,7 +251,7 @@ function DateInput({
                           .getSegments({ index })
                           .map((segment, segmentIndex) => (
                             <DateInputPrimitive.Segment
-                              className="rounded-sm px-0.5 py-0.5 outline-none data-placeholder:text-muted-foreground data-[type=literal]:px-0 data-[type=literal]:text-muted-foreground data-[type=literal]:select-none data-[type=literal]:cursor-default data-[type=literal]:data-disabled:cursor-default focus:bg-accent focus:text-accent-foreground not-data-[type=literal]:data-disabled:cursor-not-allowed"
+                              className="shrink-0 rounded-sm px-0.5 py-0.5 outline-none data-placeholder:text-muted-foreground data-[type=literal]:px-0 data-[type=literal]:text-muted-foreground data-[type=literal]:select-none data-[type=literal]:cursor-default data-[type=literal]:data-disabled:cursor-default focus:bg-accent focus:text-accent-foreground not-data-[type=literal]:data-disabled:cursor-not-allowed"
                               data-slot="date-input-segment"
                               key={`${segment.type}-${segmentIndex}`}
                               segment={segment}

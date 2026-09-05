@@ -445,7 +445,7 @@ function DatePickerValue({
     if (!hasValue) {
       return (
         <span
-          className={cn("text-muted-foreground", className)}
+          className={cn("min-w-0 truncate text-muted-foreground", className)}
           data-slot="date-picker-value"
         >
           {placeholder}
@@ -472,7 +472,10 @@ function DatePickerValue({
     if (!hasValue) {
       return (
         <span
-          className={cn("text-muted-foreground px-1 py-0.5", className)}
+          className={cn(
+            "min-w-0 truncate px-1 py-0.5 text-muted-foreground",
+            className
+          )}
           data-slot="date-picker-value"
         >
           {placeholder}
@@ -507,7 +510,7 @@ function DatePickerValue({
         data-scope="date-picker"
         data-part="value-text"
         data-slot="date-picker-value"
-        className={cn("truncate tabular-nums", className)}
+        className={cn("min-w-0 truncate tabular-nums", className)}
         {...props}
       >
         {children}
@@ -526,7 +529,7 @@ function DatePickerValue({
           data-part="value-text"
           data-slot="date-picker-value"
           className={cn(
-            "truncate tabular-nums text-muted-foreground",
+            "min-w-0 truncate tabular-nums text-muted-foreground",
             className
           )}
           {...props}
@@ -540,7 +543,7 @@ function DatePickerValue({
         data-scope="date-picker"
         data-part="value-text"
         data-slot="date-picker-value"
-        className={cn("truncate tabular-nums", className)}
+        className={cn("min-w-0 truncate tabular-nums", className)}
         {...props}
       >
         {picker.value
@@ -554,7 +557,7 @@ function DatePickerValue({
     <DatePickerPrimitive.ValueText
       data-slot="date-picker-value"
       className={cn(
-        "truncate tabular-nums data-placeholder:text-muted-foreground",
+        "min-w-0 truncate tabular-nums data-placeholder:text-muted-foreground",
         className
       )}
       placeholder={placeholder}
@@ -1143,7 +1146,10 @@ function DatePickerTimer({
           aria-hidden="true"
         />
         <span
-          className={cn("truncate", !currentValue && "text-muted-foreground")}
+          className={cn(
+            "min-w-0 truncate",
+            !currentValue && "text-muted-foreground"
+          )}
         >
           {displayTime || placeholder}
         </span>

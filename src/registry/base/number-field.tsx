@@ -31,7 +31,7 @@ const numberFieldGroupVariants = tv({
 });
 
 const numberFieldInputVariants = tv({
-  base: "h-full flex-1 w-full min-w-0 bg-transparent text-center outline-none tabular-nums",
+  base: "h-full flex-1 w-full min-w-0 truncate bg-transparent text-center outline-none placeholder:text-muted-foreground/80 tabular-nums",
   variants: {
     size: {
       sm: "px-2 py-1 text-xs sm:text-sm",

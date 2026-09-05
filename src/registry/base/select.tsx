@@ -220,7 +220,10 @@ function SelectValue({
           return (
             <span
               {...renderProps}
-              className={cn("w-full text-left text-foreground/60", className)}
+              className={cn(
+                "w-full min-w-0 truncate text-left text-foreground/60",
+                className
+              )}
             >
               {placeholder}
             </span>
