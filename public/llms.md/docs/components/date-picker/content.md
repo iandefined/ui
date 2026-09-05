@@ -72,6 +72,10 @@ Compose `DatePickerPresetTrigger` beside the calendar to select a named date or 
 
 Compose `DatePickerTimer` with the picker and manage the time separately from the calendar's date selection.
 
+#### Invalid state
+
+Use `invalid` on `DatePicker` and `DatePickerTimer` with [Field](./field) to present validation feedback for date and time selection.
+
 ### Sizes
 
 Set the typed input's `size` to match adjacent form controls.

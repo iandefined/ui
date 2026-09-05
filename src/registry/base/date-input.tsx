@@ -192,7 +192,7 @@ function DateInput({
               <InputGroup
                 aria-invalid={api.invalid || undefined}
                 className={cn(
-                  "flex w-full gap-2 px-3 text-base tabular-nums sm:text-sm focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:border-destructive focus-within:data-invalid:outline-destructive/50 data-disabled:opacity-64 motion-reduce:transition-none",
+                  "flex w-full gap-2 px-3 text-base tabular-nums sm:text-sm focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-solid aria-invalid:outline-solid data-invalid:shadow-none aria-invalid:shadow-none focus-within:data-invalid:border-destructive focus-within:data-invalid:outline-destructive/50 focus-within:aria-invalid:border-destructive focus-within:aria-invalid:outline-destructive/50 data-disabled:opacity-64 motion-reduce:transition-none",
                   size === "sm"
                     ? "min-h-8"
                     : size === "lg"

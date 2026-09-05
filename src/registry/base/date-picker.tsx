@@ -117,20 +117,25 @@ function DatePickerLabel({ className, ...props }: DatePickerLabelProps) {
   );
 }
 
-export type DatePickerTriggerProps = Omit<ButtonProps, "color">;
+export type DatePickerTriggerProps = Omit<ButtonProps, "color"> & {
+  invalid?: boolean;
+};
 function DatePickerTrigger({
   children,
   className,
   size = "default",
+  invalid,
   ...props
 }: DatePickerTriggerProps) {
   const hasControl = useContext(DatePickerControlContext);
   const picker = useDatePickerContext();
+  const isInvalid = invalid ?? picker.invalid;
 
   if (picker.selectionMode === "multiple") {
     return (
       <DatePickerChips
         className={typeof className === "function" ? undefined : className}
+        data-invalid={isInvalid ? "" : undefined}
         {...(props as DatePickerChipsProps)}
       >
         {children ?? <DatePickerValue />}
@@ -144,16 +149,16 @@ function DatePickerTrigger({
         variant="outline"
         type="button"
         className={cn(
-          "gap-2 font-normal tabular-nums data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 motion-reduce:transition-none",
+          "gap-2 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-invalid:outline-solid data-invalid:shadow-none aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 aria-invalid:outline-solid aria-invalid:shadow-none focus-visible:data-invalid:ring-destructive/50 focus-visible:aria-invalid:ring-destructive/50 focus-visible:data-invalid:border-destructive focus-visible:aria-invalid:border-destructive motion-reduce:transition-none",
           size.startsWith("icon") ? "justify-center" : "justify-start",
           size === "icon-xs" &&
-            "size-6 rounded-[calc(var(--radius)-5px)] p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50",
+            "size-6 rounded-[calc(var(--radius)-5px)] border-0 p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50 data-invalid:border-0 data-invalid:outline-none aria-invalid:border-0 aria-invalid:outline-none focus-visible:ring-0 focus-visible:data-invalid:ring-0",
           className
         )}
         data-slot="date-picker-trigger"
         size={size}
-        data-invalid={picker.invalid ? "" : undefined}
-        aria-invalid={picker.invalid || undefined}
+        data-invalid={isInvalid ? "" : undefined}
+        aria-invalid={props["aria-invalid"] ?? (isInvalid || undefined)}
         disabled={picker.disabled || picker.readOnly}
         {...props}
       >
@@ -169,10 +174,14 @@ function DatePickerTrigger({
       </Button>
     </DatePickerPrimitive.Trigger>
   );
+  const isFullWidth =
+    typeof className === "string" && className.includes("w-full");
   return hasControl ? (
     trigger
   ) : (
-    <DatePickerControl className="w-fit">{trigger}</DatePickerControl>
+    <DatePickerControl className={isFullWidth ? "w-full" : "w-fit"}>
+      {trigger}
+    </DatePickerControl>
   );
 }
 
@@ -1018,7 +1027,7 @@ function DatePickerTimerScrollColumn({
           aria-label={`Scroll ${ariaLabel.toLowerCase()} up`}
           className={cn(
             "absolute inset-x-0 top-0 z-20 flex h-6 w-full cursor-default items-center justify-center text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 motion-reduce:transition-none",
-            "before:pointer-events-none before:absolute before:inset-x-px before:top-[-2px] before:h-[140%] before:rounded-t-[calc(var(--radius-lg)-1px)] before:bg-linear-to-b before:from-popover before:from-50%"
+            "before:pointer-events-none before:absolute before:inset-x-px before:top-px before:h-[140%] before:rounded-t-[calc(var(--radius-lg)-1px)] before:bg-linear-to-b before:from-popover before:from-50%"
           )}
           data-slot="date-picker-timer-scroll-up-arrow"
           onMouseMove={() => startAutoScroll("up")}
@@ -1035,7 +1044,7 @@ function DatePickerTimerScrollColumn({
           aria-label={`Scroll ${ariaLabel.toLowerCase()} down`}
           className={cn(
             "absolute inset-x-0 bottom-0 z-20 flex h-6 w-full cursor-default items-center justify-center text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 motion-reduce:transition-none",
-            "before:pointer-events-none before:absolute before:inset-x-px before:bottom-[-2px] before:h-[140%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-popover before:from-50%"
+            "before:pointer-events-none before:absolute before:inset-x-px before:bottom-px before:h-[140%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-popover before:from-50%"
           )}
           data-slot="date-picker-timer-scroll-down-arrow"
           onMouseMove={() => startAutoScroll("down")}
@@ -1064,6 +1073,7 @@ export type DatePickerTimerProps = Omit<
   format?: "12" | "24";
   step?: number;
   placeholder?: string;
+  invalid?: boolean;
   size?:
     | "default"
     | "xs"
@@ -1096,6 +1106,7 @@ function DatePickerTimer({
   reduceMotion = false,
   disabled,
   readOnly,
+  invalid,
   ...props
 }: DatePickerTimerProps) {
   const isControlled = propValue !== undefined;
@@ -1207,8 +1218,14 @@ function DatePickerTimer({
             id={id}
             disabled={disabled}
             aria-label={props["aria-label"] ?? "Choose time"}
+            aria-invalid={props["aria-invalid"] ?? (invalid ? true : undefined)}
+            data-invalid={
+              ((props as Record<string, unknown>)["data-invalid"] as
+                | string
+                | undefined) ?? (invalid ? "" : undefined)
+            }
             className={cn(
-              "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 motion-reduce:transition-none",
+              "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-invalid:outline-solid data-invalid:shadow-none aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 aria-invalid:outline-solid aria-invalid:shadow-none focus-visible:data-invalid:ring-destructive/50 focus-visible:aria-invalid:ring-destructive/50 focus-visible:data-invalid:border-destructive focus-visible:aria-invalid:border-destructive motion-reduce:transition-none",
               className
             )}
             data-slot="date-picker-timer-trigger"
