@@ -31,7 +31,7 @@ Keep the catalog flat: component pages remain at `/docs/components/<slug>`. Do n
 ### Voice and Examples
 
 - Use direct, present-tense, declarative prose. Every sentence must add information.
-- Do not use em dashes in user-facing documentation. Date and calendar ranges may use a spaced en dash (`start – end`) as their visual separator. Prefer commas, colons, parentheses, semicolons, or separate sentences elsewhere.
+- Do not use em dashes (—) or arrows (→, ->) in prose, copywriting, or user-facing documentation. Avoid using "→" as a sloppy tell for sequences, mappings, transitions, or state changes. Use explicit words (such as "to", "then", or descriptive text), commas, colons, parentheses, semicolons, or separate sentences instead. Date and calendar ranges may use a spaced en dash (`start – end`) as their visual separator. Prefer natural prose everywhere else.
 - Backtick component names, props, values, HTML elements, attributes, files, and CSS classes.
 - Use one concise sentence between an example heading and its preview. State what it demonstrates and how to use it.
 - Follow a set of variants or enum values with a compact value-to-description table.

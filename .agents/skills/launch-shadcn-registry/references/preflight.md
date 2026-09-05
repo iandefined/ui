@@ -67,8 +67,8 @@ If including `logo` in the official entry:
 
 For registry.directory, prefer including:
 
-- `github_url` — source or registry repo
-- `github_profile` — `https://github.com/{username}.png`
+- `github_url`: source or registry repo
+- `github_profile`: `https://github.com/{username}.png`
 
 ## Blockers (do not proceed)
 

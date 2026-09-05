@@ -140,18 +140,6 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
           ) : null}
           {sourceFiles.length > 0 ? (
             <div className="space-y-4 text-sm">
-              <p className="font-medium">
-                Copy the source files to these consumer paths:
-              </p>
-              <ul className="space-y-1">
-                {sourceFiles.map((file) => (
-                  <li key={file.path} className="flex flex-wrap gap-x-2">
-                    <code>{file.path}</code>
-                    <span aria-hidden="true">→</span>
-                    <code>{file.target ?? file.path}</code>
-                  </li>
-                ))}
-              </ul>
               {sourceFiles.map((file) => (
                 <ComponentSource
                   key={file.path}
@@ -163,21 +151,6 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
           ) : null}
           {styleFiles.length > 0 ? (
             <div className="space-y-4 text-sm">
-              <div className="space-y-2">
-                <p className="font-medium">
-                  Copy and import the stylesheet
-                  {styleFiles.length > 1 ? "s" : ""}:
-                </p>
-                <ul className="space-y-1">
-                  {styleFiles.map((file) => (
-                    <li key={file.path} className="flex flex-wrap gap-x-2">
-                      <code>{file.path}</code>
-                      <span aria-hidden="true">→</span>
-                      <code>{file.target ?? file.path}</code>
-                    </li>
-                  ))}
-                </ul>
-              </div>
               {styleFiles.map((file) => (
                 <ComponentSource
                   key={file.path}
@@ -186,13 +159,18 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
                   title={file.target ?? file.path}
                 />
               ))}
-              <ComponentSource
-                code={styleFiles
-                  .map((file) => cssImport(file.target ?? file.path))
-                  .join("\n")}
-                language="css"
-                collapsible={false}
-              />
+              <div className="space-y-2">
+                <p className="font-medium">
+                  Import the stylesheet{styleFiles.length > 1 ? "s" : ""}:
+                </p>
+                <ComponentSource
+                  code={styleFiles
+                    .map((file) => cssImport(file.target ?? file.path))
+                    .join("\n")}
+                  language="css"
+                  collapsible={false}
+                />
+              </div>
             </div>
           ) : null}
           <ThemeVariables

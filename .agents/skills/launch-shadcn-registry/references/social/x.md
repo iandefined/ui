@@ -5,7 +5,7 @@
 ## Single post template
 
 ```
-Launched {scope} — {description}
+Launched {scope}: {description}
 
 Install: {installExample}
 
@@ -18,7 +18,7 @@ Keep under 280 characters. Drop the install line if too long; put it in a reply.
 
 **Post 1 (hook):**
 ```
-Shipped {name} — a shadcn/ui registry for {specific use case}.
+Shipped {name}, a shadcn/ui registry for {specific use case}.
 
 Copy-paste components via the CLI. No npm lock-in.
 
@@ -42,10 +42,10 @@ Install:
 
 {installExample}
 
-→ {homepage}
-→ {githubUrl}
+Homepage: {homepage}
+Source: {githubUrl}
 
-Feedback welcome — what should I add next?
+Feedback welcome: what should I add next?
 ```
 
 ## Optional additions

@@ -16,7 +16,7 @@ Default to **UI Libs** for shadcn registries.
 ## Row format
 
 ```markdown
-| Display Name | <description — one sentence> | <homepage> |
+| Display Name | <description (one sentence)> | <homepage> |
 ```
 
 No date column. Link is a plain URL, not markdown.

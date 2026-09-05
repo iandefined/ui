@@ -276,6 +276,10 @@ for (const doc of docs) {
     report(doc.file, "contains an em dash outside a code fence");
   }
 
+  if (authoredContent.includes("→")) {
+    report(doc.file, "contains an arrow (→) outside a code fence");
+  }
+
   for (const match of authoredContent.matchAll(
     /<ComponentInstall\b([^>]*)\/>/g
   )) {

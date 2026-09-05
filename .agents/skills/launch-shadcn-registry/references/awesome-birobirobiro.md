@@ -8,12 +8,12 @@
 
 For registries, add to the **Registries** section table (not Libs and Components).
 
-If the resource is broader than a registry, use **Libs and Components** or **Tools** — confirm with user.
+If the resource is broader than a registry, use **Libs and Components** or **Tools** (confirm with user).
 
 ## Row format
 
 ```markdown
-| scope-slug | <descriptionLong — one sentence, factual> | [Link](<homepage>) | <ISO-8601 UTC timestamp> |
+| scope-slug | <descriptionLong (one sentence, factual)> | [Link](<homepage>) | <ISO-8601 UTC timestamp> |
 ```
 
 ### Example

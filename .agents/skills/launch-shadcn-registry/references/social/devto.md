@@ -25,11 +25,11 @@ published: false
 tags: react, tailwindcss, opensource, webdev
 ---
 
-I needed {specific problem} in my React projects. Existing options didn't fit shadcn's copy-paste model, so I built **{name}** — a shadcn-compatible registry for {use case}.
+I needed {specific problem} in my React projects. Existing options didn't fit shadcn's copy-paste model, so I built **{name}**, a shadcn-compatible registry for {use case}.
 
 ## What it is
 
-{name} ({homepage}) distributes {component summary} through the shadcn CLI. Components land in your codebase — no opaque npm dependency.
+{name} ({homepage}) distributes {component summary} through the shadcn CLI. Components land in your codebase with no opaque npm dependency.
 
 ## Quick start
 
@@ -43,9 +43,9 @@ Browse all components at {homepage}.
 
 ## What's included
 
-- **{Component A}** — {one line}
-- **{Component B}** — {one line}
-- **{Component C}** — {one line}
+- **{Component A}**: {one line}
+- **{Component B}**: {one line}
+- **{Component C}**: {one line}
 
 ## How registries work (brief)
 
@@ -59,7 +59,7 @@ shadcn registries expose a `registry.json` index and per-component JSON files. T
 
 Source: {githubUrl}
 
-If you try it, I'd love issues or PRs — especially for {specific request, e.g. more templates, dark mode variants, docs}.
+If you try it, I'd love issues or PRs, especially for {specific request, e.g. more templates, dark mode variants, docs}.
 ```
 
 ## Tone

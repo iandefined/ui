@@ -20,7 +20,7 @@
   "installExample": "npx shadcn@latest add @ogimagecn/simple",
   "sampleComponents": ["simple"],
   "features": [
-    "shadcn CLI install — components live in your repo",
+    "shadcn CLI install: components live in your repo",
     "Customizable OG image templates",
     "Built for React and Next.js metadata APIs"
   ]

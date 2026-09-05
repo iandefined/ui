@@ -26,7 +26,7 @@ When an interaction changes both an icon and text, derive both from the same sta
 
 ## Reset After Inactivity
 
-For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
+For temporary confirmation states such as Copy to Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
 
 ## API Reference
 

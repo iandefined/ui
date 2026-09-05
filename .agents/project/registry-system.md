@@ -68,8 +68,8 @@ Because block code is authored to be consumer-portable, companion components imp
 
 ### 4. Category Title and Navigation (`src/shared/lib/blocks.ts`)
 - Block entries are automatically aggregated from `registry.json` by `registryBlocks`.
-- By default, category names are converted to titles using `toTitle()` (e.g. `sidebar` -> `Sidebar`).
-- If a category needs custom display text or capitalization (e.g. `auth` -> `Authentication`), add it to the `categoryTitles` dictionary in `src/shared/lib/blocks.ts`.
+- By default, category names are converted to titles using `toTitle()` (e.g. `sidebar` to `Sidebar`).
+- If a category needs custom display text or capitalization (e.g. `auth` to `Authentication`), add it to the `categoryTitles` dictionary in `src/shared/lib/blocks.ts`.
 
 ### 5. In-App Preview Registration (`src/shared/lib/registry.ts`)
 - Import the block's `page.tsx` default export into `src/shared/lib/registry.ts`.

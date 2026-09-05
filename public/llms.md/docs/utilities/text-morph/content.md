@@ -36,7 +36,7 @@ Use `autoSize={false}` only when the text lives in an intentionally fixed-width 
 
 When a status changes both an icon and its label, drive both from the same state. Use `TextMorph` for the label and [Icon Swap](/docs/utilities/icon-swap) for the icon. Do not recreate the underlying Motion presence or transition code in the consumer.
 
-The preview at the top demonstrates the complete sequence: `Fetch` → `Fetching` → `Data Fetched` → `Fetch`. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
+The preview at the top demonstrates the complete sequence: `Fetch`, then `Fetching`, then `Data Fetched`, and back to `Fetch`. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
 
 ## Examples
 

@@ -3910,7 +3910,7 @@ When an interaction changes both an icon and text, derive both from the same sta
 
 ## Reset After Inactivity
 
-For temporary confirmation states such as Copy → Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
+For temporary confirmation states such as Copy to Copied, restart the reset timer on every successful click. Clear the previous timer before scheduling the next one so repeated clicks keep the confirmation icon visible until the full delay has elapsed after the last click. Also clear the timer when the component unmounts. The preview above demonstrates this behavior.
 
 ## API Reference
 
@@ -3959,7 +3959,7 @@ Use `autoSize={false}` only when the text lives in an intentionally fixed-width 
 
 When a status changes both an icon and its label, drive both from the same state. Use `TextMorph` for the label and [Icon Swap](/docs/utilities/icon-swap) for the icon. Do not recreate the underlying Motion presence or transition code in the consumer.
 
-The preview at the top demonstrates the complete sequence: `Fetch` → `Fetching` → `Data Fetched` → `Fetch`. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
+The preview at the top demonstrates the complete sequence: `Fetch`, then `Fetching`, then `Data Fetched`, and back to `Fetch`. Its icon stays present throughout, swapping from a Lucide download icon to the registry `Spinner`, then to a check icon, and finally back to download.
 
 ## Examples
 

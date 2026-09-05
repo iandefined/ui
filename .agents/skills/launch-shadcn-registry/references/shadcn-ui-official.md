@@ -56,16 +56,16 @@ Adds `@scope` to the community registry directory.
 ## Review expectations
 
 - Maintainer approval required (typically @shadcn)
-- PR is small — one JSON object
+- PR is small: one JSON object
 - Vercel deploy preview may require team authorization on first contribution
 - Response time varies; follow up politely after 3–5 business days
 
 ## Mapping from registry profile
 
 ```
-name        ← profile.scope
-homepage    ← profile.homepage
-url         ← profile.componentUrlPattern
-description ← profile.description
-logo        ← profile.logo (if present)
+name:        profile.scope
+homepage:    profile.homepage
+url:         profile.componentUrlPattern
+description: profile.description
+logo:        profile.logo (if present)
 ```

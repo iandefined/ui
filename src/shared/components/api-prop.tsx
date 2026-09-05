@@ -24,7 +24,7 @@ export function ApiProp({
   children,
 }: ApiPropProps) {
   const displayedType = simpleType ?? fullType;
-  const displayedDefault = defaultValue ?? "—";
+  const displayedDefault = defaultValue ?? "-";
 
   return (
     <Collapsible.Root className="border-b last:border-b-0">

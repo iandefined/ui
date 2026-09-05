@@ -57,7 +57,7 @@ It must derive, from the bundled `registry.json` manifest and build-time source 
 
 - npm, pnpm, yarn, and Bun CLI commands using the persisted package-manager preference;
 - npm dependencies and registry dependencies;
-- source files with their consumer targets;
+- source files displayed directly in code blocks with their consumer targets as titles, without redundant path mapping lists or arrow indicators;
 - the `cn` prerequisite only when installable source imports it;
 - portable stylesheet copy/import instructions and relevant theme configuration; and
 - an actionable unknown-item failure, enforced by `docs:check`.

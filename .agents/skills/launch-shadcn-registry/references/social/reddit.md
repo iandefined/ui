@@ -1,4 +1,4 @@
-# Reddit — r/shadcn
+# Reddit: r/shadcn
 
 **Subreddit:** https://www.reddit.com/r/shadcn/  
 **Posting:** Manual only. Draft for the user to paste.
@@ -15,7 +15,7 @@
 Pick one:
 
 ```
-Showcase: {scope} — {one-line value from description}
+Showcase: {scope} - {one-line value from description}
 ```
 
 ```
@@ -29,7 +29,7 @@ New shadcn registry: {scope} for {specific use case}
 ## Body template
 
 ```markdown
-Hey r/shadcn — I put together a registry for {specific use case}.
+Hey r/shadcn, I put together a registry for {specific use case}.
 
 **{name}** ({homepage}) is a shadcn-compatible registry with {brief component summary}.
 
