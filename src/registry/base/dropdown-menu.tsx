@@ -12,8 +12,6 @@ type DropdownMenuAnimationPreset =
   | "fade"
   | "slideOutside"
   | "slideInside"
-  | "wipe"
-  | "wipeScale"
   | "motion"
   | "motionBlur";
 
@@ -38,14 +36,14 @@ const animationPresets: Record<DropdownMenuAnimationPreset, string> = {
     "[transition-property:translate,opacity] [will-change:translate,opacity] data-[side=bottom]:data-starting-style:translate-y-[10px] data-[side=bottom]:data-starting-style:opacity-0 data-[side=bottom]:data-ending-style:translate-y-[10px] data-[side=bottom]:data-ending-style:opacity-0 data-[side=top]:data-starting-style:translate-y-[-10px] data-[side=top]:data-starting-style:opacity-0 data-[side=top]:data-ending-style:translate-y-[-10px] data-[side=top]:data-ending-style:opacity-0 data-[side=left]:data-starting-style:translate-x-[-10px] data-[side=left]:data-starting-style:opacity-0 data-[side=left]:data-ending-style:translate-x-[-10px] data-[side=left]:data-ending-style:opacity-0 data-[side=right]:data-starting-style:translate-x-[10px] data-[side=right]:data-starting-style:opacity-0 data-[side=right]:data-ending-style:translate-x-[10px] data-[side=right]:data-ending-style:opacity-0",
   slideInside:
     "[transition-property:translate,opacity] [will-change:translate,opacity] data-[side=bottom]:data-starting-style:translate-y-[-10px] data-[side=bottom]:data-starting-style:opacity-0 data-[side=bottom]:data-ending-style:translate-y-[-10px] data-[side=bottom]:data-ending-style:opacity-0 data-[side=top]:data-starting-style:translate-y-[10px] data-[side=top]:data-starting-style:opacity-0 data-[side=top]:data-ending-style:translate-y-[10px] data-[side=top]:data-ending-style:opacity-0 data-[side=left]:data-starting-style:translate-x-[10px] data-[side=left]:data-starting-style:opacity-0 data-[side=left]:data-ending-style:translate-x-[10px] data-[side=left]:data-ending-style:opacity-0 data-[side=right]:data-starting-style:translate-x-[-10px] data-[side=right]:data-starting-style:opacity-0 data-[side=right]:data-ending-style:translate-x-[-10px] data-[side=right]:data-ending-style:opacity-0",
-  wipe: "[transition-property:clip-path] [will-change:clip-path] [clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] [-webkit-clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] data-[side=bottom]:data-starting-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=top]:data-starting-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=left]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=right]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]",
-  wipeScale:
-    "[transition-property:clip-path,scale] [will-change:clip-path,scale] [clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] [-webkit-clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] data-starting-style:scale-80 data-ending-style:scale-80 data-[side=bottom]:data-starting-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=top]:data-starting-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=left]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=right]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]",
   motion:
     "[transition-property:translate,scale,opacity,rotateX,rotateY,transform] [will-change:translate,scale,opacity,rotateX,rotateY,transform] motion-reduce:transition-none motion-reduce:transform-none [transform:perspective(1000px)] data-[side=bottom]:data-starting-style:translate-y-[7px] data-[side=bottom]:data-starting-style:opacity-0 data-[side=bottom]:data-starting-style:scale-[0.26] data-[side=bottom]:data-starting-style:rotate-x-[70deg] data-[side=bottom]:data-ending-style:translate-y-[7px] data-[side=bottom]:data-ending-style:opacity-0 data-[side=bottom]:data-ending-style:scale-[0.26] data-[side=bottom]:data-ending-style:rotate-x-[70deg]",
   motionBlur:
     "[transition-property:translate,scale,opacity,rotateX,rotateY,transform,filter] [will-change:translate,scale,opacity,rotateX,rotateY,transform,filter] motion-reduce:transition-none motion-reduce:transform-none motion-reduce:filter-none [transform:perspective(1000px)] data-starting-style:blur-[9px] data-ending-style:blur-[9px] data-[side=bottom]:data-starting-style:translate-y-[7px] data-[side=bottom]:data-starting-style:opacity-0 data-[side=bottom]:data-starting-style:scale-[0.26] data-[side=bottom]:data-starting-style:rotate-x-[70deg] data-[side=bottom]:data-ending-style:translate-y-[7px] data-[side=bottom]:data-ending-style:opacity-0 data-[side=bottom]:data-ending-style:scale-[0.26] data-[side=bottom]:data-ending-style:rotate-x-[70deg]",
 };
+
+const motionReduceClasses =
+  "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:[translate:none] motion-reduce:[scale:1] motion-reduce:[rotate:none] motion-reduce:filter-none";
 
 const transitionPresets: Record<DropdownMenuTransitionPreset, string> = {
   inExpo: "duration-[0.35s] ease-[cubic-bezier(0.95,0.05,0.795,0.035)]",
@@ -181,8 +179,6 @@ function DropdownMenuContent({
       | "fade"
       | "slideOutside"
       | "slideInside"
-      | "wipe"
-      | "wipeScale"
       | "motion"
       | "motionBlur";
     transitionPreset?:
@@ -199,7 +195,12 @@ function DropdownMenuContent({
   }) {
   const animation = useMemo(
     () =>
-      reduceMotion ? animationPresets.none : animationPresets[animationPreset],
+      cn(
+        reduceMotion
+          ? animationPresets.none
+          : animationPresets[animationPreset],
+        motionReduceClasses
+      ),
     [animationPreset, reduceMotion]
   );
   const transition = useMemo(

@@ -96,11 +96,10 @@ When animating container width or height due to dynamic content:
 3. **Invariant**: Never measure and animate the same element; doing so creates an infinite layout feedback loop.
 4. **Zero Guard**: Use the natural `auto` dimension until a positive initial measurement exists to avoid layout flash.
 
-### [HARD REQUIREMENT] Overlay Wipe Animations Inset Bleed
-For overlay wipe animations built with `clip-path: inset(...)` (Select, DropdownMenu, Popover, Tooltip):
-- Non-collapsing resting edges must use a `-2px` negative bleed inset (`inset(-2px -2px calc(100% + 2px) -2px round 12px)`).
-- This prevents box-shadows, glow filters, and rounded borders from being prematurely clipped during open/close sequences.
-- Compensate the collapsing edge to `calc(100% + 2px)` so the popup fully closes at zero height.
+### [HARD REQUIREMENT] No Overlay Wipe Animations
+- Do not add `wipe`, `wipeScale`, or another reveal that animates `clip-path` on overlays. These effects are visually undesirable and perform poorly on the registry's layered surfaces.
+- Choose only motion that fits the surface: transform and opacity presets for anchored popups, directional transforms for edge panels, and Base UI's gesture-driven transforms for drawers.
+- Static clipping remains acceptable when layout requires it, but it must not be used as an overlay enter or exit animation.
 
 ---
 
@@ -126,9 +125,9 @@ For overlay wipe animations built with `clip-path: inset(...)` (Select, Dropdown
 ## 5. Performance and Rendering
 
 ### [HARD REQUIREMENT] Transform and GPU Acceleration
-- Composite animations using GPU-friendly properties: `transform`, `opacity`, and `clip-path`.
+- Composite animations using GPU-friendly `transform` and `opacity` properties.
 - Apply `transform-gpu` and `will-change-transform` to animated overlay triggers and popup content.
-- Avoid animating layout-triggering properties (`width`, `height`, `top`, `left`, `margin`, `padding`) unless using the measured-bounds clip-path pattern.
+- Avoid animating layout-triggering properties (`width`, `height`, `top`, `left`, `margin`, `padding`) unless the measured-bounds pattern is necessary for content-driven sizing.
 
 ---
 

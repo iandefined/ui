@@ -135,29 +135,9 @@ Control the selection with `value` and `onValueChange` when application state ow
 
 ## Popup Animation
 
-Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup animation.
+Set `animationPreset` on `SelectPopup`. This gallery uses each preset's exact prop value as its trigger label. Set `reduceMotion` to disable popup animation.
 
-### Scale
-
-`scale` is the default preset.
-
-<ComponentPreview name="select/animation-scale" />
-
-### Wipe
-
-<ComponentPreview name="select/animation-wipe" />
-
-### Wipe Scale
-
-<ComponentPreview name="select/animation-wipe-scale" />
-
-### Motion
-
-<ComponentPreview name="select/animation-motion" />
-
-### Motion Blur
-
-<ComponentPreview name="select/animation-motion-blur" />
+<ComponentPreview name="select/animation" />
 
 ## API Reference
 
@@ -183,7 +163,7 @@ Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup anim
 <ApiPropsList>
   <ApiProp
     name="animationPreset"
-    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "wipe" | "wipeScale" | "motion" | "motionBlur"'
+    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "motion" | "motionBlur"'
     simpleType="string"
     defaultValue='"scale"'
   >

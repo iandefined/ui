@@ -1254,7 +1254,7 @@ Open application state from an item's `onClick` handler.
 
 ### Popup Animations
 
-Choose an animation preset for the menu content.
+Choose an `animationPreset` on `DropdownMenuContent`. This gallery uses each preset's exact prop value as its trigger label.
 
 ## Accessibility
 
@@ -2002,6 +2002,10 @@ Pass `backdrop` to `Popover` to choose how the page appears while the popover is
 
 Use the `render` prop to compose a custom trigger. This example also uses `openOnHover` to open the popover when the trigger is hovered.
 
+### Popup Animations
+
+Choose an `animationPreset` on `PopoverPopup`. This gallery uses each preset's exact prop value as its trigger label.
+
 ## API Reference
 
 `Popover` and its parts wrap the corresponding [Base UI Popover primitives](https://base-ui.com/react/components/popover). Supported Base UI props pass through.
@@ -2286,19 +2290,7 @@ Control the selection with `value` and `onValueChange` when application state ow
 
 ## Popup Animation
 
-Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup animation.
-
-### Scale
-
-`scale` is the default preset.
-
-### Wipe
-
-### Wipe Scale
-
-### Motion
-
-### Motion Blur
+Set `animationPreset` on `SelectPopup`. This gallery uses each preset's exact prop value as its trigger label. Set `reduceMotion` to disable popup animation.
 
 ## API Reference
 
@@ -2764,7 +2756,7 @@ To animate a tooltip as it moves between triggers, create one shared handle and 
 
 ## Popup Animation
 
-Set `animationPreset` on `TooltipPopup`. Pure UI supports `scale`, `fade`, `slideOutside`, `slideInside`, `wipe`, `wipeScale`, `motion`, and `motionBlur`; `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
+Set `animationPreset` on `TooltipPopup`. The gallery uses each preset's exact prop value as its trigger label. `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 ## API Reference
 

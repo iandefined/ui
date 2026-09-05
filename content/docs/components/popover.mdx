@@ -131,6 +131,12 @@ Use the `render` prop to compose a custom trigger. This example also uses `openO
 
 <ComponentPreview name="popover/custom-trigger" />
 
+### Popup Animations
+
+Choose an `animationPreset` on `PopoverPopup`. This gallery uses each preset's exact prop value as its trigger label.
+
+<ComponentPreview name="popover/animation" />
+
 ## API Reference
 
 `Popover` and its parts wrap the corresponding [Base UI Popover primitives](https://base-ui.com/react/components/popover). Supported Base UI props pass through.
@@ -142,7 +148,7 @@ Use the `render` prop to compose a custom trigger. This example also uses `openO
 <ApiPropsList>
   <ApiProp
     name="animationPreset"
-    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "wipe" | "wipeScale" | "motion" | "motionBlur"'
+    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "motion" | "motionBlur"'
     simpleType="string"
     defaultValue='"scale"'
   >

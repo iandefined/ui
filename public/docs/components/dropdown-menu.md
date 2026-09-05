@@ -84,7 +84,7 @@ Open application state from an item's `onClick` handler.
 
 ### Popup Animations
 
-Choose an animation preset for the menu content.
+Choose an `animationPreset` on `DropdownMenuContent`. This gallery uses each preset's exact prop value as its trigger label.
 
 ## Accessibility
 

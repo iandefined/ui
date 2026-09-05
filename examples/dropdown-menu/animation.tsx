@@ -12,11 +12,20 @@ import {
   DropdownMenuTrigger,
 } from "@/registry/base/dropdown-menu";
 
-type AnimationPreset = ComponentProps<
-  typeof DropdownMenuContent
->["animationPreset"];
+const presets = [
+  "scale",
+  "fade",
+  "slideOutside",
+  "slideInside",
+  "motion",
+  "motionBlur",
+] as const satisfies readonly NonNullable<
+  ComponentProps<typeof DropdownMenuContent>["animationPreset"]
+>[];
 
-export function AnimationMenu({
+type AnimationPreset = (typeof presets)[number];
+
+function AnimationMenu({
   animationPreset,
 }: {
   animationPreset: AnimationPreset;
@@ -24,15 +33,13 @@ export function AnimationMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button className="active:scale-100" size="sm" variant="ghost" />
-        }
+        render={<Button className="w-full" size="sm" variant="outline" />}
       >
-        Song
+        {animationPreset}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         animationPreset={animationPreset}
-        className="w-44"
+        className="w-52"
         sideOffset={8}
       >
         <DropdownMenuItem>Add to Library</DropdownMenuItem>
@@ -50,5 +57,15 @@ export function AnimationMenu({
         <DropdownMenuItem>Favorite</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export default function DropdownMenuAnimationDemo() {
+  return (
+    <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3">
+      {presets.map((preset) => (
+        <AnimationMenu key={preset} animationPreset={preset} />
+      ))}
+    </div>
   );
 }

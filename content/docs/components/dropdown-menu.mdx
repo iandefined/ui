@@ -103,15 +103,9 @@ Open application state from an item's `onClick` handler.
 
 ### Popup Animations
 
-Choose an animation preset for the menu content.
+Choose an `animationPreset` on `DropdownMenuContent`. This gallery uses each preset's exact prop value as its trigger label.
 
-<ComponentPreview name="dropdown-menu/animation-scale" />
-<ComponentPreview name="dropdown-menu/animation-wipe" />
-<ComponentPreview name="dropdown-menu/animation-wipe-scale" />
-<ComponentPreview name="dropdown-menu/animation-motion" />
-<ComponentPreview name="dropdown-menu/animation-motion-blur" />
-<ComponentPreview name="dropdown-menu/animation-slide-outside" />
-<ComponentPreview name="dropdown-menu/animation-slide-inside" />
+<ComponentPreview name="dropdown-menu/animation" />
 
 ## Accessibility
 
@@ -126,7 +120,7 @@ Use clear item labels. Give an icon-only trigger an `aria-label`, and keep destr
 <ApiPropsList>
   <ApiProp
     name="animationPreset"
-    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "wipe" | "wipeScale" | "motion" | "motionBlur"'
+    fullType='"none" | "scale" | "fade" | "slideOutside" | "slideInside" | "motion" | "motionBlur"'
     simpleType="string"
     defaultValue='"scale"'
   >

@@ -48,39 +48,6 @@ const cssAnimationPresets = {
     // side=inline-end
     `data-[side=inline-end]:data-starting-style:opacity-0 data-[side=inline-end]:data-starting-style:translate-x-[-10px] data-[side=inline-end]:data-ending-style:translate-x-[-10px] data-[side=inline-end]:data-ending-style:opacity-0`,
   ],
-  wipe: [
-    `[transition-property:clip-path] [will-change:clip-path]`,
-    `[clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] [-webkit-clip-path:inset(-2px_-2px_-2px_-2px_round_12px)]`,
-    // side=bottom
-    `data-[side=bottom]:data-starting-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)]`,
-    // side=top
-    `data-[side=top]:data-starting-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)]`,
-    // side=left
-    `data-[side=left]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
-    // side=right
-    `data-[side=right]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
-    // side=inline-start
-    `data-[side=inline-start]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=inline-start]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
-    // side=inline-end
-    `data-[side=inline-end]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
-  ],
-  wipeScale: [
-    `[transition-property:clip-path,scale] [will-change:clip-path,scale]`,
-    `[clip-path:inset(-2px_-2px_-2px_-2px_round_12px)] [-webkit-clip-path:inset(-2px_-2px_-2px_-2px_round_12px)]`,
-    `data-starting-style:scale-80 data-ending-style:scale-80`,
-    // side=bottom
-    `data-[side=bottom]:data-starting-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)] data-[side=bottom]:data-ending-style:[clip-path:inset(-2px_-2px_calc(100%_+_2px)_-2px_round_12px)]`,
-    // side=top
-    `data-[side=top]:data-starting-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)] data-[side=top]:data-ending-style:[clip-path:inset(calc(100%_+_2px)_-2px_-2px_-2px_round_12px)]`,
-    // side=left
-    `data-[side=left]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=left]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
-    // side=right
-    `data-[side=right]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=right]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
-    // side=inline-start
-    `data-[side=inline-start]:data-starting-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)] data-[side=inline-start]:data-ending-style:[clip-path:inset(-2px_-2px_-2px_calc(100%_+_2px)_round_12px)]`,
-    // side=inline-end
-    `data-[side=inline-end]:data-starting-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)] data-[side=inline-end]:data-ending-style:[clip-path:inset(-2px_calc(100%_+_2px)_-2px_-2px_round_12px)]`,
-  ],
   motion: [
     `[transition-property:translate,scale,opacity,rotateX,rotateY,transform] [will-change:translate,scale,opacity,rotateX,rotateY,transform] motion-reduce:transition-none motion-reduce:transform-none`,
     `[transform:perspective(1000px)]`,
@@ -115,6 +82,9 @@ const cssAnimationPresets = {
     `data-[side=inline-end]:data-starting-style:translate-x-[7px] data-[side=inline-end]:data-starting-style:opacity-0 data-[side=inline-end]:data-starting-style:scale-[0.26] data-[side=inline-end]:data-starting-style:rotate-y-[40deg] data-[side=inline-end]:data-ending-style:translate-x-[7px] data-[side=inline-end]:data-ending-style:opacity-0 data-[side=inline-end]:data-ending-style:scale-[0.26] data-[side=inline-end]:data-ending-style:rotate-y-[40deg]`,
   ],
 };
+
+const motionReduceClasses =
+  "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:[translate:none] motion-reduce:[scale:1] motion-reduce:[rotate:none] motion-reduce:filter-none";
 
 const cssTransitionPresets = {
   inExpo: `duration-[0.35s] ease-[cubic-bezier(0.95,0.05,0.795,0.035)]`,
@@ -376,8 +346,6 @@ interface SelectPopupProps
     | "fade"
     | "slideOutside"
     | "slideInside"
-    | "wipe"
-    | "wipeScale"
     | "motion"
     | "motionBlur";
   transitionPreset?:
@@ -432,10 +400,10 @@ function SelectPopup({
     if (reduceMotion) return "";
 
     if (animationPreset) {
-      return cssAnimationPresets[animationPreset];
+      return cn(cssAnimationPresets[animationPreset], motionReduceClasses);
     }
 
-    return cssAnimationPresets.scale;
+    return cn(cssAnimationPresets.scale, motionReduceClasses);
   }, [animationPreset, reduceMotion]);
 
   const cssTransitionConfig = useMemo(() => {

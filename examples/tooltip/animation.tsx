@@ -1,3 +1,5 @@
+import type { ComponentProps } from "react";
+
 import { Button } from "@/registry/base/button";
 import {
   Tooltip,
@@ -11,11 +13,11 @@ const presets = [
   "fade",
   "slideOutside",
   "slideInside",
-  "wipe",
-  "wipeScale",
   "motion",
   "motionBlur",
-] as const;
+] as const satisfies readonly NonNullable<
+  ComponentProps<typeof TooltipPopup>["animationPreset"]
+>[];
 
 const animationTooltip = Tooltip.createHandle<(typeof presets)[number]>();
 

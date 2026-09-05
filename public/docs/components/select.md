@@ -114,19 +114,7 @@ Control the selection with `value` and `onValueChange` when application state ow
 
 ## Popup Animation
 
-Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup animation.
-
-### Scale
-
-`scale` is the default preset.
-
-### Wipe
-
-### Wipe Scale
-
-### Motion
-
-### Motion Blur
+Set `animationPreset` on `SelectPopup`. This gallery uses each preset's exact prop value as its trigger label. Set `reduceMotion` to disable popup animation.
 
 ## API Reference
 

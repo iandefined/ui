@@ -40,6 +40,14 @@ Keep the catalog flat: component pages remain at `/docs/components/<slug>`. Do n
 - Keep Accessibility sections specific: consumer labeling, keyboard behavior, state communication, or focus requirements. Do not claim that a component is generically "accessible." Interface rules belong to [interface-and-interaction.md](interface-and-interaction.md).
 - End every component page with an API Reference. When a wrapper owns no props, document its upstream mapping without reproducing the pass-through API.
 
+### Animation Preset Galleries
+
+- When a component exposes `animationPreset`, showcase all animated preset values in one reusable `examples/<component>/animation.tsx` file and one `<ComponentPreview name="<component>/animation" />`. Do not create a separate documentation preview for each preset.
+- Render the preset triggers together in a responsive grid. The visible button label must be the exact string literal passed to `animationPreset`, including camelCase such as `slideOutside` or `motionBlur`; do not replace it with a prettified label.
+- Define the values once in a readonly preset array and derive the example typing from the component's public `animationPreset` prop so the gallery fails typechecking when the API changes.
+- Prefer one shared primitive handle and payload-driven popup when the primitive supports it. Otherwise render one isolated root per trigger inside the same preview so open state and focus behavior remain correct.
+- Include every preset that produces animation. Keep `none` documented in the API as the explicit opt-out, but omit it from the animation gallery.
+
 ## Concept Guides
 
 Concept pages are freeform, but lead with a plain-language mental model and the common path before deep reference. Use headings and examples to give readers an early exit, then progressively disclose exhaustive detail.

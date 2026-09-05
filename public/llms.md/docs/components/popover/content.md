@@ -106,6 +106,10 @@ Pass `backdrop` to `Popover` to choose how the page appears while the popover is
 
 Use the `render` prop to compose a custom trigger. This example also uses `openOnHover` to open the popover when the trigger is hovered.
 
+### Popup Animations
+
+Choose an `animationPreset` on `PopoverPopup`. This gallery uses each preset's exact prop value as its trigger label.
+
 ## API Reference
 
 `Popover` and its parts wrap the corresponding [Base UI Popover primitives](https://base-ui.com/react/components/popover). Supported Base UI props pass through.
