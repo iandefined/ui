@@ -1,0 +1,317 @@
+---
+title: Toast
+description: Displays brief, self-dismissing feedback without blocking the page.
+---
+
+import { AnchoredToastProvider, ToastProvider } from "@/registry/base/toast";
+
+<ToastProvider>
+<AnchoredToastProvider>
+
+Use `Toast` for transient feedback such as a saved change, a completed upload, or a recoverable error. Use `Dialog` or `AlertDialog` when the user must make a decision before continuing.
+
+## Preview
+
+<ComponentPreview name="toast/default" />
+
+## Installation
+
+<ComponentInstall name="toast" />
+
+## Usage
+
+Wrap the part of your app that can create notifications with `ToastProvider`, then call `toast()` from an event handler or another client-side function.
+
+```tsx
+import { ToastProvider, toast } from "@/components/ui/toast";
+
+function App() {
+  return (
+    <ToastProvider>
+      <Page />
+    </ToastProvider>
+  );
+}
+
+function SaveButton() {
+  return (
+    <button type="button" onClick={() => toast({ title: "Changes saved" })}>
+      Save
+    </button>
+  );
+}
+```
+
+`toast()` accepts an options object or JSX content for custom notification layouts. Add `AnchoredToastProvider` only when the app uses `toast.anchored()`.
+
+```tsx
+import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
+
+function App() {
+  return (
+    <ToastProvider>
+      <AnchoredToastProvider>
+        <Page />
+      </AnchoredToastProvider>
+    </ToastProvider>
+  );
+}
+```
+
+## Composition
+
+`ToastProvider` renders the viewport stack and owns its default position. `AnchoredToastProvider` renders element-relative toasts created with `toast.anchored()`. Use the second provider only when contextual, anchor-relative feedback is part of the app.
+
+```tsx
+<ToastProvider>
+  <AnchoredToastProvider>
+    <App />
+  </AnchoredToastProvider>
+</ToastProvider>
+```
+
+## Features
+
+- Six built-in types: `default`, `loading`, `success`, `error`, `warning`, and `info`.
+- Fixed `id` values deduplicate repeated notifications by updating the existing toast.
+- `toast.promise()` keeps asynchronous loading, success, and error states in one toast.
+- Base UI measures variable-height content so the stack can reposition itself as descriptions and actions change.
+- This phase does not include `toast.grouped()` or `toast.groupedPromise()`, and it does not reuse the app-only Sonner wrapper.
+
+## Examples
+
+### Types
+
+Use `type` or a type-specific helper to communicate the result of an operation.
+
+<ComponentPreview name="toast/types" />
+
+| Value     | Use                                               |
+| --------- | ------------------------------------------------- |
+| `default` | Neutral feedback without a status treatment.      |
+| `loading` | Work that is still in progress.                   |
+| `success` | A completed operation.                            |
+| `error`   | A failed operation.                               |
+| `warning` | A risk or caution that does not block the page.   |
+| `info`    | Neutral information that is useful in the moment. |
+
+### With Action
+
+Pass an `action` with a visible label and callback for a reversible follow-up such as undo. Use `render` to compose the action with any button component and retain its styling API.
+
+<ComponentPreview name="toast/action" />
+
+### Deduplication and Update
+
+Pass the same fixed `id` to update a toast in place instead of stacking a duplicate. The returned ID can also be passed to `toast.update()` and `toast.dismiss()`.
+
+<ComponentPreview name="toast/deduplication" />
+
+### Promise
+
+Use `toast.promise()` for an operation with loading, success, and error messages. It updates the same notification as the promise settles.
+
+<ComponentPreview name="toast/promise" />
+
+```tsx
+toast.promise(saveChanges(), {
+  loading: { title: "Saving changes" },
+  success: { title: "Changes saved" },
+  error: { title: "Could not save changes" },
+});
+```
+
+### Anchored Toast
+
+Use `toast.anchored()` for contextual feedback near the control that caused it. The anchor can be missing or disconnected; the provider keeps the notification safe to dismiss in that case.
+
+<ComponentPreview name="toast/anchored" />
+
+```tsx
+toast.anchored({
+  title: "Copied",
+  anchor: buttonRef.current,
+  side: "top",
+  sideOffset: 8,
+  arrow: true,
+});
+```
+
+### Varying Heights
+
+Toasts measure their content and adjust the stack when titles, descriptions, or actions have different heights.
+
+<ComponentPreview name="toast/varying-heights" />
+
+## Accessibility
+
+Use `priority="low"` for ordinary feedback so screen readers announce it politely without interrupting the current task. Reserve `priority="high"` for urgent failures that need immediate attention.
+
+Actions and close controls remain separate, keyboard-accessible controls. Give action labels enough context to describe the result, such as `Undo upload`, and keep `showCloseButton` enabled when users need a manual dismissal option.
+
+## API Reference
+
+`Toast` wraps the corresponding [Base UI Toast primitives](https://base-ui.com/react/components/toast), including the provider, portal, viewport, root, content, title, description, action, close, positioner, and arrow parts. Supported Base UI props pass through. The reference below covers the registry-owned options and helpers.
+
+### Props
+
+#### `toast()`
+
+`toast()` displays a notification and returns its ID. It accepts object-based options, JSX content for custom layouts, and JSX-friendly React content in `title` and `description`.
+
+<ApiPropsList>
+  <ApiProp name="id" fullType="string">
+    Sets a stable ID for the toast. Reusing the ID updates the existing toast in
+    place and refreshes its dismissal timer.
+  </ApiProp>
+  <ApiProp name="title" fullType="React.ReactNode">
+    Sets the primary toast content.
+  </ApiProp>
+  <ApiProp name="description" fullType="React.ReactNode">
+    Sets supporting content below the title.
+  </ApiProp>
+  <ApiProp
+    name="type"
+    fullType='"default" | "loading" | "success" | "error" | "warning" | "info"'
+    simpleType="string"
+    defaultValue='"default"'
+  >
+    Sets the status treatment and icon behavior.
+  </ApiProp>
+  <ApiProp name="duration" fullType="number" defaultValue="5000">
+    Sets the time in milliseconds before automatic dismissal. Use `0` to keep
+    the toast open until it is dismissed.
+  </ApiProp>
+  <ApiProp
+    name="priority"
+    fullType='"low" | "high"'
+    simpleType="string"
+    defaultValue='"low"'
+  >
+    Controls announcement urgency. Use `high` only for urgent failures.
+  </ApiProp>
+  <ApiProp
+    name="action"
+    fullType={
+      'React.ComponentPropsWithoutRef<"button"> & { label: React.ReactNode; render?: Toast.Action.Props["render"] }'
+    }
+    simpleType="object"
+  >
+    Adds a labeled action button. Pass `render` to project the action semantics
+    and callback onto a custom button element.
+  </ApiProp>
+  <ApiProp name="data" fullType="Record<string, unknown>">
+    Stores arbitrary data with the toast for consumer callbacks and custom
+    rendering.
+  </ApiProp>
+  <ApiProp name="onClose" fullType="() => void">
+    Runs when the toast begins closing.
+  </ApiProp>
+  <ApiProp name="onRemove" fullType="() => void">
+    Runs when the toast is removed after its closing transition finishes.
+  </ApiProp>
+  <ApiProp name="showCloseButton" fullType="boolean" defaultValue="true">
+    Shows the explicit close control.
+  </ApiProp>
+</ApiPropsList>
+
+#### toast() variants
+
+The type helpers accept the same options as `toast()` and set `type` for you.
+
+```tsx
+toast.success({ title: "Saved" });
+toast.error({ title: "Upload failed" });
+toast.warning({ title: "Connection is unstable" });
+toast.info({ title: "New updates are available" });
+```
+
+Use `toast.update()` and `toast.dismiss()` for explicit lifecycle control. `toast.promise()` accepts a promise and loading, success, and error messages. Success and error messages can be functions of the settled value or error.
+
+```tsx
+const id = toast({ id: "sync", title: "Syncing", type: "loading" });
+
+toast.update(id, { title: "Synced", type: "success" });
+toast.dismiss(id);
+
+toast.promise(syncData(), {
+  loading: { title: "Syncing" },
+  success: (result) => ({ title: `Synced ${result.count} records` }),
+  error: (error) => ({ title: error.message }),
+});
+```
+
+#### `toast.anchored()`
+
+`toast.anchored()` uses the same options as `toast()` except for `type`, then adds positioning options for an `AnchoredToastProvider`.
+
+<ApiPropsList>
+  <ApiProp
+    name="anchor"
+    fullType="Element | React.RefObject<Element | null> | null"
+  >
+    Sets the element that receives the contextual toast.
+  </ApiProp>
+  <ApiProp name="side" fullType='"top" | "right" | "bottom" | "left"'>
+    Sets the side of the anchor where the toast is placed.
+  </ApiProp>
+  <ApiProp name="sideOffset" fullType="number" defaultValue="8">
+    Sets the distance from the anchor in pixels.
+  </ApiProp>
+  <ApiProp
+    name="align"
+    fullType='"start" | "center" | "end"'
+    defaultValue='"center"'
+  >
+    Aligns the toast against the anchor.
+  </ApiProp>
+  <ApiProp name="alignOffset" fullType="number" defaultValue="0">
+    Adjusts the toast along the anchor's alignment axis in pixels.
+  </ApiProp>
+  <ApiProp name="arrow" fullType="boolean" defaultValue="false">
+    Renders an arrow that points to the anchor.
+  </ApiProp>
+</ApiPropsList>
+
+#### `ToastProvider`
+
+`ToastProvider` enables viewport stacks and exposes position, limit, and timeout controls. Toast entry, stacking, expansion, and swipe-dismiss motion are tuned as one coordinated behavior.
+
+<ApiPropsList>
+  <ApiProp
+    name="position"
+    fullType='"top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right"'
+    simpleType="string"
+    defaultValue='"bottom-right"'
+  >
+    Sets the viewport position for stacked toasts.
+  </ApiProp>
+  <ApiProp name="limit" fullType="number" defaultValue="3">
+    Sets the maximum number of visible toasts before older items are limited.
+  </ApiProp>
+  <ApiProp name="timeout" fullType="number" defaultValue="5000">
+    Sets the default automatic dismissal timeout in milliseconds.
+  </ApiProp>
+  <ApiProp name="container" fullType="Element | null">
+    Sets the portal container for the toast viewport.
+  </ApiProp>
+</ApiPropsList>
+
+#### `AnchoredToastProvider`
+
+`AnchoredToastProvider` enables `toast.anchored()` and uses the anchor positioning options from Base UI.
+
+<ApiPropsList>
+  <ApiProp name="limit" fullType="number" defaultValue="5">
+    Sets the maximum number of anchored toasts displayed at once.
+  </ApiProp>
+  <ApiProp name="timeout" fullType="number" defaultValue="2000">
+    Sets the default automatic dismissal timeout in milliseconds.
+  </ApiProp>
+  <ApiProp name="container" fullType="Element | null">
+    Sets the portal container for anchored toasts.
+  </ApiProp>
+</ApiPropsList>
+
+</AnchoredToastProvider>
+</ToastProvider>

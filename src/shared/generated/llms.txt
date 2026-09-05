@@ -27,6 +27,7 @@
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
 - [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
 - [Tabs](https://ui.iandefined.com/docs/components/tabs.md) - A component for toggling between related panels on the same page.
+- [Toast](https://ui.iandefined.com/docs/components/toast.md) - Displays brief, self-dismissing feedback without blocking the page.
 - [Tooltip](https://ui.iandefined.com/docs/components/tooltip.md) - Displays contextual information when a user hovers or focuses an element.
 
 ## Forms
