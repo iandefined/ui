@@ -58,10 +58,8 @@ export function ApiProp({
           <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[7rem_minmax(0,1fr)]">
             <dt className="text-muted-foreground font-medium">Description</dt>
             <dd className="min-w-0 leading-relaxed">{children}</dd>
-            <dt className="text-muted-foreground font-medium sm:hidden">
-              Type
-            </dt>
-            <dd className="min-w-0 font-mono text-xs break-words sm:hidden">
+            <dt className="text-muted-foreground font-medium">Type</dt>
+            <dd className="min-w-0 font-mono text-xs break-words">
               {fullType}
             </dd>
             <dt className="text-muted-foreground font-medium md:hidden">
@@ -88,7 +86,7 @@ export function ApiPropsList({ children }: ApiPropsListProps) {
       aria-label="Props"
     >
       <div className="bg-muted/50 border-b border-border flex items-center gap-3 px-4 py-2.5 text-sm font-medium">
-        <span className="flex-1">Prop</span>
+        <span className="flex-1 text-muted-foreground">Prop</span>
         <span className="text-muted-foreground hidden flex-1 sm:block">
           Type
         </span>

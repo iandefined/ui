@@ -32,6 +32,7 @@ Do not import globally registered MDX components inside `.mdx` files.
 ### Markdown Rendering
 
 - Standard code fences receive server-side highlighting and command transformation. Use a language tag and add a filename only when it helps the reader place the code.
+- JSX-authored documentation snippets must use `ComponentSource` with an explicit `language`; raw `<pre><code>` bypasses the highlighting pipeline.
 - Standard Markdown tables receive the responsive MDX table treatment. Use them for comparisons and non-prop reference data.
 - `Button`, `Link`, `CopyButton`, and standard Markdown elements are mapped globally. Prefer semantic Markdown unless a registered component conveys a real interaction or presentation need.
 

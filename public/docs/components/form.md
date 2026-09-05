@@ -84,6 +84,10 @@ Validate a complete value object with Zod after submit, then revalidate as the u
 
 Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
 
+### Date Picker
+
+Wire a `DatePicker` inside `Field` to collect a date with validation and invalid-state styling.
+
 ### Mixed Controls and Submission State
 
 Compose text, choice, range, switch, and checkbox controls in one form with Zod validation and pending-state feedback.

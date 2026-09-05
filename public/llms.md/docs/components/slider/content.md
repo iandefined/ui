@@ -85,14 +85,10 @@ Set `hideTooltip` to hide the cursor value tooltip while retaining the slider's 
 Controls the thumb and rail layout.
 Hides the floating value tooltip during pointer interaction.
 simpleType="function"
-
 >
-
 Formats values shown in the tooltip and `SliderValue`.
 Renders step tick dots on the track.
 Disables spring transitions for thumb movement.
 simpleType="function"
-
 >
-
 Returns an accessible name for each thumb in a multi-thumb slider.

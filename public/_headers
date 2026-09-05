@@ -31,6 +31,9 @@
 /docs/components/button-group.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/calendar.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/card.md
   Content-Type: text/markdown; charset=utf-8
 
@@ -38,6 +41,12 @@
   Content-Type: text/markdown; charset=utf-8
 
 /docs/components/combobox.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/date-input.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/date-picker.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/components/dropdown-menu.md

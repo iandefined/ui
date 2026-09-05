@@ -192,4 +192,12 @@ Set `animationPreset` on `SelectPopup`. Set `reduceMotion` to disable popup anim
   <ApiProp name="reduceMotion" fullType="boolean" defaultValue="false">
     Disables the popup animation.
   </ApiProp>
+  <ApiProp
+    name="portalContainer"
+    fullType="HTMLElement | ShadowRoot | React.RefObject<HTMLElement | ShadowRoot | null> | null"
+  >
+    Mounts the popup inside a specific container. Use this when nesting a Select
+    in an overlay from another primitive library so its focus and outside-click
+    handling include the popup.
+  </ApiProp>
 </ApiPropsList>

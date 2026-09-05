@@ -172,6 +172,7 @@ Use `MyComponent` to trigger actions or display state.
 ```tsx
 import { MyComponent } from "@/components/ui/my-component";
 ```
+
 ````
 
 ```tsx
@@ -192,8 +193,7 @@ Display an icon alongside the text label:
 
 Controls the visual presentation.
 Prevents user interaction when true.
-
-````
+```
 
 ### Demo Examples
 
@@ -204,7 +204,7 @@ Reusable preview demos live in `examples/<component>/<example>.tsx`:
 export default function MyComponentDefault() {
 return <MyComponent>Default Example</MyComponent>;
 }
-````
+```
 
 The `examples/` directory is discovered dynamically by Vite, so `examples/my-component/default.tsx` is automatically referenced in MDX as `my-component/default`.
 

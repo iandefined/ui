@@ -1,0 +1,186 @@
+---
+title: Date Input
+description: A segmented field for entering dates, date ranges, and times without a calendar popup.
+---
+
+Use `DateInput` when people know the date they want to enter. Each date or time segment can be edited with the keyboard. Use [Date Picker](./date-picker) when people also need to browse a calendar.
+
+## Preview
+
+<ComponentPreview name="date-input/default" />
+
+## Installation
+
+<ComponentInstall name="date-input" />
+
+## Usage
+
+```tsx
+import { DateInput } from "@/components/ui/date-input";
+import { Label } from "@/components/ui/label";
+```
+
+```tsx
+<div className="grid gap-2">
+  <Label htmlFor="date-of-birth">Date of birth</Label>
+  <DateInput id="date-of-birth" name="dateOfBirth" />
+</div>
+```
+
+## Examples
+
+### Controlled value
+
+Use a `Date` array with `value` and update it from `onValueChange`.
+
+<ComponentPreview name="date-input/controlled" />
+
+### Sizes
+
+Set `size` to match adjacent form controls.
+
+<ComponentPreview name="date-input/sizes" />
+
+| Size      | Description                      |
+| --------- | -------------------------------- |
+| `sm`      | Compact input for dense layouts. |
+| `default` | Standard input height.           |
+| `lg`      | Larger input for spacious forms. |
+
+### Disabled, read-only, and invalid
+
+Use `disabled`, `readOnly`, and `invalid` to communicate the field state, and associate explanatory text with `aria-describedby`.
+
+<ComponentPreview name="date-input/states" />
+
+### Date range
+
+Set `selectionMode="range"` to edit a start and end date in one field.
+
+<ComponentPreview name="date-input/range" />
+
+### Date and time
+
+Set `granularity` to include time segments, or add `timeOnly` to hide the date segments.
+
+<ComponentPreview name="date-input/granularity" />
+
+### Clearable
+
+Add `clearable` to let people reset an optional value.
+
+<ComponentPreview name="date-input/clear" />
+
+### Field composition
+
+Associate the segmented group with a [Field](./field) label and description using explicit IDs.
+
+<ComponentPreview name="date-input/field" />
+
+## Accessibility
+
+Compose with `Label` or `FieldLabel` using matching `id` and `htmlFor`, or provide `aria-label` or `aria-labelledby` directly on the input. Associate validation text with `aria-describedby`. People can type into each segment and use the arrow keys to adjust or move between segments.
+
+## API Reference
+
+`DateInput` composes [Ark UI Date Input](https://ark-ui.com/react/docs/components/date-input) into a complete segmented field. Its public date values use native `Date`; supported Ark UI root props pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="id" fullType="string">
+    Sets the field's ID, enabling label click activation when paired with a
+    matching `Label` or `FieldLabel` via `htmlFor`.
+  </ApiProp>
+  <ApiProp name="value" fullType="Date[]">
+    Controls the selected date or date range. Use an empty array to clear the
+    field.
+  </ApiProp>
+  <ApiProp name="defaultValue" fullType="Date[]">
+    Sets the initial value for an uncontrolled field.
+  </ApiProp>
+  <ApiProp
+    name="onValueChange"
+    fullType="(details: { value: Date[]; valueAsString: string[] }) => void"
+  >
+    Receives the completed date values as Date objects and serialized strings.
+  </ApiProp>
+  <ApiProp
+    name="selectionMode"
+    fullType='"single" | "range"'
+    defaultValue='"single"'
+  >
+    Renders one date or a start/end pair.
+  </ApiProp>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg"'
+    defaultValue='"default"'
+  >
+    Sets the height and spacing of the input shell.
+  </ApiProp>
+  <ApiProp name="clearable" fullType="boolean" defaultValue="false">
+    Displays a button that clears the selected dates.
+  </ApiProp>
+  <ApiProp name="clearLabel" fullType="string" defaultValue='"Clear date"'>
+    Sets the clear button's accessible name.
+  </ApiProp>
+  <ApiProp
+    name="granularity"
+    fullType='"day" | "hour" | "minute" | "second"'
+    defaultValue='"day"'
+  >
+    Sets the smallest editable date or time unit. Defaults to `"minute"` when
+    `timeOnly` is enabled.
+  </ApiProp>
+  <ApiProp name="timeOnly" fullType="boolean" defaultValue="false">
+    Shows time segments without date segments. Pair with a time granularity.
+  </ApiProp>
+  <ApiProp name="hourCycle" fullType="12 | 24">
+    Chooses 12-hour or 24-hour time display when time segments are shown.
+  </ApiProp>
+  <ApiProp name="min" fullType="Date">
+    Sets the minimum allowed value.
+  </ApiProp>
+  <ApiProp name="max" fullType="Date">
+    Sets the maximum allowed value.
+  </ApiProp>
+  <ApiProp name="placeholderValue" fullType="Date">
+    Controls the reference date used when editing an empty segment.
+  </ApiProp>
+  <ApiProp name="defaultPlaceholderValue" fullType="Date">
+    Sets the initial reference date for editing an empty field.
+  </ApiProp>
+  <ApiProp
+    name="onPlaceholderChange"
+    fullType="(details: { value: Date[]; valueAsString: string[]; placeholderValue: Date }) => void"
+  >
+    Receives reference-date changes while editing incomplete values.
+  </ApiProp>
+  <ApiProp
+    name="isDateUnavailable"
+    fullType="(date: Date, locale: string) => boolean"
+  >
+    Marks individual dates unavailable using Date values.
+  </ApiProp>
+  <ApiProp
+    name="format"
+    fullType="(date: Date, details: { locale: string; timeZone: string }) => string"
+  >
+    Customizes the serialized display string using a Date.
+  </ApiProp>
+  <ApiProp name="startLabel" fullType="string" defaultValue='"Start date"'>
+    Adds an accessible name for the range's start segment group.
+  </ApiProp>
+  <ApiProp name="endLabel" fullType="string" defaultValue='"End date"'>
+    Adds an accessible name for the range's end segment group.
+  </ApiProp>
+  <ApiProp name="startName" fullType="string">
+    Overrides the start date's form name in range mode; otherwise the field uses
+    `name[0]`.
+  </ApiProp>
+  <ApiProp name="endName" fullType="string">
+    Overrides the end date's form name in range mode; otherwise the field uses
+    `name[1]`.
+  </ApiProp>
+</ApiPropsList>

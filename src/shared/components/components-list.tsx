@@ -16,19 +16,29 @@ const getFolder = (name: string): PageTreeFolder | undefined => {
   }
 };
 
-const ComponentGrid = ({ pages }: { pages: PageTreePage[] }) => (
-  <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-x-8 lg:gap-x-16 lg:gap-y-6 xl:gap-x-20">
-    {pages.map((component) => (
-      <Link
-        className="inline-flex items-center gap-2 text-lg font-medium underline-offset-4 hover:underline md:text-base"
-        href={component.url}
-        key={component.$id}
-      >
-        {component.name}
-      </Link>
-    ))}
-  </div>
-);
+const getPageTitle = (page: PageTreePage): string =>
+  typeof page.name === "string" ? page.name : String(page.name ?? "");
+
+const sortPagesAlphabetically = (pages: PageTreePage[]): PageTreePage[] =>
+  [...pages].sort((a, b) => getPageTitle(a).localeCompare(getPageTitle(b)));
+
+const ComponentGrid = ({ pages }: { pages: PageTreePage[] }) => {
+  const sortedPages = sortPagesAlphabetically(pages);
+
+  return (
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-x-8 lg:gap-x-16 lg:gap-y-6 xl:gap-x-20">
+      {sortedPages.map((component) => (
+        <Link
+          className="inline-flex items-center gap-2 text-lg font-medium underline-offset-4 hover:underline md:text-base"
+          href={component.url}
+          key={component.$id}
+        >
+          {component.name}
+        </Link>
+      ))}
+    </div>
+  );
+};
 
 export const ComponentsList = ({
   folderName = "Components",

@@ -142,3 +142,7 @@ Sets the backdrop rendered while the popup is open.
 
 Sets the popup enter and exit animation.
 Disables the popup animation.
+>
+Mounts the popup inside a specific container. Use this when nesting a Select
+in an overlay from another primitive library so its focus and outside-click
+handling include the popup.

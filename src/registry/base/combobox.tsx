@@ -5,8 +5,11 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
 import {
   createContext,
+  useCallback,
   useContext,
+  useEffect,
   useRef,
+  useState,
   type ComponentProps,
   type RefObject,
   type SVGProps,
@@ -20,6 +23,10 @@ import { cn } from "@/lib/utils";
 type ComboboxContextValue = {
   chipsRef: RefObject<HTMLDivElement | null>;
   multiple: boolean;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isFocused: boolean;
+  setIsFocused: (isFocused: boolean) => void;
 };
 
 const ComboboxContext = createContext<ComboboxContextValue | null>(null);
@@ -35,15 +42,51 @@ type ComboboxProps<
   Multiple extends boolean | undefined = false,
 > = ComboboxPrimitive.Root.Props<Value, Multiple>;
 
-function Combobox<Value, Multiple extends boolean | undefined = false>(
-  props: ComboboxProps<Value, Multiple>
-) {
+function Combobox<Value, Multiple extends boolean | undefined = false>({
+  open: controlledOpen,
+  defaultOpen = false,
+  onOpenChange,
+  multiple = false as Multiple,
+  ...props
+}: ComboboxProps<Value, Multiple>) {
   const chipsRef = useRef<HTMLDivElement | null>(null);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen;
+
+  const handleOpenChange = (
+    nextOpen: boolean,
+    eventDetails: ComboboxPrimitive.Root.ChangeEventDetails
+  ) => {
+    if (controlledOpen === undefined) {
+      setUncontrolledOpen(nextOpen);
+    }
+    onOpenChange?.(nextOpen, eventDetails);
+  };
+
   return (
     <ComboboxContext.Provider
-      value={{ chipsRef, multiple: Boolean(props.multiple) }}
+      value={{
+        chipsRef,
+        multiple: Boolean(multiple),
+        open,
+        setOpen: (nextOpen) => {
+          if (controlledOpen === undefined) {
+            setUncontrolledOpen(nextOpen);
+          }
+        },
+        isFocused,
+        setIsFocused,
+      }}
     >
-      <ComboboxPrimitive.Root data-slot="combobox" {...props} />
+      <ComboboxPrimitive.Root
+        data-slot="combobox"
+        multiple={multiple}
+        open={open}
+        onOpenChange={handleOpenChange}
+        {...props}
+      />
     </ComboboxContext.Provider>
   );
 }
@@ -129,13 +172,16 @@ function ComboboxInput({
   className,
   ...props
 }: ComboboxInputProps) {
-  const { multiple } = useComboboxContext();
+  const { multiple, open, isFocused } = useComboboxContext();
+  const isSelecting = open || isFocused;
 
   if (multiple) {
     return (
       <ComboboxPrimitive.Input
         className={cn(
-          "min-w-12 flex-1 bg-transparent ps-2 text-base outline-none [[data-slot=combobox-chip]+&]:ps-0.5 sm:text-sm",
+          "h-6 min-w-12 flex-1 order-last bg-transparent px-1.5 py-0 text-xs sm:text-xs leading-6 outline-none [[data-slot=combobox-chip]+&]:ps-1",
+          !isSelecting &&
+            "[[data-slot=combobox-chip]~&]:flex-none [[data-slot=combobox-chip]~&]:grow-0 [[data-slot=combobox-chip]~&]:w-0 [[data-slot=combobox-chip]~&]:min-w-0 [[data-slot=combobox-chip]~&]:p-0 [[data-slot=combobox-chip]~&]:m-0 [[data-slot=combobox-chip]~&]:border-0 [[data-slot=combobox-chip]~&]:opacity-0 [[data-slot=combobox-chip]~&]:pointer-events-none [[data-slot=combobox-chip]~&]:overflow-hidden",
           className
         )}
         data-slot="combobox-input"
@@ -206,19 +252,162 @@ function ComboboxTrigger({
   );
 }
 
-function ComboboxChips({ className, ...props }: ComboboxPrimitive.Chips.Props) {
-  const { chipsRef } = useComboboxContext();
+type ComboboxChipsProps = ComboboxPrimitive.Chips.Props & {
+  overflowBehavior?: "wrap" | "wrap-when-open" | "cutoff";
+  maxCount?: number;
+};
+
+function ComboboxChips({
+  className,
+  overflowBehavior = "wrap-when-open",
+  maxCount,
+  children,
+  onFocus,
+  onBlur,
+  ...props
+}: ComboboxChipsProps) {
+  const { chipsRef, open, isFocused, setIsFocused } = useComboboxContext();
+  const overflowBadgeRef = useRef<HTMLSpanElement | null>(null);
+  const [overflowAmount, setOverflowAmount] = useState(0);
+
+  const isSelecting = open || isFocused;
+  const shouldWrap =
+    overflowBehavior === "wrap" ||
+    (overflowBehavior === "wrap-when-open" && isSelecting);
+
+  const checkOverflow = useCallback(() => {
+    const container = chipsRef.current;
+    if (!container) return;
+
+    const items = container.querySelectorAll<HTMLElement>(
+      "[data-slot=combobox-chip]"
+    );
+    const badge = overflowBadgeRef.current;
+
+    if (shouldWrap) {
+      items.forEach((item) => {
+        item.style.removeProperty("display");
+      });
+      if (badge) {
+        badge.style.display = "none";
+      }
+      setOverflowAmount(0);
+      return;
+    }
+
+    // Reset items to visible, hide badge
+    items.forEach((item) => {
+      item.style.removeProperty("display");
+    });
+    if (badge) {
+      badge.style.display = "none";
+    }
+
+    if (items.length === 0) {
+      setOverflowAmount(0);
+      return;
+    }
+
+    if (maxCount !== undefined && items.length > maxCount) {
+      const amount = items.length - maxCount;
+      for (let i = items.length - 1; i >= maxCount; i--) {
+        const item = items[i];
+        if (item) item.style.display = "none";
+      }
+      if (badge) {
+        badge.style.removeProperty("display");
+        badge.textContent = `+${amount}`;
+      }
+      setOverflowAmount(amount);
+      return;
+    }
+
+    // Dynamic single line check
+    if (container.scrollWidth <= container.clientWidth + 1) {
+      setOverflowAmount(0);
+      return;
+    }
+
+    let amount = 0;
+    for (let i = items.length - 1; i >= 0; i--) {
+      amount = items.length - i;
+      const item = items[i];
+      if (item) {
+        item.style.display = "none";
+      }
+      if (badge) {
+        badge.style.removeProperty("display");
+        badge.textContent = `+${amount}`;
+      }
+      if (container.scrollWidth <= container.clientWidth + 1) {
+        break;
+      }
+    }
+    setOverflowAmount(amount);
+  }, [chipsRef, shouldWrap, maxCount]);
+
+  useEffect(() => {
+    checkOverflow();
+  }, [checkOverflow]);
+
+  useEffect(() => {
+    const container = chipsRef.current;
+    if (!container) return;
+
+    let rafId: number | null = null;
+    const scheduleCheck = () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        checkOverflow();
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(scheduleCheck);
+    resizeObserver.observe(container);
+
+    const mutationObserver = new MutationObserver(scheduleCheck);
+    mutationObserver.observe(container, { childList: true, subtree: true });
+
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+    };
+  }, [checkOverflow, chipsRef]);
 
   return (
     <ComboboxPrimitive.Chips
       className={cn(
-        "relative inline-flex min-h-9 w-full flex-wrap items-center gap-1 rounded-[12px] border border-input bg-background px-1 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 dark:bg-input/32 sm:text-sm",
+        "relative inline-flex w-full items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 dark:bg-input/32 sm:text-sm",
+        shouldWrap
+          ? "min-h-9 flex-wrap"
+          : "h-9 min-h-9 flex-nowrap overflow-hidden",
         className
       )}
       data-slot="combobox-chips"
       ref={chipsRef}
+      onFocus={(e) => {
+        setIsFocused(true);
+        onFocus?.(e);
+      }}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setIsFocused(false);
+        }
+        onBlur?.(e);
+      }}
       {...props}
-    />
+    >
+      {children}
+      <span
+        ref={overflowBadgeRef}
+        data-slot="combobox-overflow"
+        style={{ display: "none" }}
+        className="relative flex h-6 shrink-0 items-center justify-center rounded-md bg-secondary border px-2 text-xs tabular-nums select-none"
+      >
+        +{overflowAmount}
+      </span>
+    </ComboboxPrimitive.Chips>
   );
 }
 
@@ -230,7 +419,7 @@ function ComboboxChip({
   return (
     <ComboboxPrimitive.Chip
       className={cn(
-        "relative flex items-center gap-1 rounded-md bg-secondary border px-2 py-0.25 text-xs",
+        "relative flex h-6 shrink-0 items-center rounded-md bg-secondary border px-2 pr-1 text-xs tabular-nums select-none",
         className
       )}
       data-slot="combobox-chip"
@@ -251,7 +440,7 @@ function ComboboxChipRemove({
     <ComboboxPrimitive.ChipRemove
       aria-label="Remove"
       className={cn(
-        "cursor-pointer rounded-md p-1 text-inherit hover:bg-secondary [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 sm:[&_svg:not([class*='size-'])]:size-3.5",
+        "cursor-pointer rounded-md p-0.5 text-inherit hover:bg-secondary/80 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       data-slot="combobox-chip-remove"
@@ -430,6 +619,7 @@ export {
   ComboboxChip,
   ComboboxChipRemove,
   ComboboxChips,
+  type ComboboxChipsProps,
   ComboboxClear,
   ComboboxCollection,
   ComboboxEmpty,

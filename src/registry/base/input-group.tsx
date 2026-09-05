@@ -8,11 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-type InputProps = React.ComponentProps<"input"> & {
+type InputProps = Omit<React.ComponentProps<"input">, "size"> & {
   size?: "sm" | "default" | "lg" | number;
 };
 
-type TextareaProps = React.ComponentProps<"textarea"> & {
+type TextareaProps = Omit<React.ComponentProps<"textarea">, "size"> & {
   size?: "sm" | "default" | "lg" | number;
 };
 

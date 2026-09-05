@@ -26,7 +26,12 @@ const languages = [
 type Language = (typeof languages)[number];
 
 export default function ComboboxMultipleSelectionDemo() {
-  const [selected, setSelected] = useState<Language[]>([]);
+  const [selected, setSelected] = useState<Language[]>([
+    languages[0],
+    languages[1],
+    languages[2],
+    languages[3],
+  ]);
 
   return (
     <div className="grid w-full max-w-sm gap-4">

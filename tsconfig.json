@@ -19,6 +19,12 @@
         "./src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx"
       ],
       "@/components/ui/breadcrumbs": ["./src/registry/base/breadcrumbs.tsx"],
+      "@/components/ui/calendar": ["./src/registry/base/calendar.tsx"],
+      "@/components/ui/date-picker": ["./src/registry/base/date-picker.tsx"],
+      "@/components/ui/date-input": ["./src/registry/base/date-input.tsx"],
+      "@/components/ui/input-group": ["./src/registry/base/input-group.tsx"],
+      "@/components/ui/select": ["./src/registry/base/select.tsx"],
+      "@/lib/date": ["./src/registry/base/date.ts"],
       "@/components/*": ["./src/shared/components/*"],
       "@/hooks/*": ["./src/shared/hooks/*"],
       "@/lib/*": ["./src/shared/lib/*"],

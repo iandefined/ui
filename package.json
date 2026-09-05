@@ -24,10 +24,12 @@
     "intent": "pnpm dlx @tanstack/intent@latest"
   },
   "dependencies": {
+    "@ark-ui/react": "catalog:",
     "@base-ui/react": "catalog:",
     "@bprogress/react": "catalog:",
     "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/geist-mono": "catalog:",
+    "@internationalized/date": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-router": "catalog:",

@@ -534,6 +534,103 @@ Open supplemental controls from the group.
 
 Sets the layout direction.
 
+# Calendar
+
+A calendar with day, month, and year views for selecting dates and ranges.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `Calendar` for inline date selection. Click the month and year heading to switch to a month grid, then click it again to choose a year. Use [Date Picker](./date-picker) when the calendar belongs in a popup.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import { Calendar } from "@/components/ui/calendar";
+```
+
+```tsx
+<Calendar defaultValue={[new Date(2026, 8, 15)]} />
+```
+
+## Composition
+
+`Calendar` renders the full calendar when no children are supplied. Compose `CalendarContent` explicitly to add a footer or adjacent controls.
+
+```tsx
+<Calendar>
+  <CalendarContent />
+  <div>{/* Footer controls */}</div>
+</Calendar>
+```
+
+## Examples
+
+### Date range
+
+Set `selectionMode="range"` and control the start and end dates through a `Date` array.
+
+### Multiple dates
+
+Set `selectionMode="multiple"` to toggle individual dates independently.
+
+### Multiple months
+
+Set `numOfMonths={2}` to display adjacent months for range selection.
+
+### Date restrictions
+
+Use `min`, `max`, and `isDateUnavailable` to limit selectable dates.
+
+### Today and presets
+
+Compose footer buttons and update the selected and focused dates to select a preset and display its month.
+
+### Sizes
+
+Set `size` to adjust calendar density on desktop; touch layouts retain larger date targets.
+
+| Size      | Description                  |
+| --------- | ---------------------------- |
+| `sm`      | Compact desktop date cells.  |
+| `default` | Standard desktop date cells. |
+| `lg`      | Larger desktop date cells.   |
+
+## API Reference
+
+`Calendar` uses [Ark UI Date Picker](https://ark-ui.com/react/docs/components/date-picker) in inline mode. Supported Ark UI props pass through, except date values and date callbacks use native `Date` at the public boundary.
+
+### Props
+
+#### Calendar
+
+Controls the selected dates. Use an empty array to clear selection, one date
+for single selection, and a start/end pair for a complete range.
+Sets the initial selected dates for an uncontrolled calendar.
+>
+Receives the selected Date values and their serialized strings.
+Chooses single-date, independent multiple-date, or date-range selection.
+Sets desktop date-cell density while preserving touch target sizes on
+smaller viewports.
+Controls the focused date and the month shown in the calendar.
+Sets the initial focused date without selecting it.
+>
+Receives date-focus changes. Update `focusedValue` from this callback when
+controlling it.
+>
+Receives the visible date range after navigation.
+Sets the earliest selectable date.
+Sets the latest selectable date.
+>
+Marks individual dates unavailable, such as weekends or holidays.
+
+#### CalendarContent
+
+Renders the header and the day, month, and year grids inside a `Calendar` or `DatePicker` root. Accepts standard HTML `div` attributes.
+
 # Card
 
 A container with header, content, action, and footer regions.
@@ -750,6 +847,315 @@ Sets the preferred side of the input.
 Sets the distance from the input in pixels.
 Sets alignment relative to the input.
 Offsets the popup along the alignment axis.
+
+### ComboboxChips Props
+
+Controls chip wrapping and single-line +X overflow compression.
+Explicit limit on visible chips before showing the +X overflow badge.
+
+# Date Input
+
+A segmented field for entering dates, date ranges, and times without a calendar popup.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `DateInput` when people know the date they want to enter. Each date or time segment can be edited with the keyboard. Use [Date Picker](./date-picker) when people also need to browse a calendar.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import { DateInput } from "@/components/ui/date-input";
+import { Label } from "@/components/ui/label";
+```
+
+```tsx
+<div className="grid gap-2">
+  <Label htmlFor="date-of-birth">Date of birth</Label>
+  <DateInput id="date-of-birth" name="dateOfBirth" />
+</div>
+```
+
+## Examples
+
+### Controlled value
+
+Use a `Date` array with `value` and update it from `onValueChange`.
+
+### Sizes
+
+Set `size` to match adjacent form controls.
+
+| Size      | Description                      |
+| --------- | -------------------------------- |
+| `sm`      | Compact input for dense layouts. |
+| `default` | Standard input height.           |
+| `lg`      | Larger input for spacious forms. |
+
+### Disabled, read-only, and invalid
+
+Use `disabled`, `readOnly`, and `invalid` to communicate the field state, and associate explanatory text with `aria-describedby`.
+
+### Date range
+
+Set `selectionMode="range"` to edit a start and end date in one field.
+
+### Date and time
+
+Set `granularity` to include time segments, or add `timeOnly` to hide the date segments.
+
+### Clearable
+
+Add `clearable` to let people reset an optional value.
+
+### Field composition
+
+Associate the segmented group with a [Field](./field) label and description using explicit IDs.
+
+## Accessibility
+
+Compose with `Label` or `FieldLabel` using matching `id` and `htmlFor`, or provide `aria-label` or `aria-labelledby` directly on the input. Associate validation text with `aria-describedby`. People can type into each segment and use the arrow keys to adjust or move between segments.
+
+## API Reference
+
+`DateInput` composes [Ark UI Date Input](https://ark-ui.com/react/docs/components/date-input) into a complete segmented field. Its public date values use native `Date`; supported Ark UI root props pass through.
+
+### Props
+
+Sets the field's ID, enabling label click activation when paired with a
+matching `Label` or `FieldLabel` via `htmlFor`.
+Controls the selected date or date range. Use an empty array to clear the
+field.
+Sets the initial value for an uncontrolled field.
+>
+Receives the completed date values as Date objects and serialized strings.
+Renders one date or a start/end pair.
+Sets the height and spacing of the input shell.
+Displays a button that clears the selected dates.
+Sets the clear button's accessible name.
+Sets the smallest editable date or time unit. Defaults to `"minute"` when
+`timeOnly` is enabled.
+Shows time segments without date segments. Pair with a time granularity.
+Chooses 12-hour or 24-hour time display when time segments are shown.
+Sets the minimum allowed value.
+Sets the maximum allowed value.
+Controls the reference date used when editing an empty segment.
+Sets the initial reference date for editing an empty field.
+>
+Receives reference-date changes while editing incomplete values.
+>
+Marks individual dates unavailable using Date values.
+>
+Customizes the serialized display string using a Date.
+Adds an accessible name for the range's start segment group.
+Adds an accessible name for the range's end segment group.
+Overrides the start date's form name in range mode; otherwise the field uses
+`name[0]`.
+Overrides the end date's form name in range mode; otherwise the field uses
+`name[1]`.
+
+# Date Picker
+
+A date selector with typed input, button triggers, and a calendar popup.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `DatePicker` to browse a calendar or type a date into an input. The calendar heading opens month and year selection. Use [Calendar](./calendar) for an inline calendar or [Date Input](./date-input) for segmented entry without a popup.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerLabel,
+  DatePickerTrigger,
+} from "@/components/ui/date-picker";
+```
+
+```tsx
+<DatePicker>
+  <DatePickerLabel>Event date</DatePickerLabel>
+  <DatePickerTrigger />
+  <DatePickerContent />
+</DatePicker>
+```
+
+## Composition
+
+Use `DatePickerTrigger` for a button or `DatePickerInput` for typed entry with an integrated calendar trigger. `DatePickerContent` renders the default calendar unless you supply children.
+
+Wrap grouped inputs or triggers in one `DatePickerControl` so they share a popup anchor. A standalone input or trigger supplies this wrapper automatically.
+
+```tsx
+<DatePicker>
+  <DatePickerLabel />
+  <DatePickerInput />
+  <DatePickerContent>
+    <DatePickerCalendar />
+    <DatePickerPresetTrigger value={presetDates} />
+  </DatePickerContent>
+</DatePicker>
+```
+
+## Examples
+
+### Typed input
+
+Use `DatePickerInput` to allow keyboard entry alongside the calendar popup.
+
+### Controlled and clearable
+
+Control the `Date` value array and add `DatePickerClearTrigger` to reset an optional date. The trigger flexibly adapts its size within a stable `max-w-xs` container to fit the clear icon button without shifting the layout.
+
+### Date range
+
+Set `selectionMode="range"` and group input indexes `0` and `1` in one `DatePickerControl` for the start and end dates.
+
+### Multiple dates
+
+Set `selectionMode="multiple"` and use `DatePickerChips` to render selected dates as removable pill chips matching multi-select combobox styling.
+
+### Presets
+
+Compose `DatePickerPresetTrigger` beside the calendar to select a named date or range.
+
+### Date and time
+
+Compose `DatePickerTimer` with the picker and manage the time separately from the calendar's date selection.
+
+### Sizes
+
+Set the typed input's `size` to match adjacent form controls.
+
+| Size      | Description                      |
+| --------- | -------------------------------- |
+| `sm`      | Compact input for dense layouts. |
+| `default` | Standard input height.           |
+| `lg`      | Larger input for spacious forms. |
+
+### Form
+
+Use `DatePicker` inside a [Form](./form) `Field` with TanStack Form for validation and submission.
+
+## Accessibility
+
+Use `DatePickerLabel` to label the picker. Give range inputs distinct accessible names, and associate descriptions or validation messages through `aria-describedby`. The calendar handles keyboard navigation, view switching, and popup focus.
+
+## API Reference
+
+`DatePicker` wraps [Ark UI Date Picker](https://ark-ui.com/react/docs/components/date-picker), with registry buttons, inputs, and [Calendar](./calendar) styling. Supported Ark UI props pass through, except public date values and date callbacks use native `Date`.
+
+### Props
+
+#### DatePicker
+
+Controls the selected dates. Use one date for single selection, a start/end
+pair for a complete range, or an empty array to clear selection.
+Sets the initial selected dates for an uncontrolled picker.
+>
+Receives the selected Date values and serialized strings.
+Chooses single-date, independent multiple-date, or date-range selection.
+Sets the earliest selectable date.
+Sets the latest selectable date.
+>
+Marks dates unavailable for selection.
+Controls the focused date and visible calendar month.
+Sets the initial calendar focus without selecting a date.
+>
+Receives calendar focus changes using Date values.
+>
+Receives popup visibility changes and the current selection.
+>
+Receives the visible range after calendar navigation.
+>
+Formats dates in the typed inputs. Pair a custom format with a matching
+`parse` function.
+>
+Parses typed text into a Date object. Return `undefined` when the text
+cannot be parsed.
+
+#### DatePickerTrigger
+
+Composes the Ark trigger with the registry [Button](./button). Button props set its size, variant, and rendering. Without children, it renders a calendar icon and `DatePickerValue`. In multiple-selection mode, it delegates to `DatePickerChips`.
+
+#### DatePickerChips
+
+Renders a multi-chip container trigger for `selectionMode="multiple"`. Selected dates appear as removable pills with keyboard and pointer interactions.
+
+Controls chip wrapping and single-line +X overflow compression.
+Explicit limit on visible chips before showing the +X overflow badge.
+
+#### DatePickerChip
+
+Renders an individual date badge with a formatted label and optional removal trigger.
+
+#### DatePickerChipRemove
+
+The remove button for a date chip.
+
+#### DatePickerControl
+
+Groups related inputs and triggers into a single popup anchor. Wrap both range inputs in one control. Supported Ark UI control props reach its root element.
+
+#### DatePickerValue
+
+Displays when no date is selected.
+>
+Formats selected dates with a format pattern such as `"MMM D, YYYY"`, an
+`Intl.DateTimeFormatOptions` object, or a custom formatter function.
+
+#### DatePickerInput
+
+Renders the Ark typed input inside a registry input group. Index `0` includes the calendar trigger; subsequent inputs share it. Supported input props reach the text input.
+
+Sets the input shell and trigger size.
+Selects the date edited by this input. Use `0` for the start date and `1`
+for the end date in range mode.
+
+#### DatePickerContent
+
+Portals the positioned popup and forwards content props to Ark's content element. Renders `DatePickerCalendar` when no children are supplied.
+
+Disables popup animation. The default treatment matches
+[Popover](./popover), and the operating system's reduced-motion preference
+is always respected.
+
+#### DatePickerCalendar
+
+Renders `CalendarContent` in the current picker. Accepts the same owned props as [CalendarContent](./calendar#calendarcontent).
+
+#### DatePickerPresetTrigger
+
+Composes a registry `Button` with Ark's preset trigger.
+
+Selects these dates when the button is activated. Match the array to the
+root's selection mode.
+
+#### DatePickerClearTrigger
+
+Composes Ark's clearing behavior with a registry `Button`. The default is an outline icon button with an X icon. Use `render` or `size` to supply a custom button; event handlers, refs, and disabled state are merged with the clearing behavior.
+
+```tsx
+<DatePickerClearTrigger />
+```
+
+#### DatePickerTimer
+
+Renders an elevated, accessible time picker popup with scrollable hours, minutes, and period columns, styled consistently with the date picker and other elevated popups in the codebase. It owns a separate time value and does not change the calendar's selected date.
+
+Controls the time value in 24-hour format, such as `"14:30"`.
+Sets the initial time value for an uncontrolled timer.
+Chooses 12-hour or 24-hour time representation.
+Sets the minute increment in the minutes column.
+Sets the time trigger button size.
 
 # Dropdown Menu
 
@@ -1099,6 +1505,10 @@ Validate a complete value object with Zod after submit, then revalidate as the u
 ### Async Validation
 
 Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
+
+### Date Picker
+
+Wire a `DatePicker` inside `Field` to collect a date with validation and invalid-state styling.
 
 ### Mixed Controls and Submission State
 
@@ -1893,6 +2303,10 @@ Sets the backdrop rendered while the popup is open.
 
 Sets the popup enter and exit animation.
 Disables the popup animation.
+>
+Mounts the popup inside a specific container. Use this when nesting a Select
+in an overlay from another primitive library so its focus and outside-click
+handling include the popup.
 
 # Separator
 

@@ -15,6 +15,8 @@ const ignoredPaths = [
   "dist",
   "public/.well-known/agent-skills/site-skill.md",
   "public/r/**",
+  "public/docs/**",
+  "public/llms.md/**",
   "src/routeTree.gen.ts",
   ".agents/**",
   ".cursor/**",

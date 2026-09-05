@@ -498,8 +498,11 @@ const markdownForPage = (page) => {
 
 const FORM_COMPONENT_SLUGS = new Set([
   "autocomplete",
+  "calendar",
   "checkbox",
   "combobox",
+  "date-input",
+  "date-picker",
   "field",
   "fieldset",
   "form",

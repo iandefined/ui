@@ -32,8 +32,11 @@
 ## Forms
 
 - [Autocomplete](https://ui.iandefined.com/docs/components/autocomplete.md) - A filterable text input that suggests matching options while accepting free-form text.
+- [Calendar](https://ui.iandefined.com/docs/components/calendar.md) - A calendar with day, month, and year views for selecting dates and ranges.
 - [Checkbox](https://ui.iandefined.com/docs/components/checkbox.md) - A control that allows the user to toggle between checked and unchecked.
 - [Combobox](https://ui.iandefined.com/docs/components/combobox.md) - A filterable input for selecting one or more predefined values.
+- [Date Input](https://ui.iandefined.com/docs/components/date-input.md) - A segmented field for entering dates, date ranges, and times without a calendar popup.
+- [Date Picker](https://ui.iandefined.com/docs/components/date-picker.md) - A date selector with typed input, button triggers, and a calendar popup.
 - [Field](https://ui.iandefined.com/docs/components/field.md) - An accessible field composition primitive for labels, descriptions, validation state, and errors.
 - [Fieldset](https://ui.iandefined.com/docs/components/fieldset.md) - A native semantic group for related fields with a styled legend.
 - [Form](https://ui.iandefined.com/docs/components/form.md) - A TanStack Form submission adapter that composes registry controls into type-safe forms.

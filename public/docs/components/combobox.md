@@ -88,3 +88,8 @@ Sets the preferred side of the input.
 Sets the distance from the input in pixels.
 Sets alignment relative to the input.
 Offsets the popup along the alignment axis.
+
+### ComboboxChips Props
+
+Controls chip wrapping and single-line +X overflow compression.
+Explicit limit on visible chips before showing the +X overflow badge.

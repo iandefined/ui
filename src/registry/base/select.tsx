@@ -292,17 +292,20 @@ function SelectBackdrop({ className, ...props }: SelectBackdropProps) {
 
 interface SelectPositionerProps extends React.ComponentProps<
   typeof SelectPrimitive.Positioner
-> {}
+> {
+  portalContainer?: SelectPortalProps["container"];
+}
 
 function SelectPositioner({
   sideOffset = 4,
   side = "bottom",
   className,
   alignItemWithTrigger = true,
+  portalContainer,
   ...props
 }: SelectPositionerProps) {
   return (
-    <SelectPortal>
+    <SelectPortal container={portalContainer}>
       <SelectBackdrop />
       <SelectPrimitive.Positioner
         sideOffset={sideOffset}
@@ -357,7 +360,12 @@ interface SelectPopupProps
     React.ComponentProps<typeof SelectPrimitive.Popup>,
     Pick<
       SelectPositionerProps,
-      "side" | "sideOffset" | "align" | "alignOffset" | "alignItemWithTrigger"
+      | "side"
+      | "sideOffset"
+      | "align"
+      | "alignOffset"
+      | "alignItemWithTrigger"
+      | "portalContainer"
     > {
   animationPreset?:
     | "none"
@@ -413,6 +421,7 @@ function SelectPopup({
   align = "center",
   alignOffset = 0,
   alignItemWithTrigger = false,
+  portalContainer,
   children,
   ...rest
 }: SelectPopupProps) {
@@ -443,6 +452,7 @@ function SelectPopup({
       align={align}
       alignOffset={alignOffset}
       alignItemWithTrigger={alignItemWithTrigger}
+      portalContainer={portalContainer}
     >
       <SelectPrimitive.Popup
         data-slot="select-popup"

@@ -2,14 +2,9 @@
 
 import { AlertCircleIcon } from "lucide-react";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/registry/base/tabs";
 import { CodeBlockCommand } from "@/shared/components/code-block-command";
 import { ComponentSource } from "@/shared/components/component-source";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/shared/components/ui/tabs";
 import { useConfig } from "@/shared/hooks/use-config";
 import { getRegistryItemSync, type RegistryFile } from "@/shared/lib/registry";
 
@@ -50,9 +45,7 @@ const ThemeVariables = ({
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium">Add the required theme variables:</p>
-      <pre className="bg-muted overflow-x-auto rounded-lg border p-4 text-sm">
-        <code>{code}</code>
-      </pre>
+      <ComponentSource code={code} language="css" collapsible={false} />
     </div>
   );
 };
@@ -137,9 +130,12 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
                 Ensure the <code>cn</code> utility exists at{" "}
                 <code>lib/utils.ts</code>.
               </p>
-              <pre className="bg-muted overflow-x-auto rounded-lg border p-4 text-sm">
-                <code>{`import { clsx, type ClassValue } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`}</code>
-              </pre>
+              <ComponentSource
+                code={`import { clsx, type ClassValue } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`}
+                language="ts"
+                title="lib/utils.ts"
+                collapsible={false}
+              />
             </div>
           ) : null}
           {sourceFiles.length > 0 ? (
@@ -190,13 +186,13 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
                   title={file.target ?? file.path}
                 />
               ))}
-              <pre className="bg-muted overflow-x-auto rounded-lg border p-4 text-sm">
-                <code>
-                  {styleFiles
-                    .map((file) => cssImport(file.target ?? file.path))
-                    .join("\n")}
-                </code>
-              </pre>
+              <ComponentSource
+                code={styleFiles
+                  .map((file) => cssImport(file.target ?? file.path))
+                  .join("\n")}
+                language="css"
+                collapsible={false}
+              />
             </div>
           ) : null}
           <ThemeVariables

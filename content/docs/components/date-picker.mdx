@@ -1,0 +1,319 @@
+---
+title: Date Picker
+description: A date selector with typed input, button triggers, and a calendar popup.
+---
+
+Use `DatePicker` to browse a calendar or type a date into an input. The calendar heading opens month and year selection. Use [Calendar](./calendar) for an inline calendar or [Date Input](./date-input) for segmented entry without a popup.
+
+## Preview
+
+<ComponentPreview name="date-picker/default" />
+
+## Installation
+
+<ComponentInstall name="date-picker" />
+
+## Usage
+
+```tsx
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerLabel,
+  DatePickerTrigger,
+} from "@/components/ui/date-picker";
+```
+
+```tsx
+<DatePicker>
+  <DatePickerLabel>Event date</DatePickerLabel>
+  <DatePickerTrigger />
+  <DatePickerContent />
+</DatePicker>
+```
+
+## Composition
+
+Use `DatePickerTrigger` for a button or `DatePickerInput` for typed entry with an integrated calendar trigger. `DatePickerContent` renders the default calendar unless you supply children.
+
+Wrap grouped inputs or triggers in one `DatePickerControl` so they share a popup anchor. A standalone input or trigger supplies this wrapper automatically.
+
+```tsx
+<DatePicker>
+  <DatePickerLabel />
+  <DatePickerInput />
+  <DatePickerContent>
+    <DatePickerCalendar />
+    <DatePickerPresetTrigger value={presetDates} />
+  </DatePickerContent>
+</DatePicker>
+```
+
+## Examples
+
+### Typed input
+
+Use `DatePickerInput` to allow keyboard entry alongside the calendar popup.
+
+<ComponentPreview name="date-picker/input" />
+
+### Controlled and clearable
+
+Control the `Date` value array and add `DatePickerClearTrigger` to reset an optional date. The trigger flexibly adapts its size within a stable `max-w-xs` container to fit the clear icon button without shifting the layout.
+
+<ComponentPreview name="date-picker/controlled" />
+
+### Date range
+
+Set `selectionMode="range"` and group input indexes `0` and `1` in one `DatePickerControl` for the start and end dates.
+
+<ComponentPreview name="date-picker/range" />
+
+### Multiple dates
+
+Set `selectionMode="multiple"` and use `DatePickerChips` to render selected dates as removable pill chips matching multi-select combobox styling.
+
+<ComponentPreview name="date-picker/multiple" />
+
+### Presets
+
+Compose `DatePickerPresetTrigger` beside the calendar to select a named date or range.
+
+<ComponentPreview name="date-picker/presets" />
+
+### Date and time
+
+Compose `DatePickerTimer` with the picker and manage the time separately from the calendar's date selection.
+
+<ComponentPreview name="date-picker/time" />
+
+### Sizes
+
+Set the typed input's `size` to match adjacent form controls.
+
+<ComponentPreview name="date-picker/sizes" />
+
+| Size      | Description                      |
+| --------- | -------------------------------- |
+| `sm`      | Compact input for dense layouts. |
+| `default` | Standard input height.           |
+| `lg`      | Larger input for spacious forms. |
+
+### Form
+
+Use `DatePicker` inside a [Form](./form) `Field` with TanStack Form for validation and submission.
+
+<ComponentPreview name="form/with-date-picker" />
+
+## Accessibility
+
+Use `DatePickerLabel` to label the picker. Give range inputs distinct accessible names, and associate descriptions or validation messages through `aria-describedby`. The calendar handles keyboard navigation, view switching, and popup focus.
+
+## API Reference
+
+`DatePicker` wraps [Ark UI Date Picker](https://ark-ui.com/react/docs/components/date-picker), with registry buttons, inputs, and [Calendar](./calendar) styling. Supported Ark UI props pass through, except public date values and date callbacks use native `Date`.
+
+### Props
+
+#### DatePicker
+
+<ApiPropsList>
+  <ApiProp name="value" fullType="Date[]">
+    Controls the selected dates. Use one date for single selection, a start/end
+    pair for a complete range, or an empty array to clear selection.
+  </ApiProp>
+  <ApiProp name="defaultValue" fullType="Date[]">
+    Sets the initial selected dates for an uncontrolled picker.
+  </ApiProp>
+  <ApiProp
+    name="onValueChange"
+    fullType='(details: { value: Date[]; valueAsString: string[]; view: "day" | "month" | "year" }) => void'
+  >
+    Receives the selected Date values and serialized strings.
+  </ApiProp>
+  <ApiProp
+    name="selectionMode"
+    fullType='"single" | "multiple" | "range"'
+    defaultValue='"single"'
+  >
+    Chooses single-date, independent multiple-date, or date-range selection.
+  </ApiProp>
+  <ApiProp name="min" fullType="Date">
+    Sets the earliest selectable date.
+  </ApiProp>
+  <ApiProp name="max" fullType="Date">
+    Sets the latest selectable date.
+  </ApiProp>
+  <ApiProp
+    name="isDateUnavailable"
+    fullType="(date: Date, locale: string) => boolean"
+  >
+    Marks dates unavailable for selection.
+  </ApiProp>
+  <ApiProp name="focusedValue" fullType="Date">
+    Controls the focused date and visible calendar month.
+  </ApiProp>
+  <ApiProp name="defaultFocusedValue" fullType="Date">
+    Sets the initial calendar focus without selecting a date.
+  </ApiProp>
+  <ApiProp
+    name="onFocusChange"
+    fullType='(details: { value: Date[]; valueAsString: string[]; view: "day" | "month" | "year"; focusedValue: Date }) => void'
+  >
+    Receives calendar focus changes using Date values.
+  </ApiProp>
+  <ApiProp
+    name="onOpenChange"
+    fullType="(details: { open: boolean; value: Date[] }) => void"
+  >
+    Receives popup visibility changes and the current selection.
+  </ApiProp>
+  <ApiProp
+    name="onVisibleRangeChange"
+    fullType='(details: { view: "day" | "month" | "year"; visibleRange: { start: Date; end: Date } }) => void'
+  >
+    Receives the visible range after calendar navigation.
+  </ApiProp>
+  <ApiProp
+    name="format"
+    fullType="(date: Date, details: { locale: string; timeZone: string }) => string"
+  >
+    Formats dates in the typed inputs. Pair a custom format with a matching
+    `parse` function.
+  </ApiProp>
+  <ApiProp
+    name="parse"
+    fullType="(value: string, details: { locale: string; timeZone: string }) => Date | undefined"
+  >
+    Parses typed text into a Date object. Return `undefined` when the text
+    cannot be parsed.
+  </ApiProp>
+</ApiPropsList>
+
+#### DatePickerTrigger
+
+Composes the Ark trigger with the registry [Button](./button). Button props set its size, variant, and rendering. Without children, it renders a calendar icon and `DatePickerValue`. In multiple-selection mode, it delegates to `DatePickerChips`.
+
+#### DatePickerChips
+
+Renders a multi-chip container trigger for `selectionMode="multiple"`. Selected dates appear as removable pills with keyboard and pointer interactions.
+
+<ApiPropsList>
+  <ApiProp
+    name="overflowBehavior"
+    fullType='"wrap" | "wrap-when-open" | "cutoff"'
+    simpleType="string"
+    defaultValue='"wrap-when-open"'
+  >
+    Controls chip wrapping and single-line +X overflow compression.
+  </ApiProp>
+  <ApiProp name="maxCount" fullType="number">
+    Explicit limit on visible chips before showing the +X overflow badge.
+  </ApiProp>
+</ApiPropsList>
+
+#### DatePickerChip
+
+Renders an individual date badge with a formatted label and optional removal trigger.
+
+#### DatePickerChipRemove
+
+The remove button for a date chip.
+
+#### DatePickerControl
+
+Groups related inputs and triggers into a single popup anchor. Wrap both range inputs in one control. Supported Ark UI control props reach its root element.
+
+#### DatePickerValue
+
+<ApiPropsList>
+  <ApiProp name="placeholder" fullType="string" defaultValue='"Pick a date"'>
+    Displays when no date is selected.
+  </ApiProp>
+  <ApiProp
+    name="format"
+    fullType="string | Intl.DateTimeFormatOptions | ((date: Date) => string)"
+  >
+    Formats selected dates with a format pattern such as `"MMM D, YYYY"`, an
+    `Intl.DateTimeFormatOptions` object, or a custom formatter function.
+  </ApiProp>
+</ApiPropsList>
+
+#### DatePickerInput
+
+Renders the Ark typed input inside a registry input group. Index `0` includes the calendar trigger; subsequent inputs share it. Supported input props reach the text input.
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg"'
+    defaultValue='"default"'
+  >
+    Sets the input shell and trigger size.
+  </ApiProp>
+  <ApiProp name="index" fullType="number" defaultValue="0">
+    Selects the date edited by this input. Use `0` for the start date and `1`
+    for the end date in range mode.
+  </ApiProp>
+</ApiPropsList>
+
+#### DatePickerContent
+
+Portals the positioned popup and forwards content props to Ark's content element. Renders `DatePickerCalendar` when no children are supplied.
+
+<ApiPropsList>
+  <ApiProp name="reduceMotion" fullType="boolean" defaultValue="false">
+    Disables popup animation. The default treatment matches
+    [Popover](./popover), and the operating system's reduced-motion preference
+    is always respected.
+  </ApiProp>
+</ApiPropsList>
+
+#### DatePickerCalendar
+
+Renders `CalendarContent` in the current picker. Accepts the same owned props as [CalendarContent](./calendar#calendarcontent).
+
+#### DatePickerPresetTrigger
+
+Composes a registry `Button` with Ark's preset trigger.
+
+<ApiPropsList>
+  <ApiProp name="value" fullType="Date[]" required>
+    Selects these dates when the button is activated. Match the array to the
+    root's selection mode.
+  </ApiProp>
+</ApiPropsList>
+
+#### DatePickerClearTrigger
+
+Composes Ark's clearing behavior with a registry `Button`. The default is an outline icon button with an X icon. Use `render` or `size` to supply a custom button; event handlers, refs, and disabled state are merged with the clearing behavior.
+
+```tsx
+<DatePickerClearTrigger />
+```
+
+#### DatePickerTimer
+
+Renders an elevated, accessible time picker popup with scrollable hours, minutes, and period columns, styled consistently with the date picker and other elevated popups in the codebase. It owns a separate time value and does not change the calendar's selected date.
+
+<ApiPropsList>
+  <ApiProp name="value" fullType="string">
+    Controls the time value in 24-hour format, such as `"14:30"`.
+  </ApiProp>
+  <ApiProp name="defaultValue" fullType="string">
+    Sets the initial time value for an uncontrolled timer.
+  </ApiProp>
+  <ApiProp name="format" fullType='"12" | "24"' defaultValue='"12"'>
+    Chooses 12-hour or 24-hour time representation.
+  </ApiProp>
+  <ApiProp name="step" fullType="number" defaultValue="1">
+    Sets the minute increment in the minutes column.
+  </ApiProp>
+  <ApiProp
+    name="size"
+    fullType='"default" | "xs" | "sm" | "lg" | "xl" | "icon-xs" | "icon-sm" | "icon" | "icon-lg" | "icon-xl"'
+    defaultValue='"default"'
+  >
+    Sets the time trigger button size.
+  </ApiProp>
+</ApiPropsList>

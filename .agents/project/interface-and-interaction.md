@@ -23,6 +23,8 @@ Every rule in this document is explicitly categorized into one of three levels:
 - Always search the repository for an existing primitive before introducing raw HTML interactive elements.
 - Use a published registry primitive such as `Button`, `Input`, `Textarea`, `Checkbox`, `Select`, `DropdownMenu`, `Popover`, `Tooltip`, or `Tabs` instead of recreating its behavior with raw elements.
 - In registry examples and documentation previews, always import primitives from `@/registry/base/*` to verify that examples run against the exact public code consumers install.
+- Use the registry `Select` for dropdown variants and examples; do not substitute a native `<select>`.
+- Date controls use Ark UI behavior with Day.js at the public value boundary. The default calendar heading switches between day, month, and year grids when clicked. Keep dropdown month/year navigation as an optional custom `Select` layout.
 
 ### [HARD REQUIREMENT] Compose Existing Trigger Treatments
 - Compose registry controls through Base UI's `render` contract instead of duplicating their visual classes on triggers.

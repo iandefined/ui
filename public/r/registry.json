@@ -4,6 +4,87 @@
   "homepage": "https://ui.iandefined.com",
   "items": [
     {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "An Ark UI calendar with native Date values, single, multiple and range selection, and day, month and year views.",
+      "dependencies": [
+        "@ark-ui/react",
+        "@internationalized/date",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
+      "files": [
+        {
+          "path": "src/registry/base/calendar.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/calendar.tsx"
+        },
+        {
+          "path": "src/registry/base/date.ts",
+          "type": "registry:lib",
+          "target": "lib/date.ts"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "An accessible Ark UI date picker with typed inputs, a calendar popup, presets and separate time inputs.",
+      "dependencies": [
+        "@ark-ui/react",
+        "@base-ui/react",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/calendar.json",
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/input-group.json",
+        "https://ui.iandefined.com/r/label.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/date-picker.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/date-picker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-input",
+      "type": "registry:ui",
+      "title": "Date Input",
+      "description": "A segmented Ark UI date input with native Date values, range and time editing, and no calendar popup.",
+      "dependencies": [
+        "@ark-ui/react",
+        "@internationalized/date",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/input-group.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/date-input.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/date-input.tsx"
+        },
+        {
+          "path": "src/registry/base/date.ts",
+          "type": "registry:lib",
+          "target": "lib/date.ts"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
