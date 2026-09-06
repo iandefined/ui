@@ -443,7 +443,7 @@ function ComboboxChipRemove({
     <ComboboxPrimitive.ChipRemove
       aria-label="Remove"
       className={cn(
-        "hitbox-[1px] cursor-pointer rounded-md p-0.5 text-inherit outline-none hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+        "hitbox-[1px] cursor-pointer rounded-md p-0.5 text-muted-foreground outline-none transition-colors hover:bg-secondary/80 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       data-slot="combobox-chip-remove"
@@ -461,7 +461,8 @@ function ComboboxChipRemove({
 function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   return (
     <ScrollArea
-      className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [--scroll-area-fade:var(--popover)] [&_[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      fadeColor="var(--popover)"
       scrollShadow="vertical"
     >
       <ScrollAreaContent>

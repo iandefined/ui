@@ -45,14 +45,19 @@ import {
 Pass `dirty`, `invalid`, and `touched` from TanStack Form field metadata. `Field` propagates these states, and its description/error primitives associate the active message with the control.
 
 ```tsx
-<Field
-  dirty={field.state.meta.isDirty}
-  invalid={Boolean(error)}
-  name={field.name}
-  touched={field.state.meta.isTouched}
->
-  {/* control and active message */}
-</Field>
+import {
+  Field,
+  FieldControl,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+
+<Field>
+  <FieldLabel />
+  <FieldControl />
+  {error ? <FieldError match>{error}</FieldError> : <FieldDescription />}
+</Field>;
 ```
 
 ## Examples

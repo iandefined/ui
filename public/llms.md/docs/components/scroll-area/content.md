@@ -22,14 +22,16 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 </ScrollArea>
 ```
 
-`scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
+`scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position. Use `fadeColor` when the scroll area sits on another surface, such as a card or popover.
 
 ## Composition
 
 ```tsx
+import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
+
 <ScrollArea>
   <ScrollAreaContent />
-</ScrollArea>
+</ScrollArea>;
 ```
 
 ## Examples
@@ -61,4 +63,7 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
 ### Props
 
 Adds fades at overflowing horizontal, vertical, or both edges.
+Sets the CSS color used by the edge fades. It accepts any CSS color value,
+including a theme variable such as `var(--card)` or `var(--popover)`. It
+defaults to `var(--background)`.
 Hides the custom scrollbar while keeping the scroll region available.

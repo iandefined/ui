@@ -592,7 +592,7 @@ function DatePickerChipRemove({
       type="button"
       aria-label={ariaLabel}
       className={cn(
-        "hitbox-[1px] cursor-pointer rounded-md p-0.5 text-inherit outline-none hover:bg-secondary/80 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+        "hitbox-[1px] cursor-pointer rounded-md p-0.5 text-muted-foreground outline-none transition-colors hover:bg-secondary/80 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       data-slot="date-picker-chip-remove"
@@ -1588,7 +1588,10 @@ function DatePickerClearTrigger({
       {
         "aria-label": "Clear date",
         "data-slot": "date-picker-clear-trigger",
-        className: cn("motion-reduce:transition-none", className),
+        className: cn(
+          "text-muted-foreground hover:text-foreground motion-reduce:transition-none",
+          className
+        ),
         ...(children !== undefined || !render
           ? { children: children ?? <XIcon aria-hidden="true" /> }
           : {}),

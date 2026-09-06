@@ -3,14 +3,18 @@ import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
 import { cn } from "@/shared/lib/utils";
 
 interface ScrollAreaProps extends ScrollAreaPrimitive.Root.Props {
+  fadeColor?: string;
   hideScrollbar?: boolean;
   orientation?: "horizontal" | "vertical" | "both";
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
   viewportClassName?: string;
 }
 
+type ScrollAreaStyle = React.CSSProperties & Record<`--${string}`, string>;
+
 function ScrollArea({
   className,
+  fadeColor,
   viewportClassName,
   hideScrollbar = false,
   orientation = "vertical",
@@ -18,6 +22,9 @@ function ScrollArea({
   children,
   ...props
 }: ScrollAreaProps) {
+  const fadeColorStyle: ScrollAreaStyle =
+    fadeColor === undefined ? {} : { "--scroll-area-fade": fadeColor };
+
   return (
     <ScrollAreaPrimitive.Root
       className={cn("relative isolate min-h-0 flex flex-col", className)}
@@ -50,7 +57,8 @@ function ScrollArea({
             {
               "--scroll-area-overflow-y-start": "inherit",
               "--scroll-area-overflow-y-end": "inherit",
-            } as React.CSSProperties
+              ...fadeColorStyle,
+            } as ScrollAreaStyle
           }
         />
         <div
@@ -73,7 +81,8 @@ function ScrollArea({
             {
               "--scroll-area-overflow-x-start": "inherit",
               "--scroll-area-overflow-x-end": "inherit",
-            } as React.CSSProperties
+              ...fadeColorStyle,
+            } as ScrollAreaStyle
           }
         />
         {children}

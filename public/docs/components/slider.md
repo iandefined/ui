@@ -44,6 +44,14 @@ const [value, setValue] = useState(2);
 ## Composition
 
 ```tsx
+import {
+  Slider,
+  SliderContent,
+  SliderControl,
+  SliderLabel,
+  SliderValue,
+} from "@/components/ui/slider";
+
 <Slider>
   <SliderLabel />
   <SliderControl>
@@ -51,7 +59,7 @@ const [value, setValue] = useState(2);
       <SliderValue />
     </SliderContent>
   </SliderControl>
-</Slider>
+</Slider>;
 ```
 
 ## Examples

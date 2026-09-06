@@ -53,15 +53,26 @@ function ProfileForm() {
 Map each field's metadata to `Field` so controls receive the correct validation state and active message association.
 
 ```tsx
-<Field
-  dirty={field.state.meta.isDirty}
-  invalid={Boolean(error)}
-  name={field.name}
-  touched={field.state.meta.isTouched}
->
-  {/* label and control */}
-  <FieldError match={Boolean(error)}>{error}</FieldError>
-</Field>
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Form } from "@/components/ui/form";
+
+<Form form={form}>
+  <Field
+    dirty={field.state.meta.isDirty}
+    invalid={Boolean(error)}
+    name={field.name}
+    touched={field.state.meta.isTouched}
+  >
+    <FieldLabel />
+    <FieldControl />
+    <FieldError match={Boolean(error)}>{error}</FieldError>
+  </Field>
+</Form>;
 ```
 
 Use `form.Subscribe` for submit availability and pending feedback. Disable the submit button while `isSubmitting` is true to prevent duplicate submissions.

@@ -281,6 +281,27 @@
       ]
     },
     {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "A swipe gesture drawer with positions, snap points, nested panels, and composed menu rows.",
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react",
+        "motion",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": ["https://ui.iandefined.com/r/scroll-area.json"],
+      "files": [
+        {
+          "path": "src/registry/base/drawer.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/drawer.tsx"
+        }
+      ]
+    },
+    {
       "name": "kbd",
       "type": "registry:ui",
       "title": "Kbd",
@@ -561,6 +582,29 @@
           "path": "src/registry/base/dropdown-menu.tsx",
           "type": "registry:ui",
           "target": "components/ui/dropdown-menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "A modal window with composed content, scroll modes, and detached triggers.",
+      "dependencies": [
+        "@base-ui/react",
+        "clsx",
+        "tailwind-merge",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/dialog.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/dialog.tsx"
         }
       ]
     },

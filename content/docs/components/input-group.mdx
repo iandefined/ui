@@ -35,6 +35,26 @@ import {
 
 Use `InputGroupInput` or `InputGroupTextarea` as the control. Place `InputGroupAddon` at `inline-start`, `inline-end`, `block-start`, or `block-end`.
 
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
+
+<InputGroup>
+  <InputGroupAddon>
+    <InputGroupText />
+  </InputGroupAddon>
+  <InputGroupInput />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton />
+  </InputGroupAddon>
+</InputGroup>;
+```
+
 ## Examples
 
 ### Text

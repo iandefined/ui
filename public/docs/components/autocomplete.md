@@ -43,6 +43,37 @@ const tags = ["feature", "fix", "bug", "docs"];
 
 Place the input and popup inside `Autocomplete`; use groups, collections, and separators to organize suggestions.
 
+```tsx
+import {
+  Autocomplete,
+  AutocompleteCollection,
+  AutocompleteEmpty,
+  AutocompleteGroup,
+  AutocompleteGroupLabel,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+  AutocompleteSeparator,
+} from "@/components/ui/autocomplete";
+
+<Autocomplete>
+  <AutocompleteInput />
+  <AutocompletePopup>
+    <AutocompleteEmpty />
+    <AutocompleteList>
+      <AutocompleteGroup>
+        <AutocompleteGroupLabel />
+        <AutocompleteCollection>
+          <AutocompleteItem value="option" />
+        </AutocompleteCollection>
+      </AutocompleteGroup>
+      <AutocompleteSeparator />
+    </AutocompleteList>
+  </AutocompletePopup>
+</Autocomplete>;
+```
+
 ## Examples
 
 ### Auto Highlight

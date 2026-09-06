@@ -831,6 +831,10 @@ const headers = (pages) =>
 
 await rm(path.join(publicDir, "llms.md"), { force: true, recursive: true });
 await rm(path.join(publicDir, "docs"), { force: true, recursive: true });
+await rm(path.join(publicDir, "og", "docs"), {
+  force: true,
+  recursive: true,
+});
 await rm(path.join(publicDir, ".well-known"), { force: true, recursive: true });
 
 const pages = await readDocs();

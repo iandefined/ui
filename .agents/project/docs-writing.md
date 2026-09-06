@@ -26,7 +26,7 @@ Keep the catalog flat: component pages remain at `/docs/components/<slug>`. Do n
 - Keep the existing `name="component/example"` convention. Demos live in `examples/<component>/<example>.tsx` and import from `@/registry/base/*` so previews run the installable source.
 - When demos call a module-level manager, mount its provider once around the page's complete example set. Do not mount the same global manager provider inside every preview, which duplicates portals and interaction state.
 - Keep `## Usage` authored by hand. Display consumer imports such as `@/components/ui/button`, never internal registry imports.
-- Include `## Composition` only when two or more public parts need structural explanation. Use a concise tree or anatomy snippet.
+- Include `## Composition` only when two or more public parts need structural explanation. Use one concise `tsx` code block containing consumer imports from `@/components/ui/<item>` and the JSX anatomy. Keep composition examples fenced as documentation-only code rather than raw MDX components or text trees.
 - Include `## Features` only when examples do not already explain a meaningful capability. Omit boilerplate feature lists.
 
 ### Voice and Examples

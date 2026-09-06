@@ -25,10 +25,12 @@ import { Calendar } from "@/components/ui/calendar";
 `Calendar` renders the full calendar when no children are supplied. Compose `CalendarContent` explicitly to add a footer or adjacent controls.
 
 ```tsx
+import { Calendar, CalendarContent } from "@/components/ui/calendar";
+
 <Calendar>
   <CalendarContent />
   <div>{/* Footer controls */}</div>
-</Calendar>
+</Calendar>;
 ```
 
 ## Examples

@@ -56,6 +56,21 @@ Pass `items` to `Select` when `SelectValue` should resolve a selected value to i
 ## Composition
 
 ```tsx
+import {
+  Select,
+  SelectGroup,
+  SelectGroupLabel,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 <Select>
   <SelectTrigger>
     <SelectValue />
@@ -73,7 +88,7 @@ Pass `items` to `Select` when `SelectValue` should resolve a selected value to i
       <SelectSeparator />
     </SelectList>
   </SelectPopup>
-</Select>
+</Select>;
 ```
 
 ## Examples

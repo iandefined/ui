@@ -46,6 +46,33 @@ const fruits = ["Apple", "Banana", "Orange"];
 
 Use `ComboboxChips`, `ComboboxValue`, and `ComboboxChip` for multiple selection; keep `ComboboxInput` inside the chips container.
 
+```tsx
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+  ComboboxValue,
+} from "@/components/ui/combobox";
+
+<Combobox multiple>
+  <ComboboxChips>
+    <ComboboxValue>
+      <ComboboxChip>Selected value</ComboboxChip>
+      <ComboboxInput />
+    </ComboboxValue>
+  </ComboboxChips>
+  <ComboboxPopup>
+    <ComboboxList>
+      <ComboboxItem value="option">Option</ComboboxItem>
+    </ComboboxList>
+  </ComboboxPopup>
+</Combobox>;
+```
+
 ## Examples
 
 ### Basic

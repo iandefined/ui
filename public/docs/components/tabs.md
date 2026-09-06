@@ -30,6 +30,14 @@ import { Tabs, TabsList, TabsPanel, TabsTrigger } from "@/components/ui/tabs";
 ## Composition
 
 ```tsx
+import {
+  Tabs,
+  TabsList,
+  TabsPanel,
+  TabsPanelsWrapper,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+
 <Tabs>
   <TabsList>
     <TabsTrigger />
@@ -37,7 +45,7 @@ import { Tabs, TabsList, TabsPanel, TabsTrigger } from "@/components/ui/tabs";
   <TabsPanelsWrapper>
     <TabsPanel />
   </TabsPanelsWrapper>
-</Tabs>
+</Tabs>;
 ```
 
 ## Examples

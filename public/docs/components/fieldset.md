@@ -34,6 +34,20 @@ Use one `FieldsetLegend` for a related group. For a Radio Group, put `aria-inval
 
 `Fieldset` only provides native grouping and layout. Use `Field` for descriptions, error messages, and state mapping from TanStack Form.
 
+```tsx
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+
+<Fieldset>
+  <FieldsetLegend />
+  <Field>
+    <FieldLabel />
+    <Input />
+  </Field>
+</Fieldset>;
+```
+
 ## Examples
 
 ### Radio Group

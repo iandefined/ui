@@ -63,11 +63,13 @@ function App() {
 `ToastProvider` renders the viewport stack and owns its default position. `AnchoredToastProvider` renders element-relative toasts created with `toast.anchored()`. Use the second provider only when contextual, anchor-relative feedback is part of the app.
 
 ```tsx
+import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
+
 <ToastProvider>
   <AnchoredToastProvider>
     <App />
   </AnchoredToastProvider>
-</ToastProvider>
+</ToastProvider>;
 ```
 
 ## Features

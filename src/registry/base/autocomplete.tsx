@@ -340,7 +340,8 @@ function AutocompleteList({
 }: AutocompleteListProps) {
   return (
     <ScrollArea
-      className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [--scroll-area-fade:var(--popover)] [&_[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      fadeColor="var(--popover)"
       hideScrollbar={hideScrollbar}
       scrollShadow={scrollShadow}
     >

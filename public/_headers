@@ -49,6 +49,12 @@
 /docs/components/date-picker.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/dialog.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/drawer.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/dropdown-menu.md
   Content-Type: text/markdown; charset=utf-8
 

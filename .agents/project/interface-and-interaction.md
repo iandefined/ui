@@ -31,6 +31,15 @@ Every rule in this document is explicitly categorized into one of three levels:
 - Compose registry controls through Base UI's `render` contract instead of duplicating their visual classes on triggers.
 - Follow [base-ui-patterns.md](base-ui-patterns.md) for element semantics, `nativeButton`, prop merging, refs, and callback render forms.
 
+### [HARD REQUIREMENT] Muted Close and Clear Controls
+- Close, clear, and remove icon controls in registry components use `text-muted-foreground` by default. When a hover treatment is provided, transition to `text-foreground` without changing the control's hit area.
+- Keep the control's accessible name and visible focus treatment independent from its muted color.
+
+### [HARD REQUIREMENT] Overlay Panel Surface Tokens
+- Registry panel surfaces, including `Dialog` and `BaseDrawer`, use `border-border` for their border and `bg-popover text-popover-foreground` for the panel surface by default.
+- Keep these surface tokens consistent across portalled overlays. Use `bg-background` only when a component intentionally represents the page surface rather than an overlay panel.
+- Scroll fades inside an overlay panel use the same surface token (`fadeColor="var(--popover)"`) so the fade does not reveal the page background.
+
 ### [SITUATIONAL GUIDANCE] Raw HTML Elements
 - Use raw semantic elements for document structure and native form structure, including `form`, `fieldset`, `legend`, headings, paragraphs, lists, landmarks, and media.
 - Use a raw interactive control only when no published registry primitive applies or native browser behavior is explicitly required (e.g. an invisible native file input trigger). Record the reason in a comment when it is not obvious.

@@ -24,10 +24,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 ## Composition
 
 ```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 <Avatar>
   <AvatarImage />
   <AvatarFallback />
-</Avatar>
+</Avatar>;
 ```
 
 ## Examples

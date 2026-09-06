@@ -104,6 +104,37 @@ const tags = ["feature", "fix", "bug", "docs"];
 
 Place the input and popup inside `Autocomplete`; use groups, collections, and separators to organize suggestions.
 
+```tsx
+import {
+  Autocomplete,
+  AutocompleteCollection,
+  AutocompleteEmpty,
+  AutocompleteGroup,
+  AutocompleteGroupLabel,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+  AutocompleteSeparator,
+} from "@/components/ui/autocomplete";
+
+<Autocomplete>
+  <AutocompleteInput />
+  <AutocompletePopup>
+    <AutocompleteEmpty />
+    <AutocompleteList>
+      <AutocompleteGroup>
+        <AutocompleteGroupLabel />
+        <AutocompleteCollection>
+          <AutocompleteItem value="option" />
+        </AutocompleteCollection>
+      </AutocompleteGroup>
+      <AutocompleteSeparator />
+    </AutocompleteList>
+  </AutocompletePopup>
+</Autocomplete>;
+```
+
 ## Examples
 
 ### Auto Highlight
@@ -194,10 +225,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 ## Composition
 
 ```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 <Avatar>
   <AvatarImage />
   <AvatarFallback />
-</Avatar>
+</Avatar>;
 ```
 
 ## Examples
@@ -322,6 +355,29 @@ import {
 ## Composition
 
 Use `BreadcrumbItem` for each location, `BreadcrumbLink` for navigable ancestors, and `BreadcrumbPage` for the current page.
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumbs";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage />
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>;
+```
 
 ## Examples
 
@@ -473,11 +529,18 @@ import { ButtonGroup } from "@/components/ui/button-group";
 ## Composition
 
 ```tsx
+import { Button } from "@/components/ui/button";
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+} from "@/components/ui/button-group";
+
 <ButtonGroup>
   <Button />
   <ButtonGroupSeparator orientation="vertical" />
   <ButtonGroupText>Text</ButtonGroupText>
-</ButtonGroup>
+</ButtonGroup>;
 ```
 
 ## Examples
@@ -561,10 +624,12 @@ import { Calendar } from "@/components/ui/calendar";
 `Calendar` renders the full calendar when no children are supplied. Compose `CalendarContent` explicitly to add a footer or adjacent controls.
 
 ```tsx
+import { Calendar, CalendarContent } from "@/components/ui/calendar";
+
 <Calendar>
   <CalendarContent />
   <div>{/* Footer controls */}</div>
-</Calendar>
+</Calendar>;
 ```
 
 ## Examples
@@ -667,6 +732,16 @@ import {
 ## Composition
 
 ```tsx
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 <Card>
   <CardHeader>
     <CardTitle />
@@ -675,7 +750,7 @@ import {
   </CardHeader>
   <CardContent />
   <CardFooter />
-</Card>
+</Card>;
 ```
 
 ## Examples
@@ -721,9 +796,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 Use `CheckboxRoot` and `CheckboxIndicator` when a custom composition needs separate parts.
 
 ```tsx
+import { CheckboxIndicator, CheckboxRoot } from "@/components/ui/checkbox";
+
 <CheckboxRoot>
   <CheckboxIndicator />
-</CheckboxRoot>
+</CheckboxRoot>;
 ```
 
 ## Examples
@@ -802,6 +879,33 @@ const fruits = ["Apple", "Banana", "Orange"];
 ## Composition
 
 Use `ComboboxChips`, `ComboboxValue`, and `ComboboxChip` for multiple selection; keep `ComboboxInput` inside the chips container.
+
+```tsx
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+  ComboboxValue,
+} from "@/components/ui/combobox";
+
+<Combobox multiple>
+  <ComboboxChips>
+    <ComboboxValue>
+      <ComboboxChip>Selected value</ComboboxChip>
+      <ComboboxInput />
+    </ComboboxValue>
+  </ComboboxChips>
+  <ComboboxPopup>
+    <ComboboxList>
+      <ComboboxItem value="option">Option</ComboboxItem>
+    </ComboboxList>
+  </ComboboxPopup>
+</Combobox>;
+```
 
 ## Examples
 
@@ -996,14 +1100,21 @@ Use `DatePickerTrigger` for a button or `DatePickerInput` for segmented entry wi
 Wrap grouped inputs or triggers in one `DatePickerControl` so they share a popup anchor. A standalone input or trigger supplies this wrapper automatically.
 
 ```tsx
+import {
+  DatePicker,
+  DatePickerCalendar,
+  DatePickerContent,
+  DatePickerInput,
+  DatePickerLabel,
+} from "@/components/ui/date-picker";
+
 <DatePicker>
   <DatePickerLabel />
   <DatePickerInput />
   <DatePickerContent>
     <DatePickerCalendar />
-    <DatePickerPresetTrigger value={presetDates} />
   </DatePickerContent>
-</DatePicker>
+</DatePicker>;
 ```
 
 ## Examples
@@ -1168,6 +1279,434 @@ Sets the minute increment in the minutes column.
 Sets the time trigger button size. The trigger remains content-sized and can
 shrink within its container.
 
+# Dialog
+
+A modal window for focused tasks that require user interaction.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `Dialog` for focused tasks such as editing a record, confirming an action, or completing a short form without leaving the current page.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  Dialog,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger render={<Button>Open dialog</Button>} />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Dialog title</DialogTitle>
+      <DialogDescription>Supporting text for the task.</DialogDescription>
+    </DialogHeader>
+    <DialogBody>Dialog content.</DialogBody>
+    <DialogFooter>
+      <DialogCloseTrigger render={<Button variant="outline">Cancel</Button>} />
+      <Button>Save</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>;
+```
+
+## Composition
+
+```tsx
+import {
+  Dialog,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle />
+      <DialogDescription />
+    </DialogHeader>
+    <DialogBody />
+    <DialogFooter>
+      <DialogCloseTrigger />
+    </DialogFooter>
+  </DialogContent>
+</Dialog>;
+```
+
+`DialogContent` composes the portal, backdrop, and viewport. Place the content parts directly inside it. Use `DialogBody` for content that should scroll independently from the header and footer.
+
+## Examples
+
+### Controlled
+
+Control `open` and `onOpenChange` when the surrounding flow owns the dialog state.
+
+### With Form
+
+Place a native `<form>` inside `DialogContent` and close it after a successful submit.
+
+### Scrollable Content
+
+The default `scroll="inside"` mode keeps the header and footer visible while `DialogBody` scrolls.
+
+### Outside Scroll
+
+Set `scroll="outside"` when the entire dialog card should move through the viewport.
+
+### Inset Footer
+
+Set `variant="inset"` to separate the footer with a muted background and top border.
+
+### Non-dismissible
+
+Set `dismissible={false}` when the user must complete an action before the
+dialog can close. This prevents outside presses and Escape from dismissing the
+dialog. Compose `DialogCloseTrigger` around each button that is allowed to
+close it.
+
+### Nested Dialogs
+
+Render another `Dialog` inside the first dialog when a secondary action needs its own focus scope.
+
+### Detached Trigger
+
+Use `createDialogHandle()` to connect a trigger and dialog root that live in different parts of the tree.
+
+### Non-Modal
+
+Pass `modal={false}` for a floating dialog that leaves the page interactive and does not dismiss from outside presses.
+
+## Accessibility
+
+Include a `DialogTitle` for every dialog and use `DialogDescription` for supporting context when the task needs it. Base UI manages the dialog role, focus trap, Escape handling, and focus restoration.
+
+Dismissible dialogs include a default corner close action with the accessible name
+`Close`; add a footer close action when the dialog uses `scroll="outside"` and
+the header can move out of view.
+
+For `dismissible={false}`, provide at least one visible `DialogCloseTrigger` and
+compose it around the button content with `render`.
+
+`scroll="outside"` initially focuses the popup so a tall dialog does not open scrolled past its title. Pass `initialFocus` to choose another target. For `modal={false}`, the page remains interactive and the default pointer dismissal is disabled.
+
+## API Reference
+
+`Dialog` and its parts wrap the corresponding [Base UI Dialog primitives](https://base-ui.com/react/components/dialog). Supported Base UI props pass through. The reference below covers the registry-owned behavior and defaults.
+
+### Props
+
+#### Dialog
+
+Allows outside presses and Escape to dismiss the dialog. When `false`, the
+default corner close is omitted and the dialog can close only through
+`DialogCloseTrigger` or an externally controlled `open` value.
+Controls focus trapping, page scrolling, and pointer interaction outside the
+dialog. `false` leaves the page interactive, while `"trap-focus"` traps
+focus without locking page scrolling.
+Prevents outside presses from closing the dialog. It defaults to `true` when
+`modal` is `false` or `"trap-focus"`.
+
+#### DialogContent
+
+Selects the dialog frame treatment. `"inset"` adds a muted footer surface
+when `DialogFooter` is present.
+Chooses whether `DialogBody` or the surrounding viewport scrolls.
+>
+Chooses the element that receives focus when the dialog opens. In
+`"outside"` scroll mode, the popup is the default target.
+
+#### DialogBody
+
+Uses the browser's native scrolling instead of the registry scrollbar.
+Selects the edges that receive a scroll fade. `true` fades both axes and
+`false` disables fades.
+Reserves space for the scrollbar to reduce content movement while scrolling.
+Keeps the custom scrollbar visible instead of showing it only while
+interacting with the scroll area.
+Hides the custom scrollbar while keeping the body scrollable.
+
+### Utilities
+
+#### `createDialogHandle`
+
+Create a handle once, pass it to a detached `DialogTrigger` and `Dialog`, and optionally provide a payload type for shared dialogs.
+
+```tsx
+import {
+  createDialogHandle,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+type User = { id: string; name: string };
+
+const handle = createDialogHandle<User>();
+
+<DialogTrigger handle={handle} payload={{ id: "u1", name: "Jane" }}>
+  Edit Jane
+</DialogTrigger>;
+
+<Dialog handle={handle}>
+  <DialogContent>
+    {({ payload }) => <DialogTitle>Edit {payload?.name}</DialogTitle>}
+  </DialogContent>
+</Dialog>;
+```
+
+# Drawer
+
+A swipe gesture drawer with positions, snap points, and nested panels.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `Drawer` for a panel that responds to edge swipes and can rest at snap points. It fits mobile navigation, filters, settings, and detail views that benefit from a draggable dismissal gesture.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerCloseTrigger,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerPopup,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+```
+
+```tsx
+<Drawer>
+  <DrawerTrigger render={<Button variant="outline" />}>
+    Open drawer
+  </DrawerTrigger>
+  <DrawerPopup showBar>
+    <DrawerHeader>
+      <DrawerTitle>Notifications</DrawerTitle>
+      <DrawerDescription>You are all caught up. Good job!</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <DrawerCloseTrigger render={<Button variant="outline" />}>
+        Close
+      </DrawerCloseTrigger>
+    </DrawerFooter>
+  </DrawerPopup>
+</Drawer>
+```
+
+## Composition
+
+`DrawerPopup` composes the portal, backdrop, viewport, and popup. Use `DrawerPanel` for scrollable or form content, and use `DrawerContent` directly when a custom layout needs text selection without starting a swipe gesture.
+
+```tsx
+import {
+  Drawer,
+  DrawerCloseTrigger,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerPanel,
+  DrawerPopup,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
+<Drawer>
+  <DrawerTrigger />
+  <DrawerPopup>
+    <DrawerHeader>
+      <DrawerTitle />
+      <DrawerDescription />
+    </DrawerHeader>
+    <DrawerPanel />
+    <DrawerFooter>
+      <DrawerCloseTrigger />
+    </DrawerFooter>
+  </DrawerPopup>
+</Drawer>;
+```
+
+## Examples
+
+### Controlled
+
+Pass `open` and `onOpenChange` when the drawer state belongs to a parent component.
+
+### Non-dismissible
+
+Set `dismissible={false}` when the user must complete an action before the
+drawer can close. This disables outside presses, Escape, swipe dragging, and
+swipe dismissal, and removes the thumb. Compose `DrawerCloseTrigger` around each
+button that is allowed to close the drawer.
+
+### Positions
+
+Set `position` on `Drawer` to choose the edge where the drawer opens.
+
+| Value      | Description                |
+| ---------- | -------------------------- |
+| `"bottom"` | Slides up from the bottom. |
+| `"top"`    | Slides down from the top.  |
+| `"left"`   | Slides in from the left.   |
+| `"right"`  | Slides in from the right.  |
+
+### Snap Points
+
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position.
+
+### Floating Surface
+
+Set `variant="floating"` for an inset panel with rounded corners on every edge. The example shows the same surface from all four drawer positions.
+
+### Form Content
+
+Use `DrawerPanel` for form fields and keep actions in `DrawerFooter`.
+
+### Scrollable Content
+
+Keep long content inside `DrawerPanel`. Set `scrollFade` to show fades only where the panel can scroll.
+
+### Nested Drawers
+
+Nest another `Drawer` inside a popup to coordinate parent scaling and child stacking.
+
+### Indent Effect
+
+Wrap the page surface with `DrawerIndent` inside `DrawerProvider` to scale and round it while a drawer is open.
+
+### Menu Rows
+
+Use the drawer menu parts for touch-sized actions, toggles, groups, and single-choice rows.
+
+## Accessibility
+
+Include `DrawerTitle` inside every popup so Base UI can name the dialog. Add `DrawerDescription` when the panel needs supporting context, and provide a visible `DrawerCloseTrigger` for modal drawers. For `dismissible={false}`, provide at least one visible `DrawerCloseTrigger` and compose it around the button content with `render`. `DrawerMenuCheckboxItem` and `DrawerMenuRadioItem` are individually focusable controls, so give the surrounding menu a label when it is not otherwise named.
+
+## API Reference
+
+`Drawer` and its parts wrap [Base UI Drawer primitives](https://base-ui.com/react/components/drawer). Supported Base UI props pass through. The props below are the styles and composition options owned by this registry component.
+
+### Props
+
+#### Drawer
+
+Root component that provides the position context and maps it to Base UI's `swipeDirection`.
+
+Allows outside presses, Escape, and swipe gestures to dismiss the drawer.
+When `false`, swipe dragging is disabled, the drawer has no thumb, and it
+can close only through `DrawerCloseTrigger` or an externally controlled
+`open` value.
+Chooses the edge where the drawer opens and the direction used for swipe
+dismissal. An explicit `swipeDirection` still takes precedence.
+
+#### DrawerPopup
+
+Composes `DrawerPortal`, `DrawerBackdrop`, `DrawerViewport`, and the Base UI `Drawer.Popup`.
+
+Uses a viewport-flush panel for `"default"` or an inset, fully rounded panel
+for `"floating"`.
+Renders a directional drag handle inside dismissible popups with a
+transparent expanded hitbox, an open-hand cursor, and a stronger thumb color
+on hover. The bar is omitted when `dismissible={false}`.
+Overrides the position inherited from `Drawer`.
+Exposes a surface level as `data-level` for consumer styling.
+Selects the repository shadow scale used by the popup.
+
+#### DrawerPanel
+
+Wraps panel content in `ScrollArea` and `Drawer.Content` so scrolling and text selection coexist with swipe gestures.
+
+Wraps the panel in the registry `ScrollArea` when enabled.
+Enables the vertical `ScrollArea` shadow when the panel has overflow.
+Wraps the content in `DrawerContent` so selecting text does not start a
+drawer swipe.
+
+#### DrawerHeader and DrawerFooter
+
+Both parts support the Base UI `render` contract through `useRender`. `DrawerFooter` also supports the following props.
+
+Uses standard action spacing or adds a bordered muted footer surface.
+Uses `DrawerContent` for selectable footer content.
+
+#### DrawerMenuCheckboxItem
+
+A focusable Base UI checkbox row with a reserved indicator column.
+
+Shows a checkmark or a non-interactive switch visual. The whole row remains
+the checkbox control.
+Sets the checked switch track color when `indicator="switch"`.
+Sets the switch track and thumb shape when `indicator="switch"`.
+Sets the switch visual size when `indicator="switch"`.
+Chooses the switch visual transition style when `indicator="switch"`.
+
+#### DrawerMenuRadioItem
+
+Focusable radio row for use inside `DrawerMenuRadioGroup`.
+
+Identifies the option within the surrounding radio group.
+
+### Components
+
+| Component                | Responsibility                                             |
+| ------------------------ | ---------------------------------------------------------- |
+| `DrawerTrigger`          | Opens the drawer and supports Base UI's `render` prop.     |
+| `DrawerCloseTrigger`     | Closes the drawer and supports Base UI's `render` prop.    |
+| `DrawerBar`              | Renders the hoverable directional drag handle and hitbox.  |
+| `DrawerContent`          | Wraps selectable custom content with `Drawer.Content`.     |
+| `DrawerProvider`         | Coordinates indent state for related drawers.              |
+| `DrawerIndent`           | Scales and rounds the page surface while a drawer is open. |
+| `DrawerIndentBackground` | Renders the background layer for the indent effect.        |
+| `DrawerSwipeArea`        | Adds an invisible edge area for swipe-to-open gestures.    |
+| `DrawerMenu`             | Groups drawer menu rows in a semantic `nav`.               |
+| `DrawerMenuItem`         | Renders an action row.                                     |
+| `DrawerMenuTrigger`      | Renders a row that opens a nested drawer.                  |
+| `DrawerMenuSeparator`    | Divides menu groups.                                       |
+| `DrawerMenuGroup`        | Groups related menu rows.                                  |
+| `DrawerMenuGroupLabel`   | Labels a menu group.                                       |
+| `DrawerMenuRadioGroup`   | Coordinates single-choice rows.                            |
+
+### Drawer CSS Variables
+
+Base UI exposes these values on the popup while it is being swiped or snapped.
+
+| Variable                     | Description                                     |
+| ---------------------------- | ----------------------------------------------- |
+| `--drawer-swipe-progress`    | Progress toward dismissal, from `0` to `1`.     |
+| `--drawer-swipe-movement-x`  | Horizontal swipe offset in pixels.              |
+| `--drawer-swipe-movement-y`  | Vertical swipe offset in pixels.                |
+| `--drawer-swipe-strength`    | Velocity-based value used for dismissal timing. |
+| `--drawer-snap-point-offset` | Offset created by the active snap point.        |
+| `--drawer-height`            | Current drawer height.                          |
+| `--drawer-frontmost-height`  | Height of the frontmost nested drawer.          |
+| `--nested-drawers`           | Number of nested drawers currently open.        |
+
 # Dropdown Menu
 
 A list of actions in a dropdown, enhanced with keyboard navigation.
@@ -1201,6 +1740,45 @@ import {
 ## Composition
 
 Compose items, groups, checkbox or radio groups, separators, and nested submenus inside `DropdownMenuContent`.
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+<DropdownMenu>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuLabel />
+    <DropdownMenuGroup>
+      <DropdownMenuItem />
+      <DropdownMenuSeparator />
+      <DropdownMenuCheckboxItem />
+      <DropdownMenuRadioGroup>
+        <DropdownMenuRadioItem />
+      </DropdownMenuRadioGroup>
+    </DropdownMenuGroup>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger />
+      <DropdownMenuSubContent>
+        <DropdownMenuItem />
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
 
 ## Examples
 
@@ -1324,14 +1902,19 @@ import {
 Pass `dirty`, `invalid`, and `touched` from TanStack Form field metadata. `Field` propagates these states, and its description/error primitives associate the active message with the control.
 
 ```tsx
-<Field
-  dirty={field.state.meta.isDirty}
-  invalid={Boolean(error)}
-  name={field.name}
-  touched={field.state.meta.isTouched}
->
-  {/* control and active message */}
-</Field>
+import {
+  Field,
+  FieldControl,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+
+<Field>
+  <FieldLabel />
+  <FieldControl />
+  {error ? <FieldError match>{error}</FieldError> : <FieldDescription />}
+</Field>;
 ```
 
 ## Examples
@@ -1408,6 +1991,20 @@ import { Input } from "@/components/ui/input";
 Use one `FieldsetLegend` for a related group. For a Radio Group, put `aria-invalid` and `aria-describedby` on the group root and render one group-level `FieldError` after its options. For multiple checkboxes, keep each checkbox independently labelable while the fieldset supplies the shared context.
 
 `Fieldset` only provides native grouping and layout. Use `Field` for descriptions, error messages, and state mapping from TanStack Form.
+
+```tsx
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+
+<Fieldset>
+  <FieldsetLegend />
+  <Field>
+    <FieldLabel />
+    <Input />
+  </Field>
+</Fieldset>;
+```
 
 ## Examples
 
@@ -1486,15 +2083,26 @@ function ProfileForm() {
 Map each field's metadata to `Field` so controls receive the correct validation state and active message association.
 
 ```tsx
-<Field
-  dirty={field.state.meta.isDirty}
-  invalid={Boolean(error)}
-  name={field.name}
-  touched={field.state.meta.isTouched}
->
-  {/* label and control */}
-  <FieldError match={Boolean(error)}>{error}</FieldError>
-</Field>
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Form } from "@/components/ui/form";
+
+<Form form={form}>
+  <Field
+    dirty={field.state.meta.isDirty}
+    invalid={Boolean(error)}
+    name={field.name}
+    touched={field.state.meta.isTouched}
+  >
+    <FieldLabel />
+    <FieldControl />
+    <FieldError match={Boolean(error)}>{error}</FieldError>
+  </Field>
+</Form>;
 ```
 
 Use `form.Subscribe` for submit availability and pending feedback. Disable the submit button while `isSubmitting` is true to prevent duplicate submissions.
@@ -1623,6 +2231,26 @@ import {
 
 Use `InputGroupInput` or `InputGroupTextarea` as the control. Place `InputGroupAddon` at `inline-start`, `inline-end`, `block-start`, or `block-end`.
 
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
+
+<InputGroup>
+  <InputGroupAddon>
+    <InputGroupText />
+  </InputGroupAddon>
+  <InputGroupInput />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton />
+  </InputGroupAddon>
+</InputGroup>;
+```
+
 ## Examples
 
 ### Text
@@ -1701,6 +2329,29 @@ import {
 ## Composition
 
 Group slots with `InputOTPGroup` and use `InputOTPSeparator` between groups.
+
+```tsx
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+
+<InputOTP maxLength={6}>
+  <InputOTPGroup>
+    <InputOTPSlot index={0} />
+    <InputOTPSlot index={1} />
+    <InputOTPSlot index={2} />
+  </InputOTPGroup>
+  <InputOTPSeparator />
+  <InputOTPGroup>
+    <InputOTPSlot index={3} />
+    <InputOTPSlot index={4} />
+    <InputOTPSlot index={5} />
+  </InputOTPGroup>
+</InputOTP>;
+```
 
 ## Examples
 
@@ -1853,6 +2504,15 @@ import {
 ## Composition
 
 ```tsx
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+  NumberFieldScrubArea,
+} from "@/components/ui/number-field";
+
 <NumberField>
   <NumberFieldScrubArea />
   <NumberFieldGroup>
@@ -1860,7 +2520,7 @@ import {
     <NumberFieldInput />
     <NumberFieldIncrement />
   </NumberFieldGroup>
-</NumberField>
+</NumberField>;
 ```
 
 ## Examples
@@ -2064,14 +2724,9 @@ import {
   RadioRoot,
 } from "@/components/ui/radio-group";
 
-// Option #1. Basic usage:
 <RadioGroup>
   <Radio value="one" />
-</RadioGroup>;
-
-// Option #2. Custom usage:
-<RadioGroup>
-  <RadioRoot value="one">
+  <RadioRoot value="two">
     <RadioIndicator />
   </RadioRoot>
 </RadioGroup>;
@@ -2133,14 +2788,16 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 </ScrollArea>
 ```
 
-`scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position.
+`scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position. Use `fadeColor` when the scroll area sits on another surface, such as a card or popover.
 
 ## Composition
 
 ```tsx
+import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
+
 <ScrollArea>
   <ScrollAreaContent />
-</ScrollArea>
+</ScrollArea>;
 ```
 
 ## Examples
@@ -2172,6 +2829,9 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
 ### Props
 
 Adds fades at overflowing horizontal, vertical, or both edges.
+Sets the CSS color used by the edge fades. It accepts any CSS color value,
+including a theme variable such as `var(--card)` or `var(--popover)`. It
+defaults to `var(--background)`.
 Hides the custom scrollbar while keeping the scroll region available.
 
 # Select
@@ -2232,6 +2892,21 @@ Pass `items` to `Select` when `SelectValue` should resolve a selected value to i
 ## Composition
 
 ```tsx
+import {
+  Select,
+  SelectGroup,
+  SelectGroupLabel,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 <Select>
   <SelectTrigger>
     <SelectValue />
@@ -2249,7 +2924,7 @@ Pass `items` to `Select` when `SelectValue` should resolve a selected value to i
       <SelectSeparator />
     </SelectList>
   </SelectPopup>
-</Select>
+</Select>;
 ```
 
 ## Examples
@@ -2426,6 +3101,14 @@ const [value, setValue] = useState(2);
 ## Composition
 
 ```tsx
+import {
+  Slider,
+  SliderContent,
+  SliderControl,
+  SliderLabel,
+  SliderValue,
+} from "@/components/ui/slider";
+
 <Slider>
   <SliderLabel />
   <SliderControl>
@@ -2433,7 +3116,7 @@ const [value, setValue] = useState(2);
       <SliderValue />
     </SliderContent>
   </SliderControl>
-</Slider>
+</Slider>;
 ```
 
 ## Examples
@@ -2588,6 +3271,14 @@ import { Tabs, TabsList, TabsPanel, TabsTrigger } from "@/components/ui/tabs";
 ## Composition
 
 ```tsx
+import {
+  Tabs,
+  TabsList,
+  TabsPanel,
+  TabsPanelsWrapper,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+
 <Tabs>
   <TabsList>
     <TabsTrigger />
@@ -2595,7 +3286,7 @@ import { Tabs, TabsList, TabsPanel, TabsTrigger } from "@/components/ui/tabs";
   <TabsPanelsWrapper>
     <TabsPanel />
   </TabsPanelsWrapper>
-</Tabs>
+</Tabs>;
 ```
 
 ## Examples
@@ -2729,11 +3420,13 @@ function App() {
 `ToastProvider` renders the viewport stack and owns its default position. `AnchoredToastProvider` renders element-relative toasts created with `toast.anchored()`. Use the second provider only when contextual, anchor-relative feedback is part of the app.
 
 ```tsx
+import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
+
 <ToastProvider>
   <AnchoredToastProvider>
     <App />
   </AnchoredToastProvider>
-</ToastProvider>
+</ToastProvider>;
 ```
 
 ## Features

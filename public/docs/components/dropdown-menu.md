@@ -32,6 +32,45 @@ import {
 
 Compose items, groups, checkbox or radio groups, separators, and nested submenus inside `DropdownMenuContent`.
 
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+<DropdownMenu>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuLabel />
+    <DropdownMenuGroup>
+      <DropdownMenuItem />
+      <DropdownMenuSeparator />
+      <DropdownMenuCheckboxItem />
+      <DropdownMenuRadioGroup>
+        <DropdownMenuRadioItem />
+      </DropdownMenuRadioGroup>
+    </DropdownMenuGroup>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger />
+      <DropdownMenuSubContent>
+        <DropdownMenuItem />
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
+
 ## Examples
 
 ### With Arrow

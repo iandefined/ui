@@ -1,0 +1,395 @@
+"use client";
+
+import { Dialog as BaseDialog } from "@base-ui/react/dialog";
+import { XIcon } from "lucide-react";
+import * as React from "react";
+
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+
+/** Whether the popup or the viewport owns vertical scrolling. */
+type DialogScroll = "inside" | "outside";
+
+type DialogFadeEdge = "top" | "bottom" | "left" | "right" | "x" | "y";
+type DialogFadeEdges = boolean | DialogFadeEdge | DialogFadeEdge[];
+type DialogOnOpenChange = NonNullable<BaseDialog.Root.Props["onOpenChange"]>;
+
+interface DialogConfigContextValue {
+  dismissible: boolean;
+  modal: boolean | "trap-focus";
+}
+
+const DialogConfigContext = React.createContext<DialogConfigContextValue>({
+  dismissible: true,
+  modal: true,
+});
+
+const DialogScrollContext = React.createContext<DialogScroll>("inside");
+
+interface DialogProps<Payload> extends BaseDialog.Root.Props<Payload> {
+  dismissible?: boolean;
+}
+
+function Dialog<Payload>({
+  dismissible = true,
+  modal = true,
+  disablePointerDismissal,
+  onOpenChange,
+  ...props
+}: DialogProps<Payload>) {
+  const handleOpenChange = React.useCallback<DialogOnOpenChange>(
+    (nextOpen, eventDetails) => {
+      if (!dismissible && !nextOpen && eventDetails.reason !== "close-press") {
+        eventDetails.cancel();
+        return;
+      }
+
+      onOpenChange?.(nextOpen, eventDetails);
+    },
+    [dismissible, onOpenChange]
+  );
+
+  const configValue = React.useMemo(
+    () => ({ dismissible, modal }),
+    [dismissible, modal]
+  );
+
+  return (
+    <DialogConfigContext.Provider value={configValue}>
+      <BaseDialog.Root
+        modal={modal}
+        disablePointerDismissal={
+          disablePointerDismissal ?? (!dismissible || modal !== true)
+        }
+        onOpenChange={handleOpenChange}
+        {...props}
+      />
+    </DialogConfigContext.Provider>
+  );
+}
+
+const createDialogHandle = BaseDialog.createHandle;
+
+function DialogPortal({ ...props }: BaseDialog.Portal.Props) {
+  return <BaseDialog.Portal data-slot="dialog-portal" {...props} />;
+}
+
+function DialogTrigger<Payload>({
+  ...props
+}: BaseDialog.Trigger.Props<Payload>) {
+  return <BaseDialog.Trigger data-slot="dialog-trigger" {...props} />;
+}
+
+function DialogCloseTrigger({ ...props }: BaseDialog.Close.Props) {
+  return <BaseDialog.Close data-slot="dialog-close-trigger" {...props} />;
+}
+
+function DialogBackdrop({ className, ...props }: BaseDialog.Backdrop.Props) {
+  return (
+    <BaseDialog.Backdrop
+      data-slot="dialog-backdrop"
+      className={cn(
+        "fixed inset-0 z-40 min-h-dvh bg-black/50 backdrop-blur-[2px] transition-opacity duration-200",
+        "data-starting-style:opacity-0 data-ending-style:opacity-0 motion-reduce:transition-none",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function DialogViewport({
+  className,
+  scroll = "inside",
+  children,
+  ...props
+}: BaseDialog.Viewport.Props & { scroll?: DialogScroll }) {
+  const { modal } = React.useContext(DialogConfigContext);
+
+  return (
+    <BaseDialog.Viewport
+      data-slot="dialog-viewport"
+      className={cn(
+        "fixed inset-0 z-50",
+        scroll === "inside" &&
+          "flex flex-col items-center justify-center overflow-hidden px-4 py-6",
+        className
+      )}
+      {...props}
+    >
+      <DialogScrollContext.Provider value={scroll}>
+        {scroll === "outside" ? (
+          <ScrollArea
+            className={cn(
+              "size-full",
+              modal !== true &&
+                "[&_[data-slot=scroll-area-scrollbar]]:pointer-events-auto"
+            )}
+            // Keep the scroll port fixed to the viewport; the content wrapper
+            // below owns the growable centering box for tall dialogs.
+            viewportClassName="h-full flex-none"
+          >
+            <ScrollAreaContent className="flex min-h-full items-center justify-center px-4 py-6">
+              {children}
+            </ScrollAreaContent>
+          </ScrollArea>
+        ) : (
+          children
+        )}
+      </DialogScrollContext.Provider>
+    </BaseDialog.Viewport>
+  );
+}
+
+function DialogContent({
+  className,
+  children,
+  variant = "default",
+  scroll = "inside",
+  ref,
+  initialFocus,
+  ...props
+}: BaseDialog.Popup.Props & {
+  variant?: "default" | "inset";
+  /** Whether the body or the area around the popup owns scrolling. */
+  scroll?: DialogScroll;
+}) {
+  const { dismissible, modal } = React.useContext(DialogConfigContext);
+  const isModal = modal === true;
+  const isOutsideScroll = scroll === "outside";
+  const popupRef = React.useRef<HTMLDivElement | null>(null);
+
+  const mergedRef = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      popupRef.current = node;
+
+      if (typeof ref !== "function") {
+        if (ref) ref.current = node;
+
+        return () => {
+          popupRef.current = null;
+          if (ref) ref.current = null;
+        };
+      }
+
+      const cleanup = ref(node);
+
+      return () => {
+        popupRef.current = null;
+        if (typeof cleanup === "function") cleanup();
+        else ref(null);
+      };
+    },
+    [ref]
+  );
+
+  const popup = (
+    <BaseDialog.Popup
+      ref={mergedRef}
+      initialFocus={initialFocus ?? (isOutsideScroll ? popupRef : undefined)}
+      data-slot="dialog-content"
+      data-variant={variant}
+      data-scroll={scroll}
+      className={cn(
+        "relative z-50 flex w-full max-w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-xl",
+        "sm:max-w-lg",
+        scroll === "inside" && "max-h-full min-h-0",
+        isOutsideScroll && "outline-none",
+        "-translate-y-[calc(1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))]",
+        "transition-[translate,scale,opacity] duration-200 ease-out",
+        "data-starting-style:translate-y-5 data-starting-style:scale-95 data-starting-style:opacity-0",
+        "data-ending-style:translate-y-5 data-ending-style:scale-95 data-ending-style:opacity-0",
+        "motion-reduce:transform-none motion-reduce:transition-opacity",
+        "before:pointer-events-none before:absolute before:inset-0 before:z-10 before:hidden before:rounded-[inherit] before:bg-black/5 before:opacity-0 before:transition-opacity before:duration-200",
+        "data-nested-dialog-open:before:block data-nested-dialog-open:before:opacity-100",
+        !isModal && "pointer-events-auto",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      {dismissible && (
+        <DialogCloseTrigger
+          aria-label="Close"
+          className="absolute end-2 top-2 text-muted-foreground"
+          render={<Button size="icon-sm" variant="ghost" />}
+        >
+          <XIcon aria-hidden="true" />
+        </DialogCloseTrigger>
+      )}
+    </BaseDialog.Popup>
+  );
+
+  return (
+    <DialogPortal>
+      {isModal && <DialogBackdrop />}
+      <DialogViewport
+        scroll={scroll}
+        className={cn(!isModal && "pointer-events-none")}
+      >
+        {popup}
+      </DialogViewport>
+    </DialogPortal>
+  );
+}
+
+function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-header"
+      className={cn(
+        "flex flex-col gap-2 px-6 pt-6 pb-3",
+        "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-body])):has([data-slot=dialog-footer])]:pb-6",
+        "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-body])):not(:has([data-slot=dialog-footer]))]:pb-6",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function getScrollShadow(fadeEdges: DialogFadeEdges) {
+  if (fadeEdges === false) return "none" as const;
+  if (fadeEdges === true) return "both" as const;
+
+  const edges = Array.isArray(fadeEdges) ? fadeEdges : [fadeEdges];
+  const hasVertical = edges.some((edge) =>
+    ["top", "bottom", "y"].includes(edge)
+  );
+  const hasHorizontal = edges.some((edge) =>
+    ["left", "right", "x"].includes(edge)
+  );
+
+  if (hasVertical && hasHorizontal) return "both" as const;
+  if (hasVertical) return "vertical" as const;
+  if (hasHorizontal) return "horizontal" as const;
+  return "none" as const;
+}
+
+function DialogBody({
+  className,
+  nativeScroll = false,
+  fadeEdges = true,
+  scrollbarGutter = false,
+  persistScrollbar = false,
+  hideScrollbar = false,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & {
+  nativeScroll?: boolean;
+  fadeEdges?: DialogFadeEdges;
+  scrollbarGutter?: boolean;
+  persistScrollbar?: boolean;
+  hideScrollbar?: boolean;
+}) {
+  const scroll = React.useContext(DialogScrollContext);
+  const content = (
+    <div className={cn("px-6 py-1", className)} {...props}>
+      {children}
+    </div>
+  );
+
+  return (
+    <div
+      data-slot="dialog-body"
+      className={cn(
+        "min-h-0",
+        scroll === "inside" && "flex min-h-0 flex-1 flex-col",
+        "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-header]))]:pt-5",
+        "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-footer]))]:pb-5",
+        "in-data-[variant=inset]:in-[[data-slot=dialog-content]:has([data-slot=dialog-footer])]:pb-5"
+      )}
+    >
+      {scroll === "outside" ? (
+        content
+      ) : nativeScroll ? (
+        <div
+          data-slot="dialog-body-scroll"
+          className={cn(
+            "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+            scrollbarGutter && "[scrollbar-gutter:stable]",
+            hideScrollbar && "[scrollbar-width:none]"
+          )}
+        >
+          {content}
+        </div>
+      ) : (
+        <ScrollArea
+          className={cn(
+            "flex-1",
+            persistScrollbar &&
+              "[&_[data-slot=scroll-area-scrollbar]]:opacity-100"
+          )}
+          fadeColor="var(--popover)"
+          viewportClassName={cn(scrollbarGutter && "[scrollbar-gutter:stable]")}
+          scrollShadow={getScrollShadow(fadeEdges)}
+          hideScrollbar={hideScrollbar}
+        >
+          <ScrollAreaContent className="min-h-full">
+            {content}
+          </ScrollAreaContent>
+        </ScrollArea>
+      )}
+    </div>
+  );
+}
+
+function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-footer"
+      className={cn(
+        "flex flex-col-reverse gap-2 px-6 pt-4 pb-6 sm:flex-row sm:justify-end",
+        "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-header])):not(:has([data-slot=dialog-body]))]:pt-6",
+        "not-in-data-[variant=inset]:in-[[data-slot=dialog-content]:has([data-slot=dialog-body])]:pt-3",
+        "in-data-[variant=inset]:rounded-b-xl in-data-[variant=inset]:border-t in-data-[variant=inset]:border-border in-data-[variant=inset]:bg-muted in-data-[variant=inset]:pt-4 in-data-[variant=inset]:pb-4",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function DialogTitle({ className, ...props }: BaseDialog.Title.Props) {
+  return (
+    <BaseDialog.Title
+      data-slot="dialog-title"
+      className={cn(
+        "text-lg leading-none font-semibold tracking-tight text-balance",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function DialogDescription({
+  className,
+  ...props
+}: BaseDialog.Description.Props) {
+  return (
+    <BaseDialog.Description
+      data-slot="dialog-description"
+      className={cn("text-sm text-muted-foreground text-pretty", className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  Dialog,
+  DialogBackdrop,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+  DialogViewport,
+  createDialogHandle,
+};
+export type { DialogFadeEdge, DialogFadeEdges, DialogScroll };

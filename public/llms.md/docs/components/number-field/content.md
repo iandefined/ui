@@ -35,6 +35,15 @@ import {
 ## Composition
 
 ```tsx
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+  NumberFieldScrubArea,
+} from "@/components/ui/number-field";
+
 <NumberField>
   <NumberFieldScrubArea />
   <NumberFieldGroup>
@@ -42,7 +51,7 @@ import {
     <NumberFieldInput />
     <NumberFieldIncrement />
   </NumberFieldGroup>
-</NumberField>
+</NumberField>;
 ```
 
 ## Examples

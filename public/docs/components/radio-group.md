@@ -44,14 +44,9 @@ import {
   RadioRoot,
 } from "@/components/ui/radio-group";
 
-// Option #1. Basic usage:
 <RadioGroup>
   <Radio value="one" />
-</RadioGroup>;
-
-// Option #2. Custom usage:
-<RadioGroup>
-  <RadioRoot value="one">
+  <RadioRoot value="two">
     <RadioIndicator />
   </RadioRoot>
 </RadioGroup>;

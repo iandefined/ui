@@ -33,6 +33,16 @@ import {
 ## Composition
 
 ```tsx
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 <Card>
   <CardHeader>
     <CardTitle />
@@ -41,7 +51,7 @@ import {
   </CardHeader>
   <CardContent />
   <CardFooter />
-</Card>
+</Card>;
 ```
 
 ## Examples

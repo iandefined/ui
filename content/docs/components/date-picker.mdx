@@ -39,14 +39,21 @@ Use `DatePickerTrigger` for a button or `DatePickerInput` for segmented entry wi
 Wrap grouped inputs or triggers in one `DatePickerControl` so they share a popup anchor. A standalone input or trigger supplies this wrapper automatically.
 
 ```tsx
+import {
+  DatePicker,
+  DatePickerCalendar,
+  DatePickerContent,
+  DatePickerInput,
+  DatePickerLabel,
+} from "@/components/ui/date-picker";
+
 <DatePicker>
   <DatePickerLabel />
   <DatePickerInput />
   <DatePickerContent>
     <DatePickerCalendar />
-    <DatePickerPresetTrigger value={presetDates} />
   </DatePickerContent>
-</DatePicker>
+</DatePicker>;
 ```
 
 ## Examples
