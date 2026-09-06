@@ -584,7 +584,7 @@ function AnchoredToastItem({ toast: toastItem }: { toast: ToastData }) {
           <ToastPrimitive.Close
             data-slot="toast-close"
             aria-label="Close notification"
-            className="absolute end-2 top-2"
+            className="absolute end-2 top-2 text-muted-foreground"
             render={<Button size="icon-sm" variant="ghost" />}
           >
             <X aria-hidden="true" className="size-4" />
