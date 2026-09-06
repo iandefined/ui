@@ -1,0 +1,104 @@
+# Transition Panel
+
+Animate between named views with direction-aware transitions and automatic height changes.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `TransitionPanel` to swap between related views while preserving their local state. It works well for multi-step flows, settings surfaces, and content inside dialogs or popovers.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/components/ui/transition-panel";
+```
+
+```tsx
+<TransitionPanel activeKey={step}>
+  <TransitionPanelView viewKey="account">
+    <AccountStep onNext={() => setStep("verify")} />
+  </TransitionPanelView>
+  <TransitionPanelView viewKey="verify">
+    <VerifyStep onBack={() => setStep("account")} />
+  </TransitionPanelView>
+</TransitionPanel>
+```
+
+`activeKey` selects the visible view. Keep each `TransitionPanelView` mounted when possible so its local state survives a swap. The default slide transition infers direction from the order in which views are declared.
+
+## Composition
+
+```tsx
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/components/ui/transition-panel";
+
+<TransitionPanel activeKey="first">
+  <TransitionPanelView viewKey="first" />
+  <TransitionPanelView viewKey="second" />
+</TransitionPanel>;
+```
+
+Views can be wrapped, mapped, or conditionally rendered. Registration uses context rather than direct-child inspection, so the panel can compose with ordinary React wrappers.
+
+## Examples
+
+### Crossfade
+
+Use `transition="fade"` for an in-place crossfade when the content should not move horizontally.
+
+## API Reference
+
+`TransitionPanel` and `TransitionPanelView` render `div` elements by default. Standard `div` props pass through, and both components support Base UI's `render` prop for polymorphic composition.
+
+### Props
+
+#### TransitionPanel
+
+The key of the view that should be visible. It must match a `viewKey` on a
+descendant `TransitionPanelView`.
+Chooses the view transition. `slide` moves views horizontally according to
+their declaration order. `fade` crossfades them in place with a subtle
+scale.
+simpleType="element"
+>
+Replaces or composes the root `div` while preserving the internal
+measurement ref.
+
+#### TransitionPanelView
+
+The identifier matched against the parent panel's `activeKey`.
+defaultValue="true"
+>
+Controls focus after a view swap. `true` focuses the first tabbable element,
+`false` leaves focus where it is, and a ref targets a specific element.
+Initial rendering does not move focus.
+simpleType="element"
+>
+Replaces or composes the view wrapper while preserving registration and
+consumer refs.
+
+### Data attributes
+
+The root exposes `data-slot="transition-panel"`, `data-transition`, and `data-activation-direction`. Each view exposes `data-slot="transition-panel-view"`, `data-viewkey`, and `data-active` while active.
+
+### CSS custom properties
+
+Set these properties on the root to tune the animation without replacing the component styles:
+
+| Property           | Default                           | Description                                                   |
+| ------------------ | --------------------------------- | ------------------------------------------------------------- |
+| --tp-duration      | 240ms                             | Height and slide transition duration.                         |
+| --tp-fade-duration | adaptive                          | Fade transition duration.                                     |
+| --tp-ease          | cubic-bezier(0.32, 0.72, 0, 1)    | Height and slide easing.                                      |
+| --tp-fade-ease     | cubic-bezier(0.26, 0.08, 0.25, 1) | Fade easing.                                                  |
+| --tp-clip-margin   | 0px                               | Optional bleed for focus rings or shadows near the clip edge. |
+
+The component respects prefers-reduced-motion. Inactive views stay mounted but are marked inert and aria-hidden so they do not participate in focus or assistive technology navigation.

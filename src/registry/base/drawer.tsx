@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 type DrawerPosition = "right" | "left" | "top" | "bottom";
 type DrawerVariant = "default" | "floating";
 type DrawerSurfaceLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+type DrawerShadowLevel = number;
 type DrawerOnOpenChange = NonNullable<
   DrawerPrimitive.Root.Props["onOpenChange"]
 >;
@@ -48,6 +49,79 @@ const drawerShadowClasses: Record<DrawerSurfaceLevel, string> = {
   7: "shadow-2xl",
   8: "shadow-2xl",
 };
+
+const drawerGeneratedShadowClass = "shadow-[var(--drawer-generated-shadow)]";
+
+const drawerShadowDirections: Record<DrawerPosition, [number, number]> = {
+  bottom: [0, -1],
+  left: [1, 0],
+  right: [-1, 0],
+  top: [0, 1],
+};
+
+// Logarithmic scaling keeps the generator finite for every positive level while
+// the superlinear dimensions preserve a subtle low-elevation curve.
+function createShadow(direction: [number, number], level: DrawerShadowLevel) {
+  const normalizedLevel = Number.isFinite(level) ? Math.max(1, level) : 1;
+  const scale = Math.log2(normalizedLevel);
+  const distance = Math.round(1.5 * scale ** 2.2);
+  const blur = Math.max(2, Math.round(2 + 2 * scale ** 2.2));
+  const spread = -Math.round(scale ** 1.3);
+  const opacity = Math.min(0.1, 0.05 + 0.05 * scale);
+
+  const formatShadow = (
+    shadowDistance: number,
+    shadowBlur: number,
+    shadowSpread: number,
+    shadowOpacity: number
+  ) =>
+    `${direction[0] * shadowDistance}px ${direction[1] * shadowDistance}px ${shadowBlur}px ${shadowSpread}px rgb(0 0 0 / ${shadowOpacity.toFixed(3)})`;
+
+  const primaryShadow = formatShadow(distance, blur, spread, opacity);
+
+  if (scale === 0) {
+    return primaryShadow;
+  }
+
+  const ambientBlur = Math.max(2, Math.round(1 + 1.25 * scale ** 1.8));
+  const ambientSpread = -Math.round(1.2 * scale ** 1.15);
+  const ambientShadow = formatShadow(
+    Math.round(distance / 2),
+    ambientBlur,
+    ambientSpread,
+    opacity
+  );
+
+  return `${primaryShadow}, ${ambientShadow}`;
+}
+
+function createDirectionalShadow(
+  position: DrawerPosition,
+  level: DrawerShadowLevel
+) {
+  return createShadow(drawerShadowDirections[position], level);
+}
+
+function createFloatingShadow(level: DrawerShadowLevel) {
+  return createShadow([0, 0], level);
+}
+
+function isDrawerSurfaceLevel(
+  level: DrawerShadowLevel
+): level is DrawerSurfaceLevel {
+  return Number.isInteger(level) && level >= 1 && level <= 8;
+}
+
+function getDrawerShadowClass(
+  variant: DrawerVariant,
+  shadowLevel: DrawerShadowLevel
+) {
+  if (variant === "floating" && isDrawerSurfaceLevel(shadowLevel)) {
+    return drawerShadowClasses[shadowLevel];
+  }
+
+  return drawerGeneratedShadowClass;
+}
 
 const drawerInnerBorderClasses: Record<DrawerPosition, string> = {
   bottom: "border-t",
@@ -290,12 +364,13 @@ interface DrawerPopupProps extends DrawerPrimitive.Popup.Props {
   variant?: DrawerVariant;
   showBar?: boolean;
   level?: DrawerSurfaceLevel;
-  shadowLevel?: DrawerSurfaceLevel;
+  shadowLevel?: DrawerShadowLevel;
 }
 
 function DrawerPopup({
   className,
   children,
+  style,
   position: positionProp,
   variant = "default",
   showBar = false,
@@ -317,8 +392,8 @@ function DrawerPopup({
             variant === "floating"
               ? "rounded-2xl border border-border"
               : drawerInnerBorderClasses[position],
-            drawerShadowClasses[shadowLevel],
-            "transition-[transform,box-shadow,height,background-color] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
+            getDrawerShadowClass(variant, shadowLevel),
+            "transition-[transform,box-shadow,height,background-color,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
             "focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid forced-colors:focus-visible:outline-[Highlight]",
             "[--peek:1.5rem] [--stack-step:0.05]",
             "[--stack-progress:clamp(0,var(--drawer-swipe-progress),1)]",
@@ -326,11 +401,13 @@ function DrawerPopup({
             "[--scale:clamp(0,calc(var(--scale-base)+(var(--stack-step)*var(--stack-progress))),1)]",
             "[--shrink:calc(1-var(--scale))]",
             "[--stack-peek-offset:max(0px,calc((var(--nested-drawers)-var(--stack-progress))*var(--peek)))]",
+            "[--stack-limit:3] [opacity:clamp(0,calc(var(--stack-limit)-var(--nested-drawers)),1)]",
             "before:pointer-events-none before:absolute before:bg-popover",
             "data-swiping:select-none",
             "data-nested-drawer-open:overflow-hidden",
+            "data-nested-drawer-open:pointer-events-none",
             "data-ending-style:shadow-transparent data-starting-style:shadow-transparent",
-            "data-ending-style:duration-[calc(var(--drawer-swipe-strength)*200ms)]",
+            "data-swiping:data-ending-style:duration-[calc(var(--drawer-swipe-strength)*200ms)]",
             position === "bottom" &&
               cn(
                 "mx-auto",
@@ -341,7 +418,7 @@ function DrawerPopup({
                 "-mb-[max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",
                 "pb-[max(0px,calc(env(safe-area-inset-bottom,0px)+var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",
                 "data-ending-style:mb-0 data-starting-style:mb-0 data-ending-style:pb-0 data-starting-style:pb-0",
-                "not-data-starting-style:not-data-ending-style:transition-[transform,box-shadow,height,background-color,margin,padding]",
+                "not-data-starting-style:not-data-ending-style:transition-[transform,box-shadow,height,background-color,margin,padding,opacity]",
                 "before:inset-x-0 before:top-full before:h-(--bleed)",
                 "has-data-[slot=drawer-bar]:pt-2",
                 "h-(--drawer-height,auto)",
@@ -366,23 +443,21 @@ function DrawerPopup({
               ),
             position === "left" &&
               cn(
-                "w-[calc(100%-3rem)] max-w-md",
+                "max-w-md",
                 "transform-[translateX(var(--drawer-swipe-movement-x))]",
                 "data-starting-style:transform-[translateX(calc(-100%-var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(-100%-var(--inset)))]",
                 "before:inset-y-0 before:end-full before:w-(--bleed)",
-                "has-data-[slot=drawer-bar]:pe-2",
                 "origin-right",
                 "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)+var(--stack-peek-offset)))_scale(var(--scale))]"
               ),
             position === "right" &&
               cn(
-                "w-[calc(100%-3rem)] max-w-md",
+                "max-w-md",
                 "transform-[translateX(var(--drawer-swipe-movement-x))]",
                 "data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(100%+var(--inset)))]",
                 "before:inset-y-0 before:start-full before:w-(--bleed)",
-                "has-data-[slot=drawer-bar]:ps-2",
                 "origin-left",
                 "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)-var(--stack-peek-offset)))_scale(var(--scale))]"
               ),
@@ -404,6 +479,16 @@ function DrawerPopup({
           data-shadow-level={shadowLevel}
           data-slot="drawer-popup"
           data-base-ui-swipe-ignore={!dismissible ? "" : undefined}
+          style={
+            {
+              "--drawer-generated-shadow":
+                variant === "floating"
+                  ? createFloatingShadow(shadowLevel)
+                  : createDirectionalShadow(position, shadowLevel),
+              ...style,
+            } as React.CSSProperties &
+              Record<"--drawer-generated-shadow", string>
+          }
           {...props}
         >
           {children}
@@ -631,7 +716,7 @@ function DrawerMenuSeparator({
   ...props
 }: useRender.ComponentProps<"div">) {
   const defaultProps = {
-    className: cn("mx-2 my-1 h-px bg-border", className),
+    className: cn("mx-2 my-2 h-px bg-border", className),
     "data-slot": "drawer-menu-separator",
   };
 
@@ -687,7 +772,7 @@ function DrawerMenuTrigger({
   return (
     <DrawerTrigger
       className={cn(
-        "flex min-h-11 w-full cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1 text-base text-foreground outline-none hover:bg-muted hover:text-accent-foreground focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid sm:min-h-9 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "flex min-h-11 mr-auto cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1 text-base text-foreground outline-none hover:bg-muted hover:text-accent-foreground focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid sm:min-h-9 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="drawer-menu-trigger"

@@ -302,6 +302,30 @@
       ]
     },
     {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "A sliding panel from a screen edge for navigation, forms, or supplementary content.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/sheet.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/sheet.tsx"
+        }
+      ]
+    },
+    {
       "name": "kbd",
       "type": "registry:ui",
       "title": "Kbd",
@@ -956,6 +980,20 @@
           "path": "src/registry/base/tabs.tsx",
           "type": "registry:ui",
           "target": "components/ui/tabs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "transition-panel",
+      "type": "registry:ui",
+      "title": "Transition Panel",
+      "description": "A compound panel that swaps between named views with direction-aware transitions and automatic height animation.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/transition-panel.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/transition-panel.tsx"
         }
       ]
     }

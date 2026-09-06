@@ -121,6 +121,12 @@ Keep long content inside `DrawerPanel`. Set `scrollFade` to show fades only wher
 
 Nest another `Drawer` inside a popup to coordinate parent scaling and child stacking.
 
+### Multiple Nested Drawers
+
+Open up to ten nested Drawers to inspect the stack behavior. The newest three
+surfaces remain visible; older surfaces fade out and return as deeper Drawers
+close.
+
 ### Indent Effect
 
 Wrap the page surface with `DrawerIndent` inside `DrawerProvider` to scale and round it while a drawer is open.
@@ -161,7 +167,9 @@ transparent expanded hitbox, an open-hand cursor, and a stronger thumb color
 on hover. The bar is omitted when `dismissible={false}`.
 Overrides the position inherited from `Drawer`.
 Exposes a surface level as `data-level` for consumer styling.
-Selects the repository shadow scale used by the popup.
+Selects the repository shadow scale used by the popup. Positive values are
+unbounded; flush drawers cast the shadow toward the content-facing edge so
+nested surfaces keep a clear elevation boundary.
 
 #### DrawerPanel
 

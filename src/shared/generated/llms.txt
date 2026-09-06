@@ -26,11 +26,13 @@
 - [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
 - [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
+- [Sheet](https://ui.iandefined.com/docs/components/sheet.md) - A sliding panel from a screen edge for navigation, forms, or supplementary content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.
 - [Spinner](https://ui.iandefined.com/docs/components/spinner.md) - An SVG indicator for loading states.
 - [Tabs](https://ui.iandefined.com/docs/components/tabs.md) - A component for toggling between related panels on the same page.
 - [Toast](https://ui.iandefined.com/docs/components/toast.md) - Displays brief, self-dismissing feedback without blocking the page.
 - [Tooltip](https://ui.iandefined.com/docs/components/tooltip.md) - Displays contextual information when a user hovers or focuses an element.
+- [Transition Panel](https://ui.iandefined.com/docs/components/transition-panel.md) - Animate between named views with direction-aware transitions and automatic height changes.
 
 ## Forms
 

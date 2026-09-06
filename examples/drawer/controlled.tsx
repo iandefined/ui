@@ -27,7 +27,7 @@ export default function DrawerControlledDemo() {
           <DrawerHeader>
             <DrawerTitle>Controlled drawer</DrawerTitle>
             <DrawerDescription>
-              The parent owns the open state through `open` and `onOpenChange`.
+              The parent owns the open state through open and onOpenChange.
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>

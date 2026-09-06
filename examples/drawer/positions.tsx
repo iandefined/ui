@@ -28,7 +28,7 @@ export default function DrawerPositionsDemo() {
             <DrawerHeader>
               <DrawerTitle>{label} drawer</DrawerTitle>
               <DrawerDescription>
-                Set `position="{value}"` on `Drawer`.
+                Set position="{value}" on Drawer.
               </DrawerDescription>
             </DrawerHeader>
           </DrawerPopup>

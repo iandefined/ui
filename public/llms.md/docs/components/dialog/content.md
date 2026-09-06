@@ -106,6 +106,8 @@ close it.
 
 Render another `Dialog` inside the first dialog when a secondary action needs its own focus scope.
 
+Use the deeper example to inspect five nested Dialogs in sequence.
+
 ### Detached Trigger
 
 Use `createDialogHandle()` to connect a trigger and dialog root that live in different parts of the tree.

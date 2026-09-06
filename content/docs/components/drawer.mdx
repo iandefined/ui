@@ -140,6 +140,14 @@ Nest another `Drawer` inside a popup to coordinate parent scaling and child stac
 
 <ComponentPreview name="drawer/nested" />
 
+### Multiple Nested Drawers
+
+Open up to ten nested Drawers to inspect the stack behavior. The newest three
+surfaces remain visible; older surfaces fade out and return as deeper Drawers
+close.
+
+<ComponentPreview name="drawer/multiple-nested" />
+
 ### Indent Effect
 
 Wrap the page surface with `DrawerIndent` inside `DrawerProvider` to scale and round it while a drawer is open.
@@ -216,11 +224,13 @@ Composes `DrawerPortal`, `DrawerBackdrop`, `DrawerViewport`, and the Base UI `Dr
   </ApiProp>
   <ApiProp
     name="shadowLevel"
-    fullType="1 | 2 | 3 | 4 | 5 | 6 | 7 | 8"
+    fullType="number"
     simpleType="number"
     defaultValue="5"
   >
-    Selects the repository shadow scale used by the popup.
+    Selects the repository shadow scale used by the popup. Positive values are
+    unbounded; flush drawers cast the shadow toward the content-facing edge so
+    nested surfaces keep a clear elevation boundary.
   </ApiProp>
 </ApiPropsList>
 

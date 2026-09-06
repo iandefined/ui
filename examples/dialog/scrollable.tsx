@@ -64,7 +64,7 @@ export default function DialogScrollableDemo() {
         <DialogHeader>
           <DialogTitle>Workspace settings</DialogTitle>
           <DialogDescription>
-            The header and footer stay in place while `DialogBody` scrolls.
+            The header and footer stay in place while DialogBody scrolls.
           </DialogDescription>
         </DialogHeader>
         <DialogBody fadeEdges="y" className="space-y-4">

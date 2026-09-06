@@ -18,7 +18,7 @@ export default function DrawerNestedDemo() {
       <DrawerTrigger render={<Button variant="outline" />}>
         Open nested drawers
       </DrawerTrigger>
-      <DrawerPopup showBar>
+      <DrawerPopup className="max-w-2xl" showBar>
         <DrawerHeader>
           <DrawerTitle>Account</DrawerTitle>
           <DrawerDescription>
@@ -34,7 +34,7 @@ export default function DrawerNestedDemo() {
         <DrawerFooter>
           <Drawer>
             <DrawerMenuTrigger>View account details</DrawerMenuTrigger>
-            <DrawerPopup showBar>
+            <DrawerPopup className="max-w-2xl" showBar>
               <DrawerHeader>
                 <DrawerTitle>Account details</DrawerTitle>
                 <DrawerDescription>

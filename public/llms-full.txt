@@ -1387,6 +1387,8 @@ close it.
 
 Render another `Dialog` inside the first dialog when a secondary action needs its own focus scope.
 
+Use the deeper example to inspect five nested Dialogs in sequence.
+
 ### Detached Trigger
 
 Use `createDialogHandle()` to connect a trigger and dialog root that live in different parts of the tree.
@@ -1597,6 +1599,12 @@ Keep long content inside `DrawerPanel`. Set `scrollFade` to show fades only wher
 
 Nest another `Drawer` inside a popup to coordinate parent scaling and child stacking.
 
+### Multiple Nested Drawers
+
+Open up to ten nested Drawers to inspect the stack behavior. The newest three
+surfaces remain visible; older surfaces fade out and return as deeper Drawers
+close.
+
 ### Indent Effect
 
 Wrap the page surface with `DrawerIndent` inside `DrawerProvider` to scale and round it while a drawer is open.
@@ -1637,7 +1645,9 @@ transparent expanded hitbox, an open-hand cursor, and a stronger thumb color
 on hover. The bar is omitted when `dismissible={false}`.
 Overrides the position inherited from `Drawer`.
 Exposes a surface level as `data-level` for consumer styling.
-Selects the repository shadow scale used by the popup.
+Selects the repository shadow scale used by the popup. Positive values are
+unbounded; flush drawers cast the shadow toward the content-facing edge so
+nested surfaces keep a clear elevation boundary.
 
 #### DrawerPanel
 
@@ -3020,6 +3030,229 @@ Use `orientation="vertical"` when the separator divides content arranged side by
 
 `Separator` wraps the [Base UI Separator](https://base-ui.com/react/components/separator). Supported Base UI props pass through.
 
+# Sheet
+
+A sliding panel from a screen edge for navigation, forms, or supplementary content.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `Sheet` for a panel that slides in from a screen edge without the draggable behavior of `Drawer`. It fits mobile navigation, filters, settings, and detail views that benefit from a fixed position and an explicit close action.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetBody,
+  SheetCloseTrigger,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+```
+
+```tsx
+<Sheet>
+  <SheetTrigger render={<Button variant="outline" />}>Open sheet</SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Notifications</SheetTitle>
+      <SheetDescription>You are all caught up. Good job!</SheetDescription>
+    </SheetHeader>
+    <SheetBody>Sheet content.</SheetBody>
+    <SheetFooter>
+      <SheetCloseTrigger render={<Button variant="outline" />}>
+        Close
+      </SheetCloseTrigger>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>
+```
+
+## Composition
+
+`SheetContent` composes the portal, viewport, backdrop, and popup. It renders an accessible X close button by default. Use `SheetBody` for scrollable content and compose `SheetCloseTrigger` around your own button content for additional close actions.
+
+```tsx
+import {
+  Sheet,
+  SheetBody,
+  SheetCloseTrigger,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+<Sheet>
+  <SheetTrigger />
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle />
+    </SheetHeader>
+    <SheetBody />
+    <SheetFooter>
+      <SheetCloseTrigger />
+    </SheetFooter>
+  </SheetContent>
+</Sheet>;
+```
+
+## Examples
+
+### Positions
+
+Use `side` on `SheetContent` to choose which edge the sheet slides in from.
+
+| Value      | Description                |
+| ---------- | -------------------------- |
+| `"right"`  | Slides in from the right.  |
+| `"left"`   | Slides in from the left.   |
+| `"top"`    | Slides down from the top.  |
+| `"bottom"` | Slides up from the bottom. |
+
+### Floating Variant
+
+Use `variant="floating"` for a card-like sheet with rounded corners and space around the screen edges. The example includes a trigger for each direction.
+
+### With Form
+
+Place form fields inside `SheetBody` and keep actions in `SheetFooter`. When a
+native `<form>` wraps the sheet parts, make it a flex column that fills the
+content so the footer can stay pinned to the bottom.
+
+### Nested Sheets
+
+Render another `Sheet` inside the first sheet when a secondary action needs its own focus scope. The nested sheet inherits the parent’s `side`, while the parent scales down and shifts toward its edge behind it. The example includes default and floating nested sheets from each direction so you can compare the surface treatments.
+
+Use the deeper example to inspect five nested `Sheet` instances in sequence.
+
+### Multiple Nested Sheets
+
+Open up to ten nested `Sheet` instances to inspect the stack behavior. The newest three
+surfaces remain visible; older surfaces fade out and return as deeper `Sheet` instances
+close.
+
+### Inset Footer
+
+Set `footerVariant="inset"` on `SheetContent` to separate the footer with a muted background and top border.
+
+### Non-dismissible
+
+Set `dismissible={false}` when outside presses and Escape should not close the
+sheet. Use an explicit `SheetCloseTrigger` for each action that is allowed to
+close it.
+
+### Detached Trigger
+
+Use `createSheetHandle()` to connect a trigger and sheet root that live in different parts of the tree.
+
+### Non-Modal
+
+Pass `modal={false}` to keep the page interactive. The backdrop is hidden, pointer events pass through the empty area, and outside presses do not dismiss the sheet.
+
+## Accessibility
+
+Include a `SheetTitle` inside every `SheetContent` so Base UI can name the dialog. Add `SheetDescription` when extra context helps. The built-in close button is labeled Close; add a visible `SheetCloseTrigger` in the footer when the close action should remain available beside the content.
+
+When `modal={true}`, focus moves into the sheet and is trapped until it closes. With `modal={false}`, the page remains interactive and focus is not trapped, so keep an explicit close action available from the keyboard.
+
+When `dismissible={false}`, outside presses and Escape are ignored, but explicit `SheetCloseTrigger` controls remain available.
+
+## API Reference
+
+Sheet and its parts wrap [Base UI Dialog primitives](https://base-ui.com/react/components/dialog). Supported Base UI props pass through. The props below are the styles and composition options owned by this registry component.
+
+### Props
+
+#### Sheet
+
+Root component that forwards Base UI Dialog root props and defaults `modal` and
+`dismissible` to `true`.
+
+Controls focus trapping, page scrolling, and pointer interaction outside the
+sheet. `false` leaves the page interactive, while `"trap-focus"` traps focus
+without locking page scrolling.
+Allows outside presses and Escape to dismiss the sheet. When `false`, the
+sheet can close only through `SheetCloseTrigger` or an externally controlled
+`open` value.
+Prevents outside presses from closing the sheet. It defaults to `true` when
+`modal` is `false` or `"trap-focus"`.
+
+#### SheetContent
+
+Chooses the edge where the sheet opens.
+Uses an edge-attached panel for `"default"` or an inset, rounded card for
+`"floating"`.
+Sets the default treatment used by `SheetFooter` inside this content.
+Renders the accessible X `SheetCloseTrigger` in the top corner.
+Exposes a surface level as `data-level` for consumer styling.
+Selects the shadow intensity independently from the surface level. Positive
+values are unbounded; flush sheets cast the shadow toward the content-facing
+edge so nested surfaces keep a clear elevation boundary.
+
+#### SheetBody
+
+Uses browser-native scrolling instead of the registry scrollbar.
+Selects the edges that receive a scroll fade. `true` fades both axes and
+`false` disables fades.
+Reserves space for the scrollbar to reduce content movement while scrolling.
+Keeps the custom scrollbar visible instead of showing it only while
+interacting.
+Hides the custom scrollbar while keeping the body scrollable.
+
+### Utilities
+
+#### createSheetHandle
+
+Create a handle once, pass it to a detached `SheetTrigger` and `Sheet`, and optionally provide a payload type for shared sheets.
+
+```tsx
+import {
+  createSheetHandle,
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+type User = { id: string; name: string };
+
+const handle = createSheetHandle<User>();
+
+<SheetTrigger handle={handle} payload={{ id: "u1", name: "Jane" }}>
+  Edit Jane
+</SheetTrigger>;
+
+<Sheet handle={handle}>
+  <SheetContent>
+    {({ payload }) => <SheetTitle>Edit {payload?.name}</SheetTitle>}
+  </SheetContent>
+</Sheet>;
+```
+
+### Components
+
+| Component           | Responsibility                                        |
+| ------------------- | ----------------------------------------------------- |
+| `SheetTrigger`      | Opens the sheet and supports Base UI's render prop.   |
+| `SheetCloseTrigger` | Closes the sheet and supports Base UI's render prop.  |
+| `SheetContent`      | Composes the panel, portal, viewport, and backdrop.   |
+| `SheetHeader`       | Provides the standard title and description spacing.  |
+| `SheetBody`         | Provides scrollable sheet content.                    |
+| `SheetFooter`       | Groups actions and supports the inset footer variant. |
+| `SheetTitle`        | Names the dialog for assistive technology.            |
+| `SheetDescription`  | Adds supporting context to the sheet.                 |
+
 # Skeleton
 
 A shimmer placeholder for loading content.
@@ -3684,6 +3917,111 @@ Sets the delay before a tooltip in the provider group opens.
 Sets the popup enter and exit animation.
 Disables popup animation.
 Renders an arrow pointing at the trigger.
+
+# Transition Panel
+
+Animate between named views with direction-aware transitions and automatic height changes.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `TransitionPanel` to swap between related views while preserving their local state. It works well for multi-step flows, settings surfaces, and content inside dialogs or popovers.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/components/ui/transition-panel";
+```
+
+```tsx
+<TransitionPanel activeKey={step}>
+  <TransitionPanelView viewKey="account">
+    <AccountStep onNext={() => setStep("verify")} />
+  </TransitionPanelView>
+  <TransitionPanelView viewKey="verify">
+    <VerifyStep onBack={() => setStep("account")} />
+  </TransitionPanelView>
+</TransitionPanel>
+```
+
+`activeKey` selects the visible view. Keep each `TransitionPanelView` mounted when possible so its local state survives a swap. The default slide transition infers direction from the order in which views are declared.
+
+## Composition
+
+```tsx
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/components/ui/transition-panel";
+
+<TransitionPanel activeKey="first">
+  <TransitionPanelView viewKey="first" />
+  <TransitionPanelView viewKey="second" />
+</TransitionPanel>;
+```
+
+Views can be wrapped, mapped, or conditionally rendered. Registration uses context rather than direct-child inspection, so the panel can compose with ordinary React wrappers.
+
+## Examples
+
+### Crossfade
+
+Use `transition="fade"` for an in-place crossfade when the content should not move horizontally.
+
+## API Reference
+
+`TransitionPanel` and `TransitionPanelView` render `div` elements by default. Standard `div` props pass through, and both components support Base UI's `render` prop for polymorphic composition.
+
+### Props
+
+#### TransitionPanel
+
+The key of the view that should be visible. It must match a `viewKey` on a
+descendant `TransitionPanelView`.
+Chooses the view transition. `slide` moves views horizontally according to
+their declaration order. `fade` crossfades them in place with a subtle
+scale.
+simpleType="element"
+>
+Replaces or composes the root `div` while preserving the internal
+measurement ref.
+
+#### TransitionPanelView
+
+The identifier matched against the parent panel's `activeKey`.
+defaultValue="true"
+>
+Controls focus after a view swap. `true` focuses the first tabbable element,
+`false` leaves focus where it is, and a ref targets a specific element.
+Initial rendering does not move focus.
+simpleType="element"
+>
+Replaces or composes the view wrapper while preserving registration and
+consumer refs.
+
+### Data attributes
+
+The root exposes `data-slot="transition-panel"`, `data-transition`, and `data-activation-direction`. Each view exposes `data-slot="transition-panel-view"`, `data-viewkey`, and `data-active` while active.
+
+### CSS custom properties
+
+Set these properties on the root to tune the animation without replacing the component styles:
+
+| Property           | Default                           | Description                                                   |
+| ------------------ | --------------------------------- | ------------------------------------------------------------- |
+| --tp-duration      | 240ms                             | Height and slide transition duration.                         |
+| --tp-fade-duration | adaptive                          | Fade transition duration.                                     |
+| --tp-ease          | cubic-bezier(0.32, 0.72, 0, 1)    | Height and slide easing.                                      |
+| --tp-fade-ease     | cubic-bezier(0.26, 0.08, 0.25, 1) | Fade easing.                                                  |
+| --tp-clip-margin   | 0px                               | Optional bleed for focus rings or shadows near the clip edge. |
+
+The component respects prefers-reduced-motion. Inactive views stay mounted but are marked inert and aria-hidden so they do not participate in focus or assistive technology navigation.
 
 # Extending
 
