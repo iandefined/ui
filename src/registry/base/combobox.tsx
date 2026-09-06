@@ -454,10 +454,14 @@ function ComboboxChipRemove({
   );
 }
 
+// Note: Select and DatePickerTimer scroll natively without ScrollArea by placing overflow-y-auto directly
+// on an element with an explicit max-h or height. When nesting ScrollArea in a flex popup (like Combobox and
+// Autocomplete), ScrollArea.Root must establish a flex container with min-h-0 flex-1 overflow-hidden so Firefox
+// (Gecko) does not compute Viewport's percentage height as auto, which would disable scrolling.
 function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   return (
     <ScrollArea
-      className="min-h-0 flex-1 border-0 has-[[data-empty]]:hidden [--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&>[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&>[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
+      className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [--scroll-area-fade:var(--popover)] [&_[data-slot=scroll-area-vertical-shadow]]:[--scroll-area-fade:var(--popover)] [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
       scrollShadow="vertical"
     >
       <ScrollAreaContent>

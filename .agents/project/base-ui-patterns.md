@@ -16,6 +16,7 @@ For public prop shapes and slots, see [component-implementation.md](component-im
 - Use `useRender` when building a primitive-like public component that must merge consumer elements, props, refs, and event handlers. Do not replace it with manual cloning that drops primitive behavior.
 - Use Base UI `mergeProps` when independently supplied prop objects must compose; merging must preserve all event handlers, ARIA attributes, and refs in the documented order.
 - Give projected/custom triggers an accessible name and use existing registry primitives for their visual treatment.
+- Forward layout and flex classes to `ScrollArea.Root` rather than `Viewport`. Inside flex popups (`Combobox`, `Autocomplete`), ensure `ScrollArea.Root` receives `min-h-0 flex-1 overflow-hidden` and `Viewport` has `min-h-0 flex-1 size-full` so Gecko (Firefox) resolves a definite height and creates an active scroll container (see [interface-and-interaction.md](interface-and-interaction.md)).
 
 ## Hooks, refs, and state
 

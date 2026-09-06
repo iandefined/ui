@@ -6,10 +6,12 @@ interface ScrollAreaProps extends ScrollAreaPrimitive.Root.Props {
   hideScrollbar?: boolean;
   orientation?: "horizontal" | "vertical" | "both";
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
+  viewportClassName?: string;
 }
 
 function ScrollArea({
   className,
+  viewportClassName,
   hideScrollbar = false,
   orientation = "vertical",
   scrollShadow = "none",
@@ -17,12 +19,15 @@ function ScrollArea({
   ...props
 }: ScrollAreaProps) {
   return (
-    <ScrollAreaPrimitive.Root className="relative isolate min-h-0" {...props}>
+    <ScrollAreaPrimitive.Root
+      className={cn("relative isolate min-h-0 flex flex-col", className)}
+      {...props}
+    >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
         className={cn(
-          "size-full overscroll-contain rounded-[inherit] outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
-          className
+          "size-full min-h-0 flex-1 overscroll-contain rounded-[inherit] outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+          viewportClassName
         )}
       >
         <div

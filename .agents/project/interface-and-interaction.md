@@ -129,6 +129,20 @@ When animating container width or height due to dynamic content:
 - Apply `transform-gpu` and `will-change-transform` to animated overlay triggers and popup content.
 - Avoid animating layout-triggering properties (`width`, `height`, `top`, `left`, `margin`, `padding`) unless the measured-bounds pattern is necessary for content-driven sizing.
 
+### [HARD REQUIREMENT] Firefox Scroll Container Hierarchy in Flex Popups
+- **The Pitfall**: In Gecko (Firefox), a child element with `height: 100%` (`size-full`) inside an auto-height parent cannot compute a definite height and defaults to `auto`.
+- **Why Select and DatePickerTimer work**:
+  - `Select` does not use `ScrollArea`: it applies `max-h-[min(var(--available-height),...)]` and `overflow-y-auto` directly to `SelectPrimitive.List`.
+  - `DatePickerTimer` uses an explicit fixed container height (`h-56`) with direct native `overflow-y-auto` on its column.
+- **Why Combobox and Autocomplete broke in Firefox**:
+  - Both nest `ScrollArea` inside a popup with `max-h-[...] flex flex-col overflow-hidden`.
+  - If sizing/flex classes (`min-h-0 flex-1`) are placed on `ScrollArea.Viewport` instead of `ScrollArea.Root`, `ScrollArea.Root` remains a block element with `height: auto`.
+  - In Firefox, `Viewport` computes `height: auto` and expands to the full content height (`clientHeight === scrollHeight`). No scrollable overflow is created, while the outer popup clips the overflow with `overflow: hidden`, killing scroll capability.
+- **Mandatory Invariant**:
+  - `ScrollArea.Root` must receive the caller's layout and flex classes (`className={cn("relative isolate min-h-0 flex flex-col", className)}`).
+  - When nesting inside flex popups, pass `min-h-0 flex-1 overflow-hidden` to `ScrollArea`.
+  - `ScrollArea.Viewport` must be styled with `size-full min-h-0 flex-1` so that as a child of the flex container `Root`, Firefox bounds `Viewport` to the available popup height and creates an active scroll container.
+
 ---
 
 ## 6. Accessibility (a11y)
