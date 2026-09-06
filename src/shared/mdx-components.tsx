@@ -1,6 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 import { createElement, type ElementType } from "react";
 
+import {
+  Table as BaseTable,
+  TableBody as BaseTableBody,
+  TableCell as BaseTableCell,
+  TableHead as BaseTableHead,
+  TableHeader as BaseTableHeader,
+  TableRow as BaseTableRow,
+} from "@/registry/base/table";
 import { ApiProp, ApiPropsList } from "@/shared/components/api-prop";
 import { Callout } from "@/shared/components/callout";
 import { CodeBlockCommand } from "@/shared/components/code-block-command";
@@ -70,25 +78,24 @@ function MdxElement({ as, mdxClasses, className, ...props }: MdxElementProps) {
   });
 }
 
-function MdxTable({ className, ...props }: React.ComponentProps<"table">) {
+function MdxTable({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof BaseTable>) {
   const isPreview = useMdxPreview();
-  const table = (
-    <table
+
+  return (
+    <BaseTable
       className={mdxClassName(
         isPreview,
-        "w-full border-collapse text-left text-sm [&_thead]:bg-muted/50 [&_thead]:border-b [&_thead]:border-border [&_tbody_tr:last-child]:border-b-0",
+        "not-prose my-6 w-full md:max-w-none",
         className
       )}
       {...props}
-    />
-  );
-
-  return isPreview ? (
-    table
-  ) : (
-    <div className="not-prose my-6 no-scrollbar w-full overflow-x-auto rounded-xl border border-border">
-      {table}
-    </div>
+    >
+      {children}
+    </BaseTable>
   );
 }
 
@@ -404,40 +411,26 @@ export const mdxComponents = {
     <MdxElement as="strong" mdxClasses="font-medium" {...props} />
   ),
   table: MdxTable,
-  tbody: (props: React.ComponentProps<"tbody">) => (
-    <MdxElement
-      as="tbody"
-      mdxClasses="[&_tr:last-child]:border-b-0"
+  tbody: (props: React.ComponentProps<typeof BaseTableBody>) => (
+    <BaseTableBody {...props} />
+  ),
+  td: ({ className, ...props }: React.ComponentProps<typeof BaseTableCell>) => (
+    <BaseTableCell
+      className={cn(
+        "whitespace-normal leading-relaxed [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:whitespace-nowrap [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-border [&_a:hover]:decoration-current [&_a:hover]:text-primary [&_a]:transition-colors",
+        className
+      )}
       {...props}
     />
   ),
-  td: (props: React.ComponentProps<"td">) => (
-    <MdxElement
-      as="td"
-      mdxClasses="px-4 py-3 text-left text-sm align-middle leading-normal text-foreground first:font-medium [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:whitespace-nowrap [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-border [&_a:hover]:decoration-current [&_a:hover]:text-primary [&_a]:transition-colors [[align=center]]:text-center [[align=right]]:text-right"
-      {...props}
-    />
+  th: ({ className, ...props }: React.ComponentProps<typeof BaseTableHead>) => (
+    <BaseTableHead className={className} {...props} />
   ),
-  th: (props: React.ComponentProps<"th">) => (
-    <MdxElement
-      as="th"
-      mdxClasses="border-b border-border px-4 py-2.5 text-left text-sm font-medium text-muted-foreground first:text-foreground [[align=center]]:text-center [[align=right]]:text-right"
-      {...props}
-    />
+  thead: (props: React.ComponentProps<typeof BaseTableHeader>) => (
+    <BaseTableHeader {...props} />
   ),
-  thead: (props: React.ComponentProps<"thead">) => (
-    <MdxElement
-      as="thead"
-      mdxClasses="bg-muted/50 border-b border-border"
-      {...props}
-    />
-  ),
-  tr: (props: React.ComponentProps<"tr">) => (
-    <MdxElement
-      as="tr"
-      mdxClasses="m-0 border-b border-border transition-colors hover:bg-muted/60"
-      {...props}
-    />
+  tr: (props: React.ComponentProps<typeof BaseTableRow>) => (
+    <BaseTableRow {...props} />
   ),
   ul: (props: React.ComponentProps<"ul">) => (
     <MdxElement as="ul" mdxClasses="my-6 ml-6 list-disc" {...props} />

@@ -996,6 +996,62 @@
           "target": "components/ui/transition-panel.tsx"
         }
       ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "A responsive table with sticky header, scroll area container, row dividers, striped and bordered variants.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "registryDependencies": ["https://ui.iandefined.com/r/scroll-area.json"],
+      "files": [
+        {
+          "path": "src/registry/base/table.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Pagination navigation with page links, previous and next triggers, and ellipsis disclosure.",
+      "dependencies": ["clsx", "lucide-react", "tailwind-merge"],
+      "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
+      "files": [
+        {
+          "path": "src/registry/base/pagination.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/pagination.tsx"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data Table",
+      "description": "A feature-rich data table built with TanStack Table, supporting sorting, filtering, row selection, column visibility, and pagination.",
+      "dependencies": [
+        "@tanstack/react-table",
+        "clsx",
+        "lucide-react",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/checkbox.json",
+        "https://ui.iandefined.com/r/dropdown-menu.json",
+        "https://ui.iandefined.com/r/input.json",
+        "https://ui.iandefined.com/r/table.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/data-table.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/data-table.tsx"
+        }
+      ]
     }
   ]
 }

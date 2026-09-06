@@ -1,0 +1,148 @@
+---
+title: Table
+description: A responsive data table with sticky headers, scroll area containment, row dividers, and inset card elevation.
+---
+
+Use `Table` to present tabular data in rows and columns within a contained, elevated frame.
+
+## Preview
+
+<ComponentPreview name="table/default" />
+
+## Installation
+
+<ComponentInstall name="table" />
+
+## Usage
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+<Table>
+  <TableCaption>A list of recent transactions.</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Invoice</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead className="text-right">Amount</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>INV-001</TableCell>
+      <TableCell>Paid</TableCell>
+      <TableCell className="text-right">$250.00</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>;
+```
+
+## Composition
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead />
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell />
+    </TableRow>
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell />
+    </TableRow>
+  </TableFooter>
+  <TableCaption />
+</Table>;
+```
+
+## Examples
+
+### Bordered
+
+Add cell dividing borders to column and row boundaries.
+
+<ComponentPreview name="table/bordered" />
+
+### Striped
+
+Alternate row background colors to increase readability across wide data sets.
+
+<ComponentPreview name="table/striped" />
+
+### With Footer
+
+Display summary rows or column aggregations at the base of the table.
+
+<ComponentPreview name="table/with-footer" />
+
+## API Reference
+
+`Table` parts compose standard HTML table elements through Base UI `useRender` and `mergeProps`. Standard HTML attributes and event handlers pass through to the underlying elements.
+
+### Props
+
+#### Table
+
+<ApiPropsList>
+  <ApiProp name="bordered" fullType="boolean" defaultValue="false">
+    Renders outer and column borders between table cells.
+  </ApiProp>
+  <ApiProp name="striped" fullType="boolean" defaultValue="false">
+    Alternates background shading on even rows to increase readability across
+    wide data sets.
+  </ApiProp>
+  <ApiProp name="hoverable" fullType="boolean" defaultValue="true">
+    Highlights rows on pointer hover, matching hover styles across striped and
+    non-striped cells.
+  </ApiProp>
+  <ApiProp name="rowDividers" fullType="boolean" defaultValue="true">
+    Renders horizontal dividing borders between body rows.
+  </ApiProp>
+  <ApiProp name="hideScrollbar" fullType="boolean" defaultValue="false">
+    Hides the scrollbar track and thumb while retaining horizontal scroll
+    capability.
+  </ApiProp>
+  <ApiProp
+    name="scrollShadow"
+    fullType='"vertical" | "horizontal" | "both" | "none"'
+    defaultValue='"none"'
+  >
+    Renders gradient shadow fades at the scroll container boundaries.
+  </ApiProp>
+  <ApiProp name="fadeColor" fullType="string">
+    Sets the custom CSS color used for edge shadow fades.
+  </ApiProp>
+</ApiPropsList>
+
+#### TableRow
+
+<ApiPropsList>
+  <ApiProp name="selected" fullType="boolean">
+    Applies the selected background color and state attribute to the row.
+  </ApiProp>
+</ApiPropsList>

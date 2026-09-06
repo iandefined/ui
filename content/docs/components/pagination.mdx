@@ -1,0 +1,121 @@
+---
+title: Pagination
+description: Accessible pagination navigation with page links, next and previous triggers, and ellipsis disclosure.
+---
+
+Use `Pagination` to divide large sets of records across multiple discrete views and navigate between pages.
+
+## Preview
+
+<ComponentPreview name="pagination/default" />
+
+## Installation
+
+<ComponentInstall name="pagination" />
+
+## Usage
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>
+        1
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">2</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>;
+```
+
+## Composition
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>;
+```
+
+## Examples
+
+### Controlled
+
+Manage the active page state and conditionally disable boundary controls.
+
+<ComponentPreview name="pagination/controlled" />
+
+### Compact
+
+Present minimal navigation with previous and next controls flanking current page indicator text.
+
+<ComponentPreview name="pagination/compact" />
+
+## API Reference
+
+`Pagination` renders a semantic navigation landmark with `aria-label="pagination"`. Pagination links render native anchor elements styled with the button variant recipe to preserve keyboard navigation and screen reader semantics.
+
+### Props
+
+#### PaginationLink
+
+<ApiPropsList>
+  <ApiProp name="isActive" fullType="boolean">
+    Marks the link as the current page using `aria-current="page"` and applies
+    the active outline visual treatment.
+  </ApiProp>
+  <ApiProp name="isDisabled" fullType="boolean">
+    Disables click interaction and dims link opacity using
+    `aria-disabled="true"`.
+  </ApiProp>
+  <ApiProp
+    name="size"
+    fullType='"default" | "xs" | "sm" | "lg" | "xl" | "icon-xs" | "icon-sm" | "icon" | "icon-lg" | "icon-xl"'
+    defaultValue='"icon"'
+  >
+    Sets the button size variant applied to the link.
+  </ApiProp>
+</ApiPropsList>

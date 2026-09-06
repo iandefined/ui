@@ -43,6 +43,9 @@
 /docs/components/combobox.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/data-table.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/date-input.md
   Content-Type: text/markdown; charset=utf-8
 
@@ -85,6 +88,9 @@
 /docs/components/number-field.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/pagination.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/popover.md
   Content-Type: text/markdown; charset=utf-8
 
@@ -113,6 +119,9 @@
   Content-Type: text/markdown; charset=utf-8
 
 /docs/components/switch.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/components/table.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/components/tabs.md

@@ -958,6 +958,131 @@ Offsets the popup along the alignment axis.
 Controls chip wrapping and single-line +X overflow compression.
 Explicit limit on visible chips before showing the +X overflow badge.
 
+# Data Table
+
+A feature-rich data table built with TanStack Table, supporting sorting, filtering, selection, and pagination.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `DataTable` to display complex collections of data with built-in column sorting, filtering, row selection, and pagination.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  DataTable,
+  DataTableBody,
+  DataTableColumnToggle,
+  DataTableContent,
+  DataTableHeader,
+  DataTablePagination,
+  DataTableSearch,
+  DataTableToolbar,
+} from "@/components/ui/data-table";
+
+<DataTable
+  columns={columns}
+  data={data}
+  enableSorting
+  enableFiltering
+  enableRowSelection
+  enablePagination
+>
+  <DataTableToolbar>
+    <DataTableSearch placeholder="Search records..." />
+    <DataTableColumnToggle />
+  </DataTableToolbar>
+  <DataTableContent>
+    <DataTableHeader enableSorting />
+    <DataTableBody />
+  </DataTableContent>
+  <DataTablePagination />
+</DataTable>;
+```
+
+## Composition
+
+```tsx
+import {
+  DataTable,
+  DataTableBody,
+  DataTableColumnToggle,
+  DataTableContent,
+  DataTableFooter,
+  DataTableHeader,
+  DataTablePagination,
+  DataTableSearch,
+  DataTableToolbar,
+  DataTableToolbarSeparator,
+} from "@/components/ui/data-table";
+
+<DataTable columns={columns} data={data}>
+  <DataTableToolbar>
+    <DataTableSearch />
+    <DataTableToolbarSeparator />
+    <DataTableColumnToggle />
+  </DataTableToolbar>
+  <DataTableContent>
+    <DataTableHeader />
+    <DataTableBody />
+    <DataTableFooter />
+  </DataTableContent>
+  <DataTablePagination />
+</DataTable>;
+```
+
+## Examples
+
+### Sorting
+
+Enable sortable columns with directional indicator icons.
+
+### Selection
+
+Allow selecting individual or all rows with coordinated header and row checkboxes.
+
+### Pagination
+
+Navigate records across discrete pages with page-size bounding.
+
+## API Reference
+
+`DataTable` integrates `@tanstack/react-table` with the registry `Table`, `InputGroup`, `DropdownMenu`, and `Button` primitives.
+
+### Props
+
+#### DataTable
+
+<ApiProp name="columns" fullType="ColumnDef<TData, TValue>[]" required>
+Defines the column schema, accessor keys, headers, and cell renderers.
+The array of record objects rendered in table rows.
+Enables column sort toggling on compatible column headers.
+defaultValue="false"
+>
+Enables row selection state tracking and selection checkboxes.
+Allows selecting multiple rows simultaneously.
+Enables global text filtering across string cell values.
+Enables pagination row splitting and page navigation.
+Automatically inserts a checkbox selection column as the first column when
+row selection is enabled.
+
+#### DataTableHeader
+
+Renders sort trigger buttons with directional icons for sortable columns.
+
+#### DataTableBody
+
+Custom message or component displayed when data contains zero rows.
+
+#### DataTablePagination
+
+Displays the selected rows summary count text alongside page navigation
+controls.
+
 # Date Input
 
 A segmented field for entering dates, date ranges, and times without a calendar popup.
@@ -2564,6 +2689,109 @@ Pass `Intl.NumberFormat` options through `format` to display values such as curr
 Sets the styled size. A numeric value keeps the default visual size for
 compatibility with Base UI sizing.
 
+# Pagination
+
+Accessible pagination navigation with page links, next and previous triggers, and ellipsis disclosure.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `Pagination` to divide large sets of records across multiple discrete views and navigate between pages.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>
+        1
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">2</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>;
+```
+
+## Composition
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>;
+```
+
+## Examples
+
+### Controlled
+
+Manage the active page state and conditionally disable boundary controls.
+
+### Compact
+
+Present minimal navigation with previous and next controls flanking current page indicator text.
+
+## API Reference
+
+`Pagination` renders a semantic navigation landmark with `aria-label="pagination"`. Pagination links render native anchor elements styled with the button variant recipe to preserve keyboard navigation and screen reader semantics.
+
+### Props
+
+#### PaginationLink
+
+Marks the link as the current page using `aria-current="page"` and applies
+the active outline visual treatment.
+Disables click interaction and dims link opacity using
+`aria-disabled="true"`.
+Sets the button size variant applied to the link.
+
 # Popover
 
 An accessible popup anchored to a button.
@@ -3471,6 +3699,122 @@ const [checked, setChecked] = useState(false);
 
 Sets the switch size.
 Overrides the Motion transition used for thumb movement.
+
+# Table
+
+A responsive data table with sticky headers, scroll area containment, row dividers, and inset card elevation.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+Use `Table` to present tabular data in rows and columns within a contained, elevated frame.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+<Table>
+  <TableCaption>A list of recent transactions.</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Invoice</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead className="text-right">Amount</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>INV-001</TableCell>
+      <TableCell>Paid</TableCell>
+      <TableCell className="text-right">$250.00</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>;
+```
+
+## Composition
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead />
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell />
+    </TableRow>
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell />
+    </TableRow>
+  </TableFooter>
+  <TableCaption />
+</Table>;
+```
+
+## Examples
+
+### Bordered
+
+Add cell dividing borders to column and row boundaries.
+
+### Striped
+
+Alternate row background colors to increase readability across wide data sets.
+
+### With Footer
+
+Display summary rows or column aggregations at the base of the table.
+
+## API Reference
+
+`Table` parts compose standard HTML table elements through Base UI `useRender` and `mergeProps`. Standard HTML attributes and event handlers pass through to the underlying elements.
+
+### Props
+
+#### Table
+
+Renders outer and column borders between table cells.
+Alternates background shading on even rows to increase readability across
+wide data sets.
+Highlights rows on pointer hover, matching hover styles across striped and
+non-striped cells.
+Renders horizontal dividing borders between body rows.
+Hides the scrollbar track and thumb while retaining horizontal scroll
+capability.
+Renders gradient shadow fades at the scroll container boundaries.
+Sets the custom CSS color used for edge shadow fades.
+
+#### TableRow
+
+Applies the selected background color and state attribute to the row.
 
 # Tabs
 

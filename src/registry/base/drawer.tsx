@@ -649,7 +649,7 @@ function DrawerBar({
       "after:absolute after:-inset-2 after:pointer-events-auto after:content-['']",
       horizontal
         ? "inset-y-0 before:hidden"
-        : "inset-x-0 before:h-1 before:w-12 before:rounded-full before:bg-muted-foreground/50 before:transition-colors before:duration-150 hover:before:bg-muted-foreground",
+        : "inset-x-0 before:h-1 before:w-12 before:rounded-full before:bg-muted-foreground/25 before:transition-colors before:duration-150 hover:before:bg-muted-foreground/50",
       position === "top" && "bottom-0",
       position === "bottom" && "top-0",
       position === "left" && "right-0",

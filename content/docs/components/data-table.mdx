@@ -1,0 +1,172 @@
+---
+title: Data Table
+description: A feature-rich data table built with TanStack Table, supporting sorting, filtering, selection, and pagination.
+---
+
+Use `DataTable` to display complex collections of data with built-in column sorting, filtering, row selection, and pagination.
+
+## Preview
+
+<ComponentPreview name="data-table/default" />
+
+## Installation
+
+<ComponentInstall name="data-table" />
+
+## Usage
+
+```tsx
+import {
+  DataTable,
+  DataTableBody,
+  DataTableColumnToggle,
+  DataTableContent,
+  DataTableHeader,
+  DataTablePagination,
+  DataTableSearch,
+  DataTableToolbar,
+} from "@/components/ui/data-table";
+
+<DataTable
+  columns={columns}
+  data={data}
+  enableSorting
+  enableFiltering
+  enableRowSelection
+  enablePagination
+>
+  <DataTableToolbar>
+    <DataTableSearch placeholder="Search records..." />
+    <DataTableColumnToggle />
+  </DataTableToolbar>
+  <DataTableContent>
+    <DataTableHeader enableSorting />
+    <DataTableBody />
+  </DataTableContent>
+  <DataTablePagination />
+</DataTable>;
+```
+
+## Composition
+
+```tsx
+import {
+  DataTable,
+  DataTableBody,
+  DataTableColumnToggle,
+  DataTableContent,
+  DataTableFooter,
+  DataTableHeader,
+  DataTablePagination,
+  DataTableSearch,
+  DataTableToolbar,
+  DataTableToolbarSeparator,
+} from "@/components/ui/data-table";
+
+<DataTable columns={columns} data={data}>
+  <DataTableToolbar>
+    <DataTableSearch />
+    <DataTableToolbarSeparator />
+    <DataTableColumnToggle />
+  </DataTableToolbar>
+  <DataTableContent>
+    <DataTableHeader />
+    <DataTableBody />
+    <DataTableFooter />
+  </DataTableContent>
+  <DataTablePagination />
+</DataTable>;
+```
+
+## Examples
+
+### Sorting
+
+Enable sortable columns with directional indicator icons.
+
+<ComponentPreview name="data-table/sorting" />
+
+### Selection
+
+Allow selecting individual or all rows with coordinated header and row checkboxes.
+
+<ComponentPreview name="data-table/selection" />
+
+### Pagination
+
+Navigate records across discrete pages with page-size bounding.
+
+<ComponentPreview name="data-table/pagination" />
+
+## API Reference
+
+`DataTable` integrates `@tanstack/react-table` with the registry `Table`, `InputGroup`, `DropdownMenu`, and `Button` primitives.
+
+### Props
+
+#### DataTable
+
+<ApiPropsList>
+  <ApiProp name="columns" fullType="ColumnDef<TData, TValue>[]" required>
+    Defines the column schema, accessor keys, headers, and cell renderers.
+  </ApiProp>
+  <ApiProp name="data" fullType="TData[]" required>
+    The array of record objects rendered in table rows.
+  </ApiProp>
+  <ApiProp name="enableSorting" fullType="boolean" defaultValue="false">
+    Enables column sort toggling on compatible column headers.
+  </ApiProp>
+  <ApiProp
+    name="enableRowSelection"
+    fullType="boolean | ((row: Row<TData>) => boolean)"
+    defaultValue="false"
+  >
+    Enables row selection state tracking and selection checkboxes.
+  </ApiProp>
+  <ApiProp
+    name="enableMultiRowSelection"
+    fullType="boolean"
+    defaultValue="true"
+  >
+    Allows selecting multiple rows simultaneously.
+  </ApiProp>
+  <ApiProp name="enableFiltering" fullType="boolean" defaultValue="false">
+    Enables global text filtering across string cell values.
+  </ApiProp>
+  <ApiProp name="enablePagination" fullType="boolean" defaultValue="false">
+    Enables pagination row splitting and page navigation.
+  </ApiProp>
+  <ApiProp name="showSelectionColumn" fullType="boolean" defaultValue="true">
+    Automatically inserts a checkbox selection column as the first column when
+    row selection is enabled.
+  </ApiProp>
+</ApiPropsList>
+
+#### DataTableHeader
+
+<ApiPropsList>
+  <ApiProp name="enableSorting" fullType="boolean" defaultValue="false">
+    Renders sort trigger buttons with directional icons for sortable columns.
+  </ApiProp>
+</ApiPropsList>
+
+#### DataTableBody
+
+<ApiPropsList>
+  <ApiProp
+    name="emptyState"
+    fullType="React.ReactNode"
+    defaultValue='"No results."'
+  >
+    Custom message or component displayed when data contains zero rows.
+  </ApiProp>
+</ApiPropsList>
+
+#### DataTablePagination
+
+<ApiPropsList>
+  <ApiProp name="showSelectedCount" fullType="boolean" defaultValue="true">
+    Displays the selected rows summary count text alongside page navigation
+    controls.
+  </ApiProp>
+</ApiPropsList>
