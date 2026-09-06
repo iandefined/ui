@@ -234,7 +234,7 @@ function DropdownMenuContent({
           render={
             <div
               className={cn(
-                "pointer-events-auto w-[max(var(--anchor-width),226px)] origin-(--transform-origin) rounded-[12px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
+                "pointer-events-auto data-ending-style:pointer-events-none w-[max(var(--anchor-width),226px)] origin-(--transform-origin) rounded-[12px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
                 transition,
                 animation,
                 className
@@ -469,7 +469,7 @@ function DropdownMenuSubContent({
           render={
             <div
               className={cn(
-                "pointer-events-auto min-w-[max(8rem,calc(var(--anchor-width)-1rem))]! origin-(--transform-origin) rounded-[12px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
+                "pointer-events-auto data-ending-style:pointer-events-none min-w-[max(8rem,calc(var(--anchor-width)-1rem))]! origin-(--transform-origin) rounded-[12px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
                 transitionPresets.snappyOut,
                 animationPresets.scale,
                 className

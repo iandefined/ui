@@ -1,0 +1,109 @@
+---
+title: Shimmer
+description: Add a sweeping light gradient shimmer animation to text.
+---
+
+`Shimmer` animates text with a sweeping light gradient during loading, streaming, or pending background work.
+
+<ComponentPreview name="shimmer/default" />
+
+## Installation
+
+<ComponentInstall name="shimmer" />
+
+## Usage
+
+```tsx
+import { Shimmer } from "@/components/ui/shimmer";
+```
+
+```tsx
+<Shimmer>Generating response...</Shimmer>
+```
+
+## Examples
+
+### Colors
+
+Override the default text-derived highlight with a custom CSS color, hex value, or Tailwind color token.
+
+<ComponentPreview name="shimmer/colors" />
+
+### Duration
+
+Adjust the sweep speed with millisecond numbers or CSS duration units.
+
+<ComponentPreview name="shimmer/duration" />
+
+### Spread
+
+Control the width of the animated highlight band across the text.
+
+<ComponentPreview name="shimmer/spread" />
+
+### Angle
+
+Set the linear gradient tilt angle in degrees.
+
+<ComponentPreview name="shimmer/angle" />
+
+### With Components
+
+Compose `Shimmer` with buttons and spinners.
+
+<ComponentPreview name="shimmer/with-components" />
+
+## API Reference
+
+`Shimmer` uses Base UI's [`useRender`](https://base-ui.com/react/utils/use-render) for polymorphic rendering. Standard HTML attributes pass through to the underlying element.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="color" fullType="string">
+    Sets a custom highlight color for the sweeping gradient band. Accepts hex
+    colors, CSS variables, or Tailwind color tokens. Defaults to a
+    semi-transparent tint derived from `currentColor`.
+  </ApiProp>
+  <ApiProp name="baseColor" fullType="string">
+    Sets a custom base color for the text underneath the shimmer sweep. Defaults
+    to `currentColor`.
+  </ApiProp>
+  <ApiProp name="duration" fullType="number | string" defaultValue='"2s"'>
+    Sets the animation duration for one complete sweep, specified in
+    milliseconds or CSS time units.
+  </ApiProp>
+  <ApiProp
+    name="spread"
+    fullType="number | string"
+    defaultValue='"calc(3ch + 40px)"'
+  >
+    Sets the width of the highlight band across the text.
+  </ApiProp>
+  <ApiProp name="angle" fullType="number | string" defaultValue="20">
+    Sets the linear gradient tilt angle in degrees.
+  </ApiProp>
+  <ApiProp
+    name="direction"
+    fullType='"normal" | "reverse"'
+    defaultValue='"normal"'
+  >
+    Sets the sweep animation direction.
+  </ApiProp>
+  <ApiProp
+    name="repeat"
+    fullType='"infinite" | "once"'
+    defaultValue='"infinite"'
+  >
+    Sets whether the shimmer loops indefinitely or plays a single pass.
+  </ApiProp>
+  <ApiProp name="reverse" fullType="boolean">
+    Shorthand flag to reverse the sweep direction.
+  </ApiProp>
+  <ApiProp name="once" fullType="boolean">
+    Shorthand flag to play the sweep animation only once.
+  </ApiProp>
+  <ApiProp name="disabled" fullType="boolean" defaultValue="false">
+    Disables the animation and displays solid text without background clipping.
+  </ApiProp>
+</ApiPropsList>

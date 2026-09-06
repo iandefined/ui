@@ -85,7 +85,7 @@ function AutocompleteInput({
     >
       <BaseAutocomplete.Input
         className={cn(
-          "relative rounded-[12px]",
+          "relative rounded-[12px] data-popup-open:z-[51]",
           hasBoth ? "pe-14" : (hasClear || showTrigger) && "pe-8",
           className
         )}
@@ -341,7 +341,6 @@ function AutocompleteList({
   return (
     <ScrollArea
       className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
-      fadeColor="var(--popover)"
       hideScrollbar={hideScrollbar}
       scrollShadow={scrollShadow}
     >

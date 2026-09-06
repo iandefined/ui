@@ -1,0 +1,93 @@
+---
+title: Marquee
+description: Create seamless scrolling content that starts only when it needs more room.
+---
+
+`Marquee` loops any React content, including inline brand icons and text. It measures the natural width of the first content group so text stays still when it fits and scrolls when its container is too narrow.
+
+## Installation
+
+<ComponentInstall name="marquee" />
+
+## Usage
+
+```tsx
+import { Marquee } from "@/components/ui/marquee";
+```
+
+```tsx
+<Marquee onlyOnOverflow>
+  This text scrolls only when its container is too narrow.
+</Marquee>
+```
+
+The component renders the content twice or more to create a seamless loop. The repeated copies are hidden from assistive technology, so screen readers encounter the content once.
+
+## Examples
+
+### Brand Icons
+
+Use `Marquee` with inline SVG brand icons or React components. Set `onlyOnOverflow={false}` when a brand strip should keep moving even when the first group fits.
+
+<ComponentPreview name="marquee/default" />
+
+### Text
+
+With `onlyOnOverflow`, `Marquee` uses `ResizeObserver` to compare the natural content width with the available width. Short text remains still, while long text starts a loop automatically.
+
+<ComponentPreview name="marquee/text" />
+
+### Narrow Buttons
+
+Give the marquee `min-w-0 flex-1` inside a constrained button or control so the content can shrink and the overflow measurement can take effect.
+
+<ComponentPreview name="marquee/button" />
+
+## Edge Fade
+
+The fade is shown only while content is moving and automatically blends into the surface behind the marquee. Set `fadeColor` only when you need an explicit color override.
+
+```tsx
+<Marquee fadeColor="var(--card)" onlyOnOverflow>
+  Long content that moves inside a card surface
+</Marquee>
+```
+
+## Accessibility
+
+Marquee content respects `prefers-reduced-motion` and stops moving when reduced motion is requested. The repeated loop copies are `aria-hidden`, so the same content is not announced twice.
+
+## API Reference
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="speed" fullType="number" defaultValue="30">
+    Duration of one complete loop in seconds. Higher values move slower.
+  </ApiProp>
+  <ApiProp name="direction" fullType='"left" | "right"' defaultValue='"left"'>
+    Direction in which the content travels.
+  </ApiProp>
+  <ApiProp name="pauseOnHover" fullType="boolean" defaultValue="false">
+    Pauses the loop while the pointer is over the marquee.
+  </ApiProp>
+  <ApiProp name="gap" fullType="number | string" defaultValue='"2rem"'>
+    Gap between items and repeated content groups. Numbers are interpreted as
+    pixels; strings can be any CSS length.
+  </ApiProp>
+  <ApiProp name="fade" fullType="boolean" defaultValue="true">
+    Adds a soft fade at both edges of the viewport while content is moving.
+  </ApiProp>
+  <ApiProp name="fadeColor" fullType="string">
+    Sets the CSS color used by the edge fades. It accepts any CSS color value,
+    including a theme variable such as `var(--card)` or `var(--popover)`. It is
+    optional because the default mask automatically blends into the surface
+    behind the marquee. The fade is hidden when the marquee is not moving.
+  </ApiProp>
+  <ApiProp name="onlyOnOverflow" fullType="boolean" defaultValue="true">
+    Starts the animation only when the natural content width is wider than the
+    available viewport.
+  </ApiProp>
+</ApiPropsList>
+
+All standard `div` props, including `className`, `style`, and `aria-*` attributes, pass through to the viewport element.

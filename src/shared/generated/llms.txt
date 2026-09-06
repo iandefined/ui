@@ -69,7 +69,11 @@
 
 - [Hitbox](https://ui.iandefined.com/docs/utilities/hitbox.md) - Expand hit areas of interactive elements without affecting layout.
 - [Icon Swap](https://ui.iandefined.com/docs/utilities/icon-swap.md) - Animate between keyed icons with a consistent scale, blur, and fade transition.
+- [Marquee](https://ui.iandefined.com/docs/utilities/marquee.md) - Create seamless scrolling content that starts only when it needs more room.
+- [Noise Texture](https://ui.iandefined.com/docs/utilities/noise-texture.md) - An SVG fractal noise overlay using feTurbulence for subtle texture and analog grain.
+- [Shimmer](https://ui.iandefined.com/docs/utilities/shimmer.md) - Add a sweeping light gradient shimmer animation to text.
 - [Text Morph](https://ui.iandefined.com/docs/utilities/text-morph.md) - Animate changing text with Calligraph and smoothly follow its width.
+- [Twemoji](https://ui.iandefined.com/docs/utilities/twemoji.md) - Render Unicode emoji as Twemoji SVG images inline with text.
 
 ## Machine-readable Resources
 

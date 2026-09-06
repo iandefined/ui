@@ -179,7 +179,7 @@ function ComboboxInput({
     return (
       <ComboboxPrimitive.Input
         className={cn(
-          "h-6 min-w-12 flex-1 order-last truncate bg-transparent px-1.5 py-0 text-base leading-6 outline-none placeholder:text-muted-foreground/80 [[data-slot=combobox-chip]+&]:ps-1 sm:text-sm",
+          "relative h-6 min-w-12 flex-1 order-last truncate bg-transparent px-1.5 py-0 text-base leading-6 outline-none placeholder:text-muted-foreground/80 [[data-slot=combobox-chip]+&]:ps-1 sm:text-sm data-popup-open:z-[51]",
           !isSelecting &&
             "[[data-slot=combobox-chip]~&]:flex-none [[data-slot=combobox-chip]~&]:grow-0 [[data-slot=combobox-chip]~&]:w-0 [[data-slot=combobox-chip]~&]:min-w-0 [[data-slot=combobox-chip]~&]:p-0 [[data-slot=combobox-chip]~&]:m-0 [[data-slot=combobox-chip]~&]:border-0 [[data-slot=combobox-chip]~&]:opacity-0 [[data-slot=combobox-chip]~&]:pointer-events-none [[data-slot=combobox-chip]~&]:overflow-hidden",
           className
@@ -197,7 +197,7 @@ function ComboboxInput({
     >
       <ComboboxPrimitive.Input
         className={cn(
-          "relative rounded-[12px]",
+          "relative rounded-[12px] data-popup-open:z-[51]",
           (showTrigger || isClearable) && "pe-8",
           className
         )}
@@ -462,7 +462,6 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   return (
     <ScrollArea
       className="min-h-0 flex-1 overflow-hidden border-0 has-[[data-empty]]:hidden [&_[data-slot=scroll-area-vertical-shadow]]:after:rounded-none [&_[data-slot=scroll-area-vertical-shadow]]:before:rounded-none"
-      fadeColor="var(--popover)"
       scrollShadow="vertical"
     >
       <ScrollAreaContent>

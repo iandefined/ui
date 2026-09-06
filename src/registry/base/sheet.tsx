@@ -478,7 +478,6 @@ function SheetBody({
             persistScrollbar &&
               "[&_[data-slot=scroll-area-scrollbar]]:opacity-100"
           )}
-          fadeColor="var(--popover)"
           hideScrollbar={hideScrollbar}
           scrollShadow={getScrollShadow(fadeEdges)}
           viewportClassName={cn(scrollbarGutter && "[scrollbar-gutter:stable]")}

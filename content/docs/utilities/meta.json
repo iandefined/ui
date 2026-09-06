@@ -1,4 +1,12 @@
 {
-  "pages": ["hitbox", "icon-swap", "text-morph"],
+  "pages": [
+    "hitbox",
+    "icon-swap",
+    "marquee",
+    "noise-texture",
+    "shimmer",
+    "text-morph",
+    "twemoji"
+  ],
   "title": "Utilities"
 }

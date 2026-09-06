@@ -3170,7 +3170,7 @@ import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 </ScrollArea>
 ```
 
-`scrollShadow="vertical"` fades into the background only on edges that have overflow, so the top fade is hidden at the initial scroll position. Use `fadeColor` when the scroll area sits on another surface, such as a card or popover.
+`scrollShadow="vertical"` fades into the surface behind the scroll area only on edges that have overflow, so the top fade is hidden at the initial scroll position. Set `fadeColor` only when you need an explicit color override.
 
 ## Composition
 
@@ -3213,7 +3213,8 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
 Adds fades at overflowing horizontal, vertical, or both edges.
 Sets the CSS color used by the edge fades. It accepts any CSS color value,
 including a theme variable such as `var(--card)` or `var(--popover)`. It
-defaults to `var(--background)`.
+defaults to an automatic mask that blends into the surface behind the scroll
+area.
 Hides the custom scrollbar while keeping the scroll region available.
 
 # Select
@@ -5673,6 +5674,189 @@ For temporary confirmation states such as Copy to Copied, restart the reset time
 Keys the currently displayed icon. Change it whenever the icon's semantic
 state changes.
 
+# Marquee
+
+Create seamless scrolling content that starts only when it needs more room.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+`Marquee` loops any React content, including inline brand icons and text. It measures the natural width of the first content group so text stays still when it fits and scrolls when its container is too narrow.
+
+## Installation
+
+## Usage
+
+```tsx
+import { Marquee } from "@/components/ui/marquee";
+```
+
+```tsx
+<Marquee onlyOnOverflow>
+  This text scrolls only when its container is too narrow.
+</Marquee>
+```
+
+The component renders the content twice or more to create a seamless loop. The repeated copies are hidden from assistive technology, so screen readers encounter the content once.
+
+## Examples
+
+### Brand Icons
+
+Use `Marquee` with inline SVG brand icons or React components. Set `onlyOnOverflow={false}` when a brand strip should keep moving even when the first group fits.
+
+### Text
+
+With `onlyOnOverflow`, `Marquee` uses `ResizeObserver` to compare the natural content width with the available width. Short text remains still, while long text starts a loop automatically.
+
+### Narrow Buttons
+
+Give the marquee `min-w-0 flex-1` inside a constrained button or control so the content can shrink and the overflow measurement can take effect.
+
+## Edge Fade
+
+The fade is shown only while content is moving and automatically blends into the surface behind the marquee. Set `fadeColor` only when you need an explicit color override.
+
+```tsx
+<Marquee fadeColor="var(--card)" onlyOnOverflow>
+  Long content that moves inside a card surface
+</Marquee>
+```
+
+## Accessibility
+
+Marquee content respects `prefers-reduced-motion` and stops moving when reduced motion is requested. The repeated loop copies are `aria-hidden`, so the same content is not announced twice.
+
+## API Reference
+
+### Props
+
+Duration of one complete loop in seconds. Higher values move slower.
+Direction in which the content travels.
+Pauses the loop while the pointer is over the marquee.
+Gap between items and repeated content groups. Numbers are interpreted as
+pixels; strings can be any CSS length.
+Adds a soft fade at both edges of the viewport while content is moving.
+Sets the CSS color used by the edge fades. It accepts any CSS color value,
+including a theme variable such as `var(--card)` or `var(--popover)`. It is
+optional because the default mask automatically blends into the surface
+behind the marquee. The fade is hidden when the marquee is not moving.
+Starts the animation only when the natural content width is wider than the
+available viewport.
+
+All standard `div` props, including `className`, `style`, and `aria-*` attributes, pass through to the viewport element.
+
+# Noise Texture
+
+An SVG fractal noise overlay using feTurbulence for subtle texture and analog grain.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+`NoiseTexture` renders a procedural SVG fractal noise layer using `feTurbulence` to add depth, tactile grain, and analog warmth over backgrounds and surfaces.
+
+## Installation
+
+## Usage
+
+```tsx
+import { NoiseTexture } from "@/components/ui/noise-texture";
+```
+
+```tsx
+<div className="relative overflow-hidden rounded-xl bg-zinc-900 p-6 text-white">
+  <NoiseTexture className="opacity-[0.1]" />
+  <div className="relative z-10">Card content</div>
+</div>
+```
+
+`NoiseTexture` is positioned absolutely to fill its relative parent container. Use opacity utility classes such as `opacity-[0.05]`, `opacity-10`, or `opacity-20` on the component to control the intensity of the grain overlay.
+
+## Examples
+
+### Opacity
+
+Adjust the overlay opacity to achieve anything from a barely noticeable paper feel to a strong retro film grain.
+
+### Frequency
+
+Change the base turbulence frequency to vary between coarse, medium, and ultra-fine grain patterns.
+
+## API Reference
+
+`NoiseTexture` renders an absolute, full-size SVG element containing an SVG `filter` and a filled `rect`. Standard SVG attributes pass through.
+
+### Props
+
+Sets the `baseFrequency` parameter of the `feTurbulence` filter. Higher
+values generate a finer, denser grain.
+Sets the `numOctaves` parameter for the turbulence generator, adding noise
+detail at smaller scales.
+Sets the linear transfer slope on each color channel after desaturation to
+adjust noise contrast.
+Sets the internal opacity of the SVG noise rectangle layer.
+
+# Shimmer
+
+Add a sweeping light gradient shimmer animation to text.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+`Shimmer` animates text with a sweeping light gradient during loading, streaming, or pending background work.
+
+## Installation
+
+## Usage
+
+```tsx
+import { Shimmer } from "@/components/ui/shimmer";
+```
+
+```tsx
+<Shimmer>Generating response...</Shimmer>
+```
+
+## Examples
+
+### Colors
+
+Override the default text-derived highlight with a custom CSS color, hex value, or Tailwind color token.
+
+### Duration
+
+Adjust the sweep speed with millisecond numbers or CSS duration units.
+
+### Spread
+
+Control the width of the animated highlight band across the text.
+
+### Angle
+
+Set the linear gradient tilt angle in degrees.
+
+### With Components
+
+Compose `Shimmer` with buttons and spinners.
+
+## API Reference
+
+`Shimmer` uses Base UI's [`useRender`](https://base-ui.com/react/utils/use-render) for polymorphic rendering. Standard HTML attributes pass through to the underlying element.
+
+### Props
+
+Sets a custom highlight color for the sweeping gradient band. Accepts hex
+colors, CSS variables, or Tailwind color tokens. Defaults to a
+semi-transparent tint derived from `currentColor`.
+Sets a custom base color for the text underneath the shimmer sweep. Defaults
+to `currentColor`.
+Sets the animation duration for one complete sweep, specified in
+milliseconds or CSS time units.
+Sets the width of the highlight band across the text.
+Sets the linear gradient tilt angle in degrees.
+Sets the sweep animation direction.
+Sets whether the shimmer loops indefinitely or plays a single pass.
+Shorthand flag to reverse the sweep direction.
+Shorthand flag to play the sweep animation only once.
+Disables the animation and displays solid text without background clipping.
+
 # Text Morph
 
 Animate changing text with Calligraph and smoothly follow its width.
@@ -5741,3 +5925,45 @@ Choose `default`, `smooth`, `snappy`, or `bouncy` with the `animation` prop. Tex
 
 Measures the natural text width and animates the outer wrapper to that
 width. Set it to `false` in an intentionally fixed-width container.
+
+# Twemoji
+
+Render Unicode emoji as Twemoji SVG images inline with text.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+`Twemoji` parses and renders standard Unicode emoji characters as Twitter Twemoji SVG images inline with text.
+
+## Installation
+
+## Usage
+
+```tsx
+import { Twemoji } from "@/components/ui/twemoji";
+```
+
+```tsx
+<Twemoji>Hello from the Philippines 🇵🇭</Twemoji>
+```
+
+## Examples
+
+### Custom Source
+
+Resolve emoji assets from an alternative CDN or self-hosted endpoint with the `source` prop.
+
+### Sizes
+
+Twemoji images use relative em units and scale with the parent font size.
+
+## API Reference
+
+`Twemoji` replaces emoji sequences with inline SVG `<img>` elements. Non-emoji text passes through unchanged.
+
+### Props
+
+The text content containing Unicode emoji sequences to parse and render.
+defaultValue="(codePoint) => `${TWEMOJI_CDN_URL}/${codePoint}.svg`"
+>
+Custom resolver returning the SVG asset URL for a given Unicode code point.
+Additional CSS classes applied to rendered emoji image elements.

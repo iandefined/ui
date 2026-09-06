@@ -61,7 +61,7 @@ export function ApiProp({
         <TableCell className="w-8 text-right">
           <button
             type="button"
-            className="text-muted-foreground hover:text-foreground inline-flex items-center justify-center p-1 rounded transition-colors"
+            className="text-muted-foreground hover:text-foreground inline-flex items-center justify-center p-1 rounded cursor-pointer transition-colors"
             aria-label="Toggle details"
             onClick={(e) => {
               e.stopPropagation();

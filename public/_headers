@@ -169,7 +169,19 @@
 /docs/utilities/icon-swap.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/utilities/marquee.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/utilities/noise-texture.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/utilities/shimmer.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/utilities/text-morph.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/utilities/twemoji.md
   Content-Type: text/markdown; charset=utf-8
 
 /rss.xml

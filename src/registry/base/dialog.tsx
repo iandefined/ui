@@ -321,7 +321,6 @@ function DialogBody({
             persistScrollbar &&
               "[&_[data-slot=scroll-area-scrollbar]]:opacity-100"
           )}
-          fadeColor="var(--popover)"
           viewportClassName={cn(scrollbarGutter && "[scrollbar-gutter:stable]")}
           scrollShadow={getScrollShadow(fadeEdges)}
           hideScrollbar={hideScrollbar}

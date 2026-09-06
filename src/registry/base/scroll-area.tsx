@@ -31,6 +31,8 @@ function ScrollArea({
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
+        data-fade-mode={fadeColor === undefined ? "auto" : "custom"}
+        data-scroll-shadow={scrollShadow}
         data-slot="scroll-area-viewport"
         className={cn(
           "size-full min-h-0 flex-1 overscroll-contain rounded-[inherit] outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
@@ -97,6 +99,82 @@ function ScrollArea({
           <ScrollBar orientation={orientation} />
         ))}
       <ScrollAreaPrimitive.Corner data-slot="scroll-area-corner" />
+      <style>{`
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="vertical"],
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {
+  --scroll-area-fade-y-start: min(var(--scroll-area-overflow-y-start, 0px), var(--scroll-area-fade-size, 40px));
+  --scroll-area-fade-y-end: min(var(--scroll-area-overflow-y-end, 0px), var(--scroll-area-fade-size, 40px));
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--scroll-area-fade-y-start),
+    black calc(100% - var(--scroll-area-fade-y-end)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--scroll-area-fade-y-start),
+    black calc(100% - var(--scroll-area-fade-y-end)),
+    transparent 100%
+  );
+}
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="horizontal"],
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {
+  --scroll-area-fade-x-start: min(var(--scroll-area-overflow-x-start, 0px), var(--scroll-area-fade-size, 40px));
+  --scroll-area-fade-x-end: min(var(--scroll-area-overflow-x-end, 0px), var(--scroll-area-fade-size, 40px));
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--scroll-area-fade-x-start),
+    black calc(100% - var(--scroll-area-fade-x-end)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--scroll-area-fade-x-start),
+    black calc(100% - var(--scroll-area-fade-x-end)),
+    transparent 100%
+  );
+}
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {
+  -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black var(--scroll-area-fade-y-start),
+      black calc(100% - var(--scroll-area-fade-y-end)),
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0,
+      black var(--scroll-area-fade-x-start),
+      black calc(100% - var(--scroll-area-fade-x-end)),
+      transparent 100%
+    );
+  mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black var(--scroll-area-fade-y-start),
+      black calc(100% - var(--scroll-area-fade-y-end)),
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0,
+      black var(--scroll-area-fade-x-start),
+      black calc(100% - var(--scroll-area-fade-x-end)),
+      transparent 100%
+    );
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"] [data-slot="scroll-area-vertical-shadow"],
+[data-slot="scroll-area-viewport"][data-fade-mode="auto"] [data-slot="scroll-area-horizontal-shadow"] {
+  display: none;
+}
+`}</style>
     </ScrollAreaPrimitive.Root>
   );
 }

@@ -14,11 +14,7 @@ const activity = [
 export default function ScrollAreaVerticalShadowDemo() {
   return (
     <div className="rounded-md border bg-card">
-      <ScrollArea
-        className="h-64 w-80"
-        fadeColor="var(--card)"
-        scrollShadow="vertical"
-      >
+      <ScrollArea className="h-64 w-80" scrollShadow="vertical">
         <ScrollAreaContent className="space-y-3 p-4">
           {activity.map((item, index) => (
             <div className="rounded-md border p-3 text-sm" key={item}>

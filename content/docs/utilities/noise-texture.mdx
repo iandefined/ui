@@ -1,0 +1,65 @@
+---
+title: Noise Texture
+description: An SVG fractal noise overlay using feTurbulence for subtle texture and analog grain.
+---
+
+`NoiseTexture` renders a procedural SVG fractal noise layer using `feTurbulence` to add depth, tactile grain, and analog warmth over backgrounds and surfaces.
+
+<ComponentPreview name="noise-texture/default" />
+
+## Installation
+
+<ComponentInstall name="noise-texture" />
+
+## Usage
+
+```tsx
+import { NoiseTexture } from "@/components/ui/noise-texture";
+```
+
+```tsx
+<div className="relative overflow-hidden rounded-xl bg-zinc-900 p-6 text-white">
+  <NoiseTexture className="opacity-[0.1]" />
+  <div className="relative z-10">Card content</div>
+</div>
+```
+
+`NoiseTexture` is positioned absolutely to fill its relative parent container. Use opacity utility classes such as `opacity-[0.05]`, `opacity-10`, or `opacity-20` on the component to control the intensity of the grain overlay.
+
+## Examples
+
+### Opacity
+
+Adjust the overlay opacity to achieve anything from a barely noticeable paper feel to a strong retro film grain.
+
+<ComponentPreview name="noise-texture/opacity" />
+
+### Frequency
+
+Change the base turbulence frequency to vary between coarse, medium, and ultra-fine grain patterns.
+
+<ComponentPreview name="noise-texture/frequency" />
+
+## API Reference
+
+`NoiseTexture` renders an absolute, full-size SVG element containing an SVG `filter` and a filled `rect`. Standard SVG attributes pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="frequency" fullType="number" defaultValue="0.4">
+    Sets the `baseFrequency` parameter of the `feTurbulence` filter. Higher
+    values generate a finer, denser grain.
+  </ApiProp>
+  <ApiProp name="octaves" fullType="number" defaultValue="6">
+    Sets the `numOctaves` parameter for the turbulence generator, adding noise
+    detail at smaller scales.
+  </ApiProp>
+  <ApiProp name="slope" fullType="number" defaultValue="0.15">
+    Sets the linear transfer slope on each color channel after desaturation to
+    adjust noise contrast.
+  </ApiProp>
+  <ApiProp name="noiseOpacity" fullType="number" defaultValue="0.6">
+    Sets the internal opacity of the SVG noise rectangle layer.
+  </ApiProp>
+</ApiPropsList>

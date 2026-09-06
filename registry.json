@@ -577,6 +577,20 @@
       ]
     },
     {
+      "name": "marquee",
+      "type": "registry:ui",
+      "title": "Marquee",
+      "description": "A seamless content marquee that measures overflow and respects reduced motion.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/marquee.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/marquee.tsx"
+        }
+      ]
+    },
+    {
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
@@ -1083,6 +1097,48 @@
           "path": "src/registry/base/collapsible.tsx",
           "type": "registry:ui",
           "target": "components/ui/collapsible.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shimmer",
+      "type": "registry:ui",
+      "title": "Shimmer",
+      "description": "A sweeping light gradient shimmer animation for text elements.",
+      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/shimmer.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/shimmer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "twemoji",
+      "type": "registry:ui",
+      "title": "Twemoji",
+      "description": "Render Unicode emoji as Twemoji SVG images inline with text.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/twemoji.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/twemoji.tsx"
+        }
+      ]
+    },
+    {
+      "name": "noise-texture",
+      "type": "registry:ui",
+      "title": "Noise Texture",
+      "description": "An SVG fractal noise layer using feTurbulence for subtle texture overlays.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/registry/base/noise-texture.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/noise-texture.tsx"
         }
       ]
     }

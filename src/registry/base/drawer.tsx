@@ -616,7 +616,6 @@ function DrawerPanel({
     return (
       <ScrollArea
         className="min-h-0 flex-1 touch-auto"
-        fadeColor="var(--popover)"
         scrollShadow={scrollFade ? "vertical" : "none"}
       >
         <ScrollAreaContent>{content}</ScrollAreaContent>

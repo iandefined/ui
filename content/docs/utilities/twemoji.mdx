@@ -1,0 +1,58 @@
+---
+title: Twemoji
+description: Render Unicode emoji as Twemoji SVG images inline with text.
+---
+
+`Twemoji` parses and renders standard Unicode emoji characters as Twitter Twemoji SVG images inline with text.
+
+<ComponentPreview name="twemoji/default" />
+
+## Installation
+
+<ComponentInstall name="twemoji" />
+
+## Usage
+
+```tsx
+import { Twemoji } from "@/components/ui/twemoji";
+```
+
+```tsx
+<Twemoji>Hello from the Philippines 🇵🇭</Twemoji>
+```
+
+## Examples
+
+### Custom Source
+
+Resolve emoji assets from an alternative CDN or self-hosted endpoint with the `source` prop.
+
+<ComponentPreview name="twemoji/custom-source" />
+
+### Sizes
+
+Twemoji images use relative em units and scale with the parent font size.
+
+<ComponentPreview name="twemoji/sizes" />
+
+## API Reference
+
+`Twemoji` replaces emoji sequences with inline SVG `<img>` elements. Non-emoji text passes through unchanged.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="children" fullType="string" required>
+    The text content containing Unicode emoji sequences to parse and render.
+  </ApiProp>
+  <ApiProp
+    name="source"
+    fullType="(codePoint: string) => string"
+    defaultValue="(codePoint) => `${TWEMOJI_CDN_URL}/${codePoint}.svg`"
+  >
+    Custom resolver returning the SVG asset URL for a given Unicode code point.
+  </ApiProp>
+  <ApiProp name="className" fullType="string">
+    Additional CSS classes applied to rendered emoji image elements.
+  </ApiProp>
+</ApiPropsList>

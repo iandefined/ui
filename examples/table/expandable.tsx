@@ -94,7 +94,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
             variant="ghost"
             size="icon-xs"
             aria-label="Toggle details"
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setOpen((prev) => !prev);

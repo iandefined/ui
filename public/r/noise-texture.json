@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "noise-texture",
+  "title": "Noise Texture",
+  "description": "An SVG fractal noise layer using feTurbulence for subtle texture overlays.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "src/registry/base/noise-texture.tsx",
+      "content": "\"use client\";\n\nimport { useId } from \"react\";\nimport type React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\n\ntype NoiseTextureProps = React.ComponentProps<\"svg\"> & {\n  /**\n   * Base frequency for `feTurbulence`. Higher values yield finer-grained noise.\n   * @default 0.4\n   */\n  frequency?: number;\n  /**\n   * Number of octaves for `feTurbulence`. More octaves add detail at smaller scales.\n   * @default 6\n   */\n  octaves?: number;\n  /**\n   * Linear slope on each RGB channel after desaturation; adjusts the contrast of the noise.\n   * @default 0.15\n   */\n  slope?: number;\n  /**\n   * Opacity of the filled noise `rect` layer inside the SVG.\n   * @default 0.6\n   */\n  noiseOpacity?: number;\n};\n\nfunction NoiseTexture({\n  className,\n  frequency = 0.4,\n  octaves = 6,\n  slope = 0.15,\n  noiseOpacity = 0.6,\n  ...props\n}: NoiseTextureProps): React.ReactElement {\n  const reactId = useId();\n  const filterId = `noise-${reactId.replaceAll(\":\", \"\")}`;\n\n  return (\n    <svg\n      aria-hidden=\"true\"\n      className={cn(\n        \"pointer-events-none absolute inset-0 z-0 size-full select-none\",\n        className\n      )}\n      data-slot=\"noise-texture\"\n      tabIndex={-1}\n      xmlns=\"http://www.w3.org/2000/svg\"\n      {...props}\n    >\n      <filter id={filterId}>\n        <feTurbulence\n          baseFrequency={frequency}\n          numOctaves={octaves}\n          stitchTiles=\"stitch\"\n          type=\"fractalNoise\"\n        />\n        <feColorMatrix type=\"saturate\" values=\"0\" />\n        <feComponentTransfer>\n          <feFuncR slope={slope} type=\"linear\" />\n          <feFuncG slope={slope} type=\"linear\" />\n          <feFuncB slope={slope} type=\"linear\" />\n        </feComponentTransfer>\n      </filter>\n      <rect\n        filter={`url(#${filterId})`}\n        height=\"100%\"\n        opacity={noiseOpacity}\n        width=\"100%\"\n      />\n    </svg>\n  );\n}\n\nexport { NoiseTexture };\nexport type { NoiseTextureProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/noise-texture.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}
