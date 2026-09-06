@@ -94,12 +94,14 @@ function ExpandableOrderRow({ order }: { order: Order }) {
             variant="ghost"
             size="icon-xs"
             aria-label="Toggle details"
+            className="text-muted-foreground hover:text-foreground"
             onClick={(e) => {
               e.stopPropagation();
               setOpen((prev) => !prev);
             }}
           >
             <ChevronRightIcon
+              aria-hidden="true"
               className={cn(
                 "size-4 shrink-0 transition-transform duration-200 ease-out",
                 open && "rotate-90"
@@ -108,7 +110,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
           </Button>
         </TableCell>
       </TableRow>
-      <TableRow className="[&:not(:has([data-slot=collapsible-content]:not([hidden])))]:hidden">
+      <TableRow className="[&:not(:has([data-slot=collapsible-content]:not([hidden]))):not(:has([data-slot=collapsible-content][data-ending-style]))]:hidden">
         <TableCell colSpan={5} className="p-0 whitespace-normal">
           <Collapsible open={open} onOpenChange={setOpen}>
             <CollapsibleContent>

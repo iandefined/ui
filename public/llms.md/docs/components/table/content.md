@@ -97,7 +97,11 @@ Compose `Collapsible` with table rows to reveal nested metadata, order items, or
 
 ### Resizable Columns
 
-Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor.
+Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor. On touch devices, swipe the table horizontally to reach off-screen columns, then drag a column separator to resize it. Cell and header text truncates instead of overlapping adjacent columns.
+
+### Wrapping Content
+
+Table cells keep content on one line by default so column values remain easy to scan. Add `whitespace-normal` to a cell when long-form content needs to wrap.
 
 ## API Reference
 

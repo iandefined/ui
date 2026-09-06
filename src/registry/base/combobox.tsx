@@ -179,7 +179,7 @@ function ComboboxInput({
     return (
       <ComboboxPrimitive.Input
         className={cn(
-          "h-6 min-w-12 flex-1 order-last truncate bg-transparent px-1.5 py-0 text-xs sm:text-xs leading-6 outline-none placeholder:text-muted-foreground/80 [[data-slot=combobox-chip]+&]:ps-1",
+          "h-6 min-w-12 flex-1 order-last truncate bg-transparent px-1.5 py-0 text-base leading-6 outline-none placeholder:text-muted-foreground/80 [[data-slot=combobox-chip]+&]:ps-1 sm:text-sm",
           !isSelecting &&
             "[[data-slot=combobox-chip]~&]:flex-none [[data-slot=combobox-chip]~&]:grow-0 [[data-slot=combobox-chip]~&]:w-0 [[data-slot=combobox-chip]~&]:min-w-0 [[data-slot=combobox-chip]~&]:p-0 [[data-slot=combobox-chip]~&]:m-0 [[data-slot=combobox-chip]~&]:border-0 [[data-slot=combobox-chip]~&]:opacity-0 [[data-slot=combobox-chip]~&]:pointer-events-none [[data-slot=combobox-chip]~&]:overflow-hidden",
           className
@@ -381,7 +381,7 @@ function ComboboxChips({
   return (
     <ComboboxPrimitive.Chips
       className={cn(
-        "relative inline-flex w-full items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 dark:bg-input/32 sm:text-sm",
+        "relative inline-flex w-full cursor-text items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 dark:bg-input/32 sm:text-sm",
         shouldWrap
           ? "min-h-9 flex-wrap"
           : "h-9 min-h-9 flex-nowrap overflow-hidden",

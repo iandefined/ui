@@ -40,10 +40,10 @@ function AnimationSelect({
   return (
     <Select items={options}>
       <SelectTrigger
-        className="w-full"
+        className="w-32 min-w-0 justify-self-center sm:w-full sm:min-w-36 sm:justify-self-auto"
         aria-label={`${animationPreset} animation`}
       >
-        <SelectValue placeholder={animationPreset} />
+        <SelectValue className="min-w-0" placeholder={animationPreset} />
         <SelectIcon>
           <ChevronsUpDownIcon className="size-3.5" />
         </SelectIcon>

@@ -184,9 +184,7 @@ function AccordionTrigger({
         )}
 
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="underline-offset-2 group-hover/trigger:underline">
-            {children}
-          </span>
+          <span>{children}</span>
           {subtitle && (
             <span className="text-muted-foreground text-xs font-normal no-underline">
               {subtitle}
@@ -222,8 +220,8 @@ function AccordionContent({
           "group-data-[variant=split]/accordion:pt-0",
           "group-data-[variant=outline]/accordion:pt-0",
           // Inset / Nested variant
-          "group-data-[variant=inset]/accordion:mt-1 group-data-[variant=inset]/accordion:mb-0.5 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:border group-data-[variant=inset]/accordion:border-border/70 dark:group-data-[variant=inset]/accordion:border-border group-data-[variant=inset]/accordion:bg-card dark:group-data-[variant=inset]/accordion:bg-muted group-data-[variant=inset]/accordion:p-4 group-data-[variant=inset]/accordion:shadow-xs group-data-[variant=inset]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
-          "group-data-[variant=nested]/accordion:mt-1 group-data-[variant=nested]/accordion:mb-0.5 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:border group-data-[variant=nested]/accordion:border-border/70 dark:group-data-[variant=nested]/accordion:border-border group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-xs group-data-[variant=nested]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
+          "group-data-[variant=inset]/accordion:mt-1 group-data-[variant=inset]/accordion:mb-0.5 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:bg-card dark:group-data-[variant=inset]/accordion:bg-muted group-data-[variant=inset]/accordion:p-4 group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] group-data-[variant=inset]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
+          "group-data-[variant=nested]/accordion:mt-1 group-data-[variant=nested]/accordion:mb-0.5 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] group-data-[variant=nested]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
           // Isolated variants
           "group-data-[variant=isolated-bordered]/accordion:pt-0",
           "group-data-[variant=isolated-filled]/accordion:pt-0",

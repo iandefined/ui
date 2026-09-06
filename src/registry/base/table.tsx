@@ -37,13 +37,15 @@ function Table({
   rowDividers = true,
   resizable = false,
   hideScrollbar = false,
-  scrollShadow = "none",
+  scrollShadow,
   fadeColor,
   viewportClassName,
   children,
   ...props
 }: TableProps) {
   const isStriped = Boolean(striped || stripedRows);
+  const resolvedScrollShadow =
+    scrollShadow ?? (resizable ? "horizontal" : "none");
 
   return (
     <TableContext.Provider value={{ resizable }}>
@@ -55,17 +57,18 @@ function Table({
         data-row-dividers={rowDividers ? "" : undefined}
         data-resizable={resizable ? "" : undefined}
         className={cn(
-          "group/table relative flex w-full flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 pt-0 md:max-w-2xl",
+          "group/table relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 pt-0 md:max-w-2xl",
           className
         )}
       >
         <ScrollArea
           hideScrollbar={hideScrollbar}
-          scrollShadow={scrollShadow}
+          orientation="both"
+          scrollShadow={resolvedScrollShadow}
           fadeColor={fadeColor}
-          className="min-h-0 flex-1 rounded-lg overflow-hidden"
+          className="min-h-0 min-w-0 flex-1 rounded-lg overflow-hidden"
           viewportClassName={cn(
-            "outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
+            "!overscroll-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
             viewportClassName
           )}
         >
@@ -94,6 +97,7 @@ function TableHeader({ className, render, ...props }: TableHeaderProps) {
     className: cn(
       "[&_tr]:border-0",
       "[&_tr_th]:bg-muted dark:[&_tr_th]:bg-card",
+      "[&_tr_th:has(+_th[data-empty])]:after:hidden",
       "sticky top-0 z-10",
       className
     ),
@@ -125,8 +129,8 @@ function TableBody({ className, render, ...props }: TableBodyProps) {
       "group-data-[row-dividers]/table:[&_tr:not(:last-child)_td]:border-b group-data-[row-dividers]/table:[&_tr_td]:border-border/60",
       "group-data-bordered/table:[&_tr_td]:border-b group-data-bordered/table:[&_tr_td]:border-r group-data-bordered/table:[&_tr_td]:border-border/70 dark:group-data-bordered/table:[&_tr_td]:border-border",
       "group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-muted/40 dark:group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-card/30",
-      "group-data-hoverable/table:[&_tr:hover_td]:bg-secondary/70 dark:group-data-hoverable/table:[&_tr:hover_td]:bg-muted/50",
-      "group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-secondary/70 dark:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-muted/50",
+      "[@media(hover:hover)]:group-data-hoverable/table:[&_tr:hover_td]:bg-secondary/70 dark:[@media(hover:hover)]:group-data-hoverable/table:[&_tr:hover_td]:bg-muted/50",
+      "[@media(hover:hover)]:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-secondary/70 dark:[@media(hover:hover)]:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-muted/50",
       className
     ),
   };
@@ -333,7 +337,7 @@ function TableColumnResizer({
       onTouchStart={onTouchStart}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group/resizer absolute -right-2 top-0 z-20 flex h-full w-4 cursor-col-resize select-none items-center justify-center touch-none outline-none",
+        "group/resizer absolute right-0 top-0 z-20 flex h-full w-4 cursor-col-resize touch-none select-none items-center justify-center outline-none [@media(pointer:coarse)]:w-11",
         "focus-visible:[&>div]:bg-[oklch(0.7_0_0)] dark:focus-visible:[&>div]:bg-[oklch(0.5_0_0)]",
         "[[data-slot=table-head]:last-child_&]:hidden",
         className
@@ -366,16 +370,21 @@ function TableHead({
 }: TableHeadProps) {
   const context = React.useContext(TableContext);
   const isResizable = resizableProp ?? context.resizable;
+  const hasResizer = resizer !== undefined ? Boolean(resizer) : isResizable;
+  const hasLabel =
+    children !== null && children !== undefined && children !== false;
 
   const defaultProps = {
     "data-slot": "table-head",
+    "data-empty": hasLabel ? undefined : "",
     className: cn(
-      "text-muted-foreground relative px-3 py-2 text-left align-middle text-sm font-medium whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
+      "text-muted-foreground relative overflow-hidden px-3 py-2 text-left text-ellipsis align-middle text-sm font-medium whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
       "[&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
       "after:absolute after:right-0 after:top-1/2 after:h-4 after:w-px after:-translate-y-1/2 after:bg-border after:content-['']",
       "last:after:hidden",
       "group-data-[bordered]/table:after:hidden group-data-bordered/table:after:hidden",
-      isResizable && "after:hidden select-none",
+      !hasLabel && "after:hidden",
+      hasResizer && "after:hidden select-none",
       className
     ),
     children: (
@@ -403,7 +412,7 @@ function TableCell({ className, render, ...props }: TableCellProps) {
   const defaultProps = {
     "data-slot": "table-cell",
     className: cn(
-      "px-3 py-2.5 align-middle [[align=center]]:text-center [[align=right]]:text-right",
+      "bg-card overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap dark:bg-background [[align=center]]:text-center [[align=right]]:text-right",
       "[&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
       "group-data-bordered/table:border-b group-data-bordered/table:border-r group-data-bordered/table:first:border-l group-data-bordered/table:border-border/70 dark:group-data-bordered/table:border-border",
       "[[data-state=selected]_&]:bg-accent dark:[[data-state=selected]_&]:bg-accent",

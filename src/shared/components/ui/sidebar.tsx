@@ -150,7 +150,7 @@ const SidebarProvider = ({
             } as React.CSSProperties
           }
           className={cn(
-            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full",
+            "group/sidebar-wrapper has-[>[data-slot=sidebar][data-variant=inset]]:bg-sidebar flex min-h-svh w-full",
             className
           )}
           {...props}
@@ -180,6 +180,7 @@ const Sidebar = ({
     return (
       <div
         data-slot="sidebar"
+        data-variant={variant}
         className={cn(
           "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
           className

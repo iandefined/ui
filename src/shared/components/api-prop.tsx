@@ -78,13 +78,7 @@ export function ApiProp({
           </button>
         </TableCell>
       </TableRow>
-      <TableRow
-        hidden={!open}
-        className={cn(
-          "[&:not(:has([data-slot=collapsible-content]:not([hidden])))]:hidden",
-          !open && "hidden"
-        )}
-      >
+      <TableRow className="[&:not(:has([data-slot=collapsible-content]:not([hidden]))):not(:has([data-slot=collapsible-content][data-ending-style]))]:hidden">
         <TableCell colSpan={4} className="p-0 whitespace-normal">
           <Collapsible open={open} onOpenChange={setOpen}>
             <CollapsibleContent>

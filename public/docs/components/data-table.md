@@ -91,7 +91,7 @@ Navigate records across discrete pages with page-size bounding.
 
 ### Resizable Columns
 
-Enable interactive column resizing with TanStack Table integration. The resizer handle provides a grabable hitbox, two-arrow resize cursor, and highlights the column separator on hover.
+Enable interactive column resizing with TanStack Table integration. The resizer handle provides a grabable hitbox, two-arrow resize cursor, and highlights the column separator on hover. Cell and header content truncates within its column instead of overlapping adjacent columns.
 
 ## API Reference
 

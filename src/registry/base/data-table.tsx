@@ -210,6 +210,9 @@ function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    defaultColumn: {
+      minSize: 48,
+    },
     getRowId,
     state: {
       sorting,
@@ -242,7 +245,7 @@ function DataTable<TData, TValue>({
       <div
         data-slot="data-table"
         className={cn(
-          "@container relative flex w-full flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 md:max-w-2xl",
+          "@container relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 md:max-w-2xl",
           className
         )}
       >
@@ -415,12 +418,12 @@ function SortableHeader<TData>({
   return (
     <button
       type="button"
-      className="group hover:text-foreground -mx-3 -my-2 flex w-[calc(100%+1.5rem)] cursor-pointer items-center gap-1.5 px-3 py-2 transition-colors overflow-hidden"
+      className="group hover:text-foreground -my-2 flex w-full min-w-0 cursor-pointer items-center gap-1.5 py-2 transition-colors overflow-hidden"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >
       <span
         className={cn(
-          "flex flex-1 items-center truncate",
+          "flex min-w-0 flex-1 items-center truncate",
           align === "right" && "justify-end",
           align === "center" && "justify-center"
         )}
@@ -481,10 +484,16 @@ function DataTableHeader({
     }
 
     if (typeof headerDef === "function") {
-      return flexRender(headerDef, header.getContext());
+      return (
+        <div className="min-w-0 max-w-full truncate">
+          {flexRender(headerDef, header.getContext())}
+        </div>
+      );
     }
 
-    return headerDef ?? null;
+    return headerDef === undefined || headerDef === null ? null : (
+      <div className="min-w-0 max-w-full truncate">{headerDef}</div>
+    );
   };
 
   return (
@@ -552,7 +561,12 @@ function DataTableBody({
                   isResizable ? { width: cell.column.getSize() } : undefined
                 }
               >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <div
+                  data-slot="data-table-cell-content"
+                  className="min-w-0 max-w-full truncate"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </div>
               </TableCell>
             ))}
           </TableRow>

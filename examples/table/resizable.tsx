@@ -25,7 +25,7 @@ const invoices = [
   {
     invoice: "INV-003",
     status: "Unpaid",
-    method: "Bank Transfer",
+    method: "International Bank Transfer",
     amount: "$350.00",
   },
   {
