@@ -50,6 +50,10 @@ Change the image shape for the context.
 
 Stack related people or accounts.
 
+### Random Hash Avatar
+
+Use [Hashvatar](https://www.hashvatar.com/) to generate a deterministic avatar from a username or any string. Install it in your app, then customize the input, colors, and download behavior for your product.
+
 ## API Reference
 
 `Avatar` wraps [Base UI Avatar](https://base-ui.com/react/components/avatar). Supported Base UI props pass through; this registry item owns no additional props.

@@ -112,6 +112,7 @@ export const mdxComponents = {
   ApiPropsList,
   Button,
   Callout,
+  CodeBlockCommand,
   CodeTabs,
   ColorCard,
   ComponentPreview,
