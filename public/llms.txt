@@ -13,12 +13,14 @@
 
 ## Components
 
+- [Accordion](https://ui.iandefined.com/docs/components/accordion.md) - A vertically stacked set of interactive headings that reveal or hide associated content sections.
 - [Avatar](https://ui.iandefined.com/docs/components/avatar.md) - An image element with a fallback for representing the user.
 - [Badge](https://ui.iandefined.com/docs/components/badge.md) - Compact labels for status, category, or metadata.
 - [Breadcrumbs](https://ui.iandefined.com/docs/components/breadcrumbs.md) - A responsive breadcrumb trail with surface variants, custom separators, and collapsed paths.
 - [Button](https://ui.iandefined.com/docs/components/button.md) - A button with a glossy default treatment, custom colors, variants, sections, and sizes.
 - [Button Group](https://ui.iandefined.com/docs/components/button-group.md) - A container that groups related buttons together with consistent styling.
 - [Card](https://ui.iandefined.com/docs/components/card.md) - A container with header, content, action, and footer regions.
+- [Collapsible](https://ui.iandefined.com/docs/components/collapsible.md) - An interactive component which expands and collapses content with smooth animations.
 - [Data Table](https://ui.iandefined.com/docs/components/data-table.md) - A feature-rich data table built with TanStack Table, supporting sorting, filtering, selection, and pagination.
 - [Dialog](https://ui.iandefined.com/docs/components/dialog.md) - A modal window for focused tasks that require user interaction.
 - [Drawer](https://ui.iandefined.com/docs/components/drawer.md) - A swipe gesture drawer with positions, snap points, and nested panels.

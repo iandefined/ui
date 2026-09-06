@@ -1,20 +1,43 @@
 "use client";
 
 import { ChevronLeftIcon, ChevronRightIcon, EllipsisIcon } from "lucide-react";
-import type * as React from "react";
+import * as React from "react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+export type PaginationSize = "default" | "sm" | "lg";
+
+interface PaginationContextValue {
+  size: PaginationSize;
+}
+
+const PaginationContext = React.createContext<PaginationContextValue>({
+  size: "default",
+});
+
+export const usePagination = () => React.useContext(PaginationContext);
+
+export interface PaginationProps extends React.ComponentProps<"nav"> {
+  size?: PaginationSize;
+}
+
+function Pagination({
+  className,
+  size = "default",
+  ...props
+}: PaginationProps) {
   return (
-    <nav
-      role="navigation"
-      aria-label="pagination"
-      data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
-      {...props}
-    />
+    <PaginationContext.Provider value={{ size }}>
+      <nav
+        role="navigation"
+        aria-label="pagination"
+        data-slot="pagination"
+        data-size={size}
+        className={cn("mx-auto flex w-full justify-center", className)}
+        {...props}
+      />
+    </PaginationContext.Provider>
   );
 }
 
@@ -22,10 +45,16 @@ function PaginationContent({
   className,
   ...props
 }: React.ComponentProps<"ul">) {
+  const { size } = usePagination();
+
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={cn(
+        "flex flex-row items-center",
+        size === "sm" ? "gap-0.5" : "gap-1",
+        className
+      )}
       {...props}
     />
   );
@@ -55,10 +84,25 @@ function PaginationLink({
   className,
   isActive,
   isDisabled,
-  size = "icon",
+  size: sizeProp,
   children,
   ...props
 }: PaginationLinkProps) {
+  const { size: contextSize } = usePagination();
+  const defaultSize =
+    contextSize === "sm"
+      ? "icon-sm"
+      : contextSize === "lg"
+        ? "icon-lg"
+        : "icon";
+  const resolvedSize = sizeProp ?? defaultSize;
+  const isIconOnly =
+    resolvedSize === "icon" ||
+    resolvedSize === "icon-sm" ||
+    resolvedSize === "icon-xs" ||
+    resolvedSize === "icon-lg" ||
+    resolvedSize === "icon-xl";
+
   return (
     <a
       aria-current={isActive ? "page" : undefined}
@@ -69,8 +113,13 @@ function PaginationLink({
       className={cn(
         buttonVariants({
           variant: isActive ? "outline" : "ghost",
-          size,
+          size: resolvedSize,
         }),
+        contextSize === "sm" && [
+          "text-xs [&_svg]:size-3.5",
+          isIconOnly ? "size-7 p-0" : "h-7 px-2.5 w-auto",
+        ],
+        contextSize === "default" && [isIconOnly && "size-9"],
         isDisabled && "pointer-events-none opacity-60",
         className
       )}
@@ -83,17 +132,29 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
+  size: sizeProp,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { size: contextSize } = usePagination();
+  const defaultSize =
+    contextSize === "sm" ? "sm" : contextSize === "lg" ? "lg" : "default";
+  const resolvedSize = sizeProp ?? defaultSize;
+
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
+      size={resolvedSize}
       data-slot="pagination-previous"
-      className={cn("gap-1.5 px-3", className)}
+      className={cn(
+        "gap-1.5 px-2.5 w-auto shrink-0",
+        contextSize === "sm" && "h-7 px-2 text-xs",
+        className
+      )}
       {...props}
     >
-      <ChevronLeftIcon className="size-4" />
+      <ChevronLeftIcon
+        className={contextSize === "sm" ? "size-3.5" : "size-4"}
+      />
       <span>Previous</span>
     </PaginationLink>
   );
@@ -101,18 +162,30 @@ function PaginationPrevious({
 
 function PaginationNext({
   className,
+  size: sizeProp,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { size: contextSize } = usePagination();
+  const defaultSize =
+    contextSize === "sm" ? "sm" : contextSize === "lg" ? "lg" : "default";
+  const resolvedSize = sizeProp ?? defaultSize;
+
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
+      size={resolvedSize}
       data-slot="pagination-next"
-      className={cn("gap-1.5 px-3", className)}
+      className={cn(
+        "gap-1.5 px-2.5 w-auto shrink-0",
+        contextSize === "sm" && "h-7 px-2 text-xs",
+        className
+      )}
       {...props}
     >
       <span>Next</span>
-      <ChevronRightIcon className="size-4" />
+      <ChevronRightIcon
+        className={contextSize === "sm" ? "size-3.5" : "size-4"}
+      />
     </PaginationLink>
   );
 }
@@ -121,14 +194,22 @@ function PaginationEllipsis({
   className,
   ...props
 }: React.ComponentProps<"span">) {
+  const { size: contextSize } = usePagination();
+
   return (
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={cn(
+        "flex items-center justify-center",
+        contextSize === "sm"
+          ? "size-7 text-xs [&_svg]:size-3.5"
+          : "size-9 [&_svg]:size-4",
+        className
+      )}
       {...props}
     >
-      <EllipsisIcon className="size-4" />
+      <EllipsisIcon className={contextSize === "sm" ? "size-3.5" : "size-4"} />
       <span className="sr-only">More pages</span>
     </span>
   );

@@ -100,6 +100,18 @@ Display summary rows or column aggregations at the base of the table.
 
 <ComponentPreview name="table/with-footer" />
 
+### Expandable Rows
+
+Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand.
+
+<ComponentPreview name="table/expandable" />
+
+### Resizable Columns
+
+Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor.
+
+<ComponentPreview name="table/resizable" />
+
 ## API Reference
 
 `Table` parts compose standard HTML table elements through Base UI `useRender` and `mergeProps`. Standard HTML attributes and event handlers pass through to the underlying elements.
@@ -123,6 +135,10 @@ Display summary rows or column aggregations at the base of the table.
   <ApiProp name="rowDividers" fullType="boolean" defaultValue="true">
     Renders horizontal dividing borders between body rows.
   </ApiProp>
+  <ApiProp name="resizable" fullType="boolean" defaultValue="false">
+    Enables draggable column resizing with interactive hitboxes and animated
+    separators.
+  </ApiProp>
   <ApiProp name="hideScrollbar" fullType="boolean" defaultValue="false">
     Hides the scrollbar track and thumb while retaining horizontal scroll
     capability.
@@ -136,6 +152,17 @@ Display summary rows or column aggregations at the base of the table.
   </ApiProp>
   <ApiProp name="fadeColor" fullType="string">
     Sets the custom CSS color used for edge shadow fades.
+  </ApiProp>
+</ApiPropsList>
+
+#### TableHead
+
+<ApiPropsList>
+  <ApiProp name="resizable" fullType="boolean">
+    Overrides column resizing behavior for this specific column header.
+  </ApiProp>
+  <ApiProp name="resizer" fullType="React.ReactNode">
+    Custom resizer element rendered on the column boundary.
   </ApiProp>
 </ApiPropsList>
 

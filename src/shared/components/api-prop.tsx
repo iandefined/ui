@@ -1,9 +1,18 @@
 "use client";
 
-import { Collapsible } from "@base-ui/react/collapsible";
 import { ChevronRightIcon } from "lucide-react";
+import * as React from "react";
 import type { ReactNode } from "react";
 
+import { Collapsible, CollapsibleContent } from "@/registry/base/collapsible";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/registry/base/table";
 import { cn } from "@/shared/lib/utils";
 
 export type ApiPropProps = {
@@ -23,57 +32,87 @@ export function ApiProp({
   required = false,
   children,
 }: ApiPropProps) {
+  const [open, setOpen] = React.useState(false);
   const displayedType = simpleType ?? fullType;
   const displayedDefault = defaultValue ?? "-";
 
   return (
-    <Collapsible.Root className="border-b last:border-b-0">
-      <Collapsible.Trigger
+    <>
+      <TableRow
+        onClick={() => setOpen((prev) => !prev)}
+        className="group/row cursor-pointer transition-colors hover:bg-muted/50"
+      >
+        <TableCell className="font-mono text-sm font-medium">
+          <div className="flex items-center gap-2">
+            <span>{name}</span>
+            {required ? (
+              <span className="bg-destructive/10 text-destructive rounded px-1.5 py-0.5 text-xs font-sans font-medium">
+                Required
+              </span>
+            ) : null}
+          </div>
+        </TableCell>
+        <TableCell className="text-muted-foreground hidden sm:table-cell">
+          <code className="text-xs">{displayedType}</code>
+        </TableCell>
+        <TableCell className="text-muted-foreground hidden md:table-cell">
+          <code className="text-xs">{displayedDefault}</code>
+        </TableCell>
+        <TableCell className="w-8 text-right">
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-foreground inline-flex items-center justify-center p-1 rounded transition-colors"
+            aria-label="Toggle details"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen((prev) => !prev);
+            }}
+          >
+            <ChevronRightIcon
+              aria-hidden="true"
+              className={cn(
+                "size-4 shrink-0 transition-transform duration-150 motion-reduce:transition-none",
+                open && "rotate-90"
+              )}
+            />
+          </button>
+        </TableCell>
+      </TableRow>
+      <TableRow
+        hidden={!open}
         className={cn(
-          "group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60",
-          "focus-visible:ring-ring/50 focus-visible:outline-none focus-visible:ring-[3px]"
+          "[&:not(:has([data-slot=collapsible-content]:not([hidden])))]:hidden",
+          !open && "hidden"
         )}
       >
-        <span className="min-w-0 flex-1 font-mono text-sm font-medium">
-          {name}
-        </span>
-        {required ? (
-          <span className="bg-destructive/10 text-destructive rounded px-1.5 py-0.5 text-xs font-medium">
-            Required
-          </span>
-        ) : null}
-        <code className="text-muted-foreground hidden min-w-0 flex-1 truncate text-sm sm:block">
-          {displayedType}
-        </code>
-        <code className="text-muted-foreground hidden w-28 shrink-0 truncate text-sm md:block">
-          {displayedDefault}
-        </code>
-        <ChevronRightIcon
-          aria-hidden="true"
-          className="text-muted-foreground size-4 shrink-0 transition-transform duration-150 motion-reduce:transition-none group-data-panel-open:rotate-90"
-        />
-      </Collapsible.Trigger>
-      <Collapsible.Panel className="h-(--collapsible-panel-height) overflow-hidden transition-[height,opacity] duration-150 ease-out data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0 motion-reduce:transition-none">
-        <div className="border-t bg-muted/40 px-4 py-4 text-sm">
-          <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[7rem_minmax(0,1fr)]">
-            <dt className="text-muted-foreground font-medium">Description</dt>
-            <dd className="min-w-0 leading-relaxed flex items-center">
-              {children}
-            </dd>
-            <dt className="text-muted-foreground font-medium">Type</dt>
-            <dd className="min-w-0 font-mono text-xs break-words flex items-center">
-              {fullType}
-            </dd>
-            <dt className="text-muted-foreground font-medium md:hidden">
-              Default
-            </dt>
-            <dd className="min-w-0 font-mono text-xs break-words md:hidden flex items-center">
-              {displayedDefault}
-            </dd>
-          </dl>
-        </div>
-      </Collapsible.Panel>
-    </Collapsible.Root>
+        <TableCell colSpan={4} className="p-0 whitespace-normal">
+          <Collapsible open={open} onOpenChange={setOpen}>
+            <CollapsibleContent>
+              <div className="bg-muted/40 px-4 py-4 text-sm">
+                <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[7rem_minmax(0,1fr)]">
+                  <dt className="text-muted-foreground font-medium">
+                    Description
+                  </dt>
+                  <dd className="min-w-0 leading-relaxed text-foreground whitespace-normal">
+                    {children}
+                  </dd>
+                  <dt className="text-muted-foreground font-medium">Type</dt>
+                  <dd className="min-w-0 font-mono text-xs break-words text-foreground">
+                    {fullType}
+                  </dd>
+                  <dt className="text-muted-foreground font-medium md:hidden">
+                    Default
+                  </dt>
+                  <dd className="min-w-0 font-mono text-xs break-words text-foreground md:hidden">
+                    {displayedDefault}
+                  </dd>
+                </dl>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        </TableCell>
+      </TableRow>
+    </>
   );
 }
 
@@ -83,21 +122,18 @@ export type ApiPropsListProps = {
 
 export function ApiPropsList({ children }: ApiPropsListProps) {
   return (
-    <section
-      className="not-prose my-6 overflow-hidden rounded-xl border"
-      aria-label="Props"
-    >
-      <div className="bg-muted/50 border-b border-border flex items-center gap-3 px-4 py-2.5 text-sm font-medium">
-        <span className="flex-1 text-muted-foreground">Prop</span>
-        <span className="text-muted-foreground hidden flex-1 sm:block">
-          Type
-        </span>
-        <span className="text-muted-foreground hidden w-28 md:block">
-          Default
-        </span>
-        <span className="size-4" aria-hidden="true" />
-      </div>
-      {children}
-    </section>
+    <div className="not-prose my-6">
+      <Table className="md:max-w-none">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-1/3">Prop</TableHead>
+            <TableHead className="hidden sm:table-cell">Type</TableHead>
+            <TableHead className="hidden w-28 md:table-cell">Default</TableHead>
+            <TableHead className="w-8 text-right" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>{children}</TableBody>
+      </Table>
+    </div>
   );
 }

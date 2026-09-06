@@ -91,6 +91,14 @@ Alternate row background colors to increase readability across wide data sets.
 
 Display summary rows or column aggregations at the base of the table.
 
+### Expandable Rows
+
+Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand.
+
+### Resizable Columns
+
+Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor.
+
 ## API Reference
 
 `Table` parts compose standard HTML table elements through Base UI `useRender` and `mergeProps`. Standard HTML attributes and event handlers pass through to the underlying elements.
@@ -105,10 +113,17 @@ wide data sets.
 Highlights rows on pointer hover, matching hover styles across striped and
 non-striped cells.
 Renders horizontal dividing borders between body rows.
+Enables draggable column resizing with interactive hitboxes and animated
+separators.
 Hides the scrollbar track and thumb while retaining horizontal scroll
 capability.
 Renders gradient shadow fades at the scroll container boundaries.
 Sets the custom CSS color used for edge shadow fades.
+
+#### TableHead
+
+Overrides column resizing behavior for this specific column header.
+Custom resizer element rendered on the column boundary.
 
 #### TableRow
 

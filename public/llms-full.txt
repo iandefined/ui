@@ -59,6 +59,77 @@ Browse the components available in this registry.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
+# Accordion
+
+A vertically stacked set of interactive headings that reveal or hide associated content sections.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+A vertically stacked collection of expandable panels with indicator animations and multiple styling variants.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is it accessible?</AccordionTrigger>
+    <AccordionContent>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>;
+```
+
+## Examples
+
+### Default
+
+Standard accordion with subtle divider borders between items.
+
+### Outline
+
+Encloses all items within a single rounded card frame.
+
+### Split
+
+Renders each item as an independent card with spacing between sections.
+
+### Inset
+
+An inset container matching the inset card style with a subtle tray background and elevated inner panel.
+
+## API Reference
+
+`Accordion` primitives wrap `@base-ui/react/accordion`.
+
+### Props
+
+#### Accordion
+
+Visual style variant applied to the accordion container and items.
+Whether multiple accordion items can be open simultaneously.
+Controlled open item value(s).
+Initial open item value(s) when uncontrolled.
+
+#### AccordionTrigger
+
+Whether to display the expansion indicator icon.
+The icon style rendered for the expansion indicator.
+Position of the expansion indicator relative to the title.
+Optional icon rendered alongside the trigger title.
+Secondary descriptive text rendered below the trigger title.
+
 # Autocomplete
 
 A filterable text input that suggests matching options while accepting free-form text.
@@ -835,6 +906,70 @@ Sets the control dimensions.
 Sets the indicator corner radius.
 Disables the indicator animation.
 
+# Collapsible
+
+An interactive component which expands and collapses content with smooth animations.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+An expandable panel controlled by a trigger button with automatic height and opacity transitions.
+
+## Preview
+
+## Installation
+
+## Usage
+
+```tsx
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
+<Collapsible>
+  <CollapsibleTrigger>Toggle Details</CollapsibleTrigger>
+  <CollapsibleContent>
+    Hidden content revealed on interaction.
+  </CollapsibleContent>
+</Collapsible>;
+```
+
+## Examples
+
+### Default
+
+The default collapsible component with toggle button and expandable panel.
+
+### Card Trigger
+
+Use `CollapsibleTrigger` as a full-width interactive card trigger with a rotating chevron indicator.
+
+## API Reference
+
+`Collapsible` primitives wrap `@base-ui/react/collapsible`.
+
+### Props
+
+#### Collapsible
+
+The controlled open state of the collapsible panel.
+The initial open state when uncontrolled.
+>
+Event handler called when the open state changes.
+Whether the collapsible should ignore user interaction.
+
+#### CollapsibleTrigger
+
+>
+Allows rendering a custom trigger element via polymorphism.
+
+#### CollapsibleContent
+
+Whether to keep the collapsible panel mounted in the DOM when closed.
+Whether to allow the browser's find-in-page feature to reveal the collapsed
+panel.
+
 # Combobox
 
 A filterable input for selecting one or more predefined values.
@@ -1049,6 +1184,10 @@ Allow selecting individual or all rows with coordinated header and row checkboxe
 
 Navigate records across discrete pages with page-size bounding.
 
+### Resizable Columns
+
+Enable interactive column resizing with TanStack Table integration. The resizer handle provides a grabable hitbox, two-arrow resize cursor, and highlights the column separator on hover.
+
 ## API Reference
 
 `DataTable` integrates `@tanstack/react-table` with the registry `Table`, `InputGroup`, `DropdownMenu`, and `Button` primitives.
@@ -1060,6 +1199,7 @@ Navigate records across discrete pages with page-size bounding.
 <ApiProp name="columns" fullType="ColumnDef<TData, TValue>[]" required>
 Defines the column schema, accessor keys, headers, and cell renderers.
 The array of record objects rendered in table rows.
+Enables interactive column resizing across all resizable columns.
 Enables column sort toggling on compatible column headers.
 defaultValue="false"
 >
@@ -3793,6 +3933,14 @@ Alternate row background colors to increase readability across wide data sets.
 
 Display summary rows or column aggregations at the base of the table.
 
+### Expandable Rows
+
+Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand.
+
+### Resizable Columns
+
+Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor.
+
 ## API Reference
 
 `Table` parts compose standard HTML table elements through Base UI `useRender` and `mergeProps`. Standard HTML attributes and event handlers pass through to the underlying elements.
@@ -3807,10 +3955,17 @@ wide data sets.
 Highlights rows on pointer hover, matching hover styles across striped and
 non-striped cells.
 Renders horizontal dividing borders between body rows.
+Enables draggable column resizing with interactive hitboxes and animated
+separators.
 Hides the scrollbar track and thumb while retaining horizontal scroll
 capability.
 Renders gradient shadow fades at the scroll container boundaries.
 Sets the custom CSS color used for edge shadow fades.
+
+#### TableHead
+
+Overrides column resizing behavior for this specific column header.
+Custom resizer element rendered on the column boundary.
 
 #### TableRow
 

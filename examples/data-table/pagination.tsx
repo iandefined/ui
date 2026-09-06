@@ -110,12 +110,12 @@ function DataTablePaginationBar() {
   const pageCount = table.getPageCount();
 
   return (
-    <div className="flex items-center justify-between px-3 pt-2 pb-1">
-      <span className="text-muted-foreground text-xs tabular-nums">
+    <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 py-2.5">
+      <span className="text-muted-foreground text-xs tabular-nums whitespace-nowrap shrink-0">
         Page {pageIndex + 1} of {pageCount}
       </span>
-      <Pagination className="mx-0 w-auto">
-        <PaginationContent>
+      <Pagination size="sm" className="mx-0 w-auto shrink-0">
+        <PaginationContent className="gap-0.5">
           <PaginationItem>
             <PaginationPrevious
               onClick={(e) => {

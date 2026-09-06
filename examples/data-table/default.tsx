@@ -67,10 +67,11 @@ const columns: ColumnDef<Payment>[] = [
           variant={
             status === "success"
               ? "success"
-              : status === "processing"
+              : status === "processing" || status === "pending"
                 ? "warning"
                 : "error"
           }
+          className="capitalize"
         >
           {status}
         </Badge>

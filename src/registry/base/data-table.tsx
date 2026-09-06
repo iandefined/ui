@@ -4,6 +4,7 @@ import {
   type Column,
   type ColumnDef,
   type ColumnFiltersState,
+  type ColumnResizeMode,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -41,6 +42,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableColumnResizer,
   TableFooter,
   TableHead,
   TableHeader,
@@ -51,6 +53,7 @@ import { cn } from "@/lib/utils";
 
 interface DataTableContextValue<TData> {
   table: ReactTableInstance<TData>;
+  isResizable: boolean;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: generic context requires any; consumer types are enforced via useDataTable<TData>()
@@ -71,6 +74,10 @@ export interface DataTableProps<TData, TValue> {
   data: TData[];
   children: React.ReactNode;
   className?: string;
+
+  resizable?: boolean;
+  enableColumnResizing?: boolean;
+  columnResizeMode?: ColumnResizeMode;
 
   enableSorting?: boolean;
   enableRowSelection?: boolean | ((row: Row<TData>) => boolean);
@@ -101,6 +108,9 @@ function DataTable<TData, TValue>({
   data,
   children,
   className,
+  resizable = false,
+  enableColumnResizing,
+  columnResizeMode = "onChange",
   enableSorting = false,
   enableRowSelection = false,
   enableMultiRowSelection = true,
@@ -121,6 +131,7 @@ function DataTable<TData, TValue>({
   onGlobalFilterChange,
   getRowId,
 }: DataTableProps<TData, TValue>) {
+  const isResizable = Boolean(resizable || enableColumnResizing);
   const [internalSorting, setInternalSorting] = React.useState<SortingState>(
     []
   );
@@ -152,6 +163,10 @@ function DataTable<TData, TValue>({
 
     const selectionColumn: ColumnDef<TData, unknown> = {
       id: "__select__",
+      size: 40,
+      minSize: 40,
+      maxSize: 40,
+      enableResizing: false,
       header: ({ table }) =>
         enableMultiRowSelection ? (
           <div className="flex items-center">
@@ -217,15 +232,17 @@ function DataTable<TData, TValue>({
     ...(enablePagination && { getPaginationRowModel: getPaginationRowModel() }),
     enableRowSelection,
     enableMultiRowSelection,
+    enableColumnResizing: isResizable,
+    columnResizeMode,
     globalFilterFn: "includesString",
   });
 
   return (
-    <DataTableContext.Provider value={{ table }}>
+    <DataTableContext.Provider value={{ table, isResizable }}>
       <div
         data-slot="data-table"
         className={cn(
-          "relative w-full rounded-xl border border-border bg-muted dark:bg-card p-1 md:max-w-2xl",
+          "@container relative flex w-full flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 md:max-w-2xl",
           className
         )}
       >
@@ -244,7 +261,7 @@ function DataTableToolbar({ className, ...props }: DataTableToolbarProps) {
       aria-orientation="horizontal"
       data-slot="data-table-toolbar"
       className={cn(
-        "flex items-center justify-between gap-2 px-2 py-2",
+        "flex flex-wrap items-center justify-between gap-2.5 px-3 py-2",
         className
       )}
       {...props}
@@ -288,7 +305,7 @@ function DataTableSearch({
       size={size}
       value={table.getState().globalFilter ?? ""}
       onChange={(e) => table.setGlobalFilter(e.target.value)}
-      className={cn("max-w-xs", className)}
+      className={cn("w-full sm:w-auto sm:max-w-xs flex-1", className)}
       {...props}
     />
   );
@@ -344,25 +361,39 @@ function DataTableColumnToggle() {
 
 export type DataTableContentProps = Omit<TableProps, "children"> & {
   children: React.ReactNode;
+  resizable?: boolean;
 };
 
 function DataTableContent({
   bordered,
   hoverable,
   rowDividers = true,
+  resizable: resizableProp,
   className,
   children,
+  style,
   ...tableProps
 }: DataTableContentProps) {
+  const { table, isResizable: contextResizable } = useDataTable();
+  const isResizable = resizableProp ?? contextResizable;
+
   return (
     <Table
       bordered={bordered}
       hoverable={hoverable}
       rowDividers={rowDividers}
+      resizable={isResizable}
       className={cn(
-        "rounded-none border-0 bg-transparent p-0 shadow-none md:max-w-none",
+        "rounded-none border-0 bg-transparent p-0 shadow-none md:max-w-none overflow-hidden",
+        isResizable && "table-fixed",
         className
       )}
+      style={{
+        ...(isResizable
+          ? { width: table.getTotalSize(), minWidth: "100%" }
+          : {}),
+        ...style,
+      }}
       {...(tableProps as TableProps)}
     >
       {children}
@@ -374,8 +405,6 @@ function SortableHeader<TData>({
   column,
   children,
   align,
-  isFirst,
-  isLast,
 }: {
   column: Column<TData, unknown>;
   children: React.ReactNode;
@@ -386,16 +415,12 @@ function SortableHeader<TData>({
   return (
     <button
       type="button"
-      className={cn(
-        "group hover:text-foreground -mx-3 -my-2 flex w-[calc(100%+1.5rem)] cursor-pointer items-center gap-1.5 px-3 py-2 transition-colors",
-        isFirst && "rounded-l-lg",
-        isLast && "rounded-r-lg"
-      )}
+      className="group hover:text-foreground -mx-3 -my-2 flex w-[calc(100%+1.5rem)] cursor-pointer items-center gap-1.5 px-3 py-2 transition-colors overflow-hidden"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >
       <span
         className={cn(
-          "flex flex-1 items-center",
+          "flex flex-1 items-center truncate",
           align === "right" && "justify-end",
           align === "center" && "justify-center"
         )}
@@ -403,11 +428,11 @@ function SortableHeader<TData>({
         {children}
       </span>
       {column.getIsSorted() === "asc" ? (
-        <ArrowUpIcon className="size-4" />
+        <ArrowUpIcon className="size-4 shrink-0" />
       ) : column.getIsSorted() === "desc" ? (
-        <ArrowDownIcon className="size-4" />
+        <ArrowDownIcon className="size-4 shrink-0" />
       ) : (
-        <ArrowUpDownIcon className="size-4 opacity-0 group-hover:opacity-50" />
+        <ArrowUpDownIcon className="size-4 opacity-0 group-hover:opacity-50 shrink-0" />
       )}
     </button>
   );
@@ -417,14 +442,17 @@ export interface DataTableHeaderProps extends React.ComponentProps<
   typeof TableHeader
 > {
   enableSorting?: boolean;
+  resizable?: boolean;
 }
 
 function DataTableHeader({
   enableSorting = false,
+  resizable: resizableProp,
   className,
   ...props
 }: DataTableHeaderProps) {
-  const { table } = useDataTable();
+  const { table, isResizable: contextResizable } = useDataTable();
+  const isResizable = resizableProp ?? contextResizable;
 
   const renderHeader = (
     header: ReturnType<typeof table.getHeaderGroups>[0]["headers"][0],
@@ -452,18 +480,46 @@ function DataTableHeader({
       );
     }
 
-    return flexRender(headerDef, header.getContext());
+    if (typeof headerDef === "function") {
+      return flexRender(headerDef, header.getContext());
+    }
+
+    return headerDef ?? null;
   };
 
   return (
     <TableHeader className={className} {...props}>
       {table.getHeaderGroups().map((headerGroup) => (
         <TableRow key={headerGroup.id}>
-          {headerGroup.headers.map((header, index) => (
-            <TableHead key={header.id} colSpan={header.colSpan}>
-              {renderHeader(header, index, headerGroup.headers.length)}
-            </TableHead>
-          ))}
+          {headerGroup.headers.map((header, index) => {
+            const isLast = index === headerGroup.headers.length - 1;
+            const canResize = header.column.getCanResize();
+
+            return (
+              <TableHead
+                key={header.id}
+                colSpan={header.colSpan}
+                style={isResizable ? { width: header.getSize() } : undefined}
+                className={cn(
+                  isResizable &&
+                    "relative hover:z-20 [&:has([data-resizing])]:z-20",
+                  isResizable && canResize && "select-none"
+                )}
+                resizable={false}
+                resizer={
+                  isResizable && canResize && !isLast ? (
+                    <TableColumnResizer
+                      onMouseDown={header.getResizeHandler()}
+                      onTouchStart={header.getResizeHandler()}
+                      isResizing={header.column.getIsResizing()}
+                    />
+                  ) : null
+                }
+              >
+                {renderHeader(header, index, headerGroup.headers.length)}
+              </TableHead>
+            );
+          })}
         </TableRow>
       ))}
     </TableHeader>
@@ -481,7 +537,7 @@ function DataTableBody({
   className,
   ...props
 }: DataTableBodyProps) {
-  const { table } = useDataTable();
+  const { table, isResizable } = useDataTable();
   const totalColumns = table.getAllColumns().length;
 
   return (
@@ -490,7 +546,12 @@ function DataTableBody({
         table.getRowModel().rows.map((row) => (
           <TableRow key={row.id} selected={row.getIsSelected()}>
             {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
+              <TableCell
+                key={cell.id}
+                style={
+                  isResizable ? { width: cell.column.getSize() } : undefined
+                }
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
@@ -524,11 +585,13 @@ function DataTableFooter({
 export interface DataTablePaginationProps {
   className?: string;
   showSelectedCount?: boolean;
+  size?: "default" | "sm";
 }
 
 function DataTablePagination({
   className,
   showSelectedCount = true,
+  size = "sm",
 }: DataTablePaginationProps) {
   const { table } = useDataTable();
 
@@ -536,22 +599,22 @@ function DataTablePagination({
     <div
       data-slot="data-table-pagination"
       className={cn(
-        "flex items-center justify-between px-2 pt-2 pb-1",
+        "flex flex-wrap items-center justify-between gap-2.5 px-3 py-2",
         className
       )}
     >
       {showSelectedCount ? (
-        <span className="text-muted-foreground text-xs">
+        <span className="text-muted-foreground text-xs whitespace-nowrap shrink-0">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected
         </span>
       ) : (
         <div />
       )}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 shrink-0 ml-auto">
         <Button
           variant="outline"
-          size="sm"
+          size={size}
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
@@ -559,7 +622,7 @@ function DataTablePagination({
         </Button>
         <Button
           variant="outline"
-          size="sm"
+          size={size}
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
@@ -587,6 +650,7 @@ export {
 export type {
   ColumnDef,
   ColumnFiltersState,
+  ColumnResizeMode,
   PaginationState,
   RowSelectionState,
   SortingState,

@@ -89,6 +89,10 @@ Allow selecting individual or all rows with coordinated header and row checkboxe
 
 Navigate records across discrete pages with page-size bounding.
 
+### Resizable Columns
+
+Enable interactive column resizing with TanStack Table integration. The resizer handle provides a grabable hitbox, two-arrow resize cursor, and highlights the column separator on hover.
+
 ## API Reference
 
 `DataTable` integrates `@tanstack/react-table` with the registry `Table`, `InputGroup`, `DropdownMenu`, and `Button` primitives.
@@ -100,6 +104,7 @@ Navigate records across discrete pages with page-size bounding.
 <ApiProp name="columns" fullType="ColumnDef<TData, TValue>[]" required>
 Defines the column schema, accessor keys, headers, and cell renderers.
 The array of record objects rendered in table rows.
+Enables interactive column resizing across all resizable columns.
 Enables column sort toggling on compatible column headers.
 defaultValue="false"
 >

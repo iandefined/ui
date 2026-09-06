@@ -1,0 +1,115 @@
+---
+title: Accordion
+description: A vertically stacked set of interactive headings that reveal or hide associated content sections.
+---
+
+A vertically stacked collection of expandable panels with indicator animations and multiple styling variants.
+
+## Preview
+
+<ComponentPreview name="accordion/default" />
+
+## Installation
+
+<ComponentInstall name="accordion" />
+
+## Usage
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is it accessible?</AccordionTrigger>
+    <AccordionContent>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>;
+```
+
+## Examples
+
+### Default
+
+Standard accordion with subtle divider borders between items.
+
+<ComponentPreview name="accordion/default" />
+
+### Outline
+
+Encloses all items within a single rounded card frame.
+
+<ComponentPreview name="accordion/outline" />
+
+### Split
+
+Renders each item as an independent card with spacing between sections.
+
+<ComponentPreview name="accordion/split" />
+
+### Inset
+
+An inset container matching the inset card style with a subtle tray background and elevated inner panel.
+
+<ComponentPreview name="accordion/inset" />
+
+## API Reference
+
+`Accordion` primitives wrap `@base-ui/react/accordion`.
+
+### Props
+
+#### Accordion
+
+<ApiPropsList>
+  <ApiProp
+    name="variant"
+    fullType='"default" | "split" | "outline" | "nested" | "isolated-bordered" | "isolated-filled" | "isolated-filled-bordered"'
+    defaultValue='"default"'
+  >
+    Visual style variant applied to the accordion container and items.
+  </ApiProp>
+  <ApiProp name="multiple" fullType="boolean" defaultValue="false">
+    Whether multiple accordion items can be open simultaneously.
+  </ApiProp>
+  <ApiProp name="value" fullType="string[] | string">
+    Controlled open item value(s).
+  </ApiProp>
+  <ApiProp name="defaultValue" fullType="string[] | string">
+    Initial open item value(s) when uncontrolled.
+  </ApiProp>
+</ApiPropsList>
+
+#### AccordionTrigger
+
+<ApiPropsList>
+  <ApiProp name="showIndicator" fullType="boolean" defaultValue="true">
+    Whether to display the expansion indicator icon.
+  </ApiProp>
+  <ApiProp
+    name="indicatorType"
+    fullType='"chevron" | "plus"'
+    defaultValue='"plus"'
+  >
+    The icon style rendered for the expansion indicator.
+  </ApiProp>
+  <ApiProp
+    name="indicatorPosition"
+    fullType='"start" | "end"'
+    defaultValue='"end"'
+  >
+    Position of the expansion indicator relative to the title.
+  </ApiProp>
+  <ApiProp name="icon" fullType="React.ReactNode">
+    Optional icon rendered alongside the trigger title.
+  </ApiProp>
+  <ApiProp name="subtitle" fullType="React.ReactNode">
+    Secondary descriptive text rendered below the trigger title.
+  </ApiProp>
+</ApiPropsList>

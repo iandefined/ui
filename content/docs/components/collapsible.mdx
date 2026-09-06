@@ -1,0 +1,94 @@
+---
+title: Collapsible
+description: An interactive component which expands and collapses content with smooth animations.
+---
+
+An expandable panel controlled by a trigger button with automatic height and opacity transitions.
+
+## Preview
+
+<ComponentPreview name="collapsible/default" />
+
+## Installation
+
+<ComponentInstall name="collapsible" />
+
+## Usage
+
+```tsx
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
+<Collapsible>
+  <CollapsibleTrigger>Toggle Details</CollapsibleTrigger>
+  <CollapsibleContent>
+    Hidden content revealed on interaction.
+  </CollapsibleContent>
+</Collapsible>;
+```
+
+## Examples
+
+### Default
+
+The default collapsible component with toggle button and expandable panel.
+
+<ComponentPreview name="collapsible/default" />
+
+### Card Trigger
+
+Use `CollapsibleTrigger` as a full-width interactive card trigger with a rotating chevron indicator.
+
+<ComponentPreview name="collapsible/card" />
+
+## API Reference
+
+`Collapsible` primitives wrap `@base-ui/react/collapsible`.
+
+### Props
+
+#### Collapsible
+
+<ApiPropsList>
+  <ApiProp name="open" fullType="boolean" defaultValue="false">
+    The controlled open state of the collapsible panel.
+  </ApiProp>
+  <ApiProp name="defaultOpen" fullType="boolean" defaultValue="false">
+    The initial open state when uncontrolled.
+  </ApiProp>
+  <ApiProp
+    name="onOpenChange"
+    fullType="(open: boolean, eventDetails: CollapsibleRootChangeEventDetails) => void"
+  >
+    Event handler called when the open state changes.
+  </ApiProp>
+  <ApiProp name="disabled" fullType="boolean" defaultValue="false">
+    Whether the collapsible should ignore user interaction.
+  </ApiProp>
+</ApiPropsList>
+
+#### CollapsibleTrigger
+
+<ApiPropsList>
+  <ApiProp
+    name="render"
+    fullType="React.ReactElement | ((props, state) => React.ReactElement)"
+  >
+    Allows rendering a custom trigger element via polymorphism.
+  </ApiProp>
+</ApiPropsList>
+
+#### CollapsibleContent
+
+<ApiPropsList>
+  <ApiProp name="keepMounted" fullType="boolean" defaultValue="false">
+    Whether to keep the collapsible panel mounted in the DOM when closed.
+  </ApiProp>
+  <ApiProp name="hiddenUntilFound" fullType="boolean" defaultValue="false">
+    Whether to allow the browser's find-in-page feature to reveal the collapsed
+    panel.
+  </ApiProp>
+</ApiPropsList>
