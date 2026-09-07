@@ -30,6 +30,50 @@ const DialogConfigContext = React.createContext<DialogConfigContextValue>({
 
 const DialogScrollContext = React.createContext<DialogScroll>("inside");
 
+interface DialogStackContextValue {
+  /**
+   * The shared, untransformed top offset for every popup in one nested stack.
+   * `null` retains normal centering until the active popup is measured.
+   */
+  offset: number | null;
+  setActivePopup: (popup: HTMLElement) => void;
+}
+
+const DialogStackContext = React.createContext<DialogStackContextValue | null>(
+  null
+);
+
+function useDialogStack() {
+  const parentStack = React.useContext(DialogStackContext);
+  const [offset, setOffset] = React.useState<number | null>(null);
+
+  const setActivePopup = React.useCallback((popup: HTMLElement) => {
+    const viewport = popup.closest<HTMLElement>(
+      '[data-slot="dialog-viewport"]'
+    );
+
+    if (!viewport) return;
+
+    const viewportStyles = window.getComputedStyle(viewport);
+    const paddingTop = Number.parseFloat(viewportStyles.paddingTop) || 0;
+    const nextOffset = Math.max(
+      0,
+      (viewport.clientHeight - popup.offsetHeight) / 2 - paddingTop
+    );
+
+    setOffset((currentOffset) =>
+      currentOffset === nextOffset ? currentOffset : nextOffset
+    );
+  }, []);
+
+  const ownStack = React.useMemo(
+    () => ({ offset, setActivePopup }),
+    [offset, setActivePopup]
+  );
+
+  return parentStack ?? ownStack;
+}
+
 interface DialogProps<Payload> extends BaseDialog.Root.Props<Payload> {
   dismissible?: boolean;
   overlay?: DialogOverlay;
@@ -43,6 +87,7 @@ function Dialog<Payload>({
   onOpenChange,
   ...props
 }: DialogProps<Payload>) {
+  const dialogStack = useDialogStack();
   const handleOpenChange = React.useCallback<DialogOnOpenChange>(
     (nextOpen, eventDetails) => {
       if (!dismissible && !nextOpen && eventDetails.reason !== "close-press") {
@@ -61,16 +106,18 @@ function Dialog<Payload>({
   );
 
   return (
-    <DialogConfigContext.Provider value={configValue}>
-      <BaseDialog.Root
-        modal={modal}
-        disablePointerDismissal={
-          disablePointerDismissal ?? (!dismissible || modal !== true)
-        }
-        onOpenChange={handleOpenChange}
-        {...props}
-      />
-    </DialogConfigContext.Provider>
+    <DialogStackContext.Provider value={dialogStack}>
+      <DialogConfigContext.Provider value={configValue}>
+        <BaseDialog.Root
+          modal={modal}
+          disablePointerDismissal={
+            disablePointerDismissal ?? (!dismissible || modal !== true)
+          }
+          onOpenChange={handleOpenChange}
+          {...props}
+        />
+      </DialogConfigContext.Provider>
+    </DialogStackContext.Provider>
   );
 }
 
@@ -116,6 +163,8 @@ function DialogViewport({
   ...props
 }: BaseDialog.Viewport.Props & { scroll?: DialogScroll }) {
   const { modal } = React.useContext(DialogConfigContext);
+  const dialogStack = React.useContext(DialogStackContext);
+  const isStackPositioned = dialogStack?.offset !== null;
 
   return (
     <BaseDialog.Viewport
@@ -123,7 +172,10 @@ function DialogViewport({
       className={cn(
         "fixed inset-0 z-50",
         scroll === "inside" &&
-          "flex flex-col items-center justify-center overflow-hidden px-4 py-6",
+          cn(
+            "flex flex-col items-center overflow-hidden px-4 py-6",
+            isStackPositioned ? "justify-start" : "justify-center"
+          ),
         className
       )}
       {...props}
@@ -140,7 +192,12 @@ function DialogViewport({
             // below owns the growable centering box for tall dialogs.
             viewportClassName="h-full flex-none"
           >
-            <ScrollAreaContent className="flex min-h-full items-center justify-center px-4 py-6">
+            <ScrollAreaContent
+              className={cn(
+                "flex min-h-full items-center px-4 py-6",
+                isStackPositioned ? "justify-start" : "justify-center"
+              )}
+            >
               {children}
             </ScrollAreaContent>
           </ScrollArea>
@@ -159,6 +216,7 @@ function DialogContent({
   scroll = "inside",
   ref,
   initialFocus,
+  style,
   ...props
 }: BaseDialog.Popup.Props & {
   variant?: "default" | "inset";
@@ -166,6 +224,7 @@ function DialogContent({
   scroll?: DialogScroll;
 }) {
   const { dismissible, modal } = React.useContext(DialogConfigContext);
+  const dialogStack = React.useContext(DialogStackContext);
   const isModal = modal === true;
   const isOutsideScroll = scroll === "outside";
   const popupRef = React.useRef<HTMLDivElement | null>(null);
@@ -194,6 +253,51 @@ function DialogContent({
     [ref]
   );
 
+  const updateStackOffset = React.useCallback(() => {
+    const popup = popupRef.current;
+
+    if (
+      !popup ||
+      window.getComputedStyle(popup).getPropertyValue("--nested-dialogs").trim() !==
+        "0"
+    ) {
+      return;
+    }
+
+    dialogStack?.setActivePopup(popup);
+  }, [dialogStack]);
+
+  React.useLayoutEffect(() => {
+    const popup = popupRef.current;
+    if (!popup) return;
+
+    const observer = new MutationObserver(updateStackOffset);
+    const resizeObserver = new ResizeObserver(updateStackOffset);
+    const viewport = window.visualViewport;
+
+    observer.observe(popup, {
+      attributes: true,
+      attributeFilter: [
+        "data-ending-style",
+        "data-nested-dialog-open",
+        "data-starting-style",
+        "hidden",
+        "style",
+      ],
+    });
+    resizeObserver.observe(popup);
+    window.addEventListener("resize", updateStackOffset);
+    viewport?.addEventListener("resize", updateStackOffset);
+    updateStackOffset();
+
+    return () => {
+      observer.disconnect();
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateStackOffset);
+      viewport?.removeEventListener("resize", updateStackOffset);
+    };
+  }, [updateStackOffset]);
+
   const popup = (
     <BaseDialog.Popup
       ref={mergedRef}
@@ -201,6 +305,11 @@ function DialogContent({
       data-slot="dialog-content"
       data-variant={variant}
       data-scroll={scroll}
+      style={
+        dialogStack?.offset == null
+          ? style
+          : { ...style, marginTop: dialogStack.offset }
+      }
       className={cn(
         "relative z-50 flex w-full max-w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-xl",
         "sm:max-w-lg",
