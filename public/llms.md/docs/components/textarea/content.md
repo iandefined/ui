@@ -8,7 +8,19 @@ Use `Textarea` when people need to enter multiple lines of text.
 
 ## Preview
 
+```tsx
+import { Textarea } from "@/registry/base/textarea";
+
+export default function TextareaDefaultDemo() {
+  return <Textarea className="max-w-72" placeholder="Type your message here" />;
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/textarea.json
+```
 
 ## Usage
 
@@ -22,9 +34,56 @@ import { Textarea } from "@/components/ui/textarea";
 
 ### Sizes
 
+```tsx
+import { Textarea } from "@/registry/base/textarea";
+
+export default function TextareaSizesDemo() {
+  return (
+    <div className="grid w-full max-w-md gap-3">
+      <Textarea className="w-full" placeholder="Small" size="sm" />
+      <Textarea className="w-full" placeholder="Default" />
+      <Textarea className="w-full" placeholder="Large" size="lg" />
+    </div>
+  );
+}
+```
+
 ### Disabled
 
+```tsx
+import { Textarea } from "@/registry/base/textarea";
+
+export default function TextareaDisabledDemo() {
+  return (
+    <Textarea className="max-w-72" disabled placeholder="Can't type here" />
+  );
+}
+```
+
 ### Controlled
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Textarea } from "@/registry/base/textarea";
+
+export default function TextareaControlledDemo() {
+  const [value, setValue] = useState("Type your message here");
+
+  return (
+    <div className="flex w-80 flex-col gap-2">
+      <Textarea
+        aria-label="Message"
+        onChange={(event) => setValue(event.target.value)}
+        value={value}
+      />
+      <span className="px-1 text-sm text-muted-foreground">Value: {value}</span>
+    </div>
+  );
+}
+```
 
 ## API Reference
 
@@ -32,4 +91,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 ### Props
 
-Sets the textarea's padding and text size.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `size` | `"sm" \| "default" \| "lg" \| number` | `default` | Sets the textarea's padding and text size. |

@@ -131,7 +131,11 @@ const Popover = Object.assign(
   }: PopoverProps<Payload>) {
     const handleOpenChange = useCallback<PopoverOnOpenChange>(
       (nextOpen, eventDetails) => {
-        if (!dismissible && !nextOpen && eventDetails.reason !== "close-press") {
+        if (
+          !dismissible &&
+          !nextOpen &&
+          eventDetails.reason !== "close-press"
+        ) {
           eventDetails.cancel();
           return;
         }

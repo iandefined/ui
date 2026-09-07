@@ -34,9 +34,24 @@ import { SITE } from "@/shared/constants/site";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
 import { useIsMac } from "@/shared/hooks/use-is-mac";
 import { useRouter } from "@/shared/hooks/use-navigation";
+import type { PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
 import { getDocsNavigationGroups } from "@/shared/lib/docs-navigation";
 import { trackEvent } from "@/shared/lib/events";
+
+const getShadcnAddCommand = (pm: PackageManager, url: string) => {
+  switch (pm) {
+    case "bun":
+      return `bunx --bun shadcn@latest add ${url}`;
+    case "npm":
+      return `npx shadcn@latest add ${url}`;
+    case "yarn":
+      return `yarn dlx shadcn@latest add ${url}`;
+    case "pnpm":
+    default:
+      return `pnpm dlx shadcn@latest add ${url}`;
+  }
+};
 
 type DocUrlKind =
   | { kind: "theme"; slug: string }
@@ -162,13 +177,19 @@ export const CommandMenu = ({
       const parsed = parseDocPageUrl(item.url);
       if (parsed.kind === "theme") {
         setCopyPayload(
-          `${packageManager} dlx shadcn@latest add ${SITE.REGISTRY}/theme-${parsed.slug}`
+          getShadcnAddCommand(
+            packageManager,
+            `${SITE.REGISTRY}/r/theme-${parsed.slug}.json`
+          )
         );
         return;
       }
       if (parsed.kind === "component" || parsed.kind === "template") {
         setCopyPayload(
-          `${packageManager} dlx shadcn@latest add ${SITE.REGISTRY}/${parsed.slug}`
+          getShadcnAddCommand(
+            packageManager,
+            `${SITE.REGISTRY}/r/${parsed.slug}.json`
+          )
         );
         return;
       }
@@ -180,7 +201,12 @@ export const CommandMenu = ({
   const handleBlockHighlight = useCallback(
     (block: { name: string; description: string; categories: string[] }) => {
       setShowGoToPage(true);
-      setCopyPayload(`${packageManager} dlx shadcn@latest add ${block.name}`);
+      setCopyPayload(
+        getShadcnAddCommand(
+          packageManager,
+          `${SITE.REGISTRY}/r/${block.name}.json`
+        )
+      );
     },
     [packageManager]
   );

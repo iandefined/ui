@@ -6,7 +6,51 @@ Expand hit areas of interactive elements without affecting layout.
 
 `Hitbox` is a Tailwind CSS v4 utility set that enlarges an element's pointer target without changing its visual size or layout. Use it on compact controls when their visible dimensions alone are difficult to target.
 
+```tsx
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/registry/base/checkbox";
+import { Label } from "@/registry/base/label";
+
+export default function HitboxDemo() {
+  const [showHitbox, setShowHitbox] = useState(false);
+
+  return (
+    <div className="relative flex min-h-64 w-full flex-col items-center justify-center gap-5">
+      <Label
+        className="absolute -top-2 -right-1 flex items-center gap-2 cursor-pointer text-muted-foreground"
+        htmlFor="show-hitbox"
+      >
+        <Checkbox
+          checked={showHitbox}
+          id="show-hitbox"
+          onCheckedChange={setShowHitbox}
+        />
+        Show hitbox
+      </Label>
+
+      <Button
+        className={`group/hitbox w-30 hitbox-6 ${showHitbox ? "hitbox-debug" : ""}`}
+      >
+        <span className="group-hover/hitbox:hidden group-active/hitbox:hidden">
+          hitbox-6
+        </span>
+        <span className="not-group-hover/hitbox:hidden group-active/hitbox:hidden">
+          Hovered
+        </span>
+        <span className="not-group-active/hitbox:hidden">Pressed</span>
+      </Button>
+    </div>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/hitbox.json
+```
 
 ## Portable CSS
 

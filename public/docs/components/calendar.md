@@ -10,6 +10,10 @@ Use `Calendar` for inline date selection. Click the month and year heading to sw
 
 ## Installation
 
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/calendar.json
+```
+
 ## Usage
 
 ```tsx
@@ -73,26 +77,21 @@ Set `size` to adjust calendar density; all grids fit the available width.
 
 #### Calendar
 
-Controls the selected dates. Use an empty array to clear selection, one date
-for single selection, and a start/end pair for a complete range.
-Sets the initial selected dates for an uncontrolled calendar.
->
-Receives the selected Date values and their serialized strings.
-Chooses single-date, independent multiple-date, or date-range selection.
-Sets date-cell density. Cells shrink horizontally when space is limited.
-Sets the number of visible months on viewports at least 640px wide. Smaller
-viewports show one month while preserving the selected dates.
-Controls the focused date and the month shown in the calendar.
-Sets the initial focused date without selecting it.
->
-Receives date-focus changes. Update `focusedValue` from this callback when
-controlling it.
->
-Receives the visible date range after navigation.
-Sets the earliest selectable date.
-Sets the latest selectable date.
->
-Marks individual dates unavailable, such as weekends or holidays.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `value` | `Date[]` | `-` | Controls the selected dates. Use an empty array to clear selection, one date for single selection, and a start/end pair for a complete range. |
+| `defaultValue` | `Date[]` | `-` | Sets the initial selected dates for an uncontrolled calendar. |
+| `onValueChange` | `(details: { value: Date[]; valueAsString: string[]; view: "day" \| "month" \| "year" }) => void` | `-` | Receives the selected Date values and their serialized strings. |
+| `selectionMode` | `"single" \| "multiple" \| "range"` | `single` | Chooses single-date, independent multiple-date, or date-range selection. |
+| `size` | `"sm" \| "default" \| "lg"` | `default` | Sets date-cell density. Cells shrink horizontally when space is limited. |
+| `numOfMonths` | `number` | `1` | Sets the number of visible months on viewports at least 640px wide. Smaller viewports show one month while preserving the selected dates. |
+| `focusedValue` | `Date` | `-` | Controls the focused date and the month shown in the calendar. |
+| `defaultFocusedValue` | `Date` | `-` | Sets the initial focused date without selecting it. |
+| `onFocusChange` | `(details: { value: Date[]; valueAsString: string[]; view: "day" \| "month" \| "year"; focusedValue: Date }) => void` | `-` | Receives date-focus changes. Update `focusedValue` from this callback when controlling it. |
+| `onVisibleRangeChange` | `(details: { view: "day" \| "month" \| "year"; visibleRange: { start: Date; end: Date } }) => void` | `-` | Receives the visible date range after navigation. |
+| `min` | `Date` | `-` | Sets the earliest selectable date. |
+| `max` | `Date` | `-` | Sets the latest selectable date. |
+| `isDateUnavailable` | `(date: Date, locale: string) => boolean` | `-` | Marks individual dates unavailable, such as weekends or holidays. |
 
 #### CalendarContent
 

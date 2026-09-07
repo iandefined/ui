@@ -10,6 +10,10 @@ Use `ScrollArea` for a bounded region that needs styled scrolling and optional o
 
 ## Installation
 
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/scroll-area.json
+```
+
 ## Usage
 
 ```tsx
@@ -62,9 +66,8 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
 
 ### Props
 
-Adds fades at overflowing horizontal, vertical, or both edges.
-Sets the CSS color used by the edge fades. It accepts any CSS color value,
-including a theme variable such as `var(--card)` or `var(--popover)`. It
-defaults to an automatic mask that blends into the surface behind the scroll
-area.
-Hides the custom scrollbar while keeping the scroll region available.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `scrollShadow` | `"horizontal" \| "vertical" \| "both" \| "none"` | `none` | Adds fades at overflowing horizontal, vertical, or both edges. |
+| `fadeColor` | `string` | `-` | Sets the CSS color used by the edge fades. It accepts any CSS color value, including a theme variable such as `var(--card)` or `var(--popover)`. It defaults to an automatic mask that blends into the surface behind the scroll area. |
+| `hideScrollbar` | `boolean` | `false` | Hides the custom scrollbar while keeping the scroll region available. |

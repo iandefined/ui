@@ -9,6 +9,7 @@ Components are distributed through the [shadcn registry](https://ui.shadcn.com/d
 
 - React
 - Tailwind CSS v4
+- `tw-animate-css` (for animation utilities)
 - shadcn/ui initialized
 - a `components` alias that resolves to your app's component directory
 
@@ -25,6 +26,12 @@ creates `lib/utils.ts` with a compatibility re-export:
 export { cn } from "cn";
 ```
 
+Install `tw-animate-css`:
+
+```bash
+npm install tw-animate-css
+```
+
 For an existing project, migrate the old `clsx` and `tailwind-merge` helper
 with:
 
@@ -32,11 +39,33 @@ with:
 npx shadcn@latest migrate cn
 ```
 
+### Theme Setup
+
+Components rely on OKLCH color variables and an `@theme inline` definition. Copy the required CSS variables from the [Theming Guide](/docs/theming) into your `globals.css` file so all components render with matching colors, borders, and radius scales.
+
+### Configure Registry Alias (Optional)
+
+You can add this registry to `components.json` to install components with `@iandefined/<component>` shorthand:
+
+```json title="components.json"
+{
+  "registries": {
+    "@iandefined": "https://ui.iandefined.com/r"
+  }
+}
+```
+
+Then install any component using the registry namespace:
+
+```bash
+npx shadcn@latest add @iandefined/button
+```
+
 ## Adding components
 
 ### CLI
 
-Install the Button component from this registry:
+Install the Button component directly by registry URL:
 
 ```bash
 npx shadcn@latest add https://ui.iandefined.com/r/button.json

@@ -6,7 +6,30 @@ An SVG fractal noise overlay using feTurbulence for subtle texture and analog gr
 
 `NoiseTexture` renders a procedural SVG fractal noise layer using `feTurbulence` to add depth, tactile grain, and analog warmth over backgrounds and surfaces.
 
+```tsx
+import { NoiseTexture } from "@/registry/base/noise-texture";
+
+export default function NoiseTextureDemo() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="relative size-48 overflow-hidden rounded-2xl shadow-xl">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.35]" frequency={0.8} />
+      </div>
+    </div>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/noise-texture.json
+```
 
 ## Usage
 
@@ -29,9 +52,119 @@ import { NoiseTexture } from "@/components/ui/noise-texture";
 
 Adjust the overlay opacity to achieve anything from a barely noticeable paper feel to a strong retro film grain.
 
+```tsx
+import { NoiseTexture } from "@/registry/base/noise-texture";
+
+export default function NoiseTextureOpacityDemo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-6 p-6">
+      <div className="relative flex size-28 flex-col items-center justify-center overflow-hidden rounded-xl text-white shadow">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.05]" />
+        <span className="relative z-10 text-xs font-medium text-white/90">
+          5% Opacity
+        </span>
+        <span className="relative z-10 text-[10px] font-medium text-white/90">
+          Barely there
+        </span>
+      </div>
+
+      <div className="relative flex size-28 flex-col items-center justify-center overflow-hidden rounded-xl text-white shadow">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.1]" />
+        <span className="relative z-10 text-xs font-medium text-white/90">
+          10% Opacity
+        </span>
+        <span className="relative z-10 text-[10px] font-medium text-white/90">
+          Subtle analog
+        </span>
+      </div>
+
+      <div className="relative flex size-28 flex-col items-center justify-center overflow-hidden rounded-xl text-white shadow">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.25]" />
+        <span className="relative z-10 text-xs font-medium text-white/90">
+          25% Opacity
+        </span>
+        <span className="relative z-10 text-[10px] font-medium text-white/90">
+          Tactile grain
+        </span>
+      </div>
+    </div>
+  );
+}
+```
+
 ### Frequency
 
 Change the base turbulence frequency to vary between coarse, medium, and ultra-fine grain patterns.
+
+```tsx
+import { NoiseTexture } from "@/registry/base/noise-texture";
+
+export default function NoiseTextureFrequencyDemo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-6 p-6">
+      <div className="relative flex size-28 flex-col items-center justify-center overflow-hidden rounded-xl text-white shadow">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.15]" frequency={0.2} />
+        <span className="relative z-10 text-xs font-medium text-white/90">
+          0.2 Freq
+        </span>
+        <span className="relative z-10 text-[10px] font-medium text-white/90">
+          Coarse
+        </span>
+      </div>
+
+      <div className="relative flex size-28 flex-col items-center justify-center overflow-hidden rounded-xl text-white shadow">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.15]" frequency={0.5} />
+        <span className="relative z-10 text-xs font-medium text-white/90">
+          0.5 Freq
+        </span>
+        <span className="relative z-10 text-[10px] font-medium text-white/90">
+          Default fine
+        </span>
+      </div>
+
+      <div className="relative flex size-28 flex-col items-center justify-center overflow-hidden rounded-xl text-white shadow">
+        <img
+          alt="iandefined GitHub avatar"
+          className="absolute inset-0 size-full object-cover grayscale brightness-50"
+          src="https://github.com/iandefined.png?size=512"
+        />
+        <NoiseTexture className="opacity-[0.15]" frequency={0.8} />
+        <span className="relative z-10 text-xs font-medium text-white/90">
+          0.8 Freq
+        </span>
+        <span className="relative z-10 text-[10px] font-medium text-white/90">
+          Ultra fine
+        </span>
+      </div>
+    </div>
+  );
+}
+```
 
 ## API Reference
 
@@ -39,10 +172,9 @@ Change the base turbulence frequency to vary between coarse, medium, and ultra-f
 
 ### Props
 
-Sets the `baseFrequency` parameter of the `feTurbulence` filter. Higher
-values generate a finer, denser grain.
-Sets the `numOctaves` parameter for the turbulence generator, adding noise
-detail at smaller scales.
-Sets the linear transfer slope on each color channel after desaturation to
-adjust noise contrast.
-Sets the internal opacity of the SVG noise rectangle layer.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `frequency` | `number` | `0.4` | Sets the `baseFrequency` parameter of the `feTurbulence` filter. Higher values generate a finer, denser grain. |
+| `octaves` | `number` | `6` | Sets the `numOctaves` parameter for the turbulence generator, adding noise detail at smaller scales. |
+| `slope` | `number` | `0.15` | Sets the linear transfer slope on each color channel after desaturation to adjust noise contrast. |
+| `noiseOpacity` | `number` | `0.6` | Sets the internal opacity of the SVG noise rectangle layer. |

@@ -8,7 +8,38 @@ Use `RadioGroup` when a person must choose exactly one option from a related set
 
 ## Preview
 
+```tsx
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupDemo() {
+  return (
+    <RadioGroup defaultValue="virat">
+      <div className="text-sm font-medium">
+        Choose your favorite cricket player
+      </div>
+      <Label>
+        <Radio value="virat" /> Virat Kohli
+      </Label>
+      <Label>
+        <Radio value="rohit" /> Rohit Sharma
+      </Label>
+      <Label>
+        <Radio value="sachin" /> Sachin Tendulkar
+      </Label>
+      <Label>
+        <Radio value="dhoni" /> MS Dhoni
+      </Label>
+    </RadioGroup>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/radio-group.json
+```
 
 ## Usage
 
@@ -56,23 +87,299 @@ import {
 
 ### Basic
 
+```tsx
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupBasicDemo() {
+  return (
+    <RadioGroup defaultValue="light">
+      <Label>
+        <Radio value="light" /> Light Theme
+      </Label>
+      <Label>
+        <Radio value="dark" /> Dark Theme
+      </Label>
+      <Label>
+        <Radio value="system" /> System Default
+      </Label>
+    </RadioGroup>
+  );
+}
+```
+
 ### With Description
+
+```tsx
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupWithDescriptionDemo() {
+  return (
+    <RadioGroup className="max-w-sm" defaultValue="all">
+      <Label className="items-start">
+        <Radio value="all" />
+        <span className="flex flex-col gap-1">
+          <span className="font-medium">All Notifications</span>
+          <span className="text-xs text-muted-foreground">
+            Receive all notifications including system, marketing, and activity
+            alerts.
+          </span>
+        </span>
+      </Label>
+      <Label className="items-start">
+        <Radio value="mentions" />
+        <span className="flex flex-col gap-1">
+          <span className="font-medium">Only Mentions</span>
+          <span className="text-xs text-muted-foreground">
+            Get notified only when someone mentions you or replies to your
+            posts.
+          </span>
+        </span>
+      </Label>
+      <Label className="items-start">
+        <Radio value="direct" />
+        <span className="flex flex-col gap-1">
+          <span className="font-medium">Direct Messages</span>
+          <span className="text-xs text-muted-foreground">
+            Only receive notifications for direct messages.
+          </span>
+        </span>
+      </Label>
+      <Label className="items-start">
+        <Radio value="none" />
+        <span className="flex flex-col gap-1">
+          <span className="font-medium">None</span>
+          <span className="text-xs text-muted-foreground">
+            Do not receive any notifications.
+          </span>
+        </span>
+      </Label>
+    </RadioGroup>
+  );
+}
+```
 
 ### Orientation
 
 Change the orientation of the radio group with the `orientation` prop.
 
+```tsx
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupOrientationDemo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="text-sm font-medium">
+        How would you rate your experience?
+      </div>
+      <RadioGroup defaultValue={4} orientation="horizontal">
+        {[1, 2, 3, 4, 5].map((item) => (
+          <Label key={item}>
+            <Radio value={item} /> {item}
+          </Label>
+        ))}
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
 ### Controlled
 
 Control the selected value with the `value` prop and `onValueChange` callback.
 
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupControlledDemo() {
+  const [value, setValue] = useState("virat");
+
+  return (
+    <div className="flex flex-col gap-4">
+      <RadioGroup value={value} onValueChange={setValue}>
+        <div className="text-sm font-medium">
+          Choose your favorite cricket player
+        </div>
+        <Label>
+          <Radio value="virat" /> Virat Kohli
+        </Label>
+        <Label>
+          <Radio value="rohit" /> Rohit Sharma
+        </Label>
+        <Label>
+          <Radio value="sachin" /> Sachin Tendulkar
+        </Label>
+        <Label>
+          <Radio value="dhoni" /> MS Dhoni
+        </Label>
+      </RadioGroup>
+
+      <span className="px-1 text-sm text-muted-foreground">
+        Selected Value: {value}
+      </span>
+    </div>
+  );
+}
+```
+
 ### Custom Layout
+
+```tsx
+import { BotIcon, CodeIcon, SparklesIcon } from "lucide-react";
+
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+const models = [
+  {
+    description: "Built for long coding tasks and large project context.",
+    icon: CodeIcon,
+    name: "OpenAI GPT-5.1 Codex Max",
+    value: "openai-gpt-5-1-codex-max",
+  },
+  {
+    description: "A fast daily model for lightweight iteration.",
+    icon: SparklesIcon,
+    name: "Google Gemini 3 Flash",
+    value: "google-gemini-3-flash",
+  },
+  {
+    description: "A balanced option for writing, analysis, and coding.",
+    icon: BotIcon,
+    name: "Anthropic Claude 4.5 Sonnet",
+    value: "anthropic-claude-4-5-sonnet",
+  },
+];
+
+export default function RadioGroupCustomLayoutDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-4">
+      <div className="flex flex-col">
+        <div className="text-lg font-medium">AI Model Selection</div>
+        <p className="text-sm text-muted-foreground">
+          Choose your preferred AI model
+        </p>
+      </div>
+
+      <RadioGroup className="w-full" defaultValue={models[0].value}>
+        {models.map((model) => {
+          const Icon = model.icon;
+
+          return (
+            <Label
+              className="relative flex cursor-pointer items-center gap-3 rounded-lg border bg-card p-3 shadow-xs transition-[border-color,box-shadow] duration-100 ease-linear has-data-checked:border-primary has-data-checked:ring-1 has-data-checked:ring-primary"
+              key={model.value}
+            >
+              <Icon className="size-5 shrink-0 text-muted-foreground" />
+              <span className="flex flex-col gap-1">
+                <span className="font-medium">{model.name}</span>
+                <span className="text-sm text-muted-foreground">
+                  {model.description}
+                </span>
+              </span>
+              <span className="absolute -right-2.5 -top-3 flex items-center justify-center rounded-full bg-card p-0.5">
+                <Radio value={model.value} />
+              </span>
+            </Label>
+          );
+        })}
+      </RadioGroup>
+    </div>
+  );
+}
+```
 
 ### Disabled
 
+```tsx
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupDisabledDemo() {
+  return (
+    <RadioGroup defaultValue="dhoni">
+      <div className="text-sm font-medium">
+        Choose your favorite cricket player
+      </div>
+      <Label>
+        <Radio value="virat" /> Virat Kohli
+      </Label>
+      <Label className="text-muted-foreground">
+        <Radio disabled value="rohit" /> Rohit Sharma
+      </Label>
+      <Label className="text-muted-foreground">
+        <Radio disabled value="sachin" /> Sachin Tendulkar
+      </Label>
+      <Label>
+        <Radio value="dhoni" /> MS Dhoni
+      </Label>
+    </RadioGroup>
+  );
+}
+```
+
 ### Sizes
 
+```tsx
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupSizesDemo() {
+  return (
+    <div className="flex items-center gap-5">
+      <RadioGroup className="contents" defaultValue="sm">
+        <Radio aria-label="Small radio" size="sm" value="sm" />
+      </RadioGroup>
+      <RadioGroup className="contents" defaultValue="default">
+        <Radio aria-label="Default radio" size="default" value="default" />
+      </RadioGroup>
+      <RadioGroup className="contents" defaultValue="lg">
+        <Radio aria-label="Large radio" size="lg" value="lg" />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
 ### Custom Indicator
+
+```tsx
+import { CircleIcon, HeartIcon, StarIcon } from "lucide-react";
+
+import {
+  RadioGroup,
+  RadioIndicator,
+  RadioRoot,
+} from "@/registry/base/radio-group";
+
+export default function RadioGroupCustomIndicatorDemo() {
+  return (
+    <RadioGroup defaultValue="star" orientation="horizontal">
+      <RadioRoot aria-label="Circle radio" value="circle">
+        <RadioIndicator>
+          <CircleIcon className="size-3 fill-current" />
+        </RadioIndicator>
+      </RadioRoot>
+      <RadioRoot aria-label="Star radio" value="star">
+        <RadioIndicator>
+          <StarIcon className="size-3 fill-current" />
+        </RadioIndicator>
+      </RadioRoot>
+      <RadioRoot aria-label="Heart radio" value="heart">
+        <RadioIndicator>
+          <HeartIcon className="size-3 fill-current" />
+        </RadioIndicator>
+      </RadioRoot>
+    </RadioGroup>
+  );
+}
+```
 
 ## API Reference
 
@@ -82,4 +389,6 @@ Control the selected value with the `value` prop and `onValueChange` callback.
 
 #### Radio and RadioRoot
 
-Sets the radio control size.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `size` | `"sm" \| "default" \| "lg"` | `default` | Sets the radio control size. |

@@ -7,10 +7,7 @@ export type { PageTreeRoot };
 export type PageTreeFolder = Extract<PageTreeNode, { type: "folder" }>;
 export type PageTreePage = Extract<PageTreeNode, { type: "page" }>;
 
-export const isFolderIndexPage = (
-  folder: PageTreeFolder,
-  page: PageTreePage
-) =>
+export const isFolderIndexPage = (folder: PageTreeFolder, page: PageTreePage) =>
   page.url === folder.index?.url ||
   (typeof folder.name === "string" &&
     typeof page.name === "string" &&

@@ -306,6 +306,7 @@ const buildOpenApiDocument = (origin) => {
 
 const publicDir = path.join(root, "public");
 const docsDir = path.join(root, "content", "docs");
+const examplesDir = path.join(root, "examples");
 const generatedDir = path.join(root, "src", "shared", "generated");
 const siteUrl = SITE.URL.replace(/\/$/, "");
 
@@ -360,6 +361,72 @@ const normalizeSlug = (relativePath) => {
   );
 
   return normalized;
+};
+
+const getAttr = (str, attrName) => {
+  const re = new RegExp(
+    `\\b${attrName}=(?:(["'])([\\s\\S]*?)\\1|{([\\s\\S]*?)})`
+  );
+  const m = str.match(re);
+  if (!m) return "";
+  return (m[2] !== undefined ? m[2] : m[3]).trim();
+};
+
+const expandMdxComponents = async (body) => {
+  // 1. Expand ComponentInstall to CLI add command
+  body = body.replace(
+    /<ComponentInstall\s+name=["']([^"']+)["']\s*\/?>/g,
+    (_, name) =>
+      `\`\`\`bash\nnpx shadcn@latest add ${siteUrl}/r/${name}.json\n\`\`\``
+  );
+
+  // 2. Expand ComponentPreview with actual example code from examples/
+  const previewRegex = /<ComponentPreview\s+name=["']([^"']+)["']\s*\/?>/g;
+  const previewMatches = [...body.matchAll(previewRegex)];
+  for (const m of previewMatches) {
+    const previewName = m[1];
+    const examplePath = path.join(examplesDir, `${previewName}.tsx`);
+    try {
+      const code = await readFile(examplePath, "utf8");
+      body = body.replace(m[0], `\`\`\`tsx\n${code.trim()}\n\`\`\``);
+    } catch {
+      body = body.replace(m[0], "");
+    }
+  }
+
+  // 3. Expand ApiPropsList to Markdown table
+  const listRegex = /<ApiPropsList>([\s\S]*?)<\/ApiPropsList>/g;
+  body = body.replace(listRegex, (_, inner) => {
+    const propRegex =
+      /<ApiProp\b((?:[\s\S]*?)(?:(?:"[^"]*"|'[^']*'|{[^}]*}|[^>])*?))>([\s\S]*?)<\/ApiProp>/g;
+    const rows = [];
+    let pMatch;
+    while ((pMatch = propRegex.exec(inner)) !== null) {
+      const attrsStr = pMatch[1];
+      const desc = pMatch[2]
+        .trim()
+        .replace(/\r?\n\s*/g, " ")
+        .replace(/\|/g, "\\|");
+      const name = getAttr(attrsStr, "name");
+      const type = (
+        getAttr(attrsStr, "fullType") ||
+        getAttr(attrsStr, "simpleType") ||
+        ""
+      ).replace(/\|/g, "\\|");
+      const def = (getAttr(attrsStr, "defaultValue") || "-")
+        .replace(/^['"]|['"]$/g, "")
+        .replace(/\|/g, "\\|");
+      rows.push(`| \`${name}\` | \`${type}\` | \`${def}\` | ${desc} |`);
+    }
+    if (rows.length === 0) return "";
+    return [
+      "| Prop | Type | Default | Description |",
+      "| :--- | :--- | :--- | :--- |",
+      ...rows,
+    ].join("\n");
+  });
+
+  return body;
 };
 
 const stripMdxChrome = (body) => {
@@ -471,7 +538,8 @@ const readDocs = async (dir = docsDir) => {
     const relativePath = path.relative(docsDir, fullPath);
     const slugs = normalizeSlug(relativePath);
     const { data, body } = parseFrontmatter(content);
-    const markdown = stripMdxChrome(body);
+    const expanded = await expandMdxComponents(body);
+    const markdown = stripMdxChrome(expanded);
 
     pages.push({
       body: markdown,

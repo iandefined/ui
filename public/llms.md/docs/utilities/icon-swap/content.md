@@ -6,7 +6,63 @@ Animate between keyed icons with a consistent scale, blur, and fade transition.
 
 `IconSwap` animates between keyed icons with one consistent scale, blur, fade, and spring transition. Use it when an icon represents a changing semantic state, such as copying, loading, or success.
 
+```tsx
+"use client";
+
+import { CheckIcon, CopyIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { IconSwap } from "@/registry/base/icon-swap";
+
+export default function IconSwapDefaultDemo() {
+  const [copied, setCopied] = useState(false);
+  const resetTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current !== null) {
+        window.clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleCopy = () => {
+    setCopied(true);
+
+    if (resetTimerRef.current !== null) {
+      window.clearTimeout(resetTimerRef.current);
+    }
+
+    resetTimerRef.current = window.setTimeout(() => {
+      setCopied(false);
+      resetTimerRef.current = null;
+    }, 1500);
+  };
+
+  return (
+    <Button
+      aria-label={copied ? "Copied" : "Copy"}
+      onClick={handleCopy}
+      size="icon"
+      variant="outline"
+    >
+      <IconSwap
+        className="inline-flex shrink-0 [&>svg]:size-4"
+        state={copied ? "copied" : "copy"}
+      >
+        {copied ? <CheckIcon strokeWidth={3} /> : <CopyIcon />}
+      </IconSwap>
+    </Button>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/icon-swap.json
+```
 
 ## Usage
 
@@ -34,5 +90,6 @@ For temporary confirmation states such as Copy to Copied, restart the reset time
 
 ### Props
 
-Keys the currently displayed icon. Change it whenever the icon's semantic
-state changes.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `state` | `React.Key` | `-` | Keys the currently displayed icon. Change it whenever the icon's semantic state changes. |

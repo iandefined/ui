@@ -8,7 +8,30 @@ Use `DatePicker` to browse a calendar or type a date into a segmented input. The
 
 ## Preview
 
+```tsx
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerLabel,
+  DatePickerTrigger,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerDemo() {
+  return (
+    <DatePicker>
+      <DatePickerLabel>Event date</DatePickerLabel>
+      <DatePickerTrigger />
+      <DatePickerContent />
+    </DatePicker>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/date-picker.json
+```
 
 ## Usage
 
@@ -59,33 +82,415 @@ import {
 
 Use `DatePickerInput` to enter each date segment with Date Input's constrained keyboard behavior alongside the calendar popup. Segment placeholders follow the picker's locale.
 
+```tsx
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerInput,
+  DatePickerLabel,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerInputDemo() {
+  return (
+    <DatePicker className="w-full max-w-xs">
+      <DatePickerLabel>Appointment date</DatePickerLabel>
+      <DatePickerInput />
+      <DatePickerContent />
+    </DatePicker>
+  );
+}
+```
+
 ### Controlled and clearable
 
 Control the `Date` value array and add `DatePickerClearTrigger` to reset an optional date. The trigger flexibly adapts its size within a stable `max-w-xs` container to fit the clear icon button without shifting the layout.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  DatePicker,
+  DatePickerClearTrigger,
+  DatePickerContent,
+  DatePickerControl,
+  DatePickerLabel,
+  DatePickerTrigger,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerControlled() {
+  const [value, setValue] = useState<Date[]>([new Date(2026, 8, 15)]);
+  const hasValue = value.length > 0 && value[0] != null;
+
+  return (
+    <div className="w-full max-w-xs space-y-3">
+      <DatePicker
+        className="w-full max-w-xs"
+        onValueChange={(details) => setValue(details.value)}
+        value={value}
+      >
+        <DatePickerLabel>Optional deadline</DatePickerLabel>
+        <DatePickerControl className="w-full">
+          <DatePickerTrigger className="w-full flex-1" />
+          {hasValue && <DatePickerClearTrigger className="shrink-0" />}
+        </DatePickerControl>
+        <DatePickerContent />
+      </DatePicker>
+      <p aria-live="polite" className="text-sm text-muted-foreground">
+        {hasValue ? value[0].toLocaleDateString("en-CA") : "No deadline set."}
+      </p>
+    </div>
+  );
+}
+```
 
 ### Date range
 
 Set `selectionMode="range"` and group input indexes `0` and `1` in one `DatePickerControl` for the start and end dates.
 
+```tsx
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerControl,
+  DatePickerInput,
+  DatePickerLabel,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerRange() {
+  return (
+    <DatePicker
+      className="max-w-xs"
+      defaultValue={[new Date(2026, 8, 10), new Date(2026, 8, 17)]}
+      numOfMonths={2}
+      selectionMode="range"
+    >
+      <DatePickerLabel>Travel dates</DatePickerLabel>
+      <DatePickerControl className="flex-wrap">
+        <DatePickerInput aria-label="Start date" index={0} showTrigger />
+        <span aria-hidden="true" className="text-muted-foreground">
+          to
+        </span>
+        <DatePickerInput aria-label="End date" index={1} showTrigger />
+      </DatePickerControl>
+      <DatePickerContent />
+    </DatePicker>
+  );
+}
+```
+
 ### Multiple dates
 
 Set `selectionMode="multiple"` and use `DatePickerChips` to render selected dates as removable pill chips matching multi-select combobox styling.
+
+```tsx
+import {
+  DatePicker,
+  DatePickerChips,
+  DatePickerContent,
+  DatePickerLabel,
+  DatePickerValue,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerMultiple() {
+  return (
+    <DatePicker
+      className="w-full max-w-xs"
+      defaultValue={[
+        new Date(2026, 8, 8),
+        new Date(2026, 8, 12),
+        new Date(2026, 8, 15),
+        new Date(2026, 8, 22),
+      ]}
+      selectionMode="multiple"
+    >
+      <DatePickerLabel>Available dates</DatePickerLabel>
+      <DatePickerChips>
+        <DatePickerValue format="MMM D" placeholder="Choose available dates" />
+      </DatePickerChips>
+      <DatePickerContent />
+    </DatePicker>
+  );
+}
+```
 
 ### Presets
 
 Compose `DatePickerPresetTrigger` beside the calendar to select a named date or range.
 
+```tsx
+import {
+  DatePicker,
+  DatePickerCalendar,
+  DatePickerContent,
+  DatePickerLabel,
+  DatePickerPresetTrigger,
+  DatePickerTrigger,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerPresets() {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const last7 = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+  return (
+    <DatePicker selectionMode="range">
+      <DatePickerLabel>Report period</DatePickerLabel>
+      <DatePickerTrigger />
+      <DatePickerContent>
+        <DatePickerCalendar />
+        <div className="flex flex-wrap items-center justify-center gap-2 border-t pt-4">
+          <DatePickerPresetTrigger
+            size="sm"
+            value={[todayStart, todayEnd]}
+            variant="ghost"
+          >
+            Today
+          </DatePickerPresetTrigger>
+          <DatePickerPresetTrigger
+            size="sm"
+            value={[last7, todayEnd]}
+            variant="ghost"
+          >
+            Last 7 days
+          </DatePickerPresetTrigger>
+          <DatePickerPresetTrigger
+            size="sm"
+            value={[monthStart, monthEnd]}
+            variant="ghost"
+          >
+            This month
+          </DatePickerPresetTrigger>
+        </div>
+      </DatePickerContent>
+    </DatePicker>
+  );
+}
+```
+
 ### Date and time
 
 Compose `DatePickerTimer` with the picker and manage the time separately from the calendar's date selection.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerLabel,
+  DatePickerTimer,
+  DatePickerTrigger,
+} from "@/registry/base/date-picker";
+import { Label } from "@/registry/base/label";
+
+export default function DatePickerTime() {
+  const [value, setValue] = useState<Date[]>([new Date(2026, 8, 15)]);
+  const [time, setTime] = useState("14:30");
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-end gap-3">
+        <DatePicker
+          onValueChange={(details) => setValue(details.value)}
+          value={value}
+        >
+          <DatePickerLabel>Date</DatePickerLabel>
+          <DatePickerTrigger />
+          <DatePickerContent />
+        </DatePicker>
+        <div className="space-y-2">
+          <Label htmlFor="appointment-time">Time</Label>
+          <div>
+            <DatePickerTimer
+              id="appointment-time"
+              onChange={(event) => setTime(event.target.value)}
+              value={time}
+            />
+          </div>
+        </div>
+      </div>
+      <p aria-live="polite" className="text-sm text-muted-foreground">
+        {value[0] && time
+          ? `${value[0].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} at ${time}`
+          : "Choose a date and time."}
+      </p>
+    </div>
+  );
+}
+```
 
 #### Invalid state
 
 Use `invalid` on `DatePicker` and `DatePickerTimer` with [Field](./field) to present validation feedback for date and time selection.
 
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerTimer,
+  DatePickerTrigger,
+} from "@/registry/base/date-picker";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+
+export default function DatePickerTimeInvalid() {
+  const [value, setValue] = useState<Date[]>([]);
+  const [time, setTime] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const isDateInvalid = value.length === 0;
+  const isTimeInvalid = !time;
+
+  return (
+    <form
+      className="grid w-full max-w-sm gap-4"
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (!isDateInvalid && !isTimeInvalid) {
+          setSubmitted(true);
+        }
+      }}
+    >
+      <Field className="w-full space-y-2" invalid={isDateInvalid}>
+        <DatePicker
+          className="w-full max-w-sm"
+          invalid={isDateInvalid}
+          onValueChange={(details) => {
+            setValue(details.value);
+            setSubmitted(false);
+          }}
+          value={value}
+        >
+          <FieldLabel htmlFor="appointment-date-invalid">Date</FieldLabel>
+          <DatePickerTrigger
+            id="appointment-date-invalid"
+            aria-describedby={
+              isDateInvalid ? "invalid-appointment-date-message" : undefined
+            }
+            className="w-full justify-start"
+            invalid={isDateInvalid}
+          />
+          <DatePickerContent />
+        </DatePicker>
+        <FieldErrorSlot>
+          <FieldError
+            id="invalid-appointment-date-message"
+            match={isDateInvalid}
+          >
+            Select an appointment date.
+          </FieldError>
+        </FieldErrorSlot>
+      </Field>
+
+      <Field className="w-full space-y-2" invalid={isTimeInvalid}>
+        <FieldLabel htmlFor="appointment-time-invalid">Time</FieldLabel>
+        <div className="w-full">
+          <DatePickerTimer
+            aria-describedby={
+              isTimeInvalid ? "invalid-appointment-time-message" : undefined
+            }
+            className="w-full justify-start"
+            id="appointment-time-invalid"
+            invalid={isTimeInvalid}
+            onChange={(event) => {
+              setTime(event.target.value);
+              setSubmitted(false);
+            }}
+            value={time}
+          />
+        </div>
+        <FieldErrorSlot>
+          <FieldError
+            id="invalid-appointment-time-message"
+            match={isTimeInvalid}
+          >
+            Select an appointment time.
+          </FieldError>
+        </FieldErrorSlot>
+      </Field>
+
+      <div className="flex flex-col gap-2 pt-1">
+        {(!isDateInvalid || !isTimeInvalid) && (
+          <Button
+            className="w-full"
+            onClick={() => {
+              setValue([]);
+              setTime("");
+              setSubmitted(false);
+            }}
+            type="button"
+            variant="outline"
+          >
+            Reset
+          </Button>
+        )}
+        <Button
+          className="w-full"
+          disabled={isDateInvalid || isTimeInvalid}
+          type="submit"
+        >
+          Book appointment
+        </Button>
+      </div>
+
+      {submitted && value[0] && time && (
+        <output className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
+          Appointment booked for{" "}
+          {value[0].toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}{" "}
+          at {time}.
+        </output>
+      )}
+    </form>
+  );
+}
+```
+
 ### Sizes
 
 Set the typed input's `size` to match adjacent form controls.
+
+```tsx
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerInput,
+  DatePickerLabel,
+} from "@/registry/base/date-picker";
+
+export default function DatePickerSizes() {
+  return (
+    <div className="flex w-full max-w-xs flex-col gap-4">
+      {(["sm", "default", "lg"] as const).map((size) => (
+        <DatePicker className="w-full" key={size}>
+          <DatePickerLabel>{size}</DatePickerLabel>
+          <DatePickerInput size={size} />
+          <DatePickerContent />
+        </DatePicker>
+      ))}
+    </div>
+  );
+}
+```
 
 | Size      | Description                      |
 | --------- | -------------------------------- |
@@ -96,6 +501,144 @@ Set the typed input's `size` to match adjacent form controls.
 ### Form
 
 Use `DatePicker` inside a [Form](./form) `Field` with TanStack Form for validation and submission.
+
+```tsx
+"use client";
+
+import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import {
+  DatePicker,
+  DatePickerContent,
+  DatePickerTrigger,
+} from "@/registry/base/date-picker";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
+
+export default function FormWithDatePickerDemo() {
+  const [submitted, setSubmitted] = useState<{
+    title: string;
+    date: Date;
+  }>();
+
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      date: [] as Date[],
+    },
+    onSubmit: async ({ value }) => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setSubmitted({ title: value.title, date: value.date[0] });
+    },
+  });
+
+  return (
+    <Form className="grid w-full max-w-sm gap-4" form={form}>
+      <form.Field
+        name="title"
+        validators={{
+          onSubmit: ({ value }) =>
+            !value.trim() ? "Event title is required." : undefined,
+        }}
+      >
+        {(field) => {
+          const invalid = !field.state.meta.isValid;
+
+          return (
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={invalid}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <FieldLabel>Event title</FieldLabel>
+              <FieldControl
+                onBlur={field.handleBlur}
+                onValueChange={(value) => {
+                  setSubmitted(undefined);
+                  field.handleChange(value);
+                }}
+                placeholder="Team standup"
+                value={field.state.value}
+              />
+              <FieldError match={invalid}>
+                {field.state.meta.errors.join(", ")}
+              </FieldError>
+            </Field>
+          );
+        }}
+      </form.Field>
+
+      <form.Field
+        name="date"
+        validators={{
+          onSubmit: ({ value }) =>
+            value.length === 0 ? "Pick a date." : undefined,
+        }}
+      >
+        {(field) => {
+          const invalid = !field.state.meta.isValid;
+
+          return (
+            <Field
+              dirty={field.state.meta.isDirty}
+              invalid={invalid}
+              name={field.name}
+              touched={field.state.meta.isTouched}
+            >
+              <DatePicker
+                className="w-full max-w-sm"
+                invalid={invalid}
+                onValueChange={(details) => {
+                  setSubmitted(undefined);
+                  field.handleChange(details.value);
+                }}
+                value={field.state.value}
+              >
+                <FieldLabel>Event date</FieldLabel>
+                <DatePickerTrigger className="w-full" />
+                <DatePickerContent />
+              </DatePicker>
+              <FieldError match={invalid}>
+                {field.state.meta.errors.join(", ")}
+              </FieldError>
+            </Field>
+          );
+        }}
+      </form.Field>
+
+      <form.Subscribe
+        selector={(state) => [state.canSubmit, state.isSubmitting]}
+      >
+        {([canSubmit, isSubmitting]) => (
+          <Button disabled={!canSubmit} type="submit">
+            {isSubmitting ? "Creating event..." : "Create event"}
+          </Button>
+        )}
+      </form.Subscribe>
+
+      {submitted && (
+        <output className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
+          Created "{submitted.title}" on{" "}
+          {submitted.date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+          .
+        </output>
+      )}
+    </Form>
+  );
+}
+```
 
 ## Accessibility
 
@@ -109,32 +652,23 @@ Use `DatePickerLabel` to label the picker. Give range inputs distinct accessible
 
 #### DatePicker
 
-Controls the selected dates. Use one date for single selection, a start/end
-pair for a complete range, or an empty array to clear selection.
-Sets the initial selected dates for an uncontrolled picker.
->
-Receives the selected Date values and serialized strings.
-Chooses single-date, independent multiple-date, or date-range selection.
-Sets the number of visible months on viewports at least 640px wide. Smaller
-viewports show one month while preserving the selected dates.
-Sets the earliest selectable date.
-Sets the latest selectable date.
->
-Marks dates unavailable for selection.
-Controls the focused date and visible calendar month.
-Sets the initial calendar focus without selecting a date.
->
-Receives calendar focus changes using Date values.
->
-Receives popup visibility changes and the current selection.
->
-Receives the visible range after calendar navigation.
->
-Formats dates in the typed inputs. Pair a custom format with a matching
-`parse` function.
->
-Parses typed text into a Date object. Return `undefined` when the text
-cannot be parsed.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `value` | `Date[]` | `-` | Controls the selected dates. Use one date for single selection, a start/end pair for a complete range, or an empty array to clear selection. |
+| `defaultValue` | `Date[]` | `-` | Sets the initial selected dates for an uncontrolled picker. |
+| `onValueChange` | `(details: { value: Date[]; valueAsString: string[]; view: "day" \| "month" \| "year" }) => void` | `-` | Receives the selected Date values and serialized strings. |
+| `selectionMode` | `"single" \| "multiple" \| "range"` | `single` | Chooses single-date, independent multiple-date, or date-range selection. |
+| `numOfMonths` | `number` | `1` | Sets the number of visible months on viewports at least 640px wide. Smaller viewports show one month while preserving the selected dates. |
+| `min` | `Date` | `-` | Sets the earliest selectable date. |
+| `max` | `Date` | `-` | Sets the latest selectable date. |
+| `isDateUnavailable` | `(date: Date, locale: string) => boolean` | `-` | Marks dates unavailable for selection. |
+| `focusedValue` | `Date` | `-` | Controls the focused date and visible calendar month. |
+| `defaultFocusedValue` | `Date` | `-` | Sets the initial calendar focus without selecting a date. |
+| `onFocusChange` | `(details: { value: Date[]; valueAsString: string[]; view: "day" \| "month" \| "year"; focusedValue: Date }) => void` | `-` | Receives calendar focus changes using Date values. |
+| `onOpenChange` | `(details: { open: boolean; value: Date[] }) => void` | `-` | Receives popup visibility changes and the current selection. |
+| `onVisibleRangeChange` | `(details: { view: "day" \| "month" \| "year"; visibleRange: { start: Date; end: Date } }) => void` | `-` | Receives the visible range after calendar navigation. |
+| `format` | `(date: Date, details: { locale: string; timeZone: string }) => string` | `-` | Formats dates in the typed inputs. Pair a custom format with a matching `parse` function. |
+| `parse` | `(value: string, details: { locale: string; timeZone: string }) => Date \| undefined` | `-` | Parses typed text into a Date object. Return `undefined` when the text cannot be parsed. |
 
 #### DatePickerTrigger
 
@@ -144,8 +678,10 @@ Composes the Ark trigger with the registry [Button](./button). Button props set 
 
 Renders a non-interactive multi-chip group for `selectionMode="multiple"`. Each selected date label and the remaining empty surface open the calendar, while each remove button remains a separate sibling control.
 
-Controls chip wrapping and single-line +X overflow compression.
-Explicit limit on visible chips before showing the +X overflow badge.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `overflowBehavior` | `"wrap" \| "wrap-when-open" \| "cutoff"` | `wrap-when-open` | Controls chip wrapping and single-line +X overflow compression. |
+| `maxCount` | `number` | `-` | Explicit limit on visible chips before showing the +X overflow badge. |
 
 #### DatePickerChip
 
@@ -161,29 +697,28 @@ Groups related inputs and triggers into a single popup anchor. Wrap both range i
 
 #### DatePickerValue
 
-Displays when no date is selected.
->
-Formats selected dates with a format pattern such as `"MMM D, YYYY"`, an
-`Intl.DateTimeFormatOptions` object, or a custom formatter function.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `placeholder` | `string` | `Pick a date` | Displays when no date is selected. |
+| `format` | `string \| Intl.DateTimeFormatOptions \| ((date: Date) => string)` | `-` | Formats selected dates with a format pattern such as `"MMM D, YYYY"`, an `Intl.DateTimeFormatOptions` object, or a custom formatter function. |
 
 #### DatePickerInput
 
 Renders the registry [DateInput](./date-input) segmented field with an integrated calendar trigger. The picker supplies the value, selection mode, locale, time zone, date bounds, and unavailable-date handling. Remaining `DateInput` props pass through. Index `0` includes a calendar trigger by default, and both inputs include one in range mode.
 
-Sets the input shell and trigger size.
-Selects the date edited by this input. Use `0` for the start date and `1`
-for the end date in range mode.
-Controls whether this input renders a calendar trigger. It defaults to
-`true` for index `0` and for every input in range mode. Set it to `false` to
-hide a trigger when a custom range layout supplies its own control.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `size` | `"sm" \| "default" \| "lg"` | `default` | Sets the input shell and trigger size. |
+| `index` | `number` | `0` | Selects the date edited by this input. Use `0` for the start date and `1` for the end date in range mode. |
+| `showTrigger` | `boolean` | `-` | Controls whether this input renders a calendar trigger. It defaults to `true` for index `0` and for every input in range mode. Set it to `false` to hide a trigger when a custom range layout supplies its own control. |
 
 #### DatePickerContent
 
 Portals the positioned popup and forwards content props to Ark's content element. Renders `DatePickerCalendar` when no children are supplied.
 
-Disables popup animation. The default treatment matches
-[Popover](./popover), and the operating system's reduced-motion preference
-is always respected.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `reduceMotion` | `boolean` | `false` | Disables popup animation. The default treatment matches [Popover](./popover), and the operating system's reduced-motion preference is always respected. |
 
 #### DatePickerCalendar
 
@@ -193,8 +728,9 @@ Renders `CalendarContent` in the current picker. Accepts the same owned props as
 
 Composes a registry `Button` with Ark's preset trigger.
 
-Selects these dates when the button is activated. Match the array to the
-root's selection mode.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `value` | `Date[]` | `-` | Selects these dates when the button is activated. Match the array to the root's selection mode. |
 
 #### DatePickerClearTrigger
 
@@ -208,9 +744,10 @@ Composes Ark's clearing behavior with a registry `Button`. The default is an out
 
 Renders an elevated, accessible time picker popup with scrollable hours, minutes, and period columns, styled consistently with the date picker and other elevated popups in the codebase. It owns a separate time value and does not change the calendar's selected date.
 
-Controls the time value in 24-hour format, such as `"14:30"`.
-Sets the initial time value for an uncontrolled timer.
-Chooses 12-hour or 24-hour time representation.
-Sets the minute increment in the minutes column.
-Sets the time trigger button size. The trigger remains content-sized and can
-shrink within its container.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `value` | `string` | `-` | Controls the time value in 24-hour format, such as `"14:30"`. |
+| `defaultValue` | `string` | `-` | Sets the initial time value for an uncontrolled timer. |
+| `format` | `"12" \| "24"` | `12` | Chooses 12-hour or 24-hour time representation. |
+| `step` | `number` | `1` | Sets the minute increment in the minutes column. |
+| `size` | `"default" \| "xs" \| "sm" \| "lg" \| "xl" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg" \| "icon-xl"` | `default` | Sets the time trigger button size. The trigger remains content-sized and can shrink within its container. |

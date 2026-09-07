@@ -38,9 +38,7 @@ export default function TableStickyRowsDemo() {
               {invoice}
             </TableCell>
             <TableCell>{description}</TableCell>
-            <TableCell className="text-right tabular-nums">
-              {amount}
-            </TableCell>
+            <TableCell className="text-right tabular-nums">{amount}</TableCell>
           </TableRow>
         ))}
       </TableBody>

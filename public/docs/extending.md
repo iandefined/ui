@@ -162,11 +162,19 @@ Use `MyComponent` to trigger actions or display state.
 
 ## Preview
 
-<ComponentPreview name="button/default" />
+```tsx
+import { Button } from "@/registry/base/button";
+
+export default function ButtonDefaultDemo() {
+  return <Button>Button</Button>;
+}
+```
 
 ## Installation
 
-<ComponentInstall name="button" />
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/button.json
+```
 
 ## Usage
 
@@ -186,14 +194,44 @@ import { MyComponent } from "@/components/ui/my-component";
 
 Display an icon alongside the text label:
 
+```tsx
+import { ArrowRightIcon, DownloadIcon, HeartIcon } from "lucide-react";
+
+import { Button } from "@/registry/base/button";
+
+export default function ButtonWithIconsDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button leftSection={<DownloadIcon />}>Download</Button>
+      <Button
+        className="text-white"
+        color="#dc2626"
+        leftSection={<HeartIcon />}
+      >
+        Favorite
+      </Button>
+      <Button
+        className="text-white"
+        color="#7c3aed"
+        rightSection={<ArrowRightIcon />}
+      >
+        Continue
+      </Button>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `MyComponent` wraps the corresponding [Base UI primitive](https://base-ui.com). Supported Base UI props pass through.
 
 ### Props
 
-Controls the visual presentation.
-Prevents user interaction when true.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `"default" \| "outline"` | `default` | Controls the visual presentation. |
+| `disabled` | `boolean` | `false` | Prevents user interaction when true. |
 ```
 
 ### Demo Examples

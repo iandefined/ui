@@ -8,7 +8,90 @@ Use `TransitionPanel` to swap between related views while preserving their local
 
 ## Preview
 
+```tsx
+"use client";
+
+import * as React from "react";
+
+import { Button } from "@/registry/base/button";
+import { Input } from "@/registry/base/input";
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/registry/base/transition-panel";
+
+type Step = "account" | "verify" | "complete";
+
+export default function TransitionPanelDefaultDemo() {
+  const [step, setStep] = React.useState<Step>("account");
+
+  return (
+    <div className="w-full max-w-sm">
+      <TransitionPanel
+        activeKey={step}
+        className="rounded-xl border border-border bg-card text-card-foreground shadow-sm"
+      >
+        <TransitionPanelView viewKey="account" className="space-y-4 p-5">
+          <div className="space-y-1">
+            <h3 className="font-semibold">Create your account</h3>
+            <p className="text-sm text-muted-foreground">
+              Enter your email to get started.
+            </p>
+          </div>
+          <Input type="email" placeholder="you@example.com" />
+          <Button className="w-full" onClick={() => setStep("verify")}>
+            Continue
+          </Button>
+        </TransitionPanelView>
+
+        <TransitionPanelView viewKey="verify" className="space-y-4 p-5">
+          <div className="space-y-1">
+            <h3 className="font-semibold">Check your email</h3>
+            <p className="text-sm text-muted-foreground">
+              Enter the verification code we sent you.
+            </p>
+          </div>
+          <Input inputMode="numeric" placeholder="123456" />
+          <div className="flex gap-2">
+            <Button
+              className="flex-1"
+              variant="outline"
+              onClick={() => setStep("account")}
+            >
+              Back
+            </Button>
+            <Button className="flex-1" onClick={() => setStep("complete")}>
+              Verify
+            </Button>
+          </div>
+        </TransitionPanelView>
+
+        <TransitionPanelView viewKey="complete" className="space-y-4 p-5">
+          <div className="space-y-1">
+            <h3 className="font-semibold">You are all set</h3>
+            <p className="text-sm text-muted-foreground">
+              Your account is ready to use.
+            </p>
+          </div>
+          <Button
+            className="w-full"
+            variant="outline"
+            onClick={() => setStep("account")}
+          >
+            Start over
+          </Button>
+        </TransitionPanelView>
+      </TransitionPanel>
+    </div>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/transition-panel.json
+```
 
 ## Usage
 
@@ -54,6 +137,69 @@ Views can be wrapped, mapped, or conditionally rendered. Registration uses conte
 
 Use `transition="fade"` for an in-place crossfade when the content should not move horizontally.
 
+```tsx
+"use client";
+
+import * as React from "react";
+
+import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/registry/base/transition-panel";
+
+const VIEWS = ["overview", "details", "notes"] as const;
+type View = (typeof VIEWS)[number];
+
+const CONTENT: Record<View, { title: string; body: string }> = {
+  overview: {
+    title: "Overview",
+    body: "The fade transition keeps the panel in place while the active view crossfades into the next one.",
+  },
+  details: {
+    title: "Details",
+    body: "The panel measures the active view and animates its real height, so content can grow or shrink without being scaled.",
+  },
+  notes: {
+    title: "Notes",
+    body: "Inactive views remain mounted, which keeps their local state when you move between views.",
+  },
+};
+
+export default function TransitionPanelCrossfadeDemo() {
+  const [view, setView] = React.useState<View>("overview");
+
+  return (
+    <div className="w-full max-w-sm space-y-3">
+      <Tabs value={view} onValueChange={(value) => setView(value as View)}>
+        <TabsList>
+          {VIEWS.map((key) => (
+            <TabsTrigger key={key} value={key}>
+              {CONTENT[key].title}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
+        <TransitionPanel activeKey={view} transition="fade">
+          {VIEWS.map((key) => (
+            <TransitionPanelView key={key} viewKey={key}>
+              <div className="space-y-1.5">
+                <h3 className="font-semibold">{CONTENT[key].title}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {CONTENT[key].body}
+                </p>
+              </div>
+            </TransitionPanelView>
+          ))}
+        </TransitionPanel>
+      </div>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `TransitionPanel` and `TransitionPanelView` render `div` elements by default. Standard `div` props pass through, and both components support Base UI's `render` prop for polymorphic composition.
@@ -62,28 +208,19 @@ Use `transition="fade"` for an in-place crossfade when the content should not mo
 
 #### TransitionPanel
 
-The key of the view that should be visible. It must match a `viewKey` on a
-descendant `TransitionPanelView`.
-Chooses the view transition. `slide` moves views horizontally according to
-their declaration order. `fade` crossfades them in place with a subtle
-scale.
-simpleType="element"
->
-Replaces or composes the root `div` while preserving the internal
-measurement ref.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `activeKey` | `string` | `-` | The key of the view that should be visible. It must match a `viewKey` on a descendant `TransitionPanelView`. |
+| `transition` | `"slide" \| "fade"` | `slide` | Chooses the view transition. `slide` moves views horizontally according to their declaration order. `fade` crossfades them in place with a subtle scale. |
+| `render` | `ReactElement \| ((props, state) => ReactElement)` | `-` | Replaces or composes the root `div` while preserving the internal measurement ref. |
 
 #### TransitionPanelView
 
-The identifier matched against the parent panel's `activeKey`.
-defaultValue="true"
->
-Controls focus after a view swap. `true` focuses the first tabbable element,
-`false` leaves focus where it is, and a ref targets a specific element.
-Initial rendering does not move focus.
-simpleType="element"
->
-Replaces or composes the view wrapper while preserving registration and
-consumer refs.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `viewKey` | `string` | `-` | The identifier matched against the parent panel's `activeKey`. |
+| `initialFocus` | `boolean \| React.RefObject<HTMLElement \| null>` | `true` | Controls focus after a view swap. `true` focuses the first tabbable element, `false` leaves focus where it is, and a ref targets a specific element. Initial rendering does not move focus. |
+| `render` | `ReactElement \| ((props, state) => ReactElement)` | `-` | Replaces or composes the view wrapper while preserving registration and consumer refs. |
 
 ### Data attributes
 

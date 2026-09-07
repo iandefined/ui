@@ -216,7 +216,7 @@ function DatePickerTrigger({
         className={typeof className === "function" ? undefined : className}
         data-invalid={isInvalid ? "" : undefined}
         invalid={isInvalid}
-        {...(props as DatePickerChipsProps)}
+        {...(props as unknown as DatePickerChipsProps)}
       >
         {children ?? <DatePickerValue />}
       </DatePickerChips>

@@ -8,7 +8,32 @@ Use `Field` with either a native `<form>` or the TanStack Form `Form` adapter. T
 
 ## Preview
 
+```tsx
+import {
+  Field,
+  FieldControl,
+  FieldDescription,
+  FieldLabel,
+} from "@/registry/base/field";
+
+export default function FieldDefaultDemo() {
+  return (
+    <Field className="w-full max-w-sm" name="username">
+      <FieldLabel>Username</FieldLabel>
+      <FieldControl placeholder="Enter a username" />
+      <FieldDescription>
+        Use 3–20 letters, numbers, or underscores.
+      </FieldDescription>
+    </Field>
+  );
+}
+```
+
 ## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/field.json
+```
 
 ## Usage
 
@@ -66,21 +91,206 @@ import {
 
 Map external validation state to `Field` and animate an error into the active message slot.
 
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  Field,
+  FieldControl,
+  FieldDescription,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+
+export default function FieldValidationDemo() {
+  const [touched, setTouched] = useState(false);
+  const [value, setValue] = useState("");
+  const invalid = touched && value.trim().length < 3;
+
+  return (
+    <Field
+      className="w-full max-w-sm"
+      dirty={value.length > 0}
+      invalid={invalid}
+      name="displayName"
+      touched={touched}
+    >
+      <FieldLabel>Display name</FieldLabel>
+      <FieldControl
+        onBlur={() => setTouched(true)}
+        onValueChange={setValue}
+        placeholder="Ada Lovelace"
+        value={value}
+      />
+      {!invalid && (
+        <FieldDescription>Use at least 3 characters.</FieldDescription>
+      )}
+      <FieldErrorSlot>
+        <FieldError match={invalid}>Enter at least 3 characters.</FieldError>
+      </FieldErrorSlot>
+    </Field>
+  );
+}
+```
+
 ### Checkbox and Switch
 
 Wrap each control in its label to preserve an accessible click target.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Checkbox } from "@/registry/base/checkbox";
+import { Field, FieldDescription, FieldLabel } from "@/registry/base/field";
+import { Switch } from "@/registry/base/switch";
+
+export default function FieldWithCheckboxAndSwitchDemo() {
+  const [accepted, setAccepted] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+
+  return (
+    <div className="grid w-full max-w-sm gap-5">
+      <Field name="terms">
+        <FieldLabel>
+          <Checkbox checked={accepted} onCheckedChange={setAccepted} />
+          <span>I accept the terms and privacy policy.</span>
+        </FieldLabel>
+      </Field>
+
+      <Field name="notifications" className="space-y-0">
+        <FieldLabel className="justify-between">
+          Product notifications
+          <Switch checked={notifications} onCheckedChange={setNotifications} />
+        </FieldLabel>
+        <FieldDescription>
+          Receive occasional updates about new features.
+        </FieldDescription>
+      </Field>
+    </div>
+  );
+}
+```
 
 ### Radio Group
 
 Combine `Field`, `Fieldset`, and `FieldItem` for a related single-choice group.
 
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  Field,
+  FieldDescription,
+  FieldItem,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Fieldset, FieldsetLegend } from "@/registry/base/fieldset";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+const plans = [
+  { label: "Starter", value: "starter" },
+  { label: "Pro", value: "pro" },
+  { label: "Business", value: "business" },
+];
+
+export default function FieldWithRadioGroupDemo() {
+  const [value, setValue] = useState("pro");
+
+  return (
+    <Field className="w-full max-w-sm" name="plan">
+      <Fieldset>
+        <FieldsetLegend>Plan</FieldsetLegend>
+        <RadioGroup value={value} onValueChange={setValue}>
+          {plans.map((plan) => (
+            <FieldItem key={plan.value}>
+              <FieldLabel className="cursor-pointer">
+                <Radio value={plan.value} />
+                {plan.label}
+              </FieldLabel>
+            </FieldItem>
+          ))}
+        </RadioGroup>
+      </Fieldset>
+      <FieldDescription className="mt-4">
+        You can change plans at any time.
+      </FieldDescription>
+    </Field>
+  );
+}
+```
+
 ### Slider
 
 Use Slider's own label and value display for a trigger-based range control.
 
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Field, FieldDescription } from "@/registry/base/field";
+import {
+  Slider,
+  SliderContent,
+  SliderControl,
+  SliderLabel,
+  SliderValue,
+} from "@/registry/base/slider";
+
+export default function FieldWithSliderDemo() {
+  const [value, setValue] = useState(65);
+
+  return (
+    <Field className="w-full max-w-sm" name="volume">
+      <Slider
+        formatValue={(currentValue) => `${currentValue}%`}
+        value={value}
+        onValueChange={(nextValue) => setValue(nextValue as number)}
+      >
+        <SliderControl>
+          <SliderContent>
+            <SliderLabel>Volume</SliderLabel>
+            <SliderValue className="ms-auto" />
+          </SliderContent>
+        </SliderControl>
+      </Slider>
+      <FieldDescription>Adjust the output volume level.</FieldDescription>
+    </Field>
+  );
+}
+```
+
 ### Disabled
 
 Disable Field to cascade the state to its Base UI controls.
+
+```tsx
+import {
+  Field,
+  FieldControl,
+  FieldDescription,
+  FieldLabel,
+} from "@/registry/base/field";
+
+export default function FieldDisabledDemo() {
+  return (
+    <Field className="w-full max-w-sm" disabled name="username">
+      <FieldLabel>Username</FieldLabel>
+      <FieldControl defaultValue="ada" />
+      <FieldDescription>
+        Contact an administrator to change your username.
+      </FieldDescription>
+    </Field>
+  );
+}
+```
 
 ## Accessibility
 
@@ -90,11 +300,15 @@ Keep one active description or error directly after the control. `FieldError` us
 
 `Field` and its Base UI parts accept their underlying Base UI props in addition to the registry-owned behavior below.
 
-Exposes dirty state to the field and its descendants.
-Exposes invalid state and associates the active error with the control.
-Identifies the field for label and message association.
-Exposes touched state to the field and its descendants.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `dirty` | `boolean` | `-` | Exposes dirty state to the field and its descendants. |
+| `invalid` | `boolean` | `-` | Exposes invalid state and associates the active error with the control. |
+| `name` | `string` | `-` | Identifies the field for label and message association. |
+| `touched` | `boolean` | `-` | Exposes touched state to the field and its descendants. |
 
 ### FieldError
 
-Shows the error only when the enclosing field is invalid.
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `match` | `boolean` | `false` | Shows the error only when the enclosing field is invalid. |

@@ -50,6 +50,12 @@ The system follows a simple naming pattern:
 
 ## Global Styles
 
+Install `tw-animate-css` for animation utilities:
+
+```bash
+npm install tw-animate-css
+```
+
 Copy and paste the following styles into your `globals.css` file:
 
 ```css title="globals.css"
