@@ -111,8 +111,9 @@ When animating container width or height due to dynamic content:
 - Static clipping remains acceptable when layout requires it, but it must not be used as an overlay enter or exit animation.
 
 ### [HARD REQUIREMENT] Inset Surface Shadow Clearance
-- An elevated inset surface with a one-pixel outline shadow must retain at least a one-pixel inline gutter from any `overflow-hidden` animation wrapper. Use `mx-px` on the elevated inner surface rather than removing the wrapper's clipping.
-- This clearance is required for inset Accordion and Card-style surfaces. Without it, the light-mode outline is clipped at the inline edges even when the darker shadow treatment appears intact.
+- Keep at least a one-pixel inline gutter between an elevated inset surface and any `overflow-hidden` animation wrapper. Use `mx-px` on a nested surface when the shadow must remain outside that wrapper.
+- When the animated wrapper is itself the elevated surface, apply the background, radius, padding, and shadow directly to that wrapper. Its own shadow remains visible while `overflow-hidden` clips only descendant content; this is the required pattern for inset Accordion panels.
+- Preserve the tray padding around the elevated surface. Without these clearances, the light-mode outline is clipped even when the darker shadow treatment appears intact.
 
 ---
 

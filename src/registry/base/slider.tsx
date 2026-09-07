@@ -747,7 +747,7 @@ function CompactSliderControl({
               }
               index={index}
             >
-              <span className="relative z-10 size-5 shrink-0 rounded-full border border-border bg-white shadow-md transition-transform duration-150 group-hover/compact-slider:scale-110 group-focus-visible/compact-thumb:scale-110" />
+              <span className="relative z-10 size-5 shrink-0 rounded-full border border-border bg-white shadow-md transition-transform duration-150 group-hover/compact-slider:scale-110 group-focus-visible/compact-thumb:scale-110 dark:border-white/25" />
             </SliderPrimitive.Thumb>
           ))}
           {children}

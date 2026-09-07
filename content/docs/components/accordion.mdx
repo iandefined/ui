@@ -55,7 +55,7 @@ Renders each item as an independent card with spacing between sections.
 
 ### Inset
 
-An inset container matching the inset card style with a subtle tray background and elevated inner panel. The elevated panel keeps a one-pixel inline gutter inside the height-clipped wrapper so its light-mode outline shadow remains visible. Preserve that gutter with `mx-px` when replacing the panel surface.
+An inset container matching the inset card style with a subtle tray background and elevated animated panel. The panel owns its background and shadow, so its `overflow-hidden` height animation clips only its content, not its own light-mode outline. Preserve the tray padding and one-pixel inline gutter when replacing the panel surface.
 
 <ComponentPreview name="accordion/inset" />
 
