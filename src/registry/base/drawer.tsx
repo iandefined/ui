@@ -316,7 +316,7 @@ function DrawerBackdrop({
   return (
     <DrawerPrimitive.Backdrop
       className={cn(
-        "fixed inset-0 z-50 bg-black/40 opacity-[calc(1-var(--drawer-swipe-progress))] backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
+        "fixed inset-0 z-50 bg-black/40 opacity-[calc(1-var(--drawer-swipe-progress,0))] backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
         className
       )}
       data-slot="drawer-backdrop"
@@ -397,7 +397,7 @@ function DrawerPopup({
             "transition-[transform,box-shadow,height,background-color,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
             "focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid forced-colors:focus-visible:outline-[Highlight]",
             "[--peek:1.5rem] [--stack-step:0.05]",
-            "[--stack-progress:clamp(0,var(--drawer-swipe-progress),1)]",
+            "[--stack-progress:clamp(0,var(--drawer-swipe-progress,0),1)]",
             "[--scale-base:calc(max(0,1-(var(--nested-drawers)*var(--stack-step))))]",
             "[--scale:clamp(0,calc(var(--scale-base)+(var(--stack-step)*var(--stack-progress))),1)]",
             "[--shrink:calc(1-var(--scale))]",
@@ -414,7 +414,7 @@ function DrawerPopup({
                 "mx-auto",
                 "row-start-2",
                 "w-full",
-                "transform-[translateY(calc(var(--drawer-snap-point-offset)+var(--drawer-swipe-movement-y)))]",
+                "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]",
                 "data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "-mb-[max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",
@@ -427,13 +427,13 @@ function DrawerPopup({
                 "[--height:max(0px,calc(var(--drawer-frontmost-height,var(--drawer-height))))]",
                 "data-nested-drawer-open:h-(--height)",
                 "origin-[50%_calc(100%-var(--inset))]",
-                "data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--shrink)*var(--height))))_scale(var(--scale))]"
+                "data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y,0px)-var(--stack-peek-offset)-(var(--shrink)*var(--height))))_scale(var(--scale))]"
               ),
             position === "top" &&
               cn(
                 "mx-auto",
                 "w-full",
-                "transform-[translateY(var(--drawer-swipe-movement-y))]",
+                "transform-[translateY(var(--drawer-swipe-movement-y,0px))]",
                 "data-starting-style:transform-[translateY(calc(-100%-var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(-100%-var(--inset)))]",
                 "before:inset-x-0 before:bottom-full before:h-(--bleed)",
@@ -442,29 +442,29 @@ function DrawerPopup({
                 "[--height:max(0px,calc(var(--drawer-frontmost-height,var(--drawer-height))))]",
                 "data-nested-drawer-open:h-(--height)",
                 "origin-[50%_var(--inset)]",
-                "data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y)+var(--stack-peek-offset)+(var(--shrink)*var(--height))))_scale(var(--scale))]"
+                "data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y,0px)+var(--stack-peek-offset)+(var(--shrink)*var(--height))))_scale(var(--scale))]"
               ),
             position === "left" &&
               cn(
                 "max-w-md",
                 variant === "default" && "w-3/4 sm:max-w-sm",
-                "transform-[translateX(var(--drawer-swipe-movement-x))]",
+                "transform-[translateX(var(--drawer-swipe-movement-x,0px))]",
                 "data-starting-style:transform-[translateX(calc(-100%-var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(-100%-var(--inset)))]",
                 "before:inset-y-0 before:end-full before:w-(--bleed)",
                 "origin-right",
-                "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)+var(--stack-peek-offset)))_scale(var(--scale))]"
+                "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x,0px)+var(--stack-peek-offset)))_scale(var(--scale))]"
               ),
             position === "right" &&
               cn(
                 "max-w-md",
                 variant === "default" && "w-3/4 sm:max-w-sm",
-                "transform-[translateX(var(--drawer-swipe-movement-x))]",
+                "transform-[translateX(var(--drawer-swipe-movement-x,0px))]",
                 "data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(100%+var(--inset)))]",
                 "before:inset-y-0 before:start-full before:w-(--bleed)",
                 "origin-left",
-                "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)-var(--stack-peek-offset)))_scale(var(--scale))]"
+                "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x,0px)-var(--stack-peek-offset)))_scale(var(--scale))]"
               ),
             variant !== "floating"
               ? cn(

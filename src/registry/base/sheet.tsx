@@ -130,7 +130,7 @@ const sheetNestedSurfaceClasses: Record<SheetSide, string> = {
 const sheetContentVariants = cva(
   [
     "pointer-events-auto fixed z-50 flex max-h-full min-h-0 max-w-full min-w-0 flex-col overflow-hidden bg-popover text-popover-foreground outline-hidden will-change-transform",
-    "transition-[transform,box-shadow,height,background-color,border-color,border-radius,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
+    "transition-[translate,scale,box-shadow,height,background-color,border-color,border-radius,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:[translate:none] motion-reduce:[scale:1]",
     "[--inset:0px]",
     "[--peek:1.5rem] [--stack-step:0.05]",
     "[--stack-progress:0]",
@@ -163,49 +163,49 @@ const sheetContentVariants = cva(
         variant: "floating",
         side: "right",
         class:
-          "inset-y-4 end-4 origin-left data-nested-dialog-open:transform-[translateX(calc(0px-var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateX(calc(100%+1rem))] data-starting-style:transform-[translateX(calc(100%+1rem))]",
+          "inset-y-4 end-4 origin-left data-nested-dialog-open:[translate:calc(0px-var(--stack-peek-offset))_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:calc(100%+1rem)_0] data-starting-style:[translate:calc(100%+1rem)_0]",
       },
       {
         variant: "floating",
         side: "left",
         class:
-          "inset-y-4 start-4 origin-right data-nested-dialog-open:transform-[translateX(calc(var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateX(calc(-100%-1rem))] data-starting-style:transform-[translateX(calc(-100%-1rem))]",
+          "inset-y-4 start-4 origin-right data-nested-dialog-open:[translate:var(--stack-peek-offset)_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:calc(-100%-1rem)_0] data-starting-style:[translate:calc(-100%-1rem)_0]",
       },
       {
         variant: "floating",
         side: "top",
         class:
-          "inset-x-4 top-4 origin-[50%_var(--inset)] data-nested-dialog-open:transform-[translateY(var(--stack-peek-offset))_scale(var(--scale))] data-ending-style:transform-[translateY(calc(-100%-1rem))] data-starting-style:transform-[translateY(calc(-100%-1rem))]",
+          "inset-x-4 top-4 origin-[50%_var(--inset)] data-nested-dialog-open:[translate:0_var(--stack-peek-offset)] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_calc(-100%-1rem)] data-starting-style:[translate:0_calc(-100%-1rem)]",
       },
       {
         variant: "floating",
         side: "bottom",
         class:
-          "inset-x-4 bottom-4 origin-[50%_calc(100%-var(--inset))] data-nested-dialog-open:transform-[translateY(calc(0px-var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateY(calc(100%+1rem))] data-starting-style:transform-[translateY(calc(100%+1rem))]",
+          "inset-x-4 bottom-4 origin-[50%_calc(100%-var(--inset))] data-nested-dialog-open:[translate:0_calc(0px-var(--stack-peek-offset))] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_calc(100%+1rem)] data-starting-style:[translate:0_calc(100%+1rem)]",
       },
       {
         variant: "default",
         side: "right",
         class:
-          "inset-y-0 end-0 w-3/4 origin-left sm:max-w-sm data-nested-dialog-open:transform-[translateX(calc(0px-var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateX(100%)] data-starting-style:transform-[translateX(100%)]",
+          "inset-y-0 end-0 w-3/4 origin-left sm:max-w-sm data-nested-dialog-open:[translate:calc(0px-var(--stack-peek-offset))_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:100%_0] data-starting-style:[translate:100%_0]",
       },
       {
         variant: "default",
         side: "left",
         class:
-          "inset-y-0 start-0 w-3/4 origin-right sm:max-w-sm data-nested-dialog-open:transform-[translateX(var(--stack-peek-offset))_scale(var(--scale))] data-ending-style:transform-[translateX(-100%)] data-starting-style:transform-[translateX(-100%)]",
+          "inset-y-0 start-0 w-3/4 origin-right sm:max-w-sm data-nested-dialog-open:[translate:var(--stack-peek-offset)_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:-100%_0] data-starting-style:[translate:-100%_0]",
       },
       {
         variant: "default",
         side: "top",
         class:
-          "inset-x-0 top-0 origin-[50%_var(--inset)] data-nested-dialog-open:transform-[translateY(var(--stack-peek-offset))_scale(var(--scale))] data-ending-style:transform-[translateY(-100%)] data-starting-style:transform-[translateY(-100%)]",
+          "inset-x-0 top-0 origin-[50%_var(--inset)] data-nested-dialog-open:[translate:0_var(--stack-peek-offset)] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_-100%] data-starting-style:[translate:0_-100%]",
       },
       {
         variant: "default",
         side: "bottom",
         class:
-          "inset-x-0 bottom-0 origin-[50%_calc(100%-var(--inset))] data-nested-dialog-open:transform-[translateY(calc(0px-var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateY(100%)] data-starting-style:transform-[translateY(100%)]",
+          "inset-x-0 bottom-0 origin-[50%_calc(100%-var(--inset))] data-nested-dialog-open:[translate:0_calc(0px-var(--stack-peek-offset))] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_100%] data-starting-style:[translate:0_100%]",
       },
     ],
     defaultVariants: {
