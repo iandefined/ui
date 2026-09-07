@@ -164,16 +164,30 @@ function TableFooter({ className, render, ...props }: TableFooterProps) {
   });
 }
 
+export type TableRowSticky = "top" | "bottom";
+
 export interface TableRowProps extends useRender.ComponentProps<"tr"> {
   selected?: boolean;
+  sticky?: TableRowSticky;
 }
 
-function TableRow({ className, render, selected, ...props }: TableRowProps) {
+function TableRow({
+  className,
+  render,
+  selected,
+  sticky,
+  ...props
+}: TableRowProps) {
   const defaultProps = {
     "data-slot": "table-row",
     "data-state": selected ? "selected" : undefined,
+    "data-sticky": sticky,
     className: cn(
       "transition-colors duration-100 hover:transition-none",
+      sticky === "top" &&
+        "[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>td]:sticky [&>td]:top-0 [&>td]:z-20",
+      sticky === "bottom" &&
+        "[&>th]:sticky [&>th]:bottom-0 [&>th]:z-20 [&>td]:sticky [&>td]:bottom-0 [&>td]:z-20",
       className
     ),
   };
@@ -355,9 +369,12 @@ function TableColumnResizer({
   );
 }
 
+export type TableColumnSticky = "left" | "right";
+
 export interface TableHeadProps extends useRender.ComponentProps<"th"> {
   resizable?: boolean;
   resizer?: React.ReactNode;
+  sticky?: TableColumnSticky;
 }
 
 function TableHead({
@@ -366,6 +383,7 @@ function TableHead({
   children,
   resizable: resizableProp,
   resizer,
+  sticky,
   ...props
 }: TableHeadProps) {
   const context = React.useContext(TableContext);
@@ -385,6 +403,8 @@ function TableHead({
       "group-data-[bordered]/table:after:hidden group-data-bordered/table:after:hidden",
       !hasLabel && "after:hidden",
       hasResizer && "after:hidden select-none",
+      sticky === "left" && "sticky left-0 z-20 bg-muted dark:bg-card",
+      sticky === "right" && "sticky right-0 z-20 bg-muted dark:bg-card",
       className
     ),
     children: (
@@ -406,9 +426,11 @@ function TableHead({
   });
 }
 
-export type TableCellProps = useRender.ComponentProps<"td">;
+export interface TableCellProps extends useRender.ComponentProps<"td"> {
+  sticky?: TableColumnSticky;
+}
 
-function TableCell({ className, render, ...props }: TableCellProps) {
+function TableCell({ className, render, sticky, ...props }: TableCellProps) {
   const defaultProps = {
     "data-slot": "table-cell",
     className: cn(
@@ -416,6 +438,8 @@ function TableCell({ className, render, ...props }: TableCellProps) {
       "[&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
       "group-data-bordered/table:border-b group-data-bordered/table:border-r group-data-bordered/table:first:border-l group-data-bordered/table:border-border/70 dark:group-data-bordered/table:border-border",
       "[[data-state=selected]_&]:bg-accent dark:[[data-state=selected]_&]:bg-accent",
+      sticky === "left" && "sticky left-0 z-[1]",
+      sticky === "right" && "sticky right-0 z-[1]",
       className
     ),
   };

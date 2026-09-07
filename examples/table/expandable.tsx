@@ -89,7 +89,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
         <TableCell className="text-right tabular-nums font-medium">
           {order.amount}
         </TableCell>
-        <TableCell className="w-10 text-right">
+        <TableCell sticky="right" className="w-10 text-right">
           <Button
             variant="ghost"
             size="icon-xs"
@@ -159,7 +159,7 @@ export default function TableExpandableDemo() {
           <TableHead>Customer</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">Amount</TableHead>
-          <TableHead className="w-10" />
+          <TableHead sticky="right" className="w-10" />
         </TableRow>
       </TableHeader>
       <TableBody>

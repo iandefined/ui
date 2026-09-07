@@ -93,7 +93,11 @@ Display summary rows or column aggregations at the base of the table.
 
 ### Expandable Rows
 
-Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand.
+Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand. Set `sticky="right"` on the matching `TableHead` and `TableCell` to keep an action column, such as the row toggle, visible while the table scrolls horizontally.
+
+### Sticky Rows
+
+Set `sticky="top"` or `sticky="bottom"` on `TableRow` to keep an important row visible while the table scrolls vertically. This example pins the total row at the bottom of the scroll area.
 
 ### Resizable Columns
 
@@ -126,9 +130,18 @@ Sets the custom CSS color used for edge shadow fades.
 
 #### TableHead
 
+Pins this header cell to the corresponding inline edge while the table scrolls
+horizontally. Set the same value on the matching `TableCell` components.
 Overrides column resizing behavior for this specific column header.
 Custom resizer element rendered on the column boundary.
 
+#### TableCell
+
+Pins this cell to the corresponding inline edge while the table scrolls
+horizontally. Apply it to every cell in the column, including its header.
+
 #### TableRow
 
+Pins every cell in this row to the corresponding block edge while the table
+scrolls vertically.
 Applies the selected background color and state attribute to the row.

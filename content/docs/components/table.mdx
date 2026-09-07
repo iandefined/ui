@@ -102,9 +102,15 @@ Display summary rows or column aggregations at the base of the table.
 
 ### Expandable Rows
 
-Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand.
+Compose `Collapsible` with table rows to reveal nested metadata, order items, or additional context on demand. Set `sticky="right"` on the matching `TableHead` and `TableCell` to keep an action column, such as the row toggle, visible while the table scrolls horizontally.
 
 <ComponentPreview name="table/expandable" />
+
+### Sticky Rows
+
+Set `sticky="top"` or `sticky="bottom"` on `TableRow` to keep an important row visible while the table scrolls vertically. This example pins the total row at the bottom of the scroll area.
+
+<ComponentPreview name="table/sticky-rows" />
 
 ### Resizable Columns
 
@@ -164,6 +170,10 @@ Table cells keep content on one line by default so column values remain easy to 
 #### TableHead
 
 <ApiPropsList>
+  <ApiProp name="sticky" fullType='"left" | "right"'>
+    Pins this header cell to the corresponding inline edge while the table scrolls
+    horizontally. Set the same value on the matching `TableCell` components.
+  </ApiProp>
   <ApiProp name="resizable" fullType="boolean">
     Overrides column resizing behavior for this specific column header.
   </ApiProp>
@@ -172,9 +182,22 @@ Table cells keep content on one line by default so column values remain easy to 
   </ApiProp>
 </ApiPropsList>
 
+#### TableCell
+
+<ApiPropsList>
+  <ApiProp name="sticky" fullType='"left" | "right"'>
+    Pins this cell to the corresponding inline edge while the table scrolls
+    horizontally. Apply it to every cell in the column, including its header.
+  </ApiProp>
+</ApiPropsList>
+
 #### TableRow
 
 <ApiPropsList>
+  <ApiProp name="sticky" fullType='"top" | "bottom"'>
+    Pins every cell in this row to the corresponding block edge while the table
+    scrolls vertically.
+  </ApiProp>
   <ApiProp name="selected" fullType="boolean">
     Applies the selected background color and state attribute to the row.
   </ApiProp>
