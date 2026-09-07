@@ -272,8 +272,10 @@ function DialogContent({
 
     if (
       !popup ||
-      window.getComputedStyle(popup).getPropertyValue("--nested-dialogs").trim() !==
-        "0"
+      window
+        .getComputedStyle(popup)
+        .getPropertyValue("--nested-dialogs")
+        .trim() !== "0"
     ) {
       return;
     }
@@ -330,7 +332,7 @@ function DialogContent({
           : { ...style, marginTop: dialogStack.offset }
       }
       className={cn(
-        "relative z-50 flex w-full max-w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-xl",
+        "relative z-50 flex w-full max-w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg",
         "sm:max-w-lg",
         scroll === "inside" && "max-h-full min-h-0",
         isOutsideScroll && "outline-none",
