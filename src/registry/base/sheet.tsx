@@ -152,7 +152,7 @@ const sheetContentVariants = cva(
       variant: {
         default: "",
         floating:
-          "[--inset:1rem] max-h-[calc(100%-2rem)] w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] rounded-2xl border border-border",
+          "[--inset:1rem] max-h-[calc(100%-2rem)] rounded-2xl border border-border",
       },
       side: {
         top: "w-full",
@@ -166,25 +166,25 @@ const sheetContentVariants = cva(
         variant: "floating",
         side: "right",
         class:
-          "inset-y-4 end-4 origin-left data-nested-dialog-open:[translate:calc(0px-var(--stack-peek-offset))_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:calc(100%+1rem)_0] data-starting-style:[translate:calc(100%+1rem)_0]",
+          "inset-y-4 end-4 w-3/4 max-w-sm origin-left data-nested-dialog-open:[translate:calc(0px-var(--stack-peek-offset))_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:calc(100%+1rem)_0] data-starting-style:[translate:calc(100%+1rem)_0]",
       },
       {
         variant: "floating",
         side: "left",
         class:
-          "inset-y-4 start-4 origin-right data-nested-dialog-open:[translate:var(--stack-peek-offset)_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:calc(-100%-1rem)_0] data-starting-style:[translate:calc(-100%-1rem)_0]",
+          "inset-y-4 start-4 w-3/4 max-w-sm origin-right data-nested-dialog-open:[translate:var(--stack-peek-offset)_0] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:calc(-100%-1rem)_0] data-starting-style:[translate:calc(-100%-1rem)_0]",
       },
       {
         variant: "floating",
         side: "top",
         class:
-          "inset-x-4 top-4 origin-[50%_var(--inset)] data-nested-dialog-open:[translate:0_var(--stack-peek-offset)] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_calc(-100%-1rem)] data-starting-style:[translate:0_calc(-100%-1rem)]",
+          "inset-x-4 top-4 w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] origin-[50%_var(--inset)] data-nested-dialog-open:[translate:0_var(--stack-peek-offset)] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_calc(-100%-1rem)] data-starting-style:[translate:0_calc(-100%-1rem)]",
       },
       {
         variant: "floating",
         side: "bottom",
         class:
-          "inset-x-4 bottom-4 origin-[50%_calc(100%-var(--inset))] data-nested-dialog-open:[translate:0_calc(0px-var(--stack-peek-offset))] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_calc(100%+1rem)] data-starting-style:[translate:0_calc(100%+1rem)]",
+          "inset-x-4 bottom-4 w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] origin-[50%_calc(100%-var(--inset))] data-nested-dialog-open:[translate:0_calc(0px-var(--stack-peek-offset))] data-nested-dialog-open:[scale:var(--scale)] data-ending-style:[translate:0_calc(100%+1rem)] data-starting-style:[translate:0_calc(100%+1rem)]",
       },
       {
         variant: "default",

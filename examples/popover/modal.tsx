@@ -33,7 +33,11 @@ export default function PopoverModalDemo() {
   return (
     <div className="flex flex-wrap items-center gap-3">
       {modes.map((mode) => (
-        <Popover key={mode.label} modal={mode.value}>
+        <Popover
+          key={mode.label}
+          modal={mode.value}
+          dismissible={mode.value !== true}
+        >
           <PopoverTrigger render={<Button variant="outline" />}>
             {mode.label}
           </PopoverTrigger>

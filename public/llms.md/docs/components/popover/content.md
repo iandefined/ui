@@ -76,7 +76,7 @@ The `modal` prop determines whether the popover enters a modal state and how it 
 
 - `false`: keyboard focus and pointer interaction can move between the popover and the page.
 - `"trap-focus"`: keyboard focus stays within the popover, while page scrolling and pointer interaction outside it remain enabled. Clicking outside is therefore expected.
-- `true`: keyboard focus stays within the popover, page scrolling is locked, and pointer interaction outside it is disabled.
+- `true`: keyboard focus stays within the popover, page scrolling is locked, and pointer interaction outside it is disabled. Set `dismissible={false}` when it must only close through an explicit `PopoverClose` control.
 
 The included `PopoverPopup` renders the visually hidden close control Base UI needs to enable focus trapping. Add a visible `PopoverClose` when people need an explicit way to close the popover.
 

@@ -10,8 +10,8 @@ import {
 
 export default function PaginationDemo() {
   return (
-    <Pagination>
-      <PaginationContent>
+    <Pagination size="sm">
+      <PaginationContent className="gap-0.5">
         <PaginationItem>
           <PaginationPrevious href="#" />
         </PaginationItem>

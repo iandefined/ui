@@ -6,21 +6,41 @@ export default function TabsSegmentedDemo() {
   return (
     <Tabs defaultValue="india" variant="segmented">
       <TabsList className="*:data-[slot=tabs-trigger]:h-10 *:data-[slot=tabs-trigger]:[&_svg]:size-5">
-        <TabsTrigger value="india">
+        <TabsTrigger aria-label="India" value="india">
           <IndiaFlag />
-          India
+          <span aria-hidden="true" className="sm:hidden">
+            IN
+          </span>
+          <span aria-hidden="true" className="hidden sm:inline">
+            India
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="france">
+        <TabsTrigger aria-label="France" value="france">
           <FranceFlag />
-          France
+          <span aria-hidden="true" className="sm:hidden">
+            FR
+          </span>
+          <span aria-hidden="true" className="hidden sm:inline">
+            France
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="belgium">
+        <TabsTrigger aria-label="Belgium" value="belgium">
           <BelgiumFlag />
-          Belgium
+          <span aria-hidden="true" className="sm:hidden">
+            BE
+          </span>
+          <span aria-hidden="true" className="hidden sm:inline">
+            Belgium
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="switzerland">
+        <TabsTrigger aria-label="Switzerland" value="switzerland">
           <SwitzerlandFlag />
-          Switzerland
+          <span aria-hidden="true" className="sm:hidden">
+            CH
+          </span>
+          <span aria-hidden="true" className="hidden sm:inline">
+            Switzerland
+          </span>
         </TabsTrigger>
       </TabsList>
     </Tabs>

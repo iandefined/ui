@@ -17,8 +17,8 @@ export default function PaginationControlledDemo() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <Pagination>
-        <PaginationContent>
+      <Pagination size="sm">
+        <PaginationContent className="gap-0.5">
           <PaginationItem>
             <PaginationPrevious
               href="#"

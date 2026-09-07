@@ -463,6 +463,7 @@ function DrawerPopup({
               cn(
                 "max-w-md",
                 variant === "default" && "w-3/4 sm:max-w-sm",
+                variant === "floating" && "w-[75vw] max-w-sm",
                 "transform-[translateX(var(--drawer-swipe-movement-x,0px))]",
                 "data-starting-style:transform-[translateX(calc(-100%-var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(-100%-var(--inset)))]",
@@ -474,6 +475,7 @@ function DrawerPopup({
               cn(
                 "max-w-md",
                 variant === "default" && "w-3/4 sm:max-w-sm",
+                variant === "floating" && "w-[75vw] max-w-sm",
                 "transform-[translateX(var(--drawer-swipe-movement-x,0px))]",
                 "data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(100%+var(--inset)))]",

@@ -2,7 +2,7 @@
 
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import { cn } from "cn";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 
 type PopoverAnimationPreset =
   | "none"
@@ -98,34 +98,62 @@ type PopoverBackdropStyle = "opaque" | "blur" | "transparent";
 
 interface PopoverContextType {
   backdrop?: PopoverBackdropStyle;
+  modal: boolean | "trap-focus";
 }
 
-const PopoverContext = createContext<PopoverContextType | undefined>(undefined);
+const PopoverContext = createContext<PopoverContextType>({
+  backdrop: "transparent",
+  modal: false,
+});
 
 function usePopover() {
   const context = useContext(PopoverContext);
-  if (!context) {
-    throw new Error("usePopover must be used within a PopoverProvider");
-  }
   return context;
 }
 
 type PopoverProps<Payload = unknown> = PopoverPrimitive.Root.Props<Payload> & {
   backdrop?: "opaque" | "blur" | "transparent";
+  /** Prevents closing from outside presses, Escape, and focus loss. */
+  dismissible?: boolean;
 };
+
+type PopoverOnOpenChange = NonNullable<
+  PopoverPrimitive.Root.Props["onOpenChange"]
+>;
 
 const Popover = Object.assign(
   function Popover<Payload = unknown>({
     backdrop = "transparent",
+    dismissible = true,
+    modal = false,
+    onOpenChange,
     ...props
   }: PopoverProps<Payload>) {
+    const handleOpenChange = useCallback<PopoverOnOpenChange>(
+      (nextOpen, eventDetails) => {
+        if (!dismissible && !nextOpen && eventDetails.reason !== "close-press") {
+          eventDetails.cancel();
+          return;
+        }
+
+        onOpenChange?.(nextOpen, eventDetails);
+      },
+      [dismissible, onOpenChange]
+    );
+
     return (
       <PopoverContext.Provider
         value={{
           backdrop,
+          modal,
         }}
       >
-        <PopoverPrimitive.Root data-slot="popover" {...props} />
+        <PopoverPrimitive.Root
+          data-slot="popover"
+          modal={modal}
+          onOpenChange={handleOpenChange}
+          {...props}
+        />
       </PopoverContext.Provider>
     );
   },
@@ -144,7 +172,7 @@ function PopoverBackdrop({
   className,
   ...props
 }: PopoverPrimitive.Backdrop.Props) {
-  const { backdrop = "transparent" } = usePopover();
+  const { backdrop = "transparent", modal } = usePopover();
 
   return (
     <PopoverPrimitive.Backdrop
@@ -154,7 +182,8 @@ function PopoverBackdrop({
           "fixed inset-0 z-50 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
         backdrop === "blur" &&
           "fixed inset-0 z-50 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
-        backdrop === "transparent" && "hidden",
+        backdrop === "transparent" && modal === true && "fixed inset-0 z-50",
+        backdrop === "transparent" && modal !== true && "hidden",
         className
       )}
       {...props}
