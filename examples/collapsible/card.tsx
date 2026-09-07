@@ -29,7 +29,7 @@ export default function CollapsibleCardDemo() {
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="flex flex-col gap-3 rounded-lg bg-card dark:bg-muted p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]">
+        <div className="mx-px flex flex-col gap-3 rounded-lg bg-card dark:bg-muted p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-muted-foreground">
               <PlanetIcon className="size-4 shrink-0" />
@@ -107,15 +107,15 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Founders</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-1.5 py-0.5">
+              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-1.5 py-0.5 dark:bg-card">
                 <img
                   src="https://github.com/shadcn.png"
                   alt="Founder"
                   className="size-4 rounded-full"
                 />
-                <span className="text-xs font-medium">Shadcn</span>
+                <span className="text-xs font-medium">shadcn</span>
               </div>
-              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-2 py-0.5">
+              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-2 py-0.5 dark:bg-card">
                 <span className="text-xs font-medium">+5 more</span>
               </div>
             </div>

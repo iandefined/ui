@@ -55,7 +55,7 @@ Renders each item as an independent card with spacing between sections.
 
 ### Inset
 
-An inset container matching the inset card style with a subtle tray background and elevated inner panel.
+An inset container matching the inset card style with a subtle tray background and elevated inner panel. The elevated panel keeps a one-pixel inline gutter inside the height-clipped wrapper so its light-mode outline shadow remains visible. Preserve that gutter with `mx-px` when replacing the panel surface.
 
 <ComponentPreview name="accordion/inset" />
 
@@ -70,7 +70,7 @@ An inset container matching the inset card style with a subtle tray background a
 <ApiPropsList>
   <ApiProp
     name="variant"
-    fullType='"default" | "split" | "outline" | "nested" | "isolated-bordered" | "isolated-filled" | "isolated-filled-bordered"'
+    fullType='"default" | "split" | "outline" | "inset" | "nested" | "isolated-bordered" | "isolated-filled" | "isolated-filled-bordered"'
     defaultValue='"default"'
   >
     Visual style variant applied to the accordion container and items.

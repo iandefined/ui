@@ -67,7 +67,7 @@ Use `CardFooter` below the content and `CardAction` for a header control.
 
 ### Variants
 
-Use `inset` to place nested content on a card surface inside a muted frame.
+Use `inset` to place nested content on a card surface inside a muted frame. Keep the tray padding around its elevated inner surface. If a custom inner surface sits inside an `overflow-hidden` wrapper, add `mx-px` so the light-mode one-pixel outline shadow is not clipped.
 
 <ComponentPreview name="card/variants" previewClassName="px-4 sm:px-10" />
 
