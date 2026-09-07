@@ -163,9 +163,9 @@ function DataTable<TData, TValue>({
 
     const selectionColumn: ColumnDef<TData, unknown> = {
       id: "__select__",
-      size: 40,
-      minSize: 40,
-      maxSize: 40,
+      size: 48,
+      minSize: 48,
+      maxSize: 48,
       enableResizing: false,
       header: ({ table }) =>
         enableMultiRowSelection ? (

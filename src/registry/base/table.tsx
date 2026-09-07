@@ -396,7 +396,7 @@ function TableHead({
     "data-empty": hasLabel ? undefined : "",
     className: cn(
       "text-muted-foreground relative overflow-hidden px-3 py-2 text-left text-ellipsis align-middle text-sm font-medium whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
-      "[&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
       "after:absolute after:right-0 after:top-1/2 after:h-4 after:w-px after:-translate-y-1/2 after:bg-border after:content-['']",
       "last:after:hidden",
       "group-data-[bordered]/table:after:hidden group-data-bordered/table:after:hidden",
@@ -434,7 +434,7 @@ function TableCell({ className, render, sticky, ...props }: TableCellProps) {
     "data-slot": "table-cell",
     className: cn(
       "bg-card overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap dark:bg-background [[align=center]]:text-center [[align=right]]:text-right",
-      "[&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
       "group-data-bordered/table:border-b group-data-bordered/table:border-r group-data-bordered/table:first:border-l group-data-bordered/table:border-border/70 dark:group-data-bordered/table:border-border",
       "[[data-state=selected]_&]:bg-secondary/60 dark:[[data-state=selected]_&]:bg-muted/75",
       sticky === "left" && "sticky left-0 z-[1]",
