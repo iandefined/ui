@@ -28,7 +28,7 @@ function Input({ className, size = "default", ...props }: InputProps) {
         props.type === "search" &&
           "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
         props.type === "file" &&
-          "text-muted-foreground flex items-center pt-2 pb-[9px] file:me-3 file:relative file:top-px file:align-middle file:rounded-lg file:border file:border-input/70 not-dark:file:border-input file:bg-transparent file:py-0 file:text-base file:font-medium file:leading-5 file:text-foreground sm:file:text-sm",
+          "text-muted-foreground flex items-center pt-2 pb-[9px] file:me-3 file:relative file:-top-0.5 file:align-middle file:rounded-lg file:border-input/70 not-dark:file:border-input file:bg-transparent file:py-0 file:text-base file:font-medium file:leading-5 file:text-foreground sm:file:text-sm",
         className
       )}
       data-slot="input"
