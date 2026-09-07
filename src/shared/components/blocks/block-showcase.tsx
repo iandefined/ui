@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import {
   ExpandIcon,
   Loader2Icon,
@@ -33,7 +34,6 @@ import {
 } from "@/shared/components/ui/tooltip";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 import type { RegistryBlock } from "@/shared/lib/blocks";
-import { cn } from "@/shared/lib/utils";
 
 type ScreenSize = "mobile" | "tablet" | "desktop";
 

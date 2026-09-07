@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";
@@ -8,7 +9,6 @@ import {
   CollapsibleTrigger,
 } from "@/shared/components/ui/collapsible";
 import { Separator } from "@/shared/components/ui/separator";
-import { cn } from "@/shared/lib/utils";
 
 export const CodeCollapsibleWrapper = ({
   className,

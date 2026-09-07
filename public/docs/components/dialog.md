@@ -140,6 +140,9 @@ compose it around the button content with `render`.
 Allows outside presses and Escape to dismiss the dialog. When `false`, the
 default corner close is omitted and the dialog can close only through
 `DialogCloseTrigger` or an externally controlled `open` value.
+Controls the backdrop treatment. Use `"brightness"` for a plain dark
+dimmer or `"transparent"` to retain modal interaction without visual
+dimming.
 Controls focus trapping, page scrolling, and pointer interaction outside the
 dialog. `false` leaves the page interactive, while `"trap-focus"` traps
 focus without locking page scrolling.

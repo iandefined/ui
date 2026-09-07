@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useCallback } from "react";
 
@@ -13,7 +14,6 @@ import {
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
 import type { Event } from "@/shared/lib/events";
 import { trackEvent } from "@/shared/lib/events";
-import { cn } from "@/shared/lib/utils";
 
 export interface CopyButtonProps extends Omit<ButtonProps, "color" | "value"> {
   value: string | (() => Promise<string> | string);

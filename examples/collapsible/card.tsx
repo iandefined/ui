@@ -28,11 +28,10 @@ export default function CollapsibleCardDemo() {
           <ChevronDownIcon className="size-4 text-muted-foreground transition-transform duration-200 ease-out group-data-panel-open:rotate-180" />
         </div>
       </CollapsibleTrigger>
-      <CollapsibleContent>
-        <div className="mx-px flex flex-col gap-3 rounded-lg bg-card dark:bg-muted p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]">
+      <CollapsibleContent className="mx-px mt-1 rounded-lg bg-card p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:bg-muted dark:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]">
+        <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <PlanetIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Website</span>
             </div>
             <a
@@ -41,41 +40,35 @@ export default function CollapsibleCardDemo() {
               rel="noreferrer"
               className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-2 py-0.5 text-xs font-medium transition-colors hover:bg-accent"
             >
-              <LinkIcon className="size-3.5 text-muted-foreground" />
               <span>https://claude.ai</span>
             </a>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <CursorClickIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Monthly Visits</span>
             </div>
             <span className="text-sm font-medium tabular-nums">205M</span>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <FireIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Heat Score</span>
             </div>
             <Badge variant="success" className="gap-1">
               <span>89</span>
-              <ArrowOutwardIcon className="size-3.5" />
             </Badge>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <LocationOnIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Location</span>
             </div>
             <span className="text-sm font-medium">California, USA</span>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <ShoppingModeOutlineIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Categories</span>
             </div>
             <div className="flex items-center gap-1">
@@ -86,24 +79,21 @@ export default function CollapsibleCardDemo() {
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <UsersThreeIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Employees</span>
             </div>
             <span className="text-sm font-medium tabular-nums">1001-5000</span>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <RevenueIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Estimated ARR</span>
             </div>
             <Badge variant="success">$3-4B</Badge>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <FlagPennantIcon className="size-4 shrink-0" />
+            <div className="text-muted-foreground">
               <span className="text-sm font-medium">Founders</span>
             </div>
             <div className="flex items-center gap-1">
@@ -116,7 +106,10 @@ export default function CollapsibleCardDemo() {
                 <span className="text-xs font-medium">shadcn</span>
               </div>
               <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-2 py-0.5 dark:bg-card">
-                <span className="text-xs font-medium">+5 more</span>
+                <span className="text-xs font-medium">
+                  <span className="sm:hidden">+5</span>
+                  <span className="hidden sm:inline">+5 more</span>
+                </span>
               </div>
             </div>
           </div>

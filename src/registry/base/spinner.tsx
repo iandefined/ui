@@ -1,7 +1,6 @@
+import { cn } from "cn";
 import type { ComponentProps, SVGProps } from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/lib/utils";
 
 type SpinnerPrimitiveProps = SVGProps<SVGSVGElement>;
 

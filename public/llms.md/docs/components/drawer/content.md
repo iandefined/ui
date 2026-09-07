@@ -103,7 +103,7 @@ Set `position` on `Drawer` to choose the edge where the drawer opens.
 
 ### Snap Points
 
-Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position.
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. A `DrawerFooter` stays pinned while the panel changes between snap points.
 
 ### Floating Surface
 
@@ -153,6 +153,9 @@ Allows outside presses, Escape, and swipe gestures to dismiss the drawer.
 When `false`, swipe dragging is disabled, the drawer has no thumb, and it
 can close only through `DrawerCloseTrigger` or an externally controlled
 `open` value.
+Controls the backdrop treatment. Use `"brightness"` for a plain dark
+dimmer or `"transparent"` to retain modal interaction without visual
+dimming.
 Chooses the edge where the drawer opens and the direction used for swipe
 dismissal. An explicit `swipeDirection` still takes precedence.
 

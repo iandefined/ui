@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { ChevronRightIcon } from "lucide-react";
 import * as React from "react";
 import type { ReactNode } from "react";
@@ -13,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/registry/base/table";
-import { cn } from "@/shared/lib/utils";
 
 export type ApiPropProps = {
   name: string;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useNavigate } from "@tanstack/react-router";
+import { cn } from "cn";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -42,7 +43,6 @@ import {
   getBlockCategoryTitle,
   getBlocksForCategory,
 } from "@/shared/lib/blocks";
-import { cn } from "@/shared/lib/utils";
 
 const INITIAL_BLOCK_COUNT = 5;
 const BLOCKS_PER_LOAD = 5;

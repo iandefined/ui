@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { useCallback, useRef } from "react";
 
 import { ArrowRightIcon } from "@/shared/components/animated-icons/arrow-right";
@@ -9,7 +10,6 @@ import type { ComponentIconHandle } from "@/shared/components/animated-icons/com
 import { Link } from "@/shared/components/link";
 import { Button } from "@/shared/components/ui/button";
 import { ROUTES } from "@/shared/constants/routes";
-import { cn } from "@/shared/lib/utils";
 
 const GetStartedButton = () => {
   const arrowRightRef = useRef<ArrowRightIconHandle>(null);

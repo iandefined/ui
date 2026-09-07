@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { Children, createElement, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 
@@ -5,7 +6,6 @@ import { ComponentPreviewTabs } from "@/shared/components/component-preview-tabs
 import { ComponentSource } from "@/shared/components/component-source";
 import { MdxPreviewProvider } from "@/shared/lib/mdx-preview-context";
 import { getRegistryComponent } from "@/shared/lib/registry";
-import { cn } from "@/shared/lib/utils";
 
 type ComponentPreviewProps = React.ComponentProps<"div"> & {
   name: string;

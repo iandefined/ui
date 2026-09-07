@@ -32,6 +32,7 @@ Follow these repository standards when authoring components:
 - **Animation and Reduced Motion**: When using Motion springs, check `useReducedMotion()` and add `motion-reduce:transition-none` to ensure animations gracefully disable for users with motion sensitivities.
 - **Deterministic Rendering**: Avoid runtime randomness such as `Math.random()` to prevent SSR hydration mismatches and React Compiler purity warnings.
 - **Exported Types**: Export component prop interfaces and key type unions (such as `MyComponentSize` or `MyComponentVariant`).
+- **Class Names**: Import `cn` from the `cn` package. Registry items that use it must declare `cn` in `dependencies`.
 
 ### Manifest Registration
 

@@ -37,7 +37,7 @@
     "@tanstack/react-table": "catalog:",
     "calligraph": "catalog:",
     "class-variance-authority": "catalog:",
-    "clsx": "catalog:",
+    "cn": "catalog:",
     "fumadocs-core": "catalog:",
     "hashvatar": "^0.1.2",
     "input-otp": "^1.5.0",
@@ -54,7 +54,6 @@
     "react-resizable-panels": "^4.12.3",
     "shiki": "catalog:",
     "sonner": "catalog:",
-    "tailwind-merge": "catalog:",
     "tailwind-variants": "^3.3.1",
     "takumi-js": "^2.10.0",
     "zod": "catalog:"

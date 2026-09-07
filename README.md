@@ -25,6 +25,9 @@ Install any component directly into your project:
 npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
+The registry declares `cn` as a dependency for components that use it, so the
+CLI installs the package automatically.
+
 Or install complete multi-file blocks:
 
 ```bash

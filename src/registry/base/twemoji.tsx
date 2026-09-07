@@ -1,6 +1,5 @@
+import { cn } from "cn";
 import type { ReactNode } from "react";
-
-import { cn } from "@/lib/utils";
 
 const VARIATION_SELECTOR_16 = /\uFE0F/g;
 const ZERO_WIDTH_JOINER = String.fromCharCode(0x200d);

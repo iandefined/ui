@@ -1,9 +1,9 @@
 "use client";
 
+import { cn } from "cn";
 import { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";
-import { cn } from "@/shared/lib/utils";
 
 export type ComponentPreviewTabsProps = React.ComponentProps<"div"> & {
   previewClassName?: string;

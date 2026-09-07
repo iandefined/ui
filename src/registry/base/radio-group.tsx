@@ -2,10 +2,9 @@
 
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
+import { cn } from "cn";
 import { createContext, useContext, type ComponentProps } from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/lib/utils";
 
 const radioGroupStyles = tv({
   base: "flex",

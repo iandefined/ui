@@ -48,7 +48,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/sidebar-01.json
 
 ## Next Steps
 
-- Follow the [Installation](/docs/installation) guide to set up Tailwind CSS v4 and the `cn()` utility in your project.
+- Follow the [Installation](/docs/installation) guide to set up Tailwind CSS v4 and the [`cn`](https://github.com/shadcn-ui/cn) package in your project.
 - Explore [Theming](/docs/theming) to customize OKLCH color tokens, spring physics, and border radii.
 - Read the [Forms Guide](/docs/forms) to compose validated form experiences.
 - Check out [Extending](/docs/extending) to author new components, blocks, or documentation pages.
@@ -1690,6 +1690,9 @@ compose it around the button content with `render`.
 Allows outside presses and Escape to dismiss the dialog. When `false`, the
 default corner close is omitted and the dialog can close only through
 `DialogCloseTrigger` or an externally controlled `open` value.
+Controls the backdrop treatment. Use `"brightness"` for a plain dark
+dimmer or `"transparent"` to retain modal interaction without visual
+dimming.
 Controls focus trapping, page scrolling, and pointer interaction outside the
 dialog. `false` leaves the page interactive, while `"trap-focus"` traps
 focus without locking page scrolling.
@@ -1850,7 +1853,7 @@ Set `position` on `Drawer` to choose the edge where the drawer opens.
 
 ### Snap Points
 
-Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position.
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. A `DrawerFooter` stays pinned while the panel changes between snap points.
 
 ### Floating Surface
 
@@ -1900,6 +1903,9 @@ Allows outside presses, Escape, and swipe gestures to dismiss the drawer.
 When `false`, swipe dragging is disabled, the drawer has no thumb, and it
 can close only through `DrawerCloseTrigger` or an externally controlled
 `open` value.
+Controls the backdrop treatment. Use `"brightness"` for a plain dark
+dimmer or `"transparent"` to retain modal interaction without visual
+dimming.
 Chooses the edge where the drawer opens and the direction used for swipe
 dismissal. An explicit `swipeDirection` still takes precedence.
 
@@ -3558,6 +3564,9 @@ without locking page scrolling.
 Allows outside presses and Escape to dismiss the sheet. When `false`, the
 sheet can close only through `SheetCloseTrigger` or an externally controlled
 `open` value.
+Controls the backdrop treatment. Use `"brightness"` for a plain dark
+dimmer or `"transparent"` to retain modal interaction without visual
+dimming.
 Prevents outside presses from closing the sheet. It defaults to `true` when
 `modal` is `false` or `"trap-focus"`.
 
@@ -3948,7 +3957,7 @@ Set `sticky="top"` or `sticky="bottom"` on `TableRow` to keep an important row v
 
 ### Resizable Columns
 
-Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor. On touch devices, swipe the table horizontally to reach off-screen columns, then drag a column separator to resize it. Cell and header text truncates instead of overlapping adjacent columns.
+Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor. On touch devices, swipe the table horizontally to reach off-screen columns, then drag a column separator to resize it. Cell and header text truncates instead of overlapping adjacent columns. Tables use a compact horizontal edge fade whenever content overflows.
 
 ### Wrapping Content
 
@@ -4579,6 +4588,7 @@ Follow these repository standards when authoring components:
 - **Animation and Reduced Motion**: When using Motion springs, check `useReducedMotion()` and add `motion-reduce:transition-none` to ensure animations gracefully disable for users with motion sensitivities.
 - **Deterministic Rendering**: Avoid runtime randomness such as `Math.random()` to prevent SSR hydration mismatches and React Compiler purity warnings.
 - **Exported Types**: Export component prop interfaces and key type unions (such as `MyComponentSize` or `MyComponentVariant`).
+- **Class Names**: Import `cn` from the `cn` package. Registry items that use it must declare `cn` in `dependencies`.
 
 ### Manifest Registration
 
@@ -5049,6 +5059,20 @@ For a new project, initialize shadcn first:
 npx shadcn@latest init
 ```
 
+Initialization installs the [`cn`](https://github.com/shadcn-ui/cn) package and
+creates `lib/utils.ts` with a compatibility re-export:
+
+```ts
+export { cn } from "cn";
+```
+
+For an existing project, migrate the old `clsx` and `tailwind-merge` helper
+with:
+
+```bash
+npx shadcn@latest migrate cn
+```
+
 ## Adding components
 
 ### CLI
@@ -5060,6 +5084,10 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 The CLI copies the component source into your project and installs the npm dependencies declared by the registry item.
+
+Every component that uses `cn` declares the package in its registry metadata, so
+the CLI installs it automatically. If you install a component manually, add
+`cn` to your project with your package manager.
 
 Then import it from the target path:
 

@@ -6,15 +6,16 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { useRender } from "@base-ui/react/use-render";
+import { cn } from "cn";
 import { CheckIcon, ChevronRightIcon } from "lucide-react";
 import { animate, useReducedMotion } from "motion/react";
 import * as React from "react";
 
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 type DrawerPosition = "right" | "left" | "top" | "bottom";
 type DrawerVariant = "default" | "floating";
+type DrawerOverlay = "blur" | "brightness" | "transparent";
 type DrawerSurfaceLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 type DrawerShadowLevel = number;
 type DrawerOnOpenChange = NonNullable<
@@ -24,9 +25,11 @@ type DrawerOnOpenChange = NonNullable<
 const DrawerContext = React.createContext<{
   position: DrawerPosition;
   dismissible: boolean;
+  overlay: DrawerOverlay;
 }>({
   dismissible: true,
   position: "bottom",
+  overlay: "blur",
 });
 
 const directionMap: Record<
@@ -114,8 +117,13 @@ function isDrawerSurfaceLevel(
 
 function getDrawerShadowClass(
   variant: DrawerVariant,
-  shadowLevel: DrawerShadowLevel
+  shadowLevel: DrawerShadowLevel,
+  position: DrawerPosition
 ) {
+  if (variant === "default" && position === "bottom") {
+    return "shadow-none";
+  }
+
   if (variant === "floating" && isDrawerSurfaceLevel(shadowLevel)) {
     return drawerShadowClasses[shadowLevel];
   }
@@ -189,6 +197,7 @@ const createDrawerHandle: typeof DrawerPrimitive.createHandle =
 
 interface DrawerProps extends DrawerPrimitive.Root.Props {
   dismissible?: boolean;
+  overlay?: DrawerOverlay;
   position?: DrawerPosition;
 }
 
@@ -198,6 +207,7 @@ function Drawer({
   onOpenChange,
   swipeDirection,
   position = "bottom",
+  overlay = "blur",
   ...props
 }: DrawerProps) {
   const handleOpenChange = React.useCallback<DrawerOnOpenChange>(
@@ -213,7 +223,7 @@ function Drawer({
   );
 
   return (
-    <DrawerContext.Provider value={{ dismissible, position }}>
+    <DrawerContext.Provider value={{ dismissible, overlay, position }}>
       <DrawerPrimitive.Root
         data-slot="drawer"
         disablePointerDismissal={disablePointerDismissal || !dismissible}
@@ -313,10 +323,15 @@ function DrawerBackdrop({
   className,
   ...props
 }: DrawerPrimitive.Backdrop.Props) {
+  const { overlay } = React.useContext(DrawerContext);
+
   return (
     <DrawerPrimitive.Backdrop
       className={cn(
-        "fixed inset-0 z-50 bg-black/40 opacity-[calc(1-var(--drawer-swipe-progress,0))] backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
+        "fixed inset-0 z-50 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
+        overlay === "blur" && "bg-black/40 backdrop-blur-sm",
+        overlay === "brightness" && "bg-black/50",
+        overlay === "transparent" && "bg-transparent",
         className
       )}
       data-slot="drawer-backdrop"
@@ -393,7 +408,7 @@ function DrawerPopup({
             variant === "floating"
               ? "rounded-2xl border border-border"
               : drawerInnerBorderClasses[position],
-            getDrawerShadowClass(variant, shadowLevel),
+            getDrawerShadowClass(variant, shadowLevel, position),
             "transition-[transform,box-shadow,height,background-color,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
             "focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid forced-colors:focus-visible:outline-[Highlight]",
             "[--peek:1.5rem] [--stack-step:0.05]",
@@ -415,6 +430,7 @@ function DrawerPopup({
                 "row-start-2",
                 "w-full",
                 "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]",
+                "[&_[data-slot=drawer-footer]]:-translate-y-[calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px))] [&_[data-slot=drawer-footer]]:transition-transform [&_[data-slot=drawer-footer]]:duration-300 [&_[data-slot=drawer-footer]]:ease-out data-swiping:[&_[data-slot=drawer-footer]]:transition-none",
                 "data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "-mb-[max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",

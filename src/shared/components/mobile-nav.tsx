@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
 import { useState } from "react";
 
@@ -12,7 +13,6 @@ import {
 } from "@/shared/components/ui/popover";
 import { ROUTES } from "@/shared/constants/routes";
 import { getDocsNavigationGroups } from "@/shared/lib/docs-navigation";
-import { cn } from "@/shared/lib/utils";
 
 const MobileLink = ({
   href,

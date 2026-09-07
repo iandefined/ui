@@ -1,9 +1,8 @@
 "use client";
 
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
+import { cn } from "cn";
 import { createContext, useContext, useMemo } from "react";
-
-import { cn } from "@/lib/utils";
 
 type PopoverAnimationPreset =
   | "none"

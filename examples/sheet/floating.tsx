@@ -18,10 +18,12 @@ const directions = [
 
 export default function SheetFloatingDemo() {
   return (
-    <div className="mx-auto grid w-full max-w-xs grid-cols-2 justify-items-center gap-2 sm:flex sm:max-w-none sm:justify-center">
+    <div className="grid w-full grid-cols-2 gap-3">
       {directions.map(({ label, side }) => (
         <Sheet key={side}>
-          <SheetTrigger render={<Button variant="outline" />}>
+          <SheetTrigger
+            render={<Button className="w-full" variant="outline" />}
+          >
             {label}
           </SheetTrigger>
           <SheetContent side={side} variant="floating">

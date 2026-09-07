@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
 import {
   ArrowRightIcon,
@@ -36,7 +37,6 @@ import { useRouter } from "@/shared/hooks/use-navigation";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
 import { getDocsNavigationGroups } from "@/shared/lib/docs-navigation";
 import { trackEvent } from "@/shared/lib/events";
-import { cn } from "@/shared/lib/utils";
 
 type DocUrlKind =
   | { kind: "theme"; slug: string }

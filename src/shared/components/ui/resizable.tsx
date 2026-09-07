@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { GripVerticalIcon } from "lucide-react";
 import {
   Group,
@@ -9,8 +10,6 @@ import {
   type PanelProps,
   type SeparatorProps,
 } from "react-resizable-panels";
-
-import { cn } from "@/shared/lib/utils";
 
 function ResizablePanelGroup({
   className,

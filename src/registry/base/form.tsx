@@ -1,9 +1,8 @@
 "use client";
 
 import type { AnyFormApi } from "@tanstack/react-form";
+import { cn } from "cn";
 import type { ComponentProps, FormEventHandler } from "react";
-
-import { cn } from "@/lib/utils";
 
 interface FormProps extends Omit<ComponentProps<"form">, "onSubmit"> {
   form: Pick<AnyFormApi, "handleSubmit">;

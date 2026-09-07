@@ -4,6 +4,7 @@ import {
   DatePicker as CalendarPrimitive,
   useDatePickerContext,
 } from "@ark-ui/react/date-picker";
+import { cn } from "cn";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { type ComponentProps } from "react";
 
@@ -13,7 +14,6 @@ import {
   useResponsiveCalendarMonths,
   type DatePickerRootDateProps,
 } from "@/lib/date";
-import { cn } from "@/lib/utils";
 
 interface CalendarProps extends Omit<
   DatePickerRootDateProps,

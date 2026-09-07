@@ -1,9 +1,9 @@
 "use client";
 
+import { cn } from "cn";
 import { useId } from "react";
 
 import { IconSwap } from "@/registry/base/icon-swap";
-import { cn } from "@/shared/lib/utils";
 
 type AnimatedThemeIconProps = React.ComponentProps<"svg"> & {
   state: "dark" | "light";

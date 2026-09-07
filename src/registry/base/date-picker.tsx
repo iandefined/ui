@@ -8,6 +8,7 @@ import { Portal } from "@ark-ui/react/portal";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import { useRender } from "@base-ui/react/use-render";
+import { cn } from "cn";
 import {
   Calendar,
   ChevronDownIcon,
@@ -42,7 +43,6 @@ import {
   useResponsiveCalendarMonths,
   type DatePickerRootDateProps,
 } from "@/lib/date";
-import { cn } from "@/lib/utils";
 
 export type DatePickerProps = Omit<DatePickerRootDateProps, "inline"> & {
   invalid?: boolean;

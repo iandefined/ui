@@ -4,6 +4,7 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
+import { cn } from "cn";
 import { PanelLeftIcon } from "lucide-react";
 import {
   createContext,
@@ -32,7 +33,6 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
-import { cn } from "@/shared/lib/utils";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

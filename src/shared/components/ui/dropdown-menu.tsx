@@ -1,9 +1,8 @@
 "use client";
 
 import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu";
+import { cn } from "cn";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
-
-import { cn } from "@/shared/lib/utils";
 
 type DropdownMenuPositionerProps = Pick<
   DropdownMenuPrimitive.Positioner.Props,

@@ -18,10 +18,12 @@ const positions: Array<{ value: DrawerPosition; label: string }> = [
 
 export default function DrawerPositionsDemo() {
   return (
-    <div className="mx-auto grid w-full max-w-xs grid-cols-2 justify-items-center gap-2 sm:flex sm:max-w-none sm:justify-center">
+    <div className="grid w-full grid-cols-2 gap-3">
       {positions.map(({ value, label }) => (
         <Drawer key={value} position={value}>
-          <DrawerTrigger render={<Button variant="outline" />}>
+          <DrawerTrigger
+            render={<Button className="w-full" variant="outline" />}
+          >
             {label}
           </DrawerTrigger>
           <DrawerPopup showBar>

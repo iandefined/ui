@@ -101,7 +101,7 @@ Set `sticky="top"` or `sticky="bottom"` on `TableRow` to keep an important row v
 
 ### Resizable Columns
 
-Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor. On touch devices, swipe the table horizontally to reach off-screen columns, then drag a column separator to resize it. Cell and header text truncates instead of overlapping adjacent columns.
+Enable column resizing by setting `resizable` on `Table`. An expanded interactive hitbox lets users drag column borders, highlighting the separator line on hover with a two-arrow resize cursor. On touch devices, swipe the table horizontally to reach off-screen columns, then drag a column separator to resize it. Cell and header text truncates instead of overlapping adjacent columns. Tables use a compact horizontal edge fade whenever content overflows.
 
 ### Wrapping Content
 

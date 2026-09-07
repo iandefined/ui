@@ -1,6 +1,7 @@
 "use client";
 
 import { Autocomplete } from "@base-ui/react/autocomplete";
+import { cn } from "cn";
 import { SearchIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -11,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { cn } from "@/shared/lib/utils";
 
 /**
  * Extra search terms can be attached to an item without changing the text

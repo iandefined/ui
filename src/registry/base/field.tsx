@@ -1,10 +1,10 @@
 "use client";
 
 import { Field as FieldPrimitive } from "@base-ui/react/field";
+import { cn } from "cn";
 import type { ComponentProps } from "react";
 
 import { inputVariants } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 
 function Field({ className, ...props }: FieldPrimitive.Root.Props) {
   return (

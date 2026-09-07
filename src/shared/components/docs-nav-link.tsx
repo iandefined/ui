@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { useCallback, useRef } from "react";
 
 import { Kbd } from "@/registry/base/kbd";
@@ -14,7 +15,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
-import { cn } from "@/shared/lib/utils";
 
 export const DocsNavLink = ({
   href,

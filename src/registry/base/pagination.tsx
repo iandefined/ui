@@ -1,10 +1,10 @@
 "use client";
 
+import { cn } from "cn";
 import { ChevronLeftIcon, ChevronRightIcon, EllipsisIcon } from "lucide-react";
 import * as React from "react";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 export type PaginationSize = "default" | "sm" | "lg";
 

@@ -262,9 +262,9 @@ catalogs:
     class-variance-authority:
       specifier: 0.7.1
       version: 0.7.1
-    clsx:
-      specifier: 2.1.1
-      version: 2.1.1
+    cn:
+      specifier: 0.2.6
+      version: 0.2.6
     fumadocs-mdx:
       specifier: 15.3.1
       version: 15.3.1
@@ -307,9 +307,6 @@ catalogs:
     sonner:
       specifier: 2.0.8
       version: 2.0.8
-    tailwind-merge:
-      specifier: 3.6.0
-      version: 3.6.0
     tailwindcss:
       specifier: 4.3.3
       version: 4.3.3
@@ -376,9 +373,9 @@ importers:
       class-variance-authority:
         specifier: 'catalog:'
         version: 0.7.1
-      clsx:
+      cn:
         specifier: 'catalog:'
-        version: 2.1.1
+        version: 0.2.6
       fumadocs-core:
         specifier: 16.15.0
         version: 16.15.0(@mdx-js/mdx@3.1.1(supports-color@10.2.2))(@tanstack/react-router@1.170.31(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/react@19.2.18)(lucide-react@1.33.0(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(zod@4.4.3)
@@ -427,9 +424,6 @@ importers:
       sonner:
         specifier: 'catalog:'
         version: 2.0.8(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      tailwind-merge:
-        specifier: 'catalog:'
-        version: 3.6.0
       tailwind-variants:
         specifier: ^3.3.1
         version: 3.3.1(tailwind-merge@3.6.0)(tailwindcss@4.3.3)
@@ -2993,6 +2987,11 @@ packages:
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
+
+  cn@0.2.6:
+    resolution: {integrity: sha512-+i4L0zUGgRcEnhsxueVrP7iBGxBx5iD0WOTYg1MwFEu2ZyCmH5Ov2V1cul2Ht5UchRQQgftCf4be/RxspuW6QQ==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   code-block-writer@13.0.3:
     resolution: {integrity: sha512-Oofo0pq3IKnsFtuHqSF7TqBfr71aeyZDVJ0HpmqB7FBM2qEigL0iPONSCZSO9pE9dZTAxANe5XHG9Uy0YMv8cg==}
@@ -7576,6 +7575,8 @@ snapshots:
   cli-spinners@2.9.2: {}
 
   clsx@2.1.1: {}
+
+  cn@0.2.6: {}
 
   code-block-writer@13.0.3: {}
 

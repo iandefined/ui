@@ -1,8 +1,7 @@
 import { useRender } from "@base-ui/react/use-render";
+import { cn } from "cn";
 import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
 import * as React from "react";
-
-import { cn } from "@/shared/lib/utils";
 
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;

@@ -1,12 +1,12 @@
 "use client";
 
+import { cn } from "cn";
 import * as React from "react";
 import { tv } from "tailwind-variants";
 
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 
 type InputProps = Omit<React.ComponentProps<"input">, "size"> & {
   size?: "sm" | "default" | "lg" | number;

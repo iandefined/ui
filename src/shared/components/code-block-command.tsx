@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { CopyButton } from "@/shared/components/copy-button";
@@ -14,7 +15,6 @@ import type { PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
 import type { Event } from "@/shared/lib/events";
 import { highlightCode } from "@/shared/lib/highlight-code";
-import { cn } from "@/shared/lib/utils";
 
 export const CodeBlockCommand = ({
   __npm__,

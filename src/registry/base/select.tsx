@@ -3,10 +3,9 @@
 // Adapted from Pure UI: https://github.com/MusKRI/pure-ui/tree/main/src/registry/pure-ui/ui/select
 
 import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { cn } from "cn";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { createContext, useContext, useMemo } from "react";
-
-import { cn } from "@/lib/utils";
 
 const cssAnimationPresets = {
   none: "transition-none",

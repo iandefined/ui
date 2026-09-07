@@ -1,10 +1,9 @@
 "use client";
 
 import { Accordion as BaseAccordion } from "@base-ui/react/accordion";
+import { cn } from "cn";
 import { ChevronDownIcon } from "lucide-react";
 import * as React from "react";
-
-import { cn } from "@/lib/utils";
 
 export type AccordionVariant =
   | "default"
@@ -212,7 +211,7 @@ function AccordionContent({
         "h-(--accordion-panel-height) overflow-hidden text-sm transition-[height,opacity] duration-250 ease-out data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0",
         // Inset / Nested variant
         "group-data-[variant=inset]/accordion:mx-px group-data-[variant=inset]/accordion:mt-1 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:bg-card dark:group-data-[variant=inset]/accordion:bg-muted group-data-[variant=inset]/accordion:p-4 group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
-        "group-data-[variant=nested]/accordion:mx-px group-data-[variant=nested]/accordion:mt-1 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
+        "group-data-[variant=nested]/accordion:mx-px group-data-[variant=nested]/accordion:mt-1 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]"
       )}
       {...props}
     >

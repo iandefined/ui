@@ -5,6 +5,7 @@ import {
   type ToastManager as BaseToastManager,
   type ToastObject as BaseToastObject,
 } from "@base-ui/react/toast";
+import { cn } from "cn";
 import {
   AlertCircle,
   CheckCircle2,
@@ -16,7 +17,6 @@ import {
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 import "@/styles/toast.css";
 

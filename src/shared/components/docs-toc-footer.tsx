@@ -1,11 +1,11 @@
 "use client";
 
+import { cn } from "cn";
 import { SquarePenIcon } from "lucide-react";
 
 import { GITHUB, LINK } from "@/shared/constants/links";
 import { DOCS_DIR } from "@/shared/lib/docs";
 import { trackEvent } from "@/shared/lib/events";
-import { cn } from "@/shared/lib/utils";
 
 export const DocsTocFooter = ({
   docId,

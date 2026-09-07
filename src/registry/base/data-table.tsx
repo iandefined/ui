@@ -19,6 +19,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
+import { cn } from "cn";
 import {
   ArrowDownIcon,
   ArrowUpDownIcon,
@@ -49,7 +50,6 @@ import {
   TableRow,
   type TableProps,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 
 interface DataTableContextValue<TData> {
   table: ReactTableInstance<TData>;

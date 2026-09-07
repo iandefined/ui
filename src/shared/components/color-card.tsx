@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import * as React from "react";
@@ -12,7 +13,6 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
-import { cn } from "@/shared/lib/utils";
 
 export interface ColorCardProps {
   color: string;

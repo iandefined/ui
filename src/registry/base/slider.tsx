@@ -1,6 +1,7 @@
 "use client";
 
 import { Slider as SliderPrimitive } from "@base-ui/react/slider";
+import { cn } from "cn";
 import {
   AnimatePresence,
   motion,
@@ -8,8 +9,6 @@ import {
   type Transition,
 } from "motion/react";
 import * as React from "react";
-
-import { cn } from "@/lib/utils";
 
 import { TooltipSurface } from "./tooltip";
 

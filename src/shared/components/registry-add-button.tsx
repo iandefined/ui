@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -29,7 +30,6 @@ import { SITE, UTM_PARAMS } from "@/shared/constants/site";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { trackEvent } from "@/shared/lib/events";
 import { addQueryParams } from "@/shared/lib/url";
-import { cn } from "@/shared/lib/utils";
 
 const title = "Add Registry";
 const registryNamespace = `@${SITE.NAME}`;

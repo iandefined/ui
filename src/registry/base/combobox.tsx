@@ -3,6 +3,7 @@
 // Adapted from Pure UI: https://github.com/MusKRI/pure-ui/tree/main/src/registry/pure-ui/ui/combobox
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
+import { cn } from "cn";
 import {
   createContext,
   useCallback,
@@ -18,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 type ComboboxContextValue = {
   chipsRef: RefObject<HTMLDivElement | null>;

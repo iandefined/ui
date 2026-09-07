@@ -1,10 +1,9 @@
 "use client";
 
 import { ContextMenu as ContextMenuPrimitive } from "@base-ui/react/context-menu";
+import { cn } from "cn";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 import * as React from "react";
-
-import { cn } from "@/shared/lib/utils";
 
 const ContextMenu = ({
   ...props

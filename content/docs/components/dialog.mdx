@@ -167,6 +167,15 @@ compose it around the button content with `render`.
     `DialogCloseTrigger` or an externally controlled `open` value.
   </ApiProp>
   <ApiProp
+    name="overlay"
+    fullType='"blur" | "brightness" | "transparent"'
+    defaultValue='"blur"'
+  >
+    Controls the backdrop treatment. Use `"brightness"` for a plain dark
+    dimmer or `"transparent"` to retain modal interaction without visual
+    dimming.
+  </ApiProp>
+  <ApiProp
     name="modal"
     fullType="boolean | 'trap-focus'"
     simpleType="string"

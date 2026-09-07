@@ -2,10 +2,9 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
+import { cn } from "cn";
 import { ChevronRightIcon, EllipsisIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
-
-import { cn } from "@/lib/utils";
 
 type BreadcrumbProps = ComponentProps<"nav"> & {
   size?: "sm" | "md" | "lg";

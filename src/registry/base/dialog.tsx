@@ -1,15 +1,16 @@
 "use client";
 
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
+import { cn } from "cn";
 import { XIcon } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 /** Whether the popup or the viewport owns vertical scrolling. */
 type DialogScroll = "inside" | "outside";
+type DialogOverlay = "blur" | "brightness" | "transparent";
 
 type DialogFadeEdge = "top" | "bottom" | "left" | "right" | "x" | "y";
 type DialogFadeEdges = boolean | DialogFadeEdge | DialogFadeEdge[];
@@ -18,22 +19,26 @@ type DialogOnOpenChange = NonNullable<BaseDialog.Root.Props["onOpenChange"]>;
 interface DialogConfigContextValue {
   dismissible: boolean;
   modal: boolean | "trap-focus";
+  overlay: DialogOverlay;
 }
 
 const DialogConfigContext = React.createContext<DialogConfigContextValue>({
   dismissible: true,
   modal: true,
+  overlay: "blur",
 });
 
 const DialogScrollContext = React.createContext<DialogScroll>("inside");
 
 interface DialogProps<Payload> extends BaseDialog.Root.Props<Payload> {
   dismissible?: boolean;
+  overlay?: DialogOverlay;
 }
 
 function Dialog<Payload>({
   dismissible = true,
   modal = true,
+  overlay = "blur",
   disablePointerDismissal,
   onOpenChange,
   ...props
@@ -51,8 +56,8 @@ function Dialog<Payload>({
   );
 
   const configValue = React.useMemo(
-    () => ({ dismissible, modal }),
-    [dismissible, modal]
+    () => ({ dismissible, modal, overlay }),
+    [dismissible, modal, overlay]
   );
 
   return (
@@ -86,11 +91,16 @@ function DialogCloseTrigger({ ...props }: BaseDialog.Close.Props) {
 }
 
 function DialogBackdrop({ className, ...props }: BaseDialog.Backdrop.Props) {
+  const { overlay } = React.useContext(DialogConfigContext);
+
   return (
     <BaseDialog.Backdrop
       data-slot="dialog-backdrop"
       className={cn(
-        "fixed inset-0 z-40 min-h-dvh bg-black/50 backdrop-blur-[2px] transition-opacity duration-200",
+        "fixed inset-0 z-40 min-h-dvh transition-opacity duration-200",
+        overlay === "blur" && "bg-black/40 backdrop-blur-sm",
+        overlay === "brightness" && "bg-black/50",
+        overlay === "transparent" && "bg-transparent",
         "data-starting-style:opacity-0 data-ending-style:opacity-0 motion-reduce:transition-none",
         className
       )}
@@ -194,6 +204,7 @@ function DialogContent({
       className={cn(
         "relative z-50 flex w-full max-w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-xl",
         "sm:max-w-lg",
+        "origin-top sm:origin-center",
         scroll === "inside" && "max-h-full min-h-0",
         isOutsideScroll && "outline-none",
         "-translate-y-[calc(1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))]",

@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import type { LucideIcon } from "lucide-react";
 import { createElement, type ElementType } from "react";
 
@@ -48,7 +49,6 @@ import {
   TabsTrigger,
 } from "@/shared/components/ui/tabs";
 import { useMdxPreview } from "@/shared/lib/mdx-preview-context";
-import { cn } from "@/shared/lib/utils";
 
 const mdxClassName = (
   isPreview: boolean,

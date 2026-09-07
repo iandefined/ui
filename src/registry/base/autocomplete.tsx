@@ -1,6 +1,7 @@
 "use client";
 
 import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
+import { cn } from "cn";
 import {
   createContext,
   useContext,
@@ -12,7 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 const AutocompleteRoot = BaseAutocomplete.Root;
 

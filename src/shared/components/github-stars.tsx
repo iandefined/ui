@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "cn";
+
 import { GithubIcon } from "@/shared/components/icons";
 import { buttonVariants } from "@/shared/components/ui/button";
 import {
@@ -10,7 +12,6 @@ import {
 import { LINK } from "@/shared/constants/links";
 import { UTM_PARAMS } from "@/shared/constants/site";
 import { addQueryParams } from "@/shared/lib/url";
-import { cn } from "@/shared/lib/utils";
 
 export const GitHubStars = ({
   stargazersCount,

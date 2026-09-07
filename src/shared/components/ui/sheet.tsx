@@ -1,9 +1,8 @@
 "use client";
 
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
+import { cn } from "cn";
 import { XIcon } from "lucide-react";
-
-import { cn } from "@/shared/lib/utils";
 
 const Sheet = ({
   ...props

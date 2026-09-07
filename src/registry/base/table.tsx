@@ -2,10 +2,10 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
+import { cn } from "cn";
 import * as React from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 export interface TableProps extends React.ComponentProps<"table"> {
   bordered?: boolean;
@@ -44,8 +44,7 @@ function Table({
   ...props
 }: TableProps) {
   const isStriped = Boolean(striped || stripedRows);
-  const resolvedScrollShadow =
-    scrollShadow ?? (resizable ? "horizontal" : "none");
+  const resolvedScrollShadow = scrollShadow ?? "horizontal";
 
   return (
     <TableContext.Provider value={{ resizable }}>
@@ -68,7 +67,7 @@ function Table({
           fadeColor={fadeColor}
           className="min-h-0 min-w-0 flex-1 rounded-lg overflow-hidden"
           viewportClassName={cn(
-            "!overscroll-x-none !overscroll-y-auto outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
+            "!overscroll-x-none !overscroll-y-auto [--scroll-area-fade-size:20px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
             viewportClassName
           )}
         >
@@ -437,7 +436,7 @@ function TableCell({ className, render, sticky, ...props }: TableCellProps) {
       "bg-card overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap dark:bg-background [[align=center]]:text-center [[align=right]]:text-right",
       "[&:has([role=checkbox])]:w-10 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
       "group-data-bordered/table:border-b group-data-bordered/table:border-r group-data-bordered/table:first:border-l group-data-bordered/table:border-border/70 dark:group-data-bordered/table:border-border",
-      "[[data-state=selected]_&]:bg-accent dark:[[data-state=selected]_&]:bg-accent",
+      "[[data-state=selected]_&]:bg-secondary/60 dark:[[data-state=selected]_&]:bg-muted/75",
       sticky === "left" && "sticky left-0 z-[1]",
       sticky === "right" && "sticky right-0 z-[1]",
       className

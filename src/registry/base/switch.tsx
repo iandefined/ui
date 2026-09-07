@@ -1,6 +1,7 @@
 "use client";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
+import { cn } from "cn";
 import {
   animate,
   motion,
@@ -9,8 +10,6 @@ import {
   type Transition,
 } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-import { cn } from "@/lib/utils";
 
 const REDUCED_TRANSITION: Transition = { duration: 0 };
 

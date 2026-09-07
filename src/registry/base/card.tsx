@@ -1,7 +1,6 @@
+import { cn } from "cn";
 import type React from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/lib/utils";
 
 const cardVariants = tv({
   base: "flex flex-col rounded-xl border border-border bg-card text-card-foreground",

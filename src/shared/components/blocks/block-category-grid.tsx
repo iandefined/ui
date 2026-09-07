@@ -1,7 +1,8 @@
+import { cn } from "cn";
+
 import { Link } from "@/shared/components/link";
 import { Badge } from "@/shared/components/ui/badge";
 import { blockCategories } from "@/shared/lib/blocks";
-import { cn } from "@/shared/lib/utils";
 
 const Line = ({ className }: { className?: string }) => (
   <div className={cn("h-2 rounded-full bg-muted-foreground/20", className)} />

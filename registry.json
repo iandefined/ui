@@ -12,8 +12,7 @@
         "@ark-ui/react",
         "@internationalized/date",
         "lucide-react",
-        "clsx",
-        "tailwind-merge"
+        "cn"
       ],
       "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
       "files": [
@@ -34,13 +33,7 @@
       "type": "registry:ui",
       "title": "Date Picker",
       "description": "An accessible Ark UI date picker with typed inputs, a calendar popup, presets and separate time inputs.",
-      "dependencies": [
-        "@ark-ui/react",
-        "@base-ui/react",
-        "lucide-react",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@ark-ui/react", "@base-ui/react", "lucide-react", "cn"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/calendar.json",
         "https://ui.iandefined.com/r/button.json",
@@ -64,8 +57,7 @@
         "@ark-ui/react",
         "@internationalized/date",
         "lucide-react",
-        "clsx",
-        "tailwind-merge"
+        "cn"
       ],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
@@ -89,12 +81,7 @@
       "type": "registry:ui",
       "title": "Button",
       "description": "A Base UI button with glossy default and custom-color treatments, variants, sections, and sizes.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/button.tsx",
@@ -108,12 +95,7 @@
       "type": "registry:ui",
       "title": "Button Group",
       "description": "A container that groups related buttons together with consistent styling.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "registryDependencies": ["https://ui.iandefined.com/r/separator.json"],
       "files": [
         {
@@ -128,12 +110,7 @@
       "type": "registry:ui",
       "title": "Breadcrumbs",
       "description": "A responsive breadcrumb trail with surface variants, sizes, custom separators, and collapsed paths.",
-      "dependencies": [
-        "@base-ui/react",
-        "lucide-react",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "lucide-react", "cn"],
       "files": [
         {
           "path": "src/registry/base/breadcrumbs.tsx",
@@ -147,7 +124,7 @@
       "type": "registry:ui",
       "title": "Card",
       "description": "A compound card with default and inset frame variants.",
-      "dependencies": ["tailwind-variants", "clsx", "tailwind-merge"],
+      "dependencies": ["tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/card.tsx",
@@ -161,12 +138,7 @@
       "type": "registry:ui",
       "title": "Checkbox",
       "description": "A Base UI checkbox component with sizes, radius variants, and a snappy indicator animation.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/checkbox.tsx",
@@ -180,7 +152,7 @@
       "type": "registry:ui",
       "title": "Switch",
       "description": "A draggable Base UI switch with spring-based thumb animation.",
-      "dependencies": ["@base-ui/react", "motion", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "motion", "cn"],
       "files": [
         {
           "path": "src/registry/base/switch.tsx",
@@ -194,7 +166,7 @@
       "type": "registry:ui",
       "title": "Avatar",
       "description": "An image element with a fallback for representing the user.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/avatar.tsx",
@@ -208,7 +180,7 @@
       "type": "registry:ui",
       "title": "Slider",
       "description": "A Base UI slider with compact track and rectangular control layouts, cursor previews, and editable values.",
-      "dependencies": ["@base-ui/react", "motion", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "motion", "cn"],
       "registryDependencies": ["https://ui.iandefined.com/r/tooltip.json"],
       "files": [
         {
@@ -223,12 +195,7 @@
       "type": "registry:ui",
       "title": "Radio Group",
       "description": "A Base UI radio group component with orientation, sizes, and a snappy indicator animation.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/radio-group.tsx",
@@ -242,12 +209,7 @@
       "type": "registry:ui",
       "title": "Badge",
       "description": "A compact label with semantic, translucent, and dot variants.",
-      "dependencies": [
-        "@base-ui/react",
-        "class-variance-authority",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "cn"],
       "cssVars": {
         "light": {
           "destructive-foreground": "var(--color-white)",
@@ -285,13 +247,7 @@
       "type": "registry:ui",
       "title": "Drawer",
       "description": "A swipe gesture drawer with positions, snap points, nested panels, and composed menu rows.",
-      "dependencies": [
-        "@base-ui/react",
-        "lucide-react",
-        "motion",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "lucide-react", "motion", "cn"],
       "registryDependencies": ["https://ui.iandefined.com/r/scroll-area.json"],
       "files": [
         {
@@ -310,8 +266,7 @@
         "@base-ui/react",
         "class-variance-authority",
         "lucide-react",
-        "clsx",
-        "tailwind-merge"
+        "cn"
       ],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
@@ -330,7 +285,7 @@
       "type": "registry:ui",
       "title": "Kbd",
       "description": "Displays textual keyboard input and shortcut combinations.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/kbd.tsx",
@@ -344,7 +299,7 @@
       "type": "registry:ui",
       "title": "Label",
       "description": "An accessible label for form controls.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/label.tsx",
@@ -581,7 +536,7 @@
       "type": "registry:ui",
       "title": "Marquee",
       "description": "A seamless content marquee that measures overflow and respects reduced motion.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/marquee.tsx",
@@ -595,7 +550,7 @@
       "type": "registry:ui",
       "title": "Skeleton",
       "description": "A shimmer placeholder with configurable corners and animation.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/skeleton.tsx",
@@ -609,12 +564,7 @@
       "type": "registry:ui",
       "title": "Dropdown Menu",
       "description": "A keyboard-navigable menu with checkbox, radio, and submenu items.",
-      "dependencies": [
-        "@base-ui/react",
-        "clsx",
-        "tailwind-merge",
-        "lucide-react"
-      ],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "files": [
         {
           "path": "src/registry/base/dropdown-menu.tsx",
@@ -628,12 +578,7 @@
       "type": "registry:ui",
       "title": "Dialog",
       "description": "A modal window with composed content, scroll modes, and detached triggers.",
-      "dependencies": [
-        "@base-ui/react",
-        "clsx",
-        "tailwind-merge",
-        "lucide-react"
-      ],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
         "https://ui.iandefined.com/r/scroll-area.json"
@@ -651,7 +596,7 @@
       "type": "registry:ui",
       "title": "Spinner",
       "description": "An SVG loading indicator with four sizes and a rotating arc.",
-      "dependencies": ["tailwind-variants", "clsx", "tailwind-merge"],
+      "dependencies": ["tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/spinner.tsx",
@@ -665,7 +610,7 @@
       "type": "registry:ui",
       "title": "Separator",
       "description": "A visual or semantic divider with horizontal and vertical orientations.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/separator.tsx",
@@ -679,7 +624,7 @@
       "type": "registry:ui",
       "title": "Scroll Area",
       "description": "A scrollable region with optional custom scrollbars and conditional background fades.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/scroll-area.tsx",
@@ -693,7 +638,7 @@
       "type": "registry:ui",
       "title": "Field",
       "description": "An accessible form field with automatic labels, descriptions, validation state, and error messages.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "registryDependencies": ["https://ui.iandefined.com/r/input.json"],
       "files": [
         {
@@ -708,7 +653,7 @@
       "type": "registry:ui",
       "title": "Form",
       "description": "A TanStack Form submission wrapper for composing type-safe forms with registry controls.",
-      "dependencies": ["@tanstack/react-form", "clsx", "tailwind-merge"],
+      "dependencies": ["@tanstack/react-form", "cn"],
       "files": [
         {
           "path": "src/registry/base/form.tsx",
@@ -722,7 +667,7 @@
       "type": "registry:ui",
       "title": "Fieldset",
       "description": "A semantic field group with a styled legend.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/fieldset.tsx",
@@ -736,12 +681,7 @@
       "type": "registry:ui",
       "title": "Input",
       "description": "A styled Base UI text input with size variants.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/input.tsx",
@@ -755,13 +695,7 @@
       "type": "registry:ui",
       "title": "Input OTP",
       "description": "An accessible one-time-code input with animated slots, invalid states, and masked entry.",
-      "dependencies": [
-        "input-otp",
-        "motion",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["input-otp", "motion", "tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/input-otp.tsx",
@@ -775,12 +709,7 @@
       "type": "registry:ui",
       "title": "Number Field",
       "description": "A numeric input with increment, decrement, and scrub controls.",
-      "dependencies": [
-        "@base-ui/react",
-        "tailwind-variants",
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "files": [
         {
           "path": "src/registry/base/number-field.tsx",
@@ -794,7 +723,7 @@
       "type": "registry:ui",
       "title": "Textarea",
       "description": "A styled Base UI multiline text control with size variants.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/textarea.tsx",
@@ -808,7 +737,7 @@
       "type": "registry:ui",
       "title": "Input Group",
       "description": "Composable input and textarea controls with addons and buttons.",
-      "dependencies": ["tailwind-variants", "clsx", "tailwind-merge"],
+      "dependencies": ["tailwind-variants", "cn"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
         "https://ui.iandefined.com/r/input.json",
@@ -827,7 +756,7 @@
       "type": "registry:ui",
       "title": "Tooltip",
       "description": "Contextual information shown on hover or focus.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/tooltip.tsx",
@@ -841,12 +770,7 @@
       "type": "registry:ui",
       "title": "Toast",
       "description": "Brief, self-dismissing feedback with stacked and anchored placement.",
-      "dependencies": [
-        "@base-ui/react",
-        "clsx",
-        "tailwind-merge",
-        "lucide-react"
-      ],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
       "files": [
         {
@@ -866,7 +790,7 @@
       "type": "registry:ui",
       "title": "Popover",
       "description": "An accessible popup anchored to a button.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/popover.tsx",
@@ -880,12 +804,7 @@
       "type": "registry:ui",
       "title": "Select",
       "description": "An accessible, customizable select component.",
-      "dependencies": [
-        "@base-ui/react",
-        "clsx",
-        "tailwind-merge",
-        "lucide-react"
-      ],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "files": [
         {
           "path": "src/registry/base/select.tsx",
@@ -936,7 +855,7 @@
       "type": "registry:ui",
       "title": "Combobox",
       "description": "A filterable input for selecting one or more predefined values.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/input.json",
         "https://ui.iandefined.com/r/label.json",
@@ -955,7 +874,7 @@
       "type": "registry:ui",
       "title": "Autocomplete",
       "description": "A filterable text input that suggests matching options while accepting free-form text.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/input.json",
         "https://ui.iandefined.com/r/label.json",
@@ -988,7 +907,7 @@
       "type": "registry:ui",
       "title": "Tabs",
       "description": "A component for toggling between related panels on the same page.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/tabs.tsx",
@@ -1002,7 +921,7 @@
       "type": "registry:ui",
       "title": "Transition Panel",
       "description": "A compound panel that swaps between named views with direction-aware transitions and automatic height animation.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/transition-panel.tsx",
@@ -1016,7 +935,7 @@
       "type": "registry:ui",
       "title": "Table",
       "description": "A responsive table with sticky header, scroll area container, row dividers, striped and bordered variants.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "registryDependencies": ["https://ui.iandefined.com/r/scroll-area.json"],
       "files": [
         {
@@ -1031,7 +950,7 @@
       "type": "registry:ui",
       "title": "Pagination",
       "description": "Pagination navigation with page links, previous and next triggers, and ellipsis disclosure.",
-      "dependencies": ["clsx", "lucide-react", "tailwind-merge"],
+      "dependencies": ["cn", "lucide-react"],
       "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
       "files": [
         {
@@ -1046,12 +965,7 @@
       "type": "registry:ui",
       "title": "Data Table",
       "description": "A feature-rich data table built with TanStack Table, supporting sorting, filtering, row selection, column visibility, and pagination.",
-      "dependencies": [
-        "@tanstack/react-table",
-        "clsx",
-        "lucide-react",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@tanstack/react-table", "cn", "lucide-react"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
         "https://ui.iandefined.com/r/checkbox.json",
@@ -1072,12 +986,7 @@
       "type": "registry:ui",
       "title": "Accordion",
       "description": "A vertically stacked set of interactive headings that reveal or hide associated content sections.",
-      "dependencies": [
-        "@base-ui/react",
-        "clsx",
-        "lucide-react",
-        "tailwind-merge"
-      ],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "files": [
         {
           "path": "src/registry/base/accordion.tsx",
@@ -1091,7 +1000,7 @@
       "type": "registry:ui",
       "title": "Collapsible",
       "description": "An interactive component which expands and collapses content with smooth animations.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/collapsible.tsx",
@@ -1105,7 +1014,7 @@
       "type": "registry:ui",
       "title": "Shimmer",
       "description": "A sweeping light gradient shimmer animation for text elements.",
-      "dependencies": ["@base-ui/react", "clsx", "tailwind-merge"],
+      "dependencies": ["@base-ui/react", "cn"],
       "files": [
         {
           "path": "src/registry/base/shimmer.tsx",
@@ -1119,7 +1028,7 @@
       "type": "registry:ui",
       "title": "Twemoji",
       "description": "Render Unicode emoji as Twemoji SVG images inline with text.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/twemoji.tsx",
@@ -1133,7 +1042,7 @@
       "type": "registry:ui",
       "title": "Noise Texture",
       "description": "An SVG fractal noise layer using feTurbulence for subtle texture overlays.",
-      "dependencies": ["clsx", "tailwind-merge"],
+      "dependencies": ["cn"],
       "files": [
         {
           "path": "src/registry/base/noise-texture.tsx",

@@ -1,10 +1,9 @@
 "use client";
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react";
+import { cn } from "cn";
 import React, { createContext, useContext, useState } from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/lib/utils";
 
 const checkboxRootStyles = tv({
   base: [

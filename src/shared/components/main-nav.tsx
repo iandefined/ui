@@ -1,9 +1,10 @@
 "use client";
 
+import { cn } from "cn";
+
 import { Link } from "@/shared/components/link";
 import { Button } from "@/shared/components/ui/button";
 import { usePathname } from "@/shared/hooks/use-navigation";
-import { cn } from "@/shared/lib/utils";
 
 export const MainNav = ({
   items,

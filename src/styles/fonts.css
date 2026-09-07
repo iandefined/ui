@@ -1,4 +1,12 @@
-/* Fontsource self-hosted fonts. Keep these URLs in sync with the preload links in __root.tsx. */
+/* Fontsource self-hosted fonts and family tokens. */
+
+:root {
+  --font-sans: "Geist Variable", Geist, ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+  --font-inter: "Geist Variable", Geist, ui-sans-serif, system-ui, sans-serif;
+}
 
 @font-face {
   font-family: "Geist Variable";

@@ -4,10 +4,9 @@ import {
   Button as BaseButton,
   type ButtonProps as BaseButtonProps,
 } from "@base-ui/react/button";
+import { cn } from "cn";
 import type { CSSProperties, ReactNode } from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/lib/utils";
 
 const buttonVariants = tv({
   base: [

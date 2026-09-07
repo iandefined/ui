@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import {
   OTPInput,
   OTPInputContext as OTPInputContextPrimitive,
@@ -19,8 +20,6 @@ import {
   type ReactNode,
 } from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/lib/utils";
 
 type InputOTPSize = NonNullable<InputOTPProps["size"]>;
 type InputOTPVariant = NonNullable<InputOTPProps["variant"]>;

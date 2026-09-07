@@ -3,9 +3,8 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva } from "class-variance-authority";
+import { cn } from "cn";
 import type React from "react";
-
-import { cn } from "@/lib/utils";
 
 const badgeColors = {
   gray: "var(--muted-foreground)",

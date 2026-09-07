@@ -1,8 +1,7 @@
 "use client";
 
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
-
-import { cn } from "@/shared/lib/utils";
+import { cn } from "cn";
 
 const Popover = ({
   ...props

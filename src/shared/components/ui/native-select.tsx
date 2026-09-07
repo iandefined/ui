@@ -1,8 +1,7 @@
 "use client";
 
+import { cn } from "cn";
 import { ChevronDownIcon } from "lucide-react";
-
-import { cn } from "@/shared/lib/utils";
 
 const NativeSelect = ({
   className,

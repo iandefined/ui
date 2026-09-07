@@ -1,10 +1,9 @@
 "use client";
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
+import { cn } from "cn";
 import type * as React from "react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-
-import { cn } from "@/lib/utils";
 
 type TabsVariant = NonNullable<TabsProps["variant"]>;
 

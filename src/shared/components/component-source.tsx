@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { Suspense, use } from "react";
 
 import { CodeCollapsibleWrapper } from "@/shared/components/code-collapsible-wrapper";
@@ -10,7 +11,6 @@ import {
   getRegistryItem,
   readOptionalFromRoot,
 } from "@/shared/lib/registry";
-import { cn } from "@/shared/lib/utils";
 
 export type ComponentSourceProps = {
   name?: string;

@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import {
   ChevronRightIcon,
   FileIcon,
@@ -25,7 +26,6 @@ import type { RegistryBlock } from "@/shared/lib/blocks";
 import { formatCode } from "@/shared/lib/format-code";
 import { highlightCode } from "@/shared/lib/highlight-code";
 import { readOptionalFromRoot } from "@/shared/lib/registry";
-import { cn } from "@/shared/lib/utils";
 
 type CodeFile = RegistryBlock["files"][number] & {
   displayPath: string;

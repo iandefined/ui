@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { useEffect, useRef, useState } from "react";
 
 import { TextMorph } from "@/registry/base/text-morph";
@@ -14,7 +15,6 @@ import {
 import { SITE } from "@/shared/constants/site";
 import type { PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
-import { cn } from "@/shared/lib/utils";
 
 import registry from "../../../registry.json";
 

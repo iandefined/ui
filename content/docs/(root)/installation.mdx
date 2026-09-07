@@ -18,6 +18,20 @@ For a new project, initialize shadcn first:
 npx shadcn@latest init
 ```
 
+Initialization installs the [`cn`](https://github.com/shadcn-ui/cn) package and
+creates `lib/utils.ts` with a compatibility re-export:
+
+```ts
+export { cn } from "cn";
+```
+
+For an existing project, migrate the old `clsx` and `tailwind-merge` helper
+with:
+
+```bash
+npx shadcn@latest migrate cn
+```
+
 ## Adding components
 
 ### CLI
@@ -29,6 +43,10 @@ npx shadcn@latest add https://ui.iandefined.com/r/button.json
 ```
 
 The CLI copies the component source into your project and installs the npm dependencies declared by the registry item.
+
+Every component that uses `cn` declares the package in its registry metadata, so
+the CLI installs it automatically. If you install a component manually, add
+`cn` to your project with your package manager.
 
 Then import it from the target path:
 

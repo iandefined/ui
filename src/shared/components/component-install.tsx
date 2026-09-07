@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/registry/base/tabs";
 import { CodeBlockCommand } from "@/shared/components/code-block-command";
 import { ComponentSource } from "@/shared/components/component-source";
 import { useConfig } from "@/shared/hooks/use-config";
-import { getRegistryItemSync, type RegistryFile } from "@/shared/lib/registry";
+import { getRegistryItemSync } from "@/shared/lib/registry";
 
 export type ComponentInstallProps = {
   name: string;
@@ -14,9 +14,6 @@ export type ComponentInstallProps = {
 
 const registryUrl = (name: string) =>
   `https://ui.iandefined.com/r/${name}.json`;
-
-const hasCnImport = (files: RegistryFile[]) =>
-  files.some((file) => /from\s*["']@\/lib\/utils["']/.test(file.content ?? ""));
 
 const dependenciesCommand = (dependencies: string[]) => dependencies.join(" ");
 
@@ -75,8 +72,6 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
   const sourceFiles = files.filter((file) => file.type !== "registry:style");
   const dependencies = item.dependencies ?? [];
   const registryDependencies = item.registryDependencies ?? [];
-  const needsCn = hasCnImport(sourceFiles);
-
   return (
     <div className="not-prose my-6">
       <Tabs
@@ -121,20 +116,6 @@ export function ComponentInstall({ name }: ComponentInstallProps) {
                 __pnpm__={`pnpm add ${dependenciesCommand(dependencies)}`}
                 __yarn__={`yarn add ${dependenciesCommand(dependencies)}`}
                 __bun__={`bun add ${dependenciesCommand(dependencies)}`}
-              />
-            </div>
-          ) : null}
-          {needsCn ? (
-            <div className="space-y-2 text-sm">
-              <p className="font-medium">
-                Ensure the <code>cn</code> utility exists at{" "}
-                <code>lib/utils.ts</code>.
-              </p>
-              <ComponentSource
-                code={`import { clsx, type ClassValue } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`}
-                language="ts"
-                title="lib/utils.ts"
-                collapsible={false}
               />
             </div>
           ) : null}

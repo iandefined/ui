@@ -1,10 +1,9 @@
 "use client";
 
 import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field";
+import { cn } from "cn";
 import * as React from "react";
 import { tv } from "tailwind-variants";
-
-import { cn } from "@/shared/lib/utils";
 
 type NumberFieldSize = "sm" | "default" | "lg";
 

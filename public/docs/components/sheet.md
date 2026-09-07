@@ -153,6 +153,9 @@ without locking page scrolling.
 Allows outside presses and Escape to dismiss the sheet. When `false`, the
 sheet can close only through `SheetCloseTrigger` or an externally controlled
 `open` value.
+Controls the backdrop treatment. Use `"brightness"` for a plain dark
+dimmer or `"transparent"` to retain modal interaction without visual
+dimming.
 Prevents outside presses from closing the sheet. It defaults to `true` when
 `modal` is `false` or `"trap-focus"`.
 

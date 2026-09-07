@@ -1,9 +1,10 @@
+import { cn } from "cn";
+
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from "@/shared/components/ui/alert";
-import { cn } from "@/shared/lib/utils";
 
 export const Callout = ({
   title,

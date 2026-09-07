@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { MenuIcon, TextAlignStart } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -10,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { cn } from "@/shared/lib/utils";
 
 const headingById = (id: string): Element | null =>
   document.querySelector(`#${CSS.escape(id)}`);

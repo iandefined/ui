@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { cn } from "cn";
 import { createElement } from "react";
 
 import { getRegistryComponent } from "@/shared/lib/registry";
-import { cn } from "@/shared/lib/utils";
 
 export const Route = createFileRoute("/view/$name")({
   component: RegistryViewRoute,

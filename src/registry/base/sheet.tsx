@@ -2,12 +2,12 @@
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { cva } from "class-variance-authority";
+import { cn } from "cn";
 import { XIcon } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 type SheetSide = "right" | "left" | "top" | "bottom";
 type SheetVariant = "default" | "floating";
@@ -16,6 +16,7 @@ type SheetSurfaceLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 type SheetShadowLevel = number;
 type SheetFadeEdge = "top" | "bottom" | "left" | "right" | "x" | "y";
 type SheetFadeEdges = boolean | SheetFadeEdge | SheetFadeEdge[];
+type SheetOverlay = "blur" | "brightness" | "transparent";
 type SheetOnOpenChange = NonNullable<
   DialogPrimitive.Root.Props["onOpenChange"]
 >;
@@ -23,11 +24,13 @@ type SheetOnOpenChange = NonNullable<
 interface SheetConfigContextValue {
   modal: boolean | "trap-focus";
   side: SheetSide | null;
+  overlay: SheetOverlay;
 }
 
 const SheetConfigContext = React.createContext<SheetConfigContextValue>({
   modal: true,
   side: null,
+  overlay: "blur",
 });
 
 const sheetShadowClasses: Record<SheetSurfaceLevel, string> = {
@@ -217,11 +220,13 @@ const sheetContentVariants = cva(
 
 interface SheetProps<Payload> extends DialogPrimitive.Root.Props<Payload> {
   dismissible?: boolean;
+  overlay?: SheetOverlay;
 }
 
 function Sheet<Payload>({
   dismissible = true,
   modal = true,
+  overlay = "blur",
   disablePointerDismissal,
   onOpenChange,
   ...props
@@ -241,8 +246,8 @@ function Sheet<Payload>({
   );
 
   const configValue = React.useMemo(
-    () => ({ modal, side: parentConfig.side }),
-    [modal, parentConfig.side]
+    () => ({ modal, side: parentConfig.side, overlay }),
+    [modal, overlay, parentConfig.side]
   );
 
   return (
@@ -278,12 +283,16 @@ function SheetCloseTrigger({ ...props }: DialogPrimitive.Close.Props) {
 
 function SheetBackdrop({
   className,
+  overlay = "blur",
   ...props
-}: DialogPrimitive.Backdrop.Props) {
+}: DialogPrimitive.Backdrop.Props & { overlay?: SheetOverlay }) {
   return (
     <DialogPrimitive.Backdrop
       className={cn(
-        "fixed inset-0 z-40 min-h-dvh bg-black/50 backdrop-blur-[2px] transition-opacity duration-200",
+        "fixed inset-0 z-40 min-h-dvh transition-opacity duration-200",
+        overlay === "blur" && "bg-black/40 backdrop-blur-sm",
+        overlay === "brightness" && "bg-black/50",
+        overlay === "transparent" && "bg-transparent",
         "data-starting-style:opacity-0 data-ending-style:opacity-0 motion-reduce:transition-none",
         className
       )}
@@ -334,16 +343,19 @@ function SheetContent({
 }: SheetContentProps) {
   const parentConfig = React.useContext(SheetConfigContext);
   const side = parentConfig.side ?? sideProp ?? "right";
-  const { modal } = parentConfig;
+  const { modal, overlay } = parentConfig;
   const isModal = modal === true;
   const isNested = parentConfig.side !== null;
-  const contentConfig = React.useMemo(() => ({ modal, side }), [modal, side]);
+  const contentConfig = React.useMemo(
+    () => ({ modal, overlay, side }),
+    [modal, overlay, side]
+  );
 
   return (
     <SheetPortal>
       {isModal && (
         <SheetBackdrop
-          className={isNested ? "bg-transparent" : undefined}
+          overlay={isNested ? "transparent" : overlay}
           forceRender={isNested}
         />
       )}

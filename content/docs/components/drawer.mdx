@@ -112,7 +112,7 @@ Set `position` on `Drawer` to choose the edge where the drawer opens.
 
 ### Snap Points
 
-Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position.
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. A `DrawerFooter` stays pinned while the panel changes between snap points.
 
 <ComponentPreview name="drawer/snap-points" />
 
@@ -180,6 +180,15 @@ Root component that provides the position context and maps it to Base UI's `swip
     When `false`, swipe dragging is disabled, the drawer has no thumb, and it
     can close only through `DrawerCloseTrigger` or an externally controlled
     `open` value.
+  </ApiProp>
+  <ApiProp
+    name="overlay"
+    fullType='"blur" | "brightness" | "transparent"'
+    defaultValue='"blur"'
+  >
+    Controls the backdrop treatment. Use `"brightness"` for a plain dark
+    dimmer or `"transparent"` to retain modal interaction without visual
+    dimming.
   </ApiProp>
   <ApiProp
     name="position"
