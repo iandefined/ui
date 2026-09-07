@@ -58,12 +58,12 @@ const ComponentCode = ({
   >
     {title ? (
       <figcaption
-        className="text-code-foreground flex items-center gap-2 [&_svg]:size-4 [&_svg]:opacity-70"
+        className="text-code-foreground flex min-w-0 items-center gap-2 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:opacity-70"
         data-language={language}
         data-rehype-pretty-code-title=""
       >
         {getIconForLanguageExtension(language)}
-        {title}
+        <span className="min-w-0 flex-1 truncate">{title}</span>
       </figcaption>
     ) : null}
     <CopyButton event="copy_primitive_code" value={copyCode} />

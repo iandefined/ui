@@ -126,6 +126,10 @@
     margin-inline: 0;
   }
 
+  [data-slot="collapsible-content"] [data-rehype-pretty-code-title] {
+    padding-inline-end: calc(var(--spacing) * 32);
+  }
+
   [data-rehype-pretty-code-title] {
     border-bottom: color-mix(in oklab, var(--border) 30%, transparent);
     border-bottom-width: 1px;
