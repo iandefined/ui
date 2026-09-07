@@ -164,7 +164,7 @@ function DialogViewport({
 }: BaseDialog.Viewport.Props & { scroll?: DialogScroll }) {
   const { modal } = React.useContext(DialogConfigContext);
   const dialogStack = React.useContext(DialogStackContext);
-  const isStackPositioned = dialogStack?.offset !== null;
+  const isStackPositioned = dialogStack?.offset != null;
 
   return (
     <BaseDialog.Viewport
@@ -233,6 +233,20 @@ function DialogContent({
     (node: HTMLDivElement | null) => {
       popupRef.current = node;
 
+      if (node) {
+        window.requestAnimationFrame(() => {
+          if (
+            node.isConnected &&
+            window
+              .getComputedStyle(node)
+              .getPropertyValue("--nested-dialogs")
+              .trim() === "0"
+          ) {
+            dialogStack?.setActivePopup(node);
+          }
+        });
+      }
+
       if (typeof ref !== "function") {
         if (ref) ref.current = node;
 
@@ -250,7 +264,7 @@ function DialogContent({
         else ref(null);
       };
     },
-    [ref]
+    [dialogStack, ref]
   );
 
   const updateStackOffset = React.useCallback(() => {
@@ -288,13 +302,18 @@ function DialogContent({
     resizeObserver.observe(popup);
     window.addEventListener("resize", updateStackOffset);
     viewport?.addEventListener("resize", updateStackOffset);
-    updateStackOffset();
+    // Base UI attaches the portal after this layout effect. Measure on the
+    // following frame so the popup can resolve its owning viewport.
+    let animationFrame = window.requestAnimationFrame(() => {
+      animationFrame = window.requestAnimationFrame(updateStackOffset);
+    });
 
     return () => {
       observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateStackOffset);
       viewport?.removeEventListener("resize", updateStackOffset);
+      window.cancelAnimationFrame(animationFrame);
     };
   }, [updateStackOffset]);
 
