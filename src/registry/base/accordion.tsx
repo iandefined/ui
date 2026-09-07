@@ -36,7 +36,7 @@ function Accordion({
         "group/accordion flex w-full flex-col",
         variant === "split" && "space-y-2",
         variant === "outline" &&
-          "bg-card overflow-hidden rounded-xl border border-border",
+          "bg-card overflow-hidden rounded-lg border border-border",
         isInset && "rounded-xl border border-border bg-muted dark:bg-card p-1",
         className
       )}
@@ -52,7 +52,7 @@ function AccordionItem({ className, ...props }: AccordionItemProps) {
     <BaseAccordion.Item
       data-slot="accordion-item"
       className={cn(
-        "transition-[margin,border-radius,border] duration-200 ease-out",
+        "ease-[cubic-bezier(0.16,1,0.3,1)] transition-[margin,border-radius,border] duration-250",
         // Default variant
         "group-data-[variant=default]/accordion:border-b group-data-[variant=default]/accordion:border-border group-data-[variant=default]/accordion:last:border-b-0",
         // Split variant
@@ -71,14 +71,14 @@ function AccordionItem({ className, ...props }: AccordionItemProps) {
         "group-data-[variant=isolated-bordered]/accordion:[[data-open]+&]:rounded-t-lg",
         "group-data-[variant=isolated-bordered]/accordion:[&:has(+_[data-open])]:rounded-b-lg",
         // Isolated filled variant
-        "group-data-[variant=isolated-filled]/accordion:bg-muted dark:group-data-[variant=isolated-filled]/accordion:bg-card group-data-[variant=isolated-filled]/accordion:overflow-hidden",
+        "group-data-[variant=isolated-filled]/accordion:bg-muted group-data-[variant=isolated-filled]/accordion:overflow-hidden",
         "group-data-[variant=isolated-filled]/accordion:data-open:my-2 group-data-[variant=isolated-filled]/accordion:data-open:rounded-lg",
         "group-data-[variant=isolated-filled]/accordion:first:rounded-t-lg group-data-[variant=isolated-filled]/accordion:data-open:first:mt-0",
         "group-data-[variant=isolated-filled]/accordion:last:rounded-b-lg group-data-[variant=isolated-filled]/accordion:data-open:last:mb-0",
         "group-data-[variant=isolated-filled]/accordion:[[data-open]+&]:rounded-t-lg",
         "group-data-[variant=isolated-filled]/accordion:[&:has(+_[data-open])]:rounded-b-lg",
         // Isolated filled bordered variant
-        "group-data-[variant=isolated-filled-bordered]/accordion:bg-muted dark:group-data-[variant=isolated-filled-bordered]/accordion:bg-card group-data-[variant=isolated-filled-bordered]/accordion:overflow-hidden",
+        "group-data-[variant=isolated-filled-bordered]/accordion:bg-muted group-data-[variant=isolated-filled-bordered]/accordion:overflow-hidden",
         "group-data-[variant=isolated-filled-bordered]/accordion:not-last:border-border group-data-[variant=isolated-filled-bordered]/accordion:not-last:border-b",
         "group-data-[variant=isolated-filled-bordered]/accordion:[&:has(+_[data-open])]:border-transparent",
         "group-data-[variant=isolated-filled-bordered]/accordion:data-open:border-transparent",
@@ -135,7 +135,7 @@ function AccordionTrigger({
         <span className="text-muted-foreground shrink-0" aria-hidden="true">
           <ChevronDownIcon
             data-slot="accordion-indicator"
-            className="size-4 shrink-0 transition-transform duration-200 ease-out"
+            className="ease-[cubic-bezier(0.16,1,0.3,1)] size-4 shrink-0 transition-transform duration-200"
           />
         </span>
       );
@@ -145,7 +145,7 @@ function AccordionTrigger({
       <span className="text-muted-foreground shrink-0" aria-hidden="true">
         <PlusIcon
           data-slot="accordion-indicator"
-          className="size-4 shrink-0 transition-transform duration-200 ease-out"
+          className="ease-[cubic-bezier(0.16,1,0.3,1)] size-4 shrink-0 transition-transform duration-200"
         />
       </span>
     );
@@ -163,8 +163,8 @@ function AccordionTrigger({
           // Split variant
           "group-data-[variant=split]/accordion:rounded-t-lg",
           // Inset / Nested variant
-          "group-data-[variant=inset]/accordion:hover:bg-card/60 dark:group-data-[variant=inset]/accordion:hover:bg-muted/60 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:px-3.5 group-data-[variant=inset]/accordion:py-2.5",
           "group-data-[variant=nested]/accordion:hover:bg-card/60 dark:group-data-[variant=nested]/accordion:hover:bg-muted/60 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:px-3.5 group-data-[variant=nested]/accordion:py-2.5",
+          "group-data-[variant=inset]/accordion:hover:bg-card/60 dark:group-data-[variant=inset]/accordion:hover:bg-muted/60 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:px-3.5 group-data-[variant=inset]/accordion:py-2.5",
           // Indicator animations
           indicatorType === "chevron" &&
             "[&[data-panel-open]_[data-slot=accordion-indicator]]:rotate-180",
@@ -185,7 +185,7 @@ function AccordionTrigger({
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span>{children}</span>
           {subtitle && (
-            <span className="text-muted-foreground text-xs font-normal no-underline">
+            <span className="text-muted-foreground text-sm font-normal no-underline">
               {subtitle}
             </span>
           )}
@@ -208,30 +208,28 @@ function AccordionContent({
     <BaseAccordion.Panel
       data-slot="accordion-content"
       className={cn(
-        "h-(--accordion-panel-height) overflow-hidden text-sm transition-[height,opacity,padding,margin] duration-250 ease-out data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0",
-        // Inset / Nested variant
-        "group-data-[variant=inset]/accordion:mx-px group-data-[variant=inset]/accordion:mt-1 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:bg-card dark:group-data-[variant=inset]/accordion:bg-muted group-data-[variant=inset]/accordion:p-4 group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
-        "group-data-[variant=inset]/accordion:data-ending-style:mt-0 group-data-[variant=inset]/accordion:data-ending-style:p-0 group-data-[variant=inset]/accordion:data-starting-style:mt-0 group-data-[variant=inset]/accordion:data-starting-style:p-0",
-        "group-data-[variant=nested]/accordion:mx-px group-data-[variant=nested]/accordion:mt-1 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
-        "group-data-[variant=nested]/accordion:data-ending-style:mt-0 group-data-[variant=nested]/accordion:data-ending-style:p-0 group-data-[variant=nested]/accordion:data-starting-style:mt-0 group-data-[variant=nested]/accordion:data-starting-style:p-0"
+        "ease-[cubic-bezier(0.16,1,0.3,1)] h-(--accordion-panel-height) overflow-hidden text-sm transition-[height,opacity] duration-250 data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0"
       )}
       {...props}
     >
       <div
         className={cn(
-          "text-muted-foreground p-3.5 pt-0",
+          "text-muted-foreground p-3.5",
           "group-data-[variant=default]/accordion:px-0 group-data-[variant=default]/accordion:pt-0",
           "group-data-[variant=split]/accordion:pt-0",
           "group-data-[variant=outline]/accordion:pt-0",
           // Inset / Nested variant
-          "group-data-[variant=inset]/accordion:p-0",
-          "group-data-[variant=nested]/accordion:p-0",
-          // Isolated variants
+          "group-data-[variant=nested]/accordion:mx-px group-data-[variant=nested]/accordion:my-1 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] group-data-[variant=nested]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
+          "group-data-[variant=inset]/accordion:mx-px group-data-[variant=inset]/accordion:my-1 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:bg-card dark:group-data-[variant=inset]/accordion:bg-muted group-data-[variant=inset]/accordion:p-4 group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] group-data-[variant=inset]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
+          // Isolated bordered variant
           "group-data-[variant=isolated-bordered]/accordion:pt-0",
+          // Isolated filled variant
           "group-data-[variant=isolated-filled]/accordion:pt-0",
+          // Isolated filled bordered variant
           "group-data-[variant=isolated-filled-bordered]/accordion:pt-0",
-          // Icon alignment
+          // Icon alignment - add left padding when parent item contains a trigger with icon
           "[[data-slot=accordion-item]:has([data-has-icon])_&]:pl-[calc(1rem+0.75rem)]",
+          "[[data-slot=accordion-item]:has([data-has-icon])_&]:group-data-[variant=default]/accordion:pl-[calc(1rem+0.75rem)]",
           className
         )}
       >
@@ -249,7 +247,7 @@ function PlusIcon(props: React.ComponentProps<"svg">) {
         clipRule="evenodd"
         d="M2.75 12C2.75 11.3096 3.30964 10.75 4 10.75H20C20.6904 10.75 21.25 11.3096 21.25 12C21.25 12.6904 20.6904 13.25 20 13.25H4C3.30964 13.25 2.75 12.6904 2.75 12Z"
         fill="currentColor"
-        className="transition-opacity duration-200 in-data-panel-open:opacity-0"
+        className="ease-[cubic-bezier(0.16,1,0.3,1)] transition-opacity duration-200 in-data-panel-open:opacity-0"
       />
       <path
         fillRule="evenodd"

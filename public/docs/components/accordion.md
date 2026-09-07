@@ -198,7 +198,7 @@ export default function AccordionSplitDemo() {
 
 ### Inset
 
-An inset container matching the inset card style with a subtle tray background and elevated animated panel. The panel owns its background and shadow, so its `overflow-hidden` height animation clips only its content, not its own light-mode outline. Preserve the tray padding and one-pixel inline gutter when replacing the panel surface.
+An inset container with a subtle tray background and an elevated nested content card that animates smoothly on expand.
 
 ```tsx
 import {
@@ -230,6 +230,261 @@ export default function AccordionInsetDemo() {
         <AccordionContent>
           Define role-based permissions and grant scoped API tokens with
           granular expiration windows.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+```
+
+### With Icon
+
+Displays a leading icon alongside the trigger text using the `icon` prop.
+
+```tsx
+import { CreditCardIcon, ShieldCheckIcon, TruckIcon } from "lucide-react";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/registry/base/accordion";
+
+export default function AccordionWithIcon() {
+  return (
+    <Accordion multiple={false} className="w-full max-w-lg">
+      <AccordionItem value="item-1">
+        <AccordionTrigger icon={<CreditCardIcon className="size-4 shrink-0" />}>
+          Payment Methods
+        </AccordionTrigger>
+        <AccordionContent>
+          We accept all major credit cards, PayPal, and bank transfers. Your
+          payment information is encrypted and secure.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger icon={<TruckIcon className="size-4 shrink-0" />}>
+          Shipping & Delivery
+        </AccordionTrigger>
+        <AccordionContent>
+          Standard shipping typically takes 3-5 business days, while express
+          shipping arrives within 1-2 business days. Free shipping is available
+          on orders over $50.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger
+          icon={<ShieldCheckIcon className="size-4 shrink-0" />}
+        >
+          Security & Privacy
+        </AccordionTrigger>
+        <AccordionContent>
+          Your data is protected with industry-standard encryption. We never
+          share your personal information with third parties without your
+          explicit consent.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+```
+
+### With Subtitle
+
+Provides secondary descriptive text below the trigger label using the `subtitle` prop.
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/registry/base/accordion";
+
+export default function AccordionWithSubtitle() {
+  return (
+    <Accordion multiple={false} className="w-full max-w-lg">
+      <AccordionItem value="item-1">
+        <AccordionTrigger subtitle="Learn about our hassle-free return process">
+          What is your refund policy?
+        </AccordionTrigger>
+        <AccordionContent>
+          We offer a 30-day money-back guarantee for all purchases. If
+          you&apos;re not completely satisfied, contact our support team for a
+          full refund. No questions asked.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger subtitle="Delivery times and shipping options">
+          How long does shipping take?
+        </AccordionTrigger>
+        <AccordionContent>
+          Standard shipping typically takes 3-5 business days, while express
+          shipping arrives within 1-2 business days. Free shipping is available
+          on orders over $50.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger subtitle="Get help from our expert team">
+          Do you offer technical support?
+        </AccordionTrigger>
+        <AccordionContent>
+          Yes! Our technical support team is available 24/7 via email and live
+          chat. We also have comprehensive documentation and video tutorials.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+```
+
+### Isolated Bordered
+
+Bordered card items that dynamically separate and round their corners when opened.
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/registry/base/accordion";
+
+export default function AccordionIsolatedBordered() {
+  return (
+    <Accordion variant="isolated-bordered" className="w-full max-w-lg">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Account Settings</AccordionTrigger>
+        <AccordionContent>
+          Manage your account preferences and personal information. Update your
+          profile details, change your password, and configure your account
+          settings here.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Notifications</AccordionTrigger>
+        <AccordionContent>
+          Configure how and when you receive notifications. Customize email
+          alerts, push notifications, and other communication preferences.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Privacy & Security</AccordionTrigger>
+        <AccordionContent>
+          Control your privacy settings and security options. Adjust data
+          sharing preferences, manage activity tracking, and review your
+          security settings.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-4">
+        <AccordionTrigger>Billing & Payments</AccordionTrigger>
+        <AccordionContent>
+          View and manage your billing information, payment methods, and
+          subscription details. Update your payment preferences and review your
+          billing history.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+```
+
+### Isolated Filled
+
+Muted filled items that dynamically detach and round into distinct cards when expanded.
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/registry/base/accordion";
+
+export default function AccordionIsolatedFilled() {
+  return (
+    <Accordion variant="isolated-filled" className="w-full max-w-lg">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Account Settings</AccordionTrigger>
+        <AccordionContent>
+          Manage your account preferences and personal information. Update your
+          profile details, change your password, and configure your account
+          settings here.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Notifications</AccordionTrigger>
+        <AccordionContent>
+          Configure how and when you receive notifications. Customize email
+          alerts, push notifications, and other communication preferences.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Privacy & Security</AccordionTrigger>
+        <AccordionContent>
+          Control your privacy settings and security options. Adjust data
+          sharing preferences, manage activity tracking, and review your
+          security settings.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-4">
+        <AccordionTrigger>Billing & Payments</AccordionTrigger>
+        <AccordionContent>
+          View and manage your billing information, payment methods, and
+          subscription details. Update your payment preferences and review your
+          billing history.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+```
+
+### Isolated Filled Bordered
+
+Filled items with dividing borders that cleanly isolate into individual cards when opened.
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/registry/base/accordion";
+
+export default function AccordionIsolatedFilledBordered() {
+  return (
+    <Accordion variant="isolated-filled-bordered" className="w-full max-w-lg">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Account Settings</AccordionTrigger>
+        <AccordionContent>
+          Manage your account preferences and personal information. Update your
+          profile details, change your password, and configure your account
+          settings here.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Notifications</AccordionTrigger>
+        <AccordionContent>
+          Configure how and when you receive notifications. Customize email
+          alerts, push notifications, and other communication preferences.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Privacy & Security</AccordionTrigger>
+        <AccordionContent>
+          Control your privacy settings and security options. Adjust data
+          sharing preferences, manage activity tracking, and review your
+          security settings.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-4">
+        <AccordionTrigger>Billing & Payments</AccordionTrigger>
+        <AccordionContent>
+          View and manage your billing information, payment methods, and
+          subscription details. Update your payment preferences and review your
+          billing history.
         </AccordionContent>
       </AccordionItem>
     </Accordion>
