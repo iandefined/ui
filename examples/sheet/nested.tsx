@@ -12,14 +12,14 @@ import {
 } from "@/registry/base/sheet";
 
 const nestedDirections = [
-  { label: "Right", side: "right", variant: "default" },
-  { label: "Left", side: "left", variant: "default" },
   { label: "Top", side: "top", variant: "default" },
   { label: "Bottom", side: "bottom", variant: "default" },
-  { label: "Right", side: "right", variant: "floating" },
-  { label: "Left", side: "left", variant: "floating" },
+  { label: "Left", side: "left", variant: "default" },
+  { label: "Right", side: "right", variant: "default" },
   { label: "Top", side: "top", variant: "floating" },
   { label: "Bottom", side: "bottom", variant: "floating" },
+  { label: "Left", side: "left", variant: "floating" },
+  { label: "Right", side: "right", variant: "floating" },
 ] as const;
 
 export default function SheetNestedDemo() {

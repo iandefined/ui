@@ -9,15 +9,15 @@ import {
 } from "@/registry/base/sheet";
 
 const positions = [
-  { label: "Right", side: "right" },
-  { label: "Left", side: "left" },
   { label: "Top", side: "top" },
   { label: "Bottom", side: "bottom" },
+  { label: "Left", side: "left" },
+  { label: "Right", side: "right" },
 ] as const;
 
 export default function SheetPositionsDemo() {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="mx-auto grid w-full max-w-xs grid-cols-2 justify-items-center gap-2 sm:flex sm:max-w-none sm:justify-center">
       {positions.map(({ label, side }) => (
         <Sheet key={side}>
           <SheetTrigger render={<Button variant="outline" />}>
