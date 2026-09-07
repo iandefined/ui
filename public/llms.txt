@@ -63,10 +63,12 @@
 
 ## Hooks
 
+- [Hooks](https://ui.iandefined.com/docs/hooks.md) - Browse the reusable hooks available in this registry.
 - [useFuzzyFilter](https://ui.iandefined.com/docs/hooks/use-fuzzy-filter.md) - Fuzzy matching hook for filtering and sorting items by relevance.
 
 ## Utilities
 
+- [Utilities](https://ui.iandefined.com/docs/utilities.md) - Browse the utility components and effects available in this registry.
 - [Hitbox](https://ui.iandefined.com/docs/utilities/hitbox.md) - Expand hit areas of interactive elements without affecting layout.
 - [Icon Swap](https://ui.iandefined.com/docs/utilities/icon-swap.md) - Animate between keyed icons with a consistent scale, blur, and fade transition.
 - [Marquee](https://ui.iandefined.com/docs/utilities/marquee.md) - Create seamless scrolling content that starts only when it needs more room.

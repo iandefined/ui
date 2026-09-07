@@ -151,6 +151,9 @@
 /docs/forms.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/hooks.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/hooks/use-fuzzy-filter.md
   Content-Type: text/markdown; charset=utf-8
 
@@ -161,6 +164,9 @@
   Content-Type: text/markdown; charset=utf-8
 
 /docs/theming.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/utilities.md
   Content-Type: text/markdown; charset=utf-8
 
 /docs/utilities/hitbox.md

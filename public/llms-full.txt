@@ -4947,6 +4947,12 @@ Use `form.Subscribe` to read `canSubmit` and `isSubmitting`. Disable submission 
 | [Checkbox](/docs/components/checkbox), [Switch](/docs/components/switch), [Radio Group](/docs/components/radio-group) | Boolean and choice controls.                         |
 | [Select](/docs/components/select), [Combobox](/docs/components/combobox), [Slider](/docs/components/slider)           | Trigger-based, searchable, and range controls.       |
 
+# Hooks
+
+Browse the reusable hooks available in this registry.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
 # useFuzzyFilter
 
 Fuzzy matching hook for filtering and sorting items by relevance.
@@ -5469,6 +5475,12 @@ Then use the token like any other Tailwind color utility:
 ```tsx
 <div className="bg-brand text-brand-foreground">Brand Content</div>
 ```
+
+# Utilities
+
+Browse the utility components and effects available in this registry.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
 # Hitbox
 
