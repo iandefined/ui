@@ -328,7 +328,7 @@ function DrawerBackdrop({
   return (
     <DrawerPrimitive.Backdrop
       className={cn(
-        "fixed inset-0 z-50 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
+        "fixed inset-0 z-50 opacity-100 transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:opacity-[calc(1-var(--drawer-swipe-progress,0))] data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
         overlay === "blur" && "bg-black/40 backdrop-blur-sm",
         overlay === "brightness" && "bg-black/50",
         overlay === "transparent" && "bg-transparent",
@@ -432,10 +432,7 @@ function DrawerPopup({
                 "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]",
                 "data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
-                "-mb-[max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",
-                "pb-[max(0px,calc(env(safe-area-inset-bottom,0px)+var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",
-                "data-ending-style:mb-0 data-starting-style:mb-0 data-ending-style:pb-0 data-starting-style:pb-0",
-                "not-data-starting-style:not-data-ending-style:transition-[transform,box-shadow,height,background-color,margin,padding,opacity]",
+                "not-data-starting-style:not-data-ending-style:transition-[transform,box-shadow,height,background-color,opacity]",
                 "before:inset-x-0 before:top-full before:h-(--bleed)",
                 "has-data-[slot=drawer-bar]:pt-2",
                 "h-(--drawer-height,auto)",
@@ -560,10 +557,12 @@ function DrawerFooter({
   render,
   ...props
 }: DrawerFooterProps) {
+  const { position } = React.useContext(DrawerContext);
+
   const defaultProps = {
     className: cn(
       "mt-auto flex flex-col-reverse gap-2 px-6 pb-[env(safe-area-inset-bottom,0px)] sm:flex-row sm:justify-end",
-      "in-[[data-slot=drawer-popup][data-position=bottom]]:-translate-y-[calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px))] in-[[data-slot=drawer-popup][data-position=bottom]]:transition-transform in-[[data-slot=drawer-popup][data-position=bottom]]:duration-300 in-[[data-slot=drawer-popup][data-position=bottom]]:ease-out in-[[data-slot=drawer-popup][data-position=bottom][data-swiping]]:transition-none",
+      "will-change-transform data-[position=bottom]:transform-[translateY(calc(0px-var(--drawer-snap-point-offset,0px)-var(--drawer-swipe-movement-y,0px)))]",
       !allowSelection && "cursor-default",
       variant === "default" &&
         "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",
@@ -571,6 +570,7 @@ function DrawerFooter({
         "border-t bg-muted pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1rem)]",
       className
     ),
+    "data-position": position,
     "data-slot": "drawer-footer",
   };
 

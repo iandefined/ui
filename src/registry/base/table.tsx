@@ -67,7 +67,7 @@ function Table({
           fadeColor={fadeColor}
           className="min-h-0 min-w-0 flex-1 rounded-lg overflow-hidden"
           viewportClassName={cn(
-            "!overscroll-x-none !overscroll-y-auto [--scroll-area-fade-size:20px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
+            "!overscroll-x-none !overscroll-y-none [--scroll-area-fade-size:20px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
             viewportClassName
           )}
         >
