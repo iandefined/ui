@@ -388,7 +388,8 @@ function DrawerPopup({
       <DrawerViewport position={position} variant={variant}>
         <DrawerPrimitive.Popup
           className={cn(
-            "pointer-events-auto relativ flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover text-popover-foreground will-change-transform",
+            "pointer-events-auto relativ flex max-h-full min-h-0 min-w-0 flex-col bg-popover text-popover-foreground will-change-transform",
+            variant === "floating" && "w-full",
             variant === "floating"
               ? "rounded-2xl border border-border"
               : drawerInnerBorderClasses[position],
@@ -412,6 +413,7 @@ function DrawerPopup({
               cn(
                 "mx-auto",
                 "row-start-2",
+                "w-full",
                 "transform-[translateY(calc(var(--drawer-snap-point-offset)+var(--drawer-swipe-movement-y)))]",
                 "data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
@@ -430,6 +432,7 @@ function DrawerPopup({
             position === "top" &&
               cn(
                 "mx-auto",
+                "w-full",
                 "transform-[translateY(var(--drawer-swipe-movement-y))]",
                 "data-starting-style:transform-[translateY(calc(-100%-var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(-100%-var(--inset)))]",
@@ -444,6 +447,7 @@ function DrawerPopup({
             position === "left" &&
               cn(
                 "max-w-md",
+                variant === "default" && "w-3/4 sm:max-w-sm",
                 "transform-[translateX(var(--drawer-swipe-movement-x))]",
                 "data-starting-style:transform-[translateX(calc(-100%-var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(-100%-var(--inset)))]",
@@ -454,6 +458,7 @@ function DrawerPopup({
             position === "right" &&
               cn(
                 "max-w-md",
+                variant === "default" && "w-3/4 sm:max-w-sm",
                 "transform-[translateX(var(--drawer-swipe-movement-x))]",
                 "data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
                 "data-ending-style:transform-[translateX(calc(100%+var(--inset)))]",

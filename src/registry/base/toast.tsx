@@ -629,8 +629,8 @@ export function ToastProvider({
           data-slot="toast-viewport"
           data-position={position}
           className={cn(
-            "fixed z-50 flex w-[calc(100%-var(--toast-inset)*2)] max-w-[360px] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
-            "[--toast-inset:1rem] sm:[--toast-inset:2rem]",
+            "fixed z-50 flex w-[calc(100%-var(--toast-inset)*2)] max-w-none outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] sm:max-w-[360px]",
+            "[--toast-inset:0px] sm:[--toast-inset:2rem]",
             "data-[position*=top]:top-(--toast-inset) data-[position*=bottom]:bottom-(--toast-inset)",
             "data-[position*=left]:left-(--toast-inset) data-[position*=right]:right-(--toast-inset)",
             "data-[position*=center]:left-1/2 data-[position*=center]:-translate-x-1/2"

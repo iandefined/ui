@@ -129,7 +129,7 @@ const sheetNestedSurfaceClasses: Record<SheetSide, string> = {
 
 const sheetContentVariants = cva(
   [
-    "pointer-events-auto fixed z-50 flex max-h-full min-h-0 w-full max-w-full min-w-0 flex-col overflow-hidden bg-popover text-popover-foreground outline-hidden will-change-transform",
+    "pointer-events-auto fixed z-50 flex max-h-full min-h-0 max-w-full min-w-0 flex-col overflow-hidden bg-popover text-popover-foreground outline-hidden will-change-transform",
     "transition-[transform,box-shadow,height,background-color,border-color,border-radius,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
     "[--inset:0px]",
     "[--peek:1.5rem] [--stack-step:0.05]",
@@ -152,10 +152,10 @@ const sheetContentVariants = cva(
           "[--inset:1rem] max-h-[calc(100%-2rem)] w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] rounded-2xl border border-border",
       },
       side: {
-        top: "",
-        right: "sm:max-w-md",
-        bottom: "",
-        left: "sm:max-w-md",
+        top: "w-full",
+        right: "",
+        bottom: "w-full",
+        left: "",
       },
     },
     compoundVariants: [
@@ -187,13 +187,13 @@ const sheetContentVariants = cva(
         variant: "default",
         side: "right",
         class:
-          "inset-y-0 end-0 origin-left data-nested-dialog-open:transform-[translateX(calc(0px-var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateX(100%)] data-starting-style:transform-[translateX(100%)]",
+          "inset-y-0 end-0 w-3/4 origin-left sm:max-w-sm data-nested-dialog-open:transform-[translateX(calc(0px-var(--stack-peek-offset)))_scale(var(--scale))] data-ending-style:transform-[translateX(100%)] data-starting-style:transform-[translateX(100%)]",
       },
       {
         variant: "default",
         side: "left",
         class:
-          "inset-y-0 start-0 origin-right data-nested-dialog-open:transform-[translateX(var(--stack-peek-offset))_scale(var(--scale))] data-ending-style:transform-[translateX(-100%)] data-starting-style:transform-[translateX(-100%)]",
+          "inset-y-0 start-0 w-3/4 origin-right sm:max-w-sm data-nested-dialog-open:transform-[translateX(var(--stack-peek-offset))_scale(var(--scale))] data-ending-style:transform-[translateX(-100%)] data-starting-style:transform-[translateX(-100%)]",
       },
       {
         variant: "default",
