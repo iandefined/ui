@@ -84,6 +84,12 @@ const slugsFromDocsUrl = (url: string) =>
     .split("/")
     .filter(Boolean);
 
+const sectionCatalogUrls = new Set<string>([
+  ROUTES.DOCS_COMPONENTS,
+  ROUTES.DOCS_HOOKS,
+  ROUTES.DOCS_UTILITIES,
+]);
+
 const getNeighbourDetails = (neighbour: { name: ReactNode; url: string }) => {
   const page = source.getPage(slugsFromDocsUrl(neighbour.url));
   const fallbackTitle = navLabelFromUrl(neighbour.url);
@@ -172,9 +178,9 @@ export const DocsPage = ({ data }: { data: DocsPageData | undefined }) => {
   }
 
   const { doc, markdownUrl, neighbours, page } = data;
-  const isComponentsCatalog = page.url === ROUTES.DOCS_COMPONENTS;
-  const showFooterNavigation = !isComponentsCatalog;
-  const showTocFooter = !isComponentsCatalog;
+  const isSectionCatalog = sectionCatalogUrls.has(page.url);
+  const showFooterNavigation = !isSectionCatalog;
+  const showTocFooter = !isSectionCatalog;
 
   return (
     <>

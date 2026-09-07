@@ -1,10 +1,10 @@
 import { Link } from "@/shared/components/link";
-import { ROUTES } from "@/shared/constants/routes";
 import { isComponentsFolder } from "@/shared/lib/docs";
 import type { PageTreeFolder, PageTreePage } from "@/shared/lib/page-tree";
 import {
   getAllPagesFromFolder,
   getPagesFromFolder,
+  isFolderIndexPage,
 } from "@/shared/lib/page-tree";
 import { source } from "@/shared/lib/source";
 
@@ -51,7 +51,9 @@ export const ComponentsList = ({
   }
 
   if (!isComponentsFolder(folder)) {
-    const pages = getPagesFromFolder(folder);
+    const pages = getPagesFromFolder(folder).filter(
+      (page) => !isFolderIndexPage(folder, page)
+    );
     if (pages.length === 0) {
       return null;
     }
@@ -59,7 +61,7 @@ export const ComponentsList = ({
   }
 
   const pages = getAllPagesFromFolder(folder).filter(
-    (page) => page.url !== ROUTES.DOCS_COMPONENTS
+    (page) => !isFolderIndexPage(folder, page)
   );
   if (pages.length === 0) {
     return null;

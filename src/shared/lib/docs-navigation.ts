@@ -4,6 +4,7 @@ import { ROUTES } from "@/shared/constants/routes";
 import type { PageTreeFolder, PageTreePage } from "@/shared/lib/page-tree";
 import {
   getAllPagesFromFolder,
+  isFolderIndexPage,
   type PageTreeRoot,
 } from "@/shared/lib/page-tree";
 
@@ -25,7 +26,7 @@ const makeGroup = (
 const removeFolderIndexPage = (folder: PageTreeFolder) =>
   getAllPagesFromFolder(folder).filter(
     (page) =>
-      page.url !== folder.index?.url && page.url !== ROUTES.DOCS_COMPONENTS
+      !isFolderIndexPage(folder, page) && page.url !== ROUTES.DOCS_COMPONENTS
   );
 
 export const getDocsNavigationGroups = (
@@ -64,7 +65,7 @@ export const getDocsNavigationGroups = (
           currentGroupId = `${folderId(node)}-${String(child.name).toLowerCase().replace(/\s+/g, "-")}`;
         } else if (child.type === "page") {
           if (
-            child.url !== node.index?.url &&
+            !isFolderIndexPage(node, child) &&
             child.url !== ROUTES.DOCS_COMPONENTS
           ) {
             currentPages.push(child);
