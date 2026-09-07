@@ -430,7 +430,6 @@ function DrawerPopup({
                 "row-start-2",
                 "w-full",
                 "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]",
-                "[&_[data-slot=drawer-footer]]:-translate-y-[calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px))] [&_[data-slot=drawer-footer]]:transition-transform [&_[data-slot=drawer-footer]]:duration-300 [&_[data-slot=drawer-footer]]:ease-out data-swiping:[&_[data-slot=drawer-footer]]:transition-none",
                 "data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "-mb-[max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))]",
@@ -497,6 +496,7 @@ function DrawerPopup({
             className
           )}
           data-level={level}
+          data-position={position}
           data-shadow-level={shadowLevel}
           data-slot="drawer-popup"
           data-base-ui-swipe-ignore={!dismissible ? "" : undefined}
@@ -561,6 +561,7 @@ function DrawerFooter({
   const defaultProps = {
     className: cn(
       "mt-auto flex flex-col-reverse gap-2 px-6 pb-[env(safe-area-inset-bottom,0px)] sm:flex-row sm:justify-end",
+      "in-[[data-slot=drawer-popup][data-position=bottom]]:-translate-y-[calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px))] in-[[data-slot=drawer-popup][data-position=bottom]]:transition-transform in-[[data-slot=drawer-popup][data-position=bottom]]:duration-300 in-[[data-slot=drawer-popup][data-position=bottom]]:ease-out in-[[data-slot=drawer-popup][data-position=bottom][data-swiping]]:transition-none",
       !allowSelection && "cursor-default",
       variant === "default" &&
         "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",
