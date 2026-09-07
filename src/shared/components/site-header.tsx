@@ -14,6 +14,8 @@ import { source } from "@/shared/lib/source";
 const navItems = [
   { href: ROUTES.DOCS, label: "Docs" },
   { href: ROUTES.DOCS_COMPONENTS, label: "Components" },
+  { href: ROUTES.DOCS_HOOKS, label: "Hooks" },
+  { href: ROUTES.DOCS_UTILITIES, label: "Utilities" },
   { href: ROUTES.BLOCKS, label: "Blocks" },
 ];
 
