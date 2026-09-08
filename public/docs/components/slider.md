@@ -494,7 +494,7 @@ export default function SliderInvalidDemo() {
           return (
             <Field invalid={invalid} name={field.name}>
               <Slider
-                className="grid gap-2"
+                className="w-full max-w-sm"
                 max={100}
                 min={0}
                 value={field.state.value}
@@ -504,14 +504,15 @@ export default function SliderInvalidDemo() {
                   )
                 }
               >
-                <SliderContent>
-                  <SliderLabel>Volume</SliderLabel>
-                  <SliderValue className="ms-auto" />
-                </SliderContent>
                 <SliderControl
                   aria-describedby={invalid ? errorId : undefined}
                   aria-invalid={invalid || undefined}
-                />
+                >
+                  <SliderContent>
+                    <SliderLabel>Volume</SliderLabel>
+                    <SliderValue className="ms-auto" />
+                  </SliderContent>
+                </SliderControl>
               </Slider>
               <FieldErrorSlot>
                 <FieldError id={errorId} match={invalid}>

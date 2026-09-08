@@ -374,9 +374,10 @@ export default function ComboboxMultipleSelectionDemo() {
 Move filtering into the popup when the trigger is the form control.
 
 ```tsx
+import { ChevronsUpDownIcon } from "lucide-react";
+
 import { Button } from "@/registry/base/button";
 import {
-  ChevronsUpDownIcon,
   Combobox,
   ComboboxEmpty,
   ComboboxInput,

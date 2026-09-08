@@ -1,6 +1,7 @@
+import { ChevronsUpDownIcon } from "lucide-react";
+
 import { Button } from "@/registry/base/button";
 import {
-  ChevronsUpDownIcon,
   Combobox,
   ComboboxEmpty,
   ComboboxInput,
