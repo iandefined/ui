@@ -129,7 +129,7 @@ export default function DrawerStickyFooterDemo() {
             ))}
           </div>
         </DrawerPanel>
-        <DrawerFooter className="border-t py-4 sm:flex-row">
+        <DrawerFooter sticky className="border-t py-4 sm:flex-row">
           <form
             className="flex w-full gap-2"
             onSubmit={(e) => {

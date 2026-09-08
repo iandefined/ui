@@ -112,13 +112,13 @@ Set `position` on `Drawer` to choose the edge where the drawer opens.
 
 ### Snap Points
 
-Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. A `DrawerFooter` stays pinned while the panel changes between snap points.
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. Add `sticky` to `DrawerFooter` when it should stay pinned while the panel changes between snap points.
 
 <ComponentPreview name="drawer/snap-points" />
 
 ### Sticky Footer
 
-Use `DrawerFooter` with `border-t` to keep action buttons or inputs pinned at the bottom edge while long content scrolls inside `DrawerPanel`. Combined with snap points, the footer remains anchored as the drawer moves between heights.
+Use `<DrawerFooter sticky>` with `border-t` to keep action buttons or inputs pinned at the bottom edge while long content scrolls inside `DrawerPanel`. Without `sticky`, the footer remains part of the drawer surface and moves with it during a swipe. Combined with snap points, a sticky footer remains anchored as the drawer moves between heights.
 
 <ComponentPreview name="drawer/sticky-footer" />
 
@@ -277,6 +277,11 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
     defaultValue='"default"'
   >
     Uses standard action spacing or adds a bordered muted footer surface.
+  </ApiProp>
+  <ApiProp name="sticky" fullType="boolean" defaultValue="false">
+    Keeps a bottom-positioned footer pinned to the viewport while the drawer is
+    swiped or moved between snap points. By default, the footer moves with the
+    drawer surface.
   </ApiProp>
   <ApiProp name="allowSelection" fullType="boolean" defaultValue="true">
     Uses `DrawerContent` for selectable footer content.

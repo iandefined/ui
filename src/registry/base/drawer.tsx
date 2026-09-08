@@ -838,7 +838,7 @@ interface DrawerFooterProps extends useRender.ComponentProps<"div"> {
 function DrawerFooter({
   className,
   variant = "default",
-  sticky = true,
+  sticky = false,
   allowSelection = false,
   render,
   ...props
@@ -849,7 +849,7 @@ function DrawerFooter({
     className: cn(
       "w-full relative z-10 mt-auto flex flex-col-reverse gap-2 bg-popover px-6 pb-[env(safe-area-inset-bottom,0px)] sm:flex-row sm:justify-end",
       sticky &&
-        "will-change-transform data-[position=bottom]:transform-[translateY(calc(0px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))-var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px))))] data-[position=bottom]:transition-transform data-[position=bottom]:duration-300 data-[position=bottom]:ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
+        "will-change-transform data-[position=bottom]:transform-[translateY(calc(-1px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))-var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px))))] data-[position=bottom]:transition-transform data-[position=bottom]:duration-300 data-[position=bottom]:ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
       !allowSelection && "cursor-default",
       variant === "default" &&
         "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 rounded-b-xl pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",

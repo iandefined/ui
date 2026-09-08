@@ -52,7 +52,7 @@ export default function DrawerSnapPointsDemo() {
             ))}
           </div>
         </DrawerPanel>
-        <DrawerFooter>
+        <DrawerFooter sticky>
           <DrawerCloseTrigger render={<Button variant="outline" />}>
             Done
           </DrawerCloseTrigger>
