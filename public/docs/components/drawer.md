@@ -612,7 +612,7 @@ export default function DrawerStickyFooterDemo() {
 
 ### Floating Surface
 
-Set `variant="floating"` for an inset panel with rounded corners on every edge. The example shows the same surface from all four drawer positions.
+Set `variant="floating"` for an inset panel with rounded corners on every edge. The example shows the same surface from all four drawer positions. Bottom floating drawers with snap points resize a rounded, clipped surface from its viewport-anchored bottom edge so the footer and perimeter remain visible at every height.
 
 ```tsx
 import { Button } from "@/registry/base/button";
@@ -1123,7 +1123,7 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `variant` | `"default" \| "inset"` | `default` | Uses standard action spacing or adds a bordered muted footer surface. |
-| `sticky` | `boolean` | `false` | Keeps a bottom drawer footer pinned while the drawer moves or changes snap points. Top and side footers remain surface-bound to avoid detaching during dismissal. By default, every footer moves with the drawer surface. |
+| `sticky` | `boolean` | `false` | Keeps a bottom drawer footer pinned while the drawer moves or changes snap points. Top, side, and floating footers remain surface-bound to avoid detaching during dismissal. By default, every footer moves with the drawer surface. |
 | `allowSelection` | `boolean` | `true` | Uses `DrawerContent` for selectable footer content. |
 
 #### DrawerMenuCheckboxItem

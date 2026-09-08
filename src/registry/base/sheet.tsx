@@ -133,7 +133,7 @@ const sheetNestedSurfaceClasses: Record<SheetSide, string> = {
 const sheetContentVariants = cva(
   [
     "pointer-events-auto fixed z-50 flex max-h-full min-h-0 max-w-full min-w-0 flex-col overflow-hidden bg-popover text-popover-foreground outline-hidden will-change-transform",
-    "transition-[translate,scale,box-shadow,height,background-color,border-color,border-radius,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:[translate:none] motion-reduce:[scale:1]",
+    "transition-[translate,scale,box-shadow,border-color,border-radius,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:[translate:none] motion-reduce:[scale:1]",
     "[--inset:0px]",
     "[--peek:1.5rem] [--stack-step:0.05]",
     "[--stack-progress:0]",

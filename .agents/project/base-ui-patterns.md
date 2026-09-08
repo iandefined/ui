@@ -25,3 +25,10 @@ For public prop shapes and slots, see [component-implementation.md](component-im
 - Prefer primitive state attributes, render props, and controlled props to DOM queries or imperative ref mutation. Use imperative handles only when the browser or primitive API requires them.
 - Test keyboard, pointer, focus, disabled, invalid, and controlled/uncontrolled behavior whenever a composition boundary changes.
 
+## Overlay animation ownership
+
+- Do not use trigger `pointerdown`, `pointerenter`, or focus handlers to mount and lay out a portalled overlay subtree. That work runs before activation can open the primitive and can delay the first visible frame. When repeat-open performance warrants retention, enable `keepMounted` only after the first opening transition completes; never eagerly retain every overlay on the page.
+- Keep the primitive's release state authoritative. A `null` snap point used as a dismissal sentinel must not replace the last visible snap geometry while the exit animation is running. Freeze the exit distance from the last non-null snap value so close, Escape, outside press, and swipe dismissal share one path.
+- Apply high-frequency gesture variables on the element where Base UI defines them. Registered non-inheriting variables should not be re-exposed through a deep subtree. Disable transitions during direct manipulation and use a release-specific state attribute with a bounded duration for the handoff to CSS animation.
+- Base UI waits for animations on the popup before completing close and unmount. Changing the popup's transition-property list or layout geometry after dismissal can create replacement animations and extend teardown. Keep exit geometry stable and give open/close motion, direct drag motion, snap resizing, and backdrop opacity one owner each.
+- Coalesce observer-driven overlay positioning into one animation-frame update. Do not schedule the same initial measurement from both a ref callback and an effect, and do not observe a popup's generic `style` attribute when the positioning result itself writes inline styles; that creates self-triggered measurement churn.
