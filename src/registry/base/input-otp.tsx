@@ -21,6 +21,47 @@ import {
 } from "react";
 import { tv } from "tailwind-variants";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 type InputOTPSize = NonNullable<InputOTPProps["size"]>;
 type InputOTPVariant = NonNullable<InputOTPProps["variant"]>;
 
@@ -64,25 +105,28 @@ function InputOTP({
   ...props
 }: InputOTPProps) {
   return (
-    <InputOTPContext.Provider
-      value={{
-        invalid: isInvalid(props["aria-invalid"]),
-        mask,
-        size,
-        variant,
-      }}
-    >
-      <OTPInput
-        className={cn("disabled:cursor-not-allowed", className)}
-        containerClassName={cn(
-          "flex items-center gap-2 has-disabled:opacity-64",
-          containerClassName
-        )}
-        data-slot="input-otp"
-        spellCheck={false}
-        {...props}
-      />
-    </InputOTPContext.Provider>
+    <>
+      <style>{invalidShakeStyles}</style>
+      <InputOTPContext.Provider
+        value={{
+          invalid: isInvalid(props["aria-invalid"]),
+          mask,
+          size,
+          variant,
+        }}
+      >
+        <OTPInput
+          className={cn("disabled:cursor-not-allowed", className)}
+          containerClassName={cn(
+            "flex items-center gap-2 has-disabled:opacity-64",
+            containerClassName
+          )}
+          data-slot="input-otp"
+          spellCheck={false}
+          {...props}
+        />
+      </InputOTPContext.Provider>
+    </>
   );
 }
 
@@ -130,6 +174,7 @@ function InputOTPSlot({ className, index, ...props }: InputOTPSlotProps) {
         className={cn(inputOtpSlotVariants({ size, variant }), className)}
         data-active={isActive}
         data-invalid={invalid || undefined}
+        data-invalid-shake="owner"
         data-slot="input-otp-slot"
         {...props}
       >

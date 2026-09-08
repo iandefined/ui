@@ -320,12 +320,7 @@ function Drawer({
       }
       onSnapPointChange?.(nextPoint, undefined as any);
     }
-  }, [
-    snapPoints,
-    currentSnapPoint,
-    isControlled,
-    onSnapPointChange,
-  ]);
+  }, [snapPoints, currentSnapPoint, isControlled, onSnapPointChange]);
 
   const collapseToPrevSnapPoint = React.useCallback(() => {
     if (!snapPoints || snapPoints.length === 0) return;
@@ -337,12 +332,7 @@ function Drawer({
       }
       onSnapPointChange?.(prevPoint, undefined as any);
     }
-  }, [
-    snapPoints,
-    currentSnapPoint,
-    isControlled,
-    onSnapPointChange,
-  ]);
+  }, [snapPoints, currentSnapPoint, isControlled, onSnapPointChange]);
 
   const isAtFullSnap = Boolean(
     !snapPoints ||
@@ -366,15 +356,16 @@ function Drawer({
     [dismissible, isControlled, defaultSnapPoint, onOpenChange]
   );
 
-  const handleOpenChangeComplete = React.useCallback<DrawerOnOpenChangeComplete>(
-    (nextOpen) => {
-      if (nextOpen) {
-        setKeepMounted(true);
-      }
-      onOpenChangeComplete?.(nextOpen);
-    },
-    [onOpenChangeComplete]
-  );
+  const handleOpenChangeComplete =
+    React.useCallback<DrawerOnOpenChangeComplete>(
+      (nextOpen) => {
+        if (nextOpen) {
+          setKeepMounted(true);
+        }
+        onOpenChangeComplete?.(nextOpen);
+      },
+      [onOpenChangeComplete]
+    );
 
   const contextValue = React.useMemo<DrawerContextValue>(
     () => ({
@@ -431,12 +422,7 @@ function DrawerPortal(props: DrawerPrimitive.Portal.Props) {
 function DrawerTrigger(
   props: DrawerPrimitive.Trigger.Props
 ): React.ReactElement {
-  return (
-    <DrawerPrimitive.Trigger
-      data-slot="drawer-trigger"
-      {...props}
-    />
-  );
+  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
 function DrawerCloseTrigger(
@@ -960,8 +946,7 @@ function DrawerFooter({
   const position = popupContext?.position ?? rootPosition;
   const isFloating = popupContext?.variant === "floating";
   const isFloatingBottom = isFloating && position === "bottom";
-  const isViewportPinned =
-    sticky && position === "bottom" && !isFloatingBottom;
+  const isViewportPinned = sticky && position === "bottom" && !isFloatingBottom;
   const followsSnapPoint =
     !sticky &&
     position === "bottom" &&
@@ -1049,12 +1034,7 @@ function DrawerPanel({
   const scrollAreaRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
-    if (
-      !scrollable ||
-      !isBottom ||
-      !hasSnapPoints ||
-      usesFloatingSnapHeight
-    )
+    if (!scrollable || !isBottom || !hasSnapPoints || usesFloatingSnapHeight)
       return;
     const contentElement = contentRef.current;
     const scrollAreaElement = scrollAreaRef.current;

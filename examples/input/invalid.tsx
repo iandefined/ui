@@ -3,17 +3,19 @@
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
+import { Input } from "@/registry/base/input";
 
-export default function FieldValidationDemo() {
+export default function InputInvalidDemo() {
   const [invalid, setInvalid] = useState(false);
 
   return (
     <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <FieldLabel>Display name</FieldLabel>
-        <FieldControl placeholder="Ada Lovelace" />
-      </Field>
+      <Input
+        aria-label="Email address"
+        aria-invalid={invalid || undefined}
+        className="w-full"
+        placeholder="you@example.com"
+      />
       <Button
         onClick={() => setInvalid((current) => !current)}
         variant={invalid ? "default" : "destructive"}

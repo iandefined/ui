@@ -522,7 +522,7 @@
       "type": "registry:ui",
       "title": "Text Morph",
       "description": "The standard animated-text primitive, powered by Calligraph with smooth container resizing.",
-      "dependencies": ["calligraph"],
+      "dependencies": ["calligraph", "motion"],
       "files": [
         {
           "path": "src/registry/base/text-morph.tsx",

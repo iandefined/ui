@@ -12,6 +12,47 @@ import * as React from "react";
 
 import { TooltipSurface } from "./tooltip";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 type SliderValueType = number | [number, number];
 type SliderVariant = NonNullable<SliderProps["variant"]>;
 
@@ -655,6 +696,7 @@ function CompactSliderControl({
           "group/compact-slider relative flex h-5 w-full cursor-pointer touch-none items-center outline-none data-disabled:cursor-not-allowed",
           className
         )}
+        data-invalid-shake="owner"
         data-slot="slider-control"
         onPointerCancel={(event) => {
           onPointerCancel?.(event);
@@ -826,6 +868,7 @@ function DefaultSliderControl({
           "group/default-slider relative flex h-9 w-full cursor-ew-resize touch-none items-center overflow-hidden rounded-lg border border-input/70 not-dark:border-input bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] has-[input:focus-visible]:border-ring has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-64 dark:bg-input/32",
           className
         )}
+        data-invalid-shake="owner"
         data-slot="slider-control"
         onPointerCancel={(event) => {
           onPointerCancel?.(event);
@@ -964,48 +1007,53 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(function Slider(
   };
 
   return (
-    <SliderContext.Provider
-      value={{
-        disabled,
-        formatValue,
-        getAriaLabel,
-        hideTooltip,
-        max,
-        min,
-        onValueChange: updateValue,
-        onValueCommitted,
-        reduceMotion: resolvedReduceMotion,
-        showSteps,
-        step,
-        value,
-        variant: resolvedVariant,
-      }}
-    >
-      <SliderPrimitive.Root
-        ref={ref}
-        className={cn(
-          "w-full touch-none select-none text-sm text-muted-foreground [--slider-color:color-mix(in_oklab,var(--muted-foreground)_25%,transparent)]",
-          className
-        )}
-        data-disabled={disabled ? "" : undefined}
-        data-slot="slider"
-        data-variant={resolvedVariant}
-        disabled={disabled}
-        max={max}
-        min={min}
-        step={step}
-        thumbAlignment={resolvedVariant === "compact" ? "edge" : "center"}
-        thumbCollisionBehavior={resolvedThumbCollisionBehavior}
-        value={value}
-        onValueChange={(nextValue) => updateValue(nextValue as SliderValueType)}
-        onValueCommitted={(nextValue) =>
-          onValueCommitted?.(nextValue as SliderValueType)
-        }
-        {...props}
+    <>
+      <style>{invalidShakeStyles}</style>
+      <SliderContext.Provider
+        value={{
+          disabled,
+          formatValue,
+          getAriaLabel,
+          hideTooltip,
+          max,
+          min,
+          onValueChange: updateValue,
+          onValueCommitted,
+          reduceMotion: resolvedReduceMotion,
+          showSteps,
+          step,
+          value,
+          variant: resolvedVariant,
+        }}
       >
-        {children ?? <SliderControl />}
-      </SliderPrimitive.Root>
-    </SliderContext.Provider>
+        <SliderPrimitive.Root
+          ref={ref}
+          className={cn(
+            "w-full touch-none select-none text-sm text-muted-foreground [--slider-color:color-mix(in_oklab,var(--muted-foreground)_25%,transparent)]",
+            className
+          )}
+          data-disabled={disabled ? "" : undefined}
+          data-slot="slider"
+          data-variant={resolvedVariant}
+          disabled={disabled}
+          max={max}
+          min={min}
+          step={step}
+          thumbAlignment={resolvedVariant === "compact" ? "edge" : "center"}
+          thumbCollisionBehavior={resolvedThumbCollisionBehavior}
+          value={value}
+          onValueChange={(nextValue) =>
+            updateValue(nextValue as SliderValueType)
+          }
+          onValueCommitted={(nextValue) =>
+            onValueCommitted?.(nextValue as SliderValueType)
+          }
+          {...props}
+        >
+          {children ?? <SliderControl />}
+        </SliderPrimitive.Root>
+      </SliderContext.Provider>
+    </>
   );
 });
 

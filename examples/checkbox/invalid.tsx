@@ -3,17 +3,14 @@
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
+import { Checkbox } from "@/registry/base/checkbox";
 
-export default function FieldValidationDemo() {
+export default function CheckboxInvalidDemo() {
   const [invalid, setInvalid] = useState(false);
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <FieldLabel>Display name</FieldLabel>
-        <FieldControl placeholder="Ada Lovelace" />
-      </Field>
+    <div className="flex flex-col items-center gap-3">
+      <Checkbox aria-invalid={invalid || undefined} aria-label="Accept terms" />
       <Button
         onClick={() => setInvalid((current) => !current)}
         variant={invalid ? "default" : "destructive"}

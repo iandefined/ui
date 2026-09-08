@@ -20,6 +20,47 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 type ComboboxContextValue = {
   chipsRef: RefObject<HTMLDivElement | null>;
   multiple: boolean;
@@ -184,6 +225,7 @@ function ComboboxInput({
             "[[data-slot=combobox-chip]~&]:flex-none [[data-slot=combobox-chip]~&]:grow-0 [[data-slot=combobox-chip]~&]:w-0 [[data-slot=combobox-chip]~&]:min-w-0 [[data-slot=combobox-chip]~&]:p-0 [[data-slot=combobox-chip]~&]:m-0 [[data-slot=combobox-chip]~&]:border-0 [[data-slot=combobox-chip]~&]:opacity-0 [[data-slot=combobox-chip]~&]:pointer-events-none [[data-slot=combobox-chip]~&]:overflow-hidden",
           className
         )}
+        data-invalid-shake="control"
         data-slot="combobox-input"
         {...props}
       />
@@ -379,38 +421,42 @@ function ComboboxChips({
   }, [checkOverflow, chipsRef]);
 
   return (
-    <ComboboxPrimitive.Chips
-      className={cn(
-        "relative inline-flex w-full cursor-text items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 dark:bg-input/32 sm:text-sm",
-        shouldWrap
-          ? "min-h-9 flex-wrap"
-          : "h-9 min-h-9 flex-nowrap overflow-hidden",
-        className
-      )}
-      data-slot="combobox-chips"
-      ref={chipsRef}
-      onFocus={(e) => {
-        setIsFocused(true);
-        onFocus?.(e);
-      }}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          setIsFocused(false);
-        }
-        onBlur?.(e);
-      }}
-      {...props}
-    >
-      {children}
-      <span
-        ref={overflowBadgeRef}
-        data-slot="combobox-overflow"
-        style={{ display: "none" }}
-        className="relative flex h-6 shrink-0 items-center justify-center rounded-md bg-secondary border px-2 text-xs tabular-nums select-none"
+    <>
+      <style>{invalidShakeStyles}</style>
+      <ComboboxPrimitive.Chips
+        className={cn(
+          "relative inline-flex w-full cursor-text items-center gap-1 rounded-[12px] border border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out has-data-popup-open:z-[51] focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-within:data-invalid:outline-destructive/50 dark:bg-input/32 sm:text-sm",
+          shouldWrap
+            ? "min-h-9 flex-wrap"
+            : "h-9 min-h-9 flex-nowrap overflow-hidden",
+          className
+        )}
+        data-invalid-shake="owner"
+        data-slot="combobox-chips"
+        ref={chipsRef}
+        onFocus={(e) => {
+          setIsFocused(true);
+          onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) {
+            setIsFocused(false);
+          }
+          onBlur?.(e);
+        }}
+        {...props}
       >
-        +{overflowAmount}
-      </span>
-    </ComboboxPrimitive.Chips>
+        {children}
+        <span
+          ref={overflowBadgeRef}
+          data-slot="combobox-overflow"
+          style={{ display: "none" }}
+          className="relative flex h-6 shrink-0 items-center justify-center rounded-md bg-secondary border px-2 text-xs tabular-nums select-none"
+        >
+          +{overflowAmount}
+        </span>
+      </ComboboxPrimitive.Chips>
+    </>
   );
 }
 

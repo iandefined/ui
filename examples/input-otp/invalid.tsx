@@ -1,7 +1,8 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 
+import { Button } from "@/registry/base/button";
 import {
   InputOTP,
   InputOTPGroup,
@@ -15,23 +16,14 @@ const SLOT_KEYS = Array.from(
 );
 
 export default function InputOTPInvalidDemo() {
-  const inputId = useId();
-  const errorId = useId();
-  const [value, setValue] = useState("");
-  const invalid = value.length === OTP_LENGTH && value !== "123456";
+  const [invalid, setInvalid] = useState(false);
 
   return (
-    <div className="grid gap-2">
-      <label className="text-sm font-medium" htmlFor={inputId}>
-        Verification code
-      </label>
+    <div className="flex flex-col items-center gap-3">
       <InputOTP
-        aria-describedby={invalid ? errorId : undefined}
         aria-invalid={invalid || undefined}
-        id={inputId}
         maxLength={OTP_LENGTH}
-        onChange={setValue}
-        value={value}
+        aria-label="Verification code"
       >
         <InputOTPGroup>
           {SLOT_KEYS.map((key, index) => (
@@ -39,14 +31,12 @@ export default function InputOTPInvalidDemo() {
           ))}
         </InputOTPGroup>
       </InputOTP>
-      <p
-        className={
-          invalid ? "text-sm text-destructive" : "text-sm text-muted-foreground"
-        }
-        id={errorId}
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
       >
-        {invalid ? "The code is invalid." : "Enter 123456 to verify the code."}
-      </p>
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
     </div>
   );
 }

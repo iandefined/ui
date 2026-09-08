@@ -1,10 +1,4 @@
 import { DateInput } from "@/registry/base/date-input";
-import {
-  Field,
-  FieldError,
-  FieldErrorSlot,
-  FieldLabel,
-} from "@/registry/base/field";
 import { Label } from "@/registry/base/label";
 
 export default function DateInputStates() {
@@ -26,20 +20,6 @@ export default function DateInputStates() {
           readOnly
         />
       </div>
-      <Field invalid>
-        <FieldLabel htmlFor="date-input-required">Required date</FieldLabel>
-        <DateInput
-          aria-describedby="invalid-date-message"
-          id="date-input-required"
-          invalid
-          required
-        />
-        <FieldErrorSlot>
-          <FieldError id="invalid-date-message" match>
-            Enter a complete date.
-          </FieldError>
-        </FieldErrorSlot>
-      </Field>
     </div>
   );
 }

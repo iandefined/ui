@@ -5,6 +5,47 @@ import { cn } from "cn";
 import * as React from "react";
 import { tv } from "tailwind-variants";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 type NumberFieldSize = Exclude<NonNullable<NumberFieldProps["size"]>, number>;
 
 interface NumberFieldContextValue {
@@ -73,17 +114,20 @@ const NumberField = ({
     typeof size === "number" ? "default" : size;
 
   return (
-    <NumberFieldContext.Provider value={{ size: resolvedSize }}>
-      <NumberFieldPrimitive.Root
-        data-slot="number-field"
-        data-size={resolvedSize}
-        className={cn(
-          "flex w-full max-w-[200px] flex-col items-start gap-2",
-          className
-        )}
-        {...props}
-      />
-    </NumberFieldContext.Provider>
+    <>
+      <style>{invalidShakeStyles}</style>
+      <NumberFieldContext.Provider value={{ size: resolvedSize }}>
+        <NumberFieldPrimitive.Root
+          data-slot="number-field"
+          data-size={resolvedSize}
+          className={cn(
+            "flex w-full max-w-[200px] flex-col items-start gap-2",
+            className
+          )}
+          {...props}
+        />
+      </NumberFieldContext.Provider>
+    </>
   );
 };
 
@@ -110,6 +154,7 @@ const NumberFieldGroup = ({
   return (
     <NumberFieldContext.Provider value={{ size }}>
       <NumberFieldPrimitive.Group
+        data-invalid-shake="owner"
         data-slot="number-field-group"
         data-size={size}
         className={cn(numberFieldGroupVariants({ size }), className)}

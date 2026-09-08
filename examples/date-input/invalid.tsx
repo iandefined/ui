@@ -3,17 +3,14 @@
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
+import { DateInput } from "@/registry/base/date-input";
 
-export default function FieldValidationDemo() {
+export default function DateInputInvalidDemo() {
   const [invalid, setInvalid] = useState(false);
 
   return (
     <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <FieldLabel>Display name</FieldLabel>
-        <FieldControl placeholder="Ada Lovelace" />
-      </Field>
+      <DateInput aria-label="Event date" className="w-full" invalid={invalid} />
       <Button
         onClick={() => setInvalid((current) => !current)}
         variant={invalid ? "default" : "destructive"}

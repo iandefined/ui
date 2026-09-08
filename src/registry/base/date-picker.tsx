@@ -46,6 +46,47 @@ import {
   type DatePickerRootDateProps,
 } from "@/lib/date";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 export type DatePickerProps = Omit<DatePickerRootDateProps, "inline"> & {
   invalid?: boolean;
 };
@@ -161,28 +202,31 @@ function DatePicker({
     [invalid, props.format, props.locale, props.max, props.min, props.timeZone]
   );
   return (
-    <DatePickerInputContext value={inputContextValue}>
-      <DatePickerPrimitive.Root
-        ref={rootRef}
-        fixedWeeks
-        lazyMount
-        unmountOnExit
-        closeOnSelect={selectionMode !== "multiple"}
-        {...adaptedProps}
-        openOnClick={props.openOnClick ?? true}
-        selectionMode={selectionMode}
-        numOfMonths={visibleMonths}
-        positioning={{ placement: "bottom-start", gutter: 4, ...positioning }}
-        data-invalid={invalid ? "" : undefined}
-        className={cn(
-          selectionMode === "multiple"
-            ? "w-full max-w-sm space-y-2"
-            : "w-fit max-w-full space-y-2",
-          className
-        )}
-        data-slot="date-picker"
-      />
-    </DatePickerInputContext>
+    <>
+      <style>{invalidShakeStyles}</style>
+      <DatePickerInputContext value={inputContextValue}>
+        <DatePickerPrimitive.Root
+          ref={rootRef}
+          fixedWeeks
+          lazyMount
+          unmountOnExit
+          closeOnSelect={selectionMode !== "multiple"}
+          {...adaptedProps}
+          openOnClick={props.openOnClick ?? true}
+          selectionMode={selectionMode}
+          numOfMonths={visibleMonths}
+          positioning={{ placement: "bottom-start", gutter: 4, ...positioning }}
+          data-invalid={invalid ? "" : undefined}
+          className={cn(
+            selectionMode === "multiple"
+              ? "w-full max-w-sm space-y-2"
+              : "w-fit max-w-full space-y-2",
+            className
+          )}
+          data-slot="date-picker"
+        />
+      </DatePickerInputContext>
+    </>
   );
 }
 
@@ -242,6 +286,7 @@ function DatePickerTrigger({
             "size-6 hitbox-[1px] rounded-[calc(var(--radius)-5px)] border-0 p-0 shadow-none text-muted-foreground hover:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground dark:data-[state=open]:bg-muted/50 data-invalid:border-0 aria-invalid:border-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
           className
         )}
+        data-invalid-shake="owner"
         data-slot="date-picker-trigger"
         size={size}
         data-invalid={isInvalid ? "" : undefined}
@@ -440,6 +485,7 @@ function DatePickerChips({
         data-slot="date-picker-chips"
         data-state={picker.open ? "open" : "closed"}
         data-invalid={isInvalid ? "" : undefined}
+        data-invalid-shake="owner"
         data-disabled={picker.disabled || picker.readOnly ? "" : undefined}
         className={cn(
           "relative inline-flex w-full min-w-48 items-center gap-1 rounded-[12px] border border-input/70 not-dark:border-input bg-background px-1.5 py-1 text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid",
@@ -1440,155 +1486,164 @@ function DatePickerTimer({
   const activeMinuteStr = parsed ? String(parsed.minute).padStart(2, "0") : "";
 
   return (
-    <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
-      <PopoverPrimitive.Trigger
-        render={
-          <Button
-            variant="outline"
-            type="button"
-            size={size}
-            id={id}
-            disabled={disabled}
-            aria-label={props["aria-label"] ?? "Choose time"}
-            aria-invalid={props["aria-invalid"] ?? (invalid ? true : undefined)}
-            data-invalid={
-              ((props as Record<string, unknown>)["data-invalid"] as
-                | string
-                | undefined) ?? (invalid ? "" : undefined)
-            }
-            className={cn(
-              "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! motion-reduce:transition-none",
-              size.startsWith("icon") && "hitbox-[1px]",
-              className
-            )}
-            data-slot="date-picker-timer-trigger"
-            {...(props as Record<string, unknown>)}
+    <>
+      <style>{invalidShakeStyles}</style>
+      <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
+        <PopoverPrimitive.Trigger
+          render={
+            <Button
+              variant="outline"
+              type="button"
+              size={size}
+              id={id}
+              disabled={disabled}
+              aria-label={props["aria-label"] ?? "Choose time"}
+              aria-invalid={
+                props["aria-invalid"] ?? (invalid ? true : undefined)
+              }
+              data-invalid={
+                ((props as Record<string, unknown>)["data-invalid"] as
+                  | string
+                  | undefined) ?? (invalid ? "" : undefined)
+              }
+              className={cn(
+                "h-9 min-w-0 max-w-full justify-start gap-2 px-3 font-normal tabular-nums transition-[border-color,outline-width,outline-offset,outline-color] duration-100 ease-out border-input/70 not-dark:border-input dark:border-input/70 data-invalid:border-destructive! data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50! data-invalid:outline-solid data-invalid:shadow-none! aria-invalid:border-destructive! aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50! aria-invalid:outline-solid aria-invalid:shadow-none! dark:data-invalid:border-destructive! dark:aria-invalid:border-destructive! dark:data-invalid:outline-destructive/50! dark:aria-invalid:outline-destructive/50! focus-visible:data-invalid:border-destructive! focus-visible:aria-invalid:border-destructive! focus-visible:data-invalid:outline-destructive/50! focus-visible:aria-invalid:outline-destructive/50! focus-visible:data-invalid:ring-0 focus-visible:aria-invalid:ring-0 [[data-slot=field][data-invalid]_&]:border-destructive! dark:[[data-slot=field][data-invalid]_&]:border-destructive! [[data-slot=field][data-invalid]_&]:outline-2 [[data-slot=field][data-invalid]_&]:outline-offset-2 [[data-slot=field][data-invalid]_&]:outline-destructive/50! dark:[[data-slot=field][data-invalid]_&]:outline-destructive/50! [[data-slot=field][data-invalid]_&]:outline-solid [[data-slot=field][data-invalid]_&]:shadow-none! motion-reduce:transition-none",
+                size.startsWith("icon") && "hitbox-[1px]",
+                className
+              )}
+              data-invalid-shake="owner"
+              data-slot="date-picker-timer-trigger"
+              {...(props as Record<string, unknown>)}
+            />
+          }
+        >
+          <Clock
+            className="size-4 shrink-0 text-muted-foreground"
+            aria-hidden="true"
           />
-        }
-      >
-        <Clock
-          className="size-4 shrink-0 text-muted-foreground"
-          aria-hidden="true"
-        />
-        <span
-          className={cn(
-            "min-w-0 truncate",
-            !currentValue && "text-muted-foreground"
-          )}
-        >
-          {displayTime || placeholder}
-        </span>
-      </PopoverPrimitive.Trigger>
-      {name && <input type="hidden" name={name} value={currentValue} />}
-
-      <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Positioner
-          side="bottom"
-          align="start"
-          sideOffset={4}
-          className="z-50"
-          data-slot="date-picker-timer-positioner"
-        >
-          <PopoverPrimitive.Popup
-            data-slot="date-picker-timer-popup"
+          <span
             className={cn(
-              "pointer-events-auto origin-(--transform-origin) overflow-hidden rounded-lg border border-border bg-popover p-0 text-popover-foreground shadow-md outline-none",
-              !reduceMotion &&
-                "[transition-property:scale,opacity] [will-change:scale,opacity] data-starting-style:scale-80 data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:scale-80 duration-[0.35s] ease-[cubic-bezier(0.19,1,0.22,1)] motion-reduce:transition-none",
-              popupClassName
+              "min-w-0 truncate",
+              !currentValue && "text-muted-foreground"
             )}
           >
-            <div className="flex h-56 divide-x divide-border text-sm">
-              <DatePickerTimerScrollColumn
-                ariaLabel="Hours"
-                items={hours}
-                selectedValue={activeHourStr}
-                onSelect={handleHourSelect}
-                itemClassName="w-11"
-                open={open}
-                reduceMotion={reduceMotion}
-              />
+            {displayTime || placeholder}
+          </span>
+        </PopoverPrimitive.Trigger>
+        {name && <input type="hidden" name={name} value={currentValue} />}
 
-              <DatePickerTimerScrollColumn
-                ariaLabel="Minutes"
-                items={minutes}
-                selectedValue={activeMinuteStr}
-                onSelect={handleMinuteSelect}
-                itemClassName="w-11"
-                open={open}
-                reduceMotion={reduceMotion}
-              />
-
-              {format === "12" && (
-                <div
-                  aria-label="Period"
-                  aria-orientation="vertical"
-                  role="listbox"
-                  className="flex flex-col gap-y-2 px-1 py-1"
-                >
-                  {(["AM", "PM"] as const).map((p, periodIndex) => {
-                    const isSelected = activePeriod === p;
-                    return (
-                      <button
-                        key={p}
-                        type="button"
-                        role="option"
-                        aria-selected={isSelected}
-                        aria-label={`Period: ${p}`}
-                        tabIndex={
-                          periodIndex === (activePeriod === "AM" ? 0 : 1)
-                            ? 0
-                            : -1
-                        }
-                        data-selected={isSelected ? "" : undefined}
-                        className={cn(
-                          "cursor-pointer flex h-8 hitbox-[1px] w-12 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
-                          "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
-                          isSelected
-                            ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
-                            : "text-foreground"
-                        )}
-                        onClick={() => handlePeriodSelect(p)}
-                        onKeyDown={(event) => {
-                          const isPrevious = event.key === "ArrowUp";
-                          const isNext = event.key === "ArrowDown";
-                          const isFirst = event.key === "Home";
-                          const isLast = event.key === "End";
-                          if (!isPrevious && !isNext && !isFirst && !isLast) {
-                            return;
-                          }
-
-                          const nextIndex = isFirst
-                            ? 0
-                            : isLast
-                              ? 1
-                              : Math.min(
-                                  Math.max(periodIndex + (isNext ? 1 : -1), 0),
-                                  1
-                                );
-                          if (nextIndex === periodIndex) return;
-
-                          event.preventDefault();
-                          const nextPeriod = nextIndex === 0 ? "AM" : "PM";
-                          const nextOption =
-                            event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
-                              '[role="option"]'
-                            )[nextIndex];
-                          nextOption?.focus();
-                          handlePeriodSelect(nextPeriod);
-                        }}
-                      >
-                        {p}
-                      </button>
-                    );
-                  })}
-                </div>
+        <PopoverPrimitive.Portal>
+          <PopoverPrimitive.Positioner
+            side="bottom"
+            align="start"
+            sideOffset={4}
+            className="z-50"
+            data-slot="date-picker-timer-positioner"
+          >
+            <PopoverPrimitive.Popup
+              data-slot="date-picker-timer-popup"
+              className={cn(
+                "pointer-events-auto origin-(--transform-origin) overflow-hidden rounded-lg border border-border bg-popover p-0 text-popover-foreground shadow-md outline-none",
+                !reduceMotion &&
+                  "[transition-property:scale,opacity] [will-change:scale,opacity] data-starting-style:scale-80 data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:scale-80 duration-[0.35s] ease-[cubic-bezier(0.19,1,0.22,1)] motion-reduce:transition-none",
+                popupClassName
               )}
-            </div>
-          </PopoverPrimitive.Popup>
-        </PopoverPrimitive.Positioner>
-      </PopoverPrimitive.Portal>
-    </PopoverPrimitive.Root>
+            >
+              <div className="flex h-56 divide-x divide-border text-sm">
+                <DatePickerTimerScrollColumn
+                  ariaLabel="Hours"
+                  items={hours}
+                  selectedValue={activeHourStr}
+                  onSelect={handleHourSelect}
+                  itemClassName="w-11"
+                  open={open}
+                  reduceMotion={reduceMotion}
+                />
+
+                <DatePickerTimerScrollColumn
+                  ariaLabel="Minutes"
+                  items={minutes}
+                  selectedValue={activeMinuteStr}
+                  onSelect={handleMinuteSelect}
+                  itemClassName="w-11"
+                  open={open}
+                  reduceMotion={reduceMotion}
+                />
+
+                {format === "12" && (
+                  <div
+                    aria-label="Period"
+                    aria-orientation="vertical"
+                    role="listbox"
+                    className="flex flex-col gap-y-2 px-1 py-1"
+                  >
+                    {(["AM", "PM"] as const).map((p, periodIndex) => {
+                      const isSelected = activePeriod === p;
+                      return (
+                        <button
+                          key={p}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          aria-label={`Period: ${p}`}
+                          tabIndex={
+                            periodIndex === (activePeriod === "AM" ? 0 : 1)
+                              ? 0
+                              : -1
+                          }
+                          data-selected={isSelected ? "" : undefined}
+                          className={cn(
+                            "cursor-pointer flex h-8 hitbox-[1px] w-12 items-center justify-center rounded-sm text-sm font-normal tabular-nums transition-colors motion-reduce:transition-none outline-none",
+                            "hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-[-1px] focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
+                            isSelected
+                              ? "bg-primary text-primary-foreground font-medium hover:bg-primary hover:text-primary-foreground"
+                              : "text-foreground"
+                          )}
+                          onClick={() => handlePeriodSelect(p)}
+                          onKeyDown={(event) => {
+                            const isPrevious = event.key === "ArrowUp";
+                            const isNext = event.key === "ArrowDown";
+                            const isFirst = event.key === "Home";
+                            const isLast = event.key === "End";
+                            if (!isPrevious && !isNext && !isFirst && !isLast) {
+                              return;
+                            }
+
+                            const nextIndex = isFirst
+                              ? 0
+                              : isLast
+                                ? 1
+                                : Math.min(
+                                    Math.max(
+                                      periodIndex + (isNext ? 1 : -1),
+                                      0
+                                    ),
+                                    1
+                                  );
+                            if (nextIndex === periodIndex) return;
+
+                            event.preventDefault();
+                            const nextPeriod = nextIndex === 0 ? "AM" : "PM";
+                            const nextOption =
+                              event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
+                                '[role="option"]'
+                              )[nextIndex];
+                            nextOption?.focus();
+                            handlePeriodSelect(nextPeriod);
+                          }}
+                        >
+                          {p}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </PopoverPrimitive.Popup>
+          </PopoverPrimitive.Positioner>
+        </PopoverPrimitive.Portal>
+      </PopoverPrimitive.Root>
+    </>
   );
 }
 

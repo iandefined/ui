@@ -6,6 +6,47 @@ import { cn } from "cn";
 import { createContext, useContext, type ComponentProps } from "react";
 import { tv } from "tailwind-variants";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 const radioGroupStyles = tv({
   base: "flex",
   variants: {
@@ -114,11 +155,15 @@ function RadioGroup<Value = string>({
   ...props
 }: RadioGroupProps<Value>) {
   return (
-    <RadioGroupPrimitive
-      className={cn(radioGroupStyles({ orientation }), className)}
-      data-slot="radio-group"
-      {...props}
-    />
+    <>
+      <style>{invalidShakeStyles}</style>
+      <RadioGroupPrimitive
+        className={cn(radioGroupStyles({ orientation }), className)}
+        data-invalid-shake="owner"
+        data-slot="radio-group"
+        {...props}
+      />
+    </>
   );
 }
 
@@ -137,25 +182,29 @@ function RadioRoot<Value = string>({
   ...props
 }: RadioRootProps<Value>) {
   return (
-    <RadioContext.Provider value={{ reduceMotion, size }}>
-      <RadioPrimitive.Root
-        className={cn(radioRootStyles({ size, reduceMotion }), className)}
-        data-slot="radio"
-        {...props}
-      >
-        <span
-          className="absolute -inset-1 pointer-events-auto"
-          aria-hidden="true"
-        />
-        <RadioPrimitive.Indicator
-          aria-hidden
-          className={radioSelectedSurfaceStyles({ reduceMotion })}
-          data-slot="radio-selected-surface"
-          keepMounted
-        />
-        {children}
-      </RadioPrimitive.Root>
-    </RadioContext.Provider>
+    <>
+      <style>{invalidShakeStyles}</style>
+      <RadioContext.Provider value={{ reduceMotion, size }}>
+        <RadioPrimitive.Root
+          className={cn(radioRootStyles({ size, reduceMotion }), className)}
+          data-invalid-shake="owner"
+          data-slot="radio"
+          {...props}
+        >
+          <span
+            className="absolute -inset-1 pointer-events-auto"
+            aria-hidden="true"
+          />
+          <RadioPrimitive.Indicator
+            aria-hidden
+            className={radioSelectedSurfaceStyles({ reduceMotion })}
+            data-slot="radio-selected-surface"
+            keepMounted
+          />
+          {children}
+        </RadioPrimitive.Root>
+      </RadioContext.Provider>
+    </>
   );
 }
 

@@ -8,10 +8,33 @@ interface FormProps extends Omit<ComponentProps<"form">, "onSubmit"> {
   form: Pick<AnyFormApi, "handleSubmit">;
 }
 
+function replayInvalidShakes(formElement: HTMLFormElement) {
+  const invalidSelector = '[aria-invalid="true"], [data-invalid]';
+
+  formElement
+    .querySelectorAll<HTMLElement>('[data-invalid-shake="owner"]')
+    .forEach((target) => {
+      if (
+        !target.matches(invalidSelector) &&
+        !target.querySelector(invalidSelector)
+      ) {
+        return;
+      }
+
+      target.classList.remove("is-shaking");
+      void target.offsetWidth;
+      target.classList.add("is-shaking");
+    });
+}
+
 function Form({ className, form, noValidate = true, ...props }: FormProps) {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    const formElement = event.currentTarget;
     event.preventDefault();
-    void form.handleSubmit();
+    void Promise.resolve(form.handleSubmit()).then(
+      () => requestAnimationFrame(() => replayInvalidShakes(formElement)),
+      () => requestAnimationFrame(() => replayInvalidShakes(formElement))
+    );
   };
 
   return (

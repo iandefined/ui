@@ -89,49 +89,32 @@ import {
 
 ### Validation
 
-Map external validation state to `Field` and animate an error into the active message slot.
+Trigger the invalid-state shake on a Field control.
 
 ```tsx
 "use client";
 
 import { useState } from "react";
 
-import {
-  Field,
-  FieldControl,
-  FieldDescription,
-  FieldError,
-  FieldErrorSlot,
-  FieldLabel,
-} from "@/registry/base/field";
+import { Button } from "@/registry/base/button";
+import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
 
 export default function FieldValidationDemo() {
-  const [touched, setTouched] = useState(false);
-  const [value, setValue] = useState("");
-  const invalid = touched && value.trim().length < 3;
+  const [invalid, setInvalid] = useState(false);
 
   return (
-    <Field
-      className="w-full max-w-sm"
-      dirty={value.length > 0}
-      invalid={invalid}
-      name="displayName"
-      touched={touched}
-    >
-      <FieldLabel>Display name</FieldLabel>
-      <FieldControl
-        onBlur={() => setTouched(true)}
-        onValueChange={setValue}
-        placeholder="Ada Lovelace"
-        value={value}
-      />
-      {!invalid && (
-        <FieldDescription>Use at least 3 characters.</FieldDescription>
-      )}
-      <FieldErrorSlot>
-        <FieldError match={invalid}>Enter at least 3 characters.</FieldError>
-      </FieldErrorSlot>
-    </Field>
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <FieldLabel>Display name</FieldLabel>
+        <FieldControl placeholder="Ada Lovelace" />
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
   );
 }
 ```

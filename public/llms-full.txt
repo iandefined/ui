@@ -1900,6 +1900,62 @@ export default function AutocompleteUseFilterDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on the autocomplete input.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+  AutocompleteRoot,
+} from "@/registry/base/autocomplete";
+import { Button } from "@/registry/base/button";
+import { Field } from "@/registry/base/field";
+
+const tags = ["feature", "fix", "bug", "docs"];
+
+export default function AutocompleteInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <AutocompleteRoot items={tags}>
+          <AutocompleteInput
+            aria-label="Search tags"
+            placeholder="Search tags..."
+          />
+          <AutocompletePopup>
+            <AutocompleteEmpty>No tags found.</AutocompleteEmpty>
+            <AutocompleteList>
+              {(tag: string) => (
+                <AutocompleteItem key={tag} value={tag}>
+                  {tag}
+                </AutocompleteItem>
+              )}
+            </AutocompleteList>
+          </AutocompletePopup>
+        </AutocompleteRoot>
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ### Result Counter and Stats
 
 Read the filtered item list for contextual summaries.
@@ -4395,6 +4451,35 @@ export default function CheckboxIconsDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on the checkbox.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Checkbox } from "@/registry/base/checkbox";
+
+export default function CheckboxInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <Checkbox aria-invalid={invalid || undefined} aria-label="Accept terms" />
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ## Accessibility
 
 Give an unlabeled checkbox an `aria-label`, or associate it with a visible `<label>`.
@@ -5763,6 +5848,61 @@ export default function ComboboxGroupsDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on the combobox input.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+} from "@/registry/base/combobox";
+import { Field } from "@/registry/base/field";
+
+const fruits = ["Apple", "Banana", "Cherry", "Orange"];
+
+export default function ComboboxInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <Combobox items={fruits}>
+          <ComboboxInput
+            aria-label="Select a fruit"
+            className="w-full"
+            placeholder="Select a fruit..."
+          />
+          <ComboboxPopup>
+            <ComboboxList>
+              {(fruit: string) => (
+                <ComboboxItem key={fruit} value={fruit}>
+                  {fruit}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxPopup>
+        </Combobox>
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `Combobox` wraps [Base UI Combobox](https://base-ui.com/react/components/combobox). Supported Base UI props pass through.
@@ -6573,18 +6713,12 @@ export default function DateInputSizes() {
 | `default` | Standard input height.           |
 | `lg`      | Larger input for spacious forms. |
 
-### Disabled, read-only, and invalid
+### Disabled and read-only
 
-Use `disabled`, `readOnly`, and `invalid` to communicate the field state, and associate explanatory text with `aria-describedby`.
+Use `disabled` and `readOnly` to communicate non-editable field states.
 
 ```tsx
 import { DateInput } from "@/registry/base/date-input";
-import {
-  Field,
-  FieldError,
-  FieldErrorSlot,
-  FieldLabel,
-} from "@/registry/base/field";
 import { Label } from "@/registry/base/label";
 
 export default function DateInputStates() {
@@ -6606,20 +6740,35 @@ export default function DateInputStates() {
           readOnly
         />
       </div>
-      <Field invalid>
-        <FieldLabel htmlFor="date-input-required">Required date</FieldLabel>
-        <DateInput
-          aria-describedby="invalid-date-message"
-          id="date-input-required"
-          invalid
-          required
-        />
-        <FieldErrorSlot>
-          <FieldError id="invalid-date-message" match>
-            Enter a complete date.
-          </FieldError>
-        </FieldErrorSlot>
-      </Field>
+    </div>
+  );
+}
+```
+
+### Invalid
+
+Trigger the invalid-state shake on the segmented input.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { DateInput } from "@/registry/base/date-input";
+
+export default function DateInputInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <DateInput aria-label="Event date" className="w-full" invalid={invalid} />
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
     </div>
   );
 }
@@ -7103,9 +7252,9 @@ export default function DatePickerTime() {
 }
 ```
 
-#### Invalid state
+### Invalid
 
-Use `invalid` on `DatePicker` and `DatePickerTimer` with [Field](./field) to present validation feedback for date and time selection.
+Trigger the invalid-state shake on the date picker trigger.
 
 ```tsx
 "use client";
@@ -7116,128 +7265,27 @@ import { Button } from "@/registry/base/button";
 import {
   DatePicker,
   DatePickerContent,
-  DatePickerTimer,
+  DatePickerLabel,
   DatePickerTrigger,
 } from "@/registry/base/date-picker";
-import {
-  Field,
-  FieldError,
-  FieldErrorSlot,
-  FieldLabel,
-} from "@/registry/base/field";
 
-export default function DatePickerTimeInvalid() {
-  const [value, setValue] = useState<Date[]>([]);
-  const [time, setTime] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const isDateInvalid = value.length === 0;
-  const isTimeInvalid = !time;
+export default function DatePickerInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
 
   return (
-    <form
-      className="grid w-full max-w-sm gap-4"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (!isDateInvalid && !isTimeInvalid) {
-          setSubmitted(true);
-        }
-      }}
-    >
-      <Field className="w-full space-y-2" invalid={isDateInvalid}>
-        <DatePicker
-          className="w-full max-w-sm"
-          invalid={isDateInvalid}
-          onValueChange={(details) => {
-            setValue(details.value);
-            setSubmitted(false);
-          }}
-          value={value}
-        >
-          <FieldLabel htmlFor="appointment-date-invalid">Date</FieldLabel>
-          <DatePickerTrigger
-            id="appointment-date-invalid"
-            aria-describedby={
-              isDateInvalid ? "invalid-appointment-date-message" : undefined
-            }
-            className="w-full justify-start"
-            invalid={isDateInvalid}
-          />
-          <DatePickerContent />
-        </DatePicker>
-        <FieldErrorSlot>
-          <FieldError
-            id="invalid-appointment-date-message"
-            match={isDateInvalid}
-          >
-            Select an appointment date.
-          </FieldError>
-        </FieldErrorSlot>
-      </Field>
-
-      <Field className="w-full space-y-2" invalid={isTimeInvalid}>
-        <FieldLabel htmlFor="appointment-time-invalid">Time</FieldLabel>
-        <div className="w-full">
-          <DatePickerTimer
-            aria-describedby={
-              isTimeInvalid ? "invalid-appointment-time-message" : undefined
-            }
-            className="w-full justify-start"
-            id="appointment-time-invalid"
-            invalid={isTimeInvalid}
-            onChange={(event) => {
-              setTime(event.target.value);
-              setSubmitted(false);
-            }}
-            value={time}
-          />
-        </div>
-        <FieldErrorSlot>
-          <FieldError
-            id="invalid-appointment-time-message"
-            match={isTimeInvalid}
-          >
-            Select an appointment time.
-          </FieldError>
-        </FieldErrorSlot>
-      </Field>
-
-      <div className="flex flex-col gap-2 pt-1">
-        {(!isDateInvalid || !isTimeInvalid) && (
-          <Button
-            className="w-full"
-            onClick={() => {
-              setValue([]);
-              setTime("");
-              setSubmitted(false);
-            }}
-            type="button"
-            variant="outline"
-          >
-            Reset
-          </Button>
-        )}
-        <Button
-          className="w-full"
-          disabled={isDateInvalid || isTimeInvalid}
-          type="submit"
-        >
-          Book appointment
-        </Button>
-      </div>
-
-      {submitted && value[0] && time && (
-        <output className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
-          Appointment booked for{" "}
-          {value[0].toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}{" "}
-          at {time}.
-        </output>
-      )}
-    </form>
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <DatePicker className="w-full" invalid={invalid}>
+        <DatePickerLabel>Event date</DatePickerLabel>
+        <DatePickerTrigger className="w-full justify-start" invalid={invalid} />
+        <DatePickerContent />
+      </DatePicker>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
   );
 }
 ```
@@ -10379,49 +10427,32 @@ import {
 
 ### Validation
 
-Map external validation state to `Field` and animate an error into the active message slot.
+Trigger the invalid-state shake on a Field control.
 
 ```tsx
 "use client";
 
 import { useState } from "react";
 
-import {
-  Field,
-  FieldControl,
-  FieldDescription,
-  FieldError,
-  FieldErrorSlot,
-  FieldLabel,
-} from "@/registry/base/field";
+import { Button } from "@/registry/base/button";
+import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
 
 export default function FieldValidationDemo() {
-  const [touched, setTouched] = useState(false);
-  const [value, setValue] = useState("");
-  const invalid = touched && value.trim().length < 3;
+  const [invalid, setInvalid] = useState(false);
 
   return (
-    <Field
-      className="w-full max-w-sm"
-      dirty={value.length > 0}
-      invalid={invalid}
-      name="displayName"
-      touched={touched}
-    >
-      <FieldLabel>Display name</FieldLabel>
-      <FieldControl
-        onBlur={() => setTouched(true)}
-        onValueChange={setValue}
-        placeholder="Ada Lovelace"
-        value={value}
-      />
-      {!invalid && (
-        <FieldDescription>Use at least 3 characters.</FieldDescription>
-      )}
-      <FieldErrorSlot>
-        <FieldError match={invalid}>Enter at least 3 characters.</FieldError>
-      </FieldErrorSlot>
-    </Field>
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <FieldLabel>Display name</FieldLabel>
+        <FieldControl placeholder="Ada Lovelace" />
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
   );
 }
 ```
@@ -12222,6 +12253,40 @@ export default function InputControlledDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on demand.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Input } from "@/registry/base/input";
+
+export default function InputInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Input
+        aria-label="Email address"
+        aria-invalid={invalid || undefined}
+        className="w-full"
+        placeholder="you@example.com"
+      />
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `Input` wraps [Base UI Input](https://base-ui.com/react/components/input). Supported Base UI and native input props pass through.
@@ -12681,6 +12746,46 @@ export default function InputGroupMenuDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on the input group.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/base/input-group";
+
+export default function InputGroupInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <InputGroup className="w-full">
+        <InputGroupInput
+          aria-invalid={invalid || undefined}
+          aria-label="Website"
+          placeholder="example.com"
+        />
+        <InputGroupAddon>https://</InputGroupAddon>
+      </InputGroup>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `InputGroup` and its parts are styled HTML elements. Standard element props pass through.
@@ -12870,13 +12975,14 @@ export default function InputOTPSizesDemo() {
 
 ### Invalid
 
-Set `aria-invalid` to expose and style an invalid code.
+Trigger the invalid-state shake on the OTP slots.
 
 ```tsx
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 
+import { Button } from "@/registry/base/button";
 import {
   InputOTP,
   InputOTPGroup,
@@ -12890,23 +12996,14 @@ const SLOT_KEYS = Array.from(
 );
 
 export default function InputOTPInvalidDemo() {
-  const inputId = useId();
-  const errorId = useId();
-  const [value, setValue] = useState("");
-  const invalid = value.length === OTP_LENGTH && value !== "123456";
+  const [invalid, setInvalid] = useState(false);
 
   return (
-    <div className="grid gap-2">
-      <label className="text-sm font-medium" htmlFor={inputId}>
-        Verification code
-      </label>
+    <div className="flex flex-col items-center gap-3">
       <InputOTP
-        aria-describedby={invalid ? errorId : undefined}
         aria-invalid={invalid || undefined}
-        id={inputId}
         maxLength={OTP_LENGTH}
-        onChange={setValue}
-        value={value}
+        aria-label="Verification code"
       >
         <InputOTPGroup>
           {SLOT_KEYS.map((key, index) => (
@@ -12914,14 +13011,12 @@ export default function InputOTPInvalidDemo() {
           ))}
         </InputOTPGroup>
       </InputOTP>
-      <p
-        className={
-          invalid ? "text-sm text-destructive" : "text-sm text-muted-foreground"
-        }
-        id={errorId}
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
       >
-        {invalid ? "The code is invalid." : "Enter 123456 to verify the code."}
-      </p>
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
     </div>
   );
 }
@@ -13599,6 +13694,50 @@ export default function NumberFieldFormattingDemo() {
         <NumberFieldIncrement />
       </NumberFieldGroup>
     </NumberField>
+  );
+}
+```
+
+### Invalid
+
+Trigger the invalid-state shake on the number field.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Field } from "@/registry/base/field";
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from "@/registry/base/number-field";
+
+export default function NumberFieldInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <NumberField defaultValue={10} className="max-w-none">
+          <NumberFieldGroup>
+            <NumberFieldDecrement />
+            <NumberFieldInput aria-label="Quantity" />
+            <NumberFieldIncrement />
+          </NumberFieldGroup>
+        </NumberField>
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
   );
 }
 ```
@@ -14847,6 +14986,52 @@ export default function RadioGroupCustomIndicatorDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on the radio group.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+
+export default function RadioGroupInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <RadioGroup
+        aria-invalid={invalid || undefined}
+        aria-label="Choose a plan"
+        defaultValue="pro"
+      >
+        <label
+          className="flex items-center gap-2 text-sm"
+          htmlFor="radio-invalid-starter"
+        >
+          <Radio id="radio-invalid-starter" value="starter" /> Starter
+        </label>
+        <label
+          className="flex items-center gap-2 text-sm"
+          htmlFor="radio-invalid-pro"
+        >
+          <Radio id="radio-invalid-pro" value="pro" /> Pro
+        </label>
+      </RadioGroup>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `RadioGroup`, `Radio`, and the composable radio parts wrap [Base UI Radio Group primitives](https://base-ui.com/react/components/radio-group). Supported Base UI props pass through.
@@ -15569,6 +15754,67 @@ export default function SelectMultipleSelectionDemo() {
         </SelectList>
       </SelectPopup>
     </Select>
+  );
+}
+```
+
+### Invalid
+
+Trigger the invalid-state shake on the select trigger.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Field } from "@/registry/base/field";
+import {
+  Select,
+  SelectIcon,
+  SelectItem,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
+} from "@/registry/base/select";
+
+const frameworks = [
+  { label: "Next.js", value: "next" },
+  { label: "Vite", value: "vite" },
+  { label: "Astro", value: "astro" },
+];
+
+export default function SelectInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <Select items={frameworks}>
+          <SelectTrigger aria-label="Select a framework" className="w-full">
+            <SelectValue placeholder="Select a framework" />
+            <SelectIcon />
+          </SelectTrigger>
+          <SelectPopup>
+            <SelectList>
+              {frameworks.map((framework) => (
+                <SelectItem key={framework.value} value={framework.value}>
+                  <SelectItemText>{framework.label}</SelectItemText>
+                </SelectItem>
+              ))}
+            </SelectList>
+          </SelectPopup>
+        </Select>
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
   );
 }
 ```
@@ -17586,6 +17832,55 @@ export default function SliderWithoutTooltipDemo() {
 }
 ```
 
+### Invalid
+
+Trigger the invalid-state shake on the slider control.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Field } from "@/registry/base/field";
+import {
+  Slider,
+  SliderContent,
+  SliderControl,
+  SliderLabel,
+  SliderValue,
+} from "@/registry/base/slider";
+
+export default function SliderInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+  const [value, setValue] = useState(50);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Field className="w-full" invalid={invalid}>
+        <Slider
+          value={value}
+          onValueChange={(nextValue) => setValue(nextValue as number)}
+        >
+          <SliderControl>
+            <SliderContent>
+              <SliderLabel>Volume</SliderLabel>
+              <SliderValue className="ms-auto" />
+            </SliderContent>
+          </SliderControl>
+        </Slider>
+      </Field>
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `Slider` and its parts wrap the corresponding [Base UI Slider primitives](https://base-ui.com/react/components/slider). Supported Base UI props pass through.
@@ -19204,6 +19499,40 @@ export default function TextareaControlledDemo() {
         value={value}
       />
       <span className="px-1 text-sm text-muted-foreground">Value: {value}</span>
+    </div>
+  );
+}
+```
+
+### Invalid
+
+Trigger the invalid-state shake on demand.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { Button } from "@/registry/base/button";
+import { Textarea } from "@/registry/base/textarea";
+
+export default function TextareaInvalidDemo() {
+  const [invalid, setInvalid] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-sm flex-col items-center gap-3">
+      <Textarea
+        aria-label="Message"
+        aria-invalid={invalid || undefined}
+        className="w-full"
+        placeholder="Tell us more..."
+      />
+      <Button
+        onClick={() => setInvalid((current) => !current)}
+        variant={invalid ? "default" : "destructive"}
+      >
+        {invalid ? "Reset" : "Trigger Error"}
+      </Button>
     </div>
   );
 }

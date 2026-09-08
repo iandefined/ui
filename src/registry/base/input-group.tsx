@@ -8,6 +8,47 @@ import { Button, type ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 type InputProps = Omit<React.ComponentProps<"input">, "size"> & {
   size?: "sm" | "default" | "lg" | number;
 };
@@ -18,15 +59,19 @@ type TextareaProps = Omit<React.ComponentProps<"textarea">, "size"> & {
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      className={cn(
-        "group/input-group relative inline-flex min-w-0 items-center rounded-lg border border-input/70 not-dark:border-input bg-background text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>textarea]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:outline-offset-2 has-[[data-slot=input-group-control]:focus-visible]:outline-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:outline-2 has-[[data-slot][aria-invalid=true]]:outline-offset-2 has-[[data-slot][aria-invalid=true]]:outline-destructive/50 dark:bg-input/32",
-        className
-      )}
-      data-slot="input-group"
-      role="group"
-      {...props}
-    />
+    <>
+      <style>{invalidShakeStyles}</style>
+      <div
+        className={cn(
+          "group/input-group relative inline-flex min-w-0 items-center rounded-lg border border-input/70 not-dark:border-input bg-background text-base/5 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>textarea]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:outline-2 has-[[data-slot=input-group-control]:focus-visible]:outline-offset-2 has-[[data-slot=input-group-control]:focus-visible]:outline-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:outline-2 has-[[data-slot][aria-invalid=true]]:outline-offset-2 has-[[data-slot][aria-invalid=true]]:outline-destructive/50 dark:bg-input/32",
+          className
+        )}
+        data-invalid-shake="owner"
+        data-slot="input-group"
+        role="group"
+        {...props}
+      />
+    </>
   );
 }
 
@@ -135,6 +180,7 @@ function InputGroupInput({ className, ...props }: InputProps) {
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:border-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0 aria-invalid:border-0 aria-invalid:outline-none aria-invalid:outline-0 dark:bg-transparent",
         className
       )}
+      data-invalid-shake="control"
       data-slot="input-group-control"
       {...props}
     />
@@ -148,6 +194,7 @@ function InputGroupTextarea({ className, ...props }: TextareaProps) {
         "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:border-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0 aria-invalid:border-0 aria-invalid:outline-none aria-invalid:outline-0 dark:bg-transparent",
         className
       )}
+      data-invalid-shake="control"
       data-slot="input-group-control"
       {...props}
     />

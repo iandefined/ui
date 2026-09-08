@@ -5,6 +5,47 @@ import { cn } from "cn";
 import React, { createContext, useContext, useState } from "react";
 import { tv } from "tailwind-variants";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 const checkboxRootStyles = tv({
   base: [
     `group size-7 relative inline-flex items-center justify-center shrink-0 shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid cursor-pointer transition-[outline-width,outline-offset,outline-color] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50`,
@@ -117,33 +158,37 @@ function CheckboxRoot({
     onCheckedChange?.(checked, eventDetails);
   };
   return (
-    <CheckboxContext.Provider
-      value={{
-        checked: isChecked,
-        onCheckedChange: handleCheckedChange,
-        indeterminate: indeterminate,
-        size: size,
-        reduceMotion: reduceMotion,
-      }}
-    >
-      <CheckboxPrimitive.Root
-        checked={isChecked}
-        className={cn(
-          checkboxRootStyles({ size, radius, reduceMotion }),
-          className
-        )}
-        indeterminate={indeterminate}
-        data-slot="checkbox"
-        onCheckedChange={handleCheckedChange}
-        {...rest}
+    <>
+      <style>{invalidShakeStyles}</style>
+      <CheckboxContext.Provider
+        value={{
+          checked: isChecked,
+          onCheckedChange: handleCheckedChange,
+          indeterminate: indeterminate,
+          size: size,
+          reduceMotion: reduceMotion,
+        }}
       >
-        <span
-          className="absolute -inset-1 pointer-events-auto"
-          aria-hidden="true"
-        />
-        {children}
-      </CheckboxPrimitive.Root>
-    </CheckboxContext.Provider>
+        <CheckboxPrimitive.Root
+          checked={isChecked}
+          className={cn(
+            checkboxRootStyles({ size, radius, reduceMotion }),
+            className
+          )}
+          indeterminate={indeterminate}
+          data-invalid-shake="owner"
+          data-slot="checkbox"
+          onCheckedChange={handleCheckedChange}
+          {...rest}
+        >
+          <span
+            className="absolute -inset-1 pointer-events-auto"
+            aria-hidden="true"
+          />
+          {children}
+        </CheckboxPrimitive.Root>
+      </CheckboxContext.Provider>
+    </>
   );
 }
 

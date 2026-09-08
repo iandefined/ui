@@ -4,7 +4,8 @@
   "title": "Text Morph",
   "description": "The standard animated-text primitive, powered by Calligraph with smooth container resizing.",
   "dependencies": [
-    "calligraph"
+    "calligraph",
+    "motion"
   ],
   "files": [
     {

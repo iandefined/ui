@@ -7,6 +7,47 @@ import { cn } from "cn";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { createContext, useContext, useMemo } from "react";
 
+// Styles for invalid animation shake
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+    will-change: transform;
+  }
+  [data-invalid-shake="owner"][aria-invalid="true"],
+  [data-invalid-shake="owner"][data-invalid],
+  [data-invalid-shake="owner"]:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"]:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 const cssAnimationPresets = {
   none: "transition-none",
   scale: [
@@ -157,14 +198,18 @@ interface SelectTriggerProps extends React.ComponentProps<
 
 function SelectTrigger({ className, ...props }: SelectTriggerProps) {
   return (
-    <SelectPrimitive.Trigger
-      data-slot="select-trigger"
-      className={cn(
-        "group/select-trigger cursor-pointer inline-flex h-fit min-w-36 touch-manipulation select-none items-center justify-between gap-3 rounded-lg border border-input/70 not-dark:border-input bg-background px-3 py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,background-color,outline-width,outline-offset,outline-color] duration-100 ease-out hover:bg-input/20 focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 data-popup-open:z-[51] data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-visible:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
-        className
-      )}
-      {...props}
-    />
+    <>
+      <style>{invalidShakeStyles}</style>
+      <SelectPrimitive.Trigger
+        data-invalid-shake="owner"
+        data-slot="select-trigger"
+        className={cn(
+          "group/select-trigger cursor-pointer inline-flex h-fit min-w-36 touch-manipulation select-none items-center justify-between gap-3 rounded-lg border border-input/70 not-dark:border-input bg-background px-3 py-[calc(--spacing(2)-1px)] text-sm text-foreground shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid transition-[border-color,background-color,outline-width,outline-offset,outline-color] duration-100 ease-out hover:bg-input/20 focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 data-popup-open:z-[51] data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50 focus-visible:data-invalid:outline-destructive/50 data-disabled:pointer-events-none data-disabled:opacity-50 dark:bg-input/32 dark:hover:bg-input/50",
+          className
+        )}
+        {...props}
+      />
+    </>
   );
 }
 
