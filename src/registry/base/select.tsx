@@ -142,8 +142,10 @@ interface SelectRootProps extends React.ComponentProps<
 }
 
 function Select({ backdrop = "transparent", ...props }: SelectRootProps) {
+  const contextValue = useMemo(() => ({ backdrop }), [backdrop]);
+
   return (
-    <SelectContext.Provider value={{ backdrop }}>
+    <SelectContext.Provider value={contextValue}>
       <SelectPrimitive.Root data-slot="select" {...props} />
     </SelectContext.Provider>
   );
@@ -251,9 +253,9 @@ function SelectBackdrop({ className, ...props }: SelectBackdropProps) {
       data-slot="select-backdrop"
       className={cn(
         backdrop === "opaque" &&
-          "fixed inset-0 z-50 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
+          "fixed inset-0 z-50 bg-black opacity-40 transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
         backdrop === "blur" &&
-          "fixed inset-0 z-50 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed inset-0 z-50 backdrop-blur-sm transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
         backdrop === "transparent" && "hidden",
         className
       )}

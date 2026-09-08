@@ -7,6 +7,23 @@ import {
 } from "@internationalized/date";
 import { useSyncExternalStore } from "react";
 
+const defaultDateFormatters = new Map<string, Intl.DateTimeFormat>();
+
+function getDefaultDateFormatter(locale: string, timeZone: string) {
+  const key = `${locale}\u0000${timeZone}`;
+  const cachedFormatter = defaultDateFormatters.get(key);
+  if (cachedFormatter) return cachedFormatter;
+
+  const formatter = new Intl.DateTimeFormat(locale, {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+    timeZone,
+  });
+  defaultDateFormatters.set(key, formatter);
+  return formatter;
+}
+
 function subscribeToCalendarViewport(onChange: () => void) {
   const query = window.matchMedia("(min-width: 640px)");
   query.addEventListener("change", onChange);
@@ -273,12 +290,10 @@ export function adaptDatePickerProps(
       ? (date, details) => format(fromDateValue(date), details)
       : (date, details) => {
           const jsDate = fromDateValue(date);
-          return new Intl.DateTimeFormat(details.locale, {
-            month: "2-digit",
-            day: "2-digit",
-            year: "numeric",
-            timeZone: details.timeZone,
-          }).format(jsDate);
+          return getDefaultDateFormatter(
+            details.locale,
+            details.timeZone
+          ).format(jsDate);
         },
     parse:
       parse &&

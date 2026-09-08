@@ -60,6 +60,83 @@ const defaultMetrics: MarqueeMetrics = {
   measured: false,
 };
 
+const MARQUEE_STYLES = `
+@keyframes tw-marquee-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(var(--marquee-distance, 0px) * -1), 0, 0); }
+}
+@keyframes tw-marquee-right {
+  from { transform: translate3d(calc(var(--marquee-distance, 0px) * -1), 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+[data-slot="marquee-track"] {
+  display: flex;
+  gap: var(--marquee-gap, 2rem);
+  min-width: max-content;
+  width: max-content;
+}
+[data-slot="marquee"][data-animating="true"] [data-slot="marquee-track"] {
+  animation-duration: var(--marquee-duration, 30s);
+  animation-iteration-count: infinite;
+  animation-name: tw-marquee-left;
+  animation-play-state: running;
+  animation-timing-function: linear;
+  will-change: transform;
+}
+[data-slot="marquee"][data-direction="right"][data-animating="true"] [data-slot="marquee-track"] {
+  animation-name: tw-marquee-right;
+}
+[data-slot="marquee"][data-animating="false"] [data-slot="marquee-track"] {
+  animation: none;
+  transform: none;
+}
+[data-slot="marquee"][data-pause-on-hover="true"][data-animating="true"]:hover [data-slot="marquee-track"] {
+  animation-play-state: paused;
+}
+[data-slot="marquee"][data-animating="false"] [data-copy="true"] {
+  visibility: hidden;
+}
+[data-slot="marquee"][data-fade="true"][data-fade-mode="auto"][data-animating="true"] {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::before,
+[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 2rem;
+  pointer-events: none;
+}
+[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::before {
+  left: 0;
+  background: linear-gradient(to right, var(--marquee-fade-color, var(--background)), transparent);
+}
+[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::after {
+  right: 0;
+  background: linear-gradient(to left, var(--marquee-fade-color, var(--background)), transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="marquee"] [data-slot="marquee-track"] {
+    animation: none !important;
+    transform: none !important;
+  }
+  [data-slot="marquee"] [data-copy="true"] {
+    visibility: hidden;
+  }
+  [data-slot="marquee"][data-fade="true"][data-fade-mode="auto"] {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+  [data-slot="marquee"][data-fade="true"][data-fade-mode="custom"]::before,
+  [data-slot="marquee"][data-fade="true"][data-fade-mode="custom"]::after {
+    display: none;
+  }
+}
+`;
+
 const getCssLength = (value: number | string) =>
   typeof value === "number" ? `${Math.max(0, value)}px` : value;
 
@@ -195,82 +272,7 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(function Marquee(
           </div>
         ))}
       </div>
-      <style>{`
-@keyframes tw-marquee-left {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(calc(var(--marquee-distance, 0px) * -1), 0, 0); }
-}
-@keyframes tw-marquee-right {
-  from { transform: translate3d(calc(var(--marquee-distance, 0px) * -1), 0, 0); }
-  to { transform: translate3d(0, 0, 0); }
-}
-[data-slot="marquee-track"] {
-  display: flex;
-  gap: var(--marquee-gap, 2rem);
-  min-width: max-content;
-  width: max-content;
-}
-[data-slot="marquee"][data-animating="true"] [data-slot="marquee-track"] {
-  animation-duration: var(--marquee-duration, 30s);
-  animation-iteration-count: infinite;
-  animation-name: tw-marquee-left;
-  animation-play-state: running;
-  animation-timing-function: linear;
-  will-change: transform;
-}
-[data-slot="marquee"][data-direction="right"][data-animating="true"] [data-slot="marquee-track"] {
-  animation-name: tw-marquee-right;
-}
-[data-slot="marquee"][data-animating="false"] [data-slot="marquee-track"] {
-  animation: none;
-  transform: none;
-}
-[data-slot="marquee"][data-pause-on-hover="true"][data-animating="true"]:hover [data-slot="marquee-track"] {
-  animation-play-state: paused;
-}
-[data-slot="marquee"][data-animating="false"] [data-copy="true"] {
-  visibility: hidden;
-}
-[data-slot="marquee"][data-fade="true"][data-fade-mode="auto"][data-animating="true"] {
-  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-}
-[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::before,
-[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-  width: 2rem;
-  pointer-events: none;
-}
-[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::before {
-  left: 0;
-  background: linear-gradient(to right, var(--marquee-fade-color, var(--background)), transparent);
-}
-[data-slot="marquee"][data-fade="true"][data-fade-mode="custom"][data-animating="true"]::after {
-  right: 0;
-  background: linear-gradient(to left, var(--marquee-fade-color, var(--background)), transparent);
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-slot="marquee"] [data-slot="marquee-track"] {
-    animation: none !important;
-    transform: none !important;
-  }
-  [data-slot="marquee"] [data-copy="true"] {
-    visibility: hidden;
-  }
-  [data-slot="marquee"][data-fade="true"][data-fade-mode="auto"] {
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-  }
-  [data-slot="marquee"][data-fade="true"][data-fade-mode="custom"]::before,
-  [data-slot="marquee"][data-fade="true"][data-fade-mode="custom"]::after {
-    display: none;
-  }
-}
-`}</style>
+      <style>{MARQUEE_STYLES}</style>
     </div>
   );
 });

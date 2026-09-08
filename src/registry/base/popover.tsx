@@ -144,14 +144,13 @@ const Popover = Object.assign(
       },
       [dismissible, onOpenChange]
     );
+    const contextValue = useMemo(
+      () => ({ backdrop, modal }),
+      [backdrop, modal]
+    );
 
     return (
-      <PopoverContext.Provider
-        value={{
-          backdrop,
-          modal,
-        }}
-      >
+      <PopoverContext.Provider value={contextValue}>
         <PopoverPrimitive.Root
           data-slot="popover"
           modal={modal}
@@ -183,9 +182,9 @@ function PopoverBackdrop({
       data-slot="popover-backdrop"
       className={cn(
         backdrop === "opaque" &&
-          "fixed inset-0 z-50 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
+          "fixed inset-0 z-50 bg-black opacity-40 transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
         backdrop === "blur" &&
-          "fixed inset-0 z-50 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed inset-0 z-50 backdrop-blur-sm transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
         backdrop === "transparent" && modal === true && "fixed inset-0 z-50",
         backdrop === "transparent" && modal !== true && "hidden",
         className

@@ -143,6 +143,16 @@ When animating container width or height due to dynamic content:
 - Apply `transform-gpu` and `will-change-transform` to animated overlay triggers and popup content.
 - Avoid animating layout-triggering properties (`width`, `height`, `top`, `left`, `margin`, `padding`) unless the measured-bounds pattern is necessary for content-driven sizing.
 
+### [HARD REQUIREMENT] Non-Blocking Measurement and Observation
+- Do not synchronously measure layout in a layout effect and then set React state before an overlay or animated surface can paint unless correctness explicitly requires pre-paint geometry reconciliation. Reuse primitive-owned measurements when available; otherwise observe only the configurations that require custom sizing.
+- Prefer `ResizeObserverEntry.borderBoxSize` or `contentRect` over a second `getBoundingClientRect()` or `scrollHeight` read inside a `ResizeObserver` callback.
+- When feature-specific verification shows notification coalescing is behavior-neutral, use one `requestAnimationFrame` scheduler for resize, mutation, and viewport notifications. When a measurement only drives element styling, update the relevant CSS property or variable directly instead of forcing the component subtree through another React render.
+- Keep object-valued context providers stable when their semantic value has not changed so opening or controlling a primitive does not invalidate unrelated descendants.
+- Treat geometry-driven overflow, resizing, sorting, filtering, pagination, and third-party primitive state as behavior-sensitive. Do not change their callback timing, observer lifecycle, row-model factories, or state-object identity as a generic optimization; require feature-specific evidence and verify every affected control path.
+- A scheduler must preserve the latest invalidation and the component's initial measurement. Do not replace cancel-and-reschedule behavior with a dropped notification unless stale frames are proven harmless for that component.
+- When browser QA is intentionally out of scope, limit performance refactors in behavior-sensitive components to pure computations, stable values outside primitive state models, and transition-property narrowing. Leave measurement and control scheduling unchanged.
+- If the UI must be correct on its first painted frame (for example, collapsing overflowing chips into a `+X` badge), perform the initial geometry reconciliation in a layout effect. Keep subsequent observer work deferred, and preserve this pre-paint guarantee during refactors.
+
 ### [HARD REQUIREMENT] Firefox Scroll Container Hierarchy in Flex Popups
 - **The Pitfall**: In Gecko (Firefox), a child element with `height: 100%` (`size-full`) inside an auto-height parent cannot compute a definite height and defaults to `auto`.
 - **Why Select and DatePickerTimer work**:

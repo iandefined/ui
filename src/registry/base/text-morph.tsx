@@ -1,6 +1,8 @@
 "use client";
 
 import { Calligraph, type CalligraphProps } from "calligraph";
+import { MotionConfig } from "motion/react";
+import { memo } from "react";
 
 type TextMorphProps = CalligraphProps;
 
@@ -11,19 +13,27 @@ type TextMorphProps = CalligraphProps;
  * the natural inner width while animating a separate outer wrapper to that
  * measured width.
  */
-function TextMorph({ children, autoSize = true, ...props }: TextMorphProps) {
+const TextMorph = memo(function TextMorph({
+  children,
+  autoSize = true,
+  ...props
+}: TextMorphProps) {
   const accessibleLabel = props["aria-label"] ?? String(children ?? "");
 
   return (
-    <Calligraph
-      {...props}
-      aria-label={accessibleLabel}
-      autoSize={autoSize}
-      data-slot="text-morph"
-    >
-      {children}
-    </Calligraph>
+    <MotionConfig reducedMotion="user">
+      <Calligraph
+        {...props}
+        aria-label={accessibleLabel}
+        autoSize={autoSize}
+        data-slot="text-morph"
+      >
+        {children}
+      </Calligraph>
+    </MotionConfig>
   );
-}
+});
+
+TextMorph.displayName = "TextMorph";
 
 export { TextMorph, type TextMorphProps };

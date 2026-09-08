@@ -29,7 +29,7 @@ function CollapsibleTrigger({
       className={cn(
         render
           ? "cursor-pointer"
-          : "bg-card border-border hover:bg-muted/50 group flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-left text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset disabled:pointer-events-none disabled:opacity-60",
+          : "bg-card border-border hover:bg-muted/50 group flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-left text-sm font-medium outline-none transition-colors motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset disabled:pointer-events-none disabled:opacity-60",
         className
       )}
       {...props}
@@ -44,7 +44,7 @@ function CollapsibleContent({ className, ...props }: CollapsibleContentProps) {
     <BaseCollapsible.Panel
       data-slot="collapsible-content"
       className={cn(
-        "h-(--collapsible-panel-height) overflow-hidden text-sm transition-all duration-200 ease-out data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0",
+        "h-(--collapsible-panel-height) overflow-hidden text-sm transition-[height,opacity] duration-200 ease-out motion-reduce:transition-none data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0",
         className
       )}
       {...props}

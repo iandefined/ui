@@ -28,7 +28,7 @@
       "@/components/ui/pagination": ["./src/registry/base/pagination.tsx"],
       "@/components/ui/select": ["./src/registry/base/select.tsx"],
       "@/components/ui/table": ["./src/registry/base/table.tsx"],
-      "@/lib/date": ["./src/registry/base/date.ts"],
+      "@/lib/date": ["./src/shared/lib/date.ts"],
       "@/components/*": ["./src/shared/components/*"],
       "@/hooks/*": ["./src/shared/hooks/*"],
       "@/lib/*": ["./src/shared/lib/*"],

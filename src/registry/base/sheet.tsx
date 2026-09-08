@@ -346,6 +346,16 @@ function SheetContent({
   const { modal, overlay } = parentConfig;
   const isModal = modal === true;
   const isNested = parentConfig.side !== null;
+  const shadowClass = getSheetShadowClass(variant, shadowLevel);
+  const generatedShadow = React.useMemo(() => {
+    if (shadowClass !== sheetGeneratedShadowClass) {
+      return undefined;
+    }
+
+    return variant === "floating"
+      ? createFloatingShadow(shadowLevel)
+      : createDirectionalShadow(side, shadowLevel);
+  }, [shadowClass, shadowLevel, side, variant]);
   const contentConfig = React.useMemo(
     () => ({ modal, overlay, side }),
     [modal, overlay, side]
@@ -363,7 +373,7 @@ function SheetContent({
         <DialogPrimitive.Popup
           className={cn(
             sheetContentVariants({ side, variant }),
-            getSheetShadowClass(variant, shadowLevel),
+            shadowClass,
             variant === "default" && sheetBorderClasses[side],
             variant === "default" && "border-transparent",
             variant === "default" && sheetNestedSurfaceClasses[side],
@@ -377,13 +387,10 @@ function SheetContent({
           data-variant={variant}
           style={
             {
-              "--sheet-generated-shadow":
-                variant === "floating"
-                  ? createFloatingShadow(shadowLevel)
-                  : createDirectionalShadow(side, shadowLevel),
+              "--sheet-generated-shadow": generatedShadow,
               ...style,
             } as React.CSSProperties &
-              Record<"--sheet-generated-shadow", string>
+              Record<"--sheet-generated-shadow", string | undefined>
           }
           {...props}
         >

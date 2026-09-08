@@ -436,7 +436,7 @@ function TableCell({ className, render, sticky, ...props }: TableCellProps) {
       "bg-card overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap dark:bg-background [[align=center]]:text-center [[align=right]]:text-right",
       "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
       "group-data-bordered/table:border-b group-data-bordered/table:border-r group-data-bordered/table:first:border-l group-data-bordered/table:border-border/70 dark:group-data-bordered/table:border-border",
-      "[[data-state=selected]_&]:bg-secondary/60 dark:[[data-state=selected]_&]:bg-muted/75",
+      "[[data-state=selected]_&]:bg-secondary/60 dark:[[data-state=selected]_&]:bg-muted/30 dark:[[data-state=selected]:hover_&]:bg-muted/30",
       sticky === "left" && "sticky left-0 z-[1]",
       sticky === "right" && "sticky right-0 z-[1]",
       className

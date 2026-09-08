@@ -6,7 +6,7 @@ For component source contracts, see [component-implementation.md](component-impl
 
 ## Source, manifest, and publication
 
-- Installable source belongs in the single `src/registry/base/` namespace. Do not add style namespaces.
+- Installable UI source belongs in `src/registry/base/`. Shared installable utilities may live in `src/shared/lib/` when both registry components and application code consume them; map those files to `lib/<name>.ts` in each owning registry item. Do not add style namespaces.
 - Every public item has one `registry.json` entry with an accurate `name`, `type`, `title`, `description`, dependencies, and `files` mapping.
 - `files[].path` names an authored source file; `files[].target` is the consumer destination. UI items normally install to `components/ui/<name>.tsx`.
 - Use `registry:ui` for components, `registry:hook` for hooks, `registry:style` for portable CSS utilities, and `registry:block` for multi-file layouts.
@@ -79,4 +79,3 @@ Because block code is authored to be consumer-portable, companion components imp
 - Run `pnpm registry:build` to regenerate the installable registry payload in `public/r/<category>-<number>.json`.
 - Run `pnpm typecheck`, `pnpm docs:check`, and `pnpm check`.
 - Verify the block displays properly in `/blocks` (both under its category filter pill and in the catalog grid) and inspect the live preview at `/blocks/<category>-<number>`.
-

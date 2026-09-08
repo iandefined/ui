@@ -22,7 +22,7 @@
           "target": "components/ui/calendar.tsx"
         },
         {
-          "path": "src/registry/base/date.ts",
+          "path": "src/shared/lib/date.ts",
           "type": "registry:lib",
           "target": "lib/date.ts"
         }
@@ -70,7 +70,7 @@
           "target": "components/ui/date-input.tsx"
         },
         {
-          "path": "src/registry/base/date.ts",
+          "path": "src/shared/lib/date.ts",
           "type": "registry:lib",
           "target": "lib/date.ts"
         }

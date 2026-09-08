@@ -22,6 +22,8 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type ComponentProps,
@@ -147,17 +149,19 @@ function DatePicker({
   }, []);
 
   const adaptedProps = adaptDatePickerProps(props);
+  const inputContextValue = useMemo(
+    () => ({
+      locale: props.locale,
+      timeZone: props.timeZone,
+      min: props.min,
+      max: props.max,
+      format: props.format,
+      invalid,
+    }),
+    [invalid, props.format, props.locale, props.max, props.min, props.timeZone]
+  );
   return (
-    <DatePickerInputContext
-      value={{
-        locale: props.locale,
-        timeZone: props.timeZone,
-        min: props.min,
-        max: props.max,
-        format: props.format,
-        invalid,
-      }}
-    >
+    <DatePickerInputContext value={inputContextValue}>
       <DatePickerPrimitive.Root
         ref={rootRef}
         fixedWeeks
@@ -301,9 +305,9 @@ function DatePickerChips({
     overflowBehavior === "wrap" ||
     (overflowBehavior === "wrap-when-open" && isSelecting);
 
-  const checkOverflow = useCallback(() => {
+  const applyOverflow = useCallback(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) return 0;
 
     const items = container.querySelectorAll<HTMLElement>(
       "[data-slot=date-picker-chip]"
@@ -317,8 +321,7 @@ function DatePickerChips({
       if (badge) {
         badge.style.display = "none";
       }
-      setOverflowAmount(0);
-      return;
+      return 0;
     }
 
     items.forEach((item) => {
@@ -329,8 +332,7 @@ function DatePickerChips({
     }
 
     if (items.length === 0) {
-      setOverflowAmount(0);
-      return;
+      return 0;
     }
 
     if (maxCount !== undefined && items.length > maxCount) {
@@ -343,13 +345,11 @@ function DatePickerChips({
         badge.style.removeProperty("display");
         badge.textContent = `+${amount}`;
       }
-      setOverflowAmount(amount);
-      return;
+      return amount;
     }
 
     if (container.scrollWidth <= container.clientWidth + 1) {
-      setOverflowAmount(0);
-      return;
+      return 0;
     }
 
     let amount = 0;
@@ -367,15 +367,16 @@ function DatePickerChips({
         break;
       }
     }
-    setOverflowAmount(amount);
+    return amount;
   }, [shouldWrap, maxCount]);
 
-  useEffect(() => {
-    const rafId = requestAnimationFrame(() => {
-      checkOverflow();
-    });
-    return () => cancelAnimationFrame(rafId);
-  }, [checkOverflow, picker.value]);
+  const checkOverflow = useCallback(() => {
+    setOverflowAmount(applyOverflow());
+  }, [applyOverflow]);
+
+  useLayoutEffect(() => {
+    applyOverflow();
+  }, [applyOverflow, picker.value]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -634,6 +635,22 @@ function DatePickerValue({
   const hasValue = picker.value.length > 0;
   const locale = settings.locale ?? "en-US";
   const timeZone = settings.timeZone ?? "UTC";
+  const defaultFormatter = useMemo(() => {
+    if (
+      resolvedFormat !== undefined ||
+      children !== undefined ||
+      picker.selectionMode === "multiple"
+    ) {
+      return null;
+    }
+
+    return new Intl.DateTimeFormat(locale, {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      timeZone,
+    });
+  }, [children, locale, picker.selectionMode, resolvedFormat, timeZone]);
 
   if (typeof children === "function") {
     if (!hasValue) {
@@ -784,13 +801,7 @@ function DatePickerValue({
     >
       {picker.value.map((dateValue, index) => {
         const date = fromDateValue(dateValue);
-        const formatter = new Intl.DateTimeFormat(locale, {
-          month: "2-digit",
-          day: "2-digit",
-          year: "numeric",
-          timeZone,
-        });
-        const parts = formatter.formatToParts(date);
+        const parts = defaultFormatter!.formatToParts(date);
         return (
           <Fragment key={dateValue.toString()}>
             {index > 0 && (
@@ -1021,17 +1032,24 @@ function DatePickerTimerScrollColumn({
 }: DatePickerTimerScrollColumnProps) {
   const columnRef = useRef<HTMLDivElement>(null);
   const autoScrollTimeoutRef = useRef<number | null>(null);
-  const [canScrollUp, setCanScrollUp] = useState(false);
-  const [canScrollDown, setCanScrollDown] = useState(false);
+  const [scrollState, setScrollState] = useState({
+    canScrollDown: false,
+    canScrollUp: false,
+  });
 
   useEffect(() => {
     const column = columnRef.current;
     if (!column) return;
 
     const updateScrollState = () => {
-      setCanScrollUp(column.scrollTop > 0);
-      setCanScrollDown(
-        column.scrollTop + column.clientHeight < column.scrollHeight - 1
+      const canScrollUp = column.scrollTop > 0;
+      const canScrollDown =
+        column.scrollTop + column.clientHeight < column.scrollHeight - 1;
+      setScrollState((previous) =>
+        previous.canScrollUp === canScrollUp &&
+        previous.canScrollDown === canScrollDown
+          ? previous
+          : { canScrollDown, canScrollUp }
       );
     };
 
@@ -1168,6 +1186,8 @@ function DatePickerTimerScrollColumn({
     });
   };
 
+  const activeIndex = Math.max(0, items.indexOf(selectedValue));
+
   return (
     <div className="relative h-full py-1">
       <div
@@ -1180,7 +1200,6 @@ function DatePickerTimerScrollColumn({
       >
         {items.map((item, itemIndex) => {
           const isSelected = selectedValue === item;
-          const activeIndex = Math.max(0, items.indexOf(selectedValue));
           return (
             <button
               key={item}
@@ -1234,7 +1253,7 @@ function DatePickerTimerScrollColumn({
         })}
       </div>
 
-      {canScrollUp && (
+      {scrollState.canScrollUp && (
         <button
           type="button"
           aria-label={`Scroll ${ariaLabel.toLowerCase()} up`}
@@ -1251,7 +1270,7 @@ function DatePickerTimerScrollColumn({
         </button>
       )}
 
-      {canScrollDown && (
+      {scrollState.canScrollDown && (
         <button
           type="button"
           aria-label={`Scroll ${ariaLabel.toLowerCase()} down`}
@@ -1383,27 +1402,33 @@ function DatePickerTimer({
     }
   };
 
-  const hours =
-    format === "24"
-      ? Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"))
-      : [
-          "01",
-          "02",
-          "03",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11",
-          "12",
-        ];
-
   const stepVal = Math.max(1, step);
-  const minutes = Array.from({ length: Math.ceil(60 / stepVal) }, (_, i) =>
-    String(i * stepVal).padStart(2, "0")
+  const hours = useMemo(
+    () =>
+      format === "24"
+        ? Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"))
+        : [
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+          ],
+    [format]
+  );
+  const minutes = useMemo(
+    () =>
+      Array.from({ length: Math.ceil(60 / stepVal) }, (_, i) =>
+        String(i * stepVal).padStart(2, "0")
+      ),
+    [stepVal]
   );
 
   const activeHourStr = parsed

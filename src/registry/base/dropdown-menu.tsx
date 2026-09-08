@@ -85,8 +85,10 @@ function DropdownMenu({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
   backdrop?: "opaque" | "blur" | "transparent";
 }) {
+  const contextValue = useMemo(() => ({ backdrop }), [backdrop]);
+
   return (
-    <DropdownMenuContext.Provider value={{ backdrop }}>
+    <DropdownMenuContext.Provider value={contextValue}>
       <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
     </DropdownMenuContext.Provider>
   );
@@ -123,9 +125,9 @@ function DropdownMenuBackdrop({
     <DropdownMenuPrimitive.Backdrop
       className={cn(
         backdrop === "opaque" &&
-          "fixed inset-0 z-50 bg-black opacity-40 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
+          "fixed inset-0 z-50 bg-black opacity-40 transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
         backdrop === "blur" &&
-          "fixed inset-0 z-50 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed inset-0 z-50 backdrop-blur-sm transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
         backdrop === "transparent" && "hidden",
         className
       )}
@@ -347,8 +349,10 @@ function DropdownMenuRadioGroup({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup> & {
   activeIcon?: ReactNode;
 }) {
+  const contextValue = useMemo(() => ({ activeIcon }), [activeIcon]);
+
   return (
-    <DropdownMenuRadioGroupContext.Provider value={{ activeIcon }}>
+    <DropdownMenuRadioGroupContext.Provider value={contextValue}>
       <DropdownMenuPrimitive.RadioGroup
         data-slot="dropdown-menu-radio-group"
         {...props}
