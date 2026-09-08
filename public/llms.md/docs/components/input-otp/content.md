@@ -171,14 +171,22 @@ export default function InputOTPSizesDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the OTP slots.
+Submit an incomplete verification code to mark the OTP slots invalid. Entering all digits clears the associated error, and another failed submission replays one shake.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   InputOTP,
   InputOTPGroup,
@@ -192,28 +200,64 @@ const SLOT_KEYS = Array.from(
 );
 
 export default function InputOTPInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const errorId = useId();
+  const form = useForm({
+    defaultValues: { code: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <InputOTP
-        aria-invalid={invalid || undefined}
-        maxLength={OTP_LENGTH}
-        aria-label="Verification code"
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="code"
+        validators={{
+          onDynamic: ({ value }) =>
+            value.length === OTP_LENGTH && /^\d+$/.test(value)
+              ? undefined
+              : `Enter the ${OTP_LENGTH}-digit verification code.`,
+        }}
       >
-        <InputOTPGroup>
-          {SLOT_KEYS.map((key, index) => (
-            <InputOTPSlot index={index} key={key} />
-          ))}
-        </InputOTPGroup>
-      </InputOTP>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
-      >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Verification code</FieldLabel>
+              <InputOTP
+                aria-describedby={invalid ? errorId : undefined}
+                aria-invalid={invalid || undefined}
+                id={inputId}
+                inputMode="numeric"
+                maxLength={OTP_LENGTH}
+                name={field.name}
+                pattern="[0-9]*"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(value) => field.handleChange(value)}
+              >
+                <InputOTPGroup>
+                  {SLOT_KEYS.map((key, index) => (
+                    <InputOTPSlot index={index} key={key} />
+                  ))}
+                </InputOTPGroup>
+              </InputOTP>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Verify code</Button>
+    </Form>
   );
 }
 ```

@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -32,6 +32,10 @@ export default function FormWithDatePickerDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmitted({ title: value.title, date: value.date[0] });
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -39,7 +43,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="title"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             !value.trim() ? "Event title is required." : undefined,
         }}
       >
@@ -74,7 +78,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="date"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.length === 0 ? "Pick a date." : undefined,
         }}
       >
@@ -109,11 +113,9 @@ export default function FormWithDatePickerDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating event..." : "Create event"}
           </Button>
         )}

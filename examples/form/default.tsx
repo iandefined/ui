@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -40,6 +40,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -47,8 +51,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -80,11 +83,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}

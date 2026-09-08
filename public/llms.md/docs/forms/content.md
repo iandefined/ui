@@ -11,7 +11,7 @@ Registry controls are composable rather than tied to one form library. Use a nat
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -51,6 +51,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -58,8 +62,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -91,11 +94,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -187,13 +188,14 @@ export default function FormNativeConstraintDemo() {
 Create the form with `useForm`, connect each registry control to `form.Field`, and give the registry `Form` the form API.
 
 ```tsx
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldControl,
   FieldError,
+  FieldErrorSlot,
   FieldLabel,
 } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
@@ -202,6 +204,10 @@ function NewsletterForm() {
   const form = useForm({
     defaultValues: { email: "" },
     onSubmit: ({ value }) => console.info(value),
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -209,7 +215,7 @@ function NewsletterForm() {
       <form.Field
         name="email"
         validators={{
-          onBlur: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.includes("@") ? undefined : "Enter a valid email address.",
         }}
       >
@@ -230,7 +236,11 @@ function NewsletterForm() {
                 type="email"
                 value={field.state.value}
               />
-              <FieldError match={typeof error === "string"}>{error}</FieldError>
+              <FieldErrorSlot>
+                <FieldError match={typeof error === "string"}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
             </Field>
           );
         }}
@@ -244,7 +254,7 @@ function NewsletterForm() {
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -284,6 +294,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -291,8 +305,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -324,11 +337,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -651,11 +662,9 @@ export default function FormCompleteDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating profile..." : "Create profile"}
           </Button>
         )}
@@ -778,6 +787,8 @@ export default function FormWithFieldsetDemo() {
 ## Validation
 
 Use field validators for small local rules. Use a schema when rules depend on multiple values. The Zod example validates on submission, then revalidates when a value changes so corrected fields clear their errors.
+
+Treat invalid styling as persistent state and shaking as transient feedback. A failed submission marks the control invalid, announces its associated error when focus moves there, and runs one shake. Focus alone does not clear the error. After that first attempt, revalidate as the value changes and remove `invalid` only when the rule passes. If a later submission still fails, `Form` replays the shake without changing the persistent invalid state. Reduced-motion preferences suppress the shake, so error text remains the primary feedback.
 
 ```tsx
 import { revalidateLogic, useForm } from "@tanstack/react-form";
@@ -954,11 +965,9 @@ export default function FormZodValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
         )}
@@ -974,12 +983,12 @@ export default function FormZodValidationDemo() {
 }
 ```
 
-For availability and other server checks, use an asynchronous validator such as `onSubmitAsync`. Keep the field pending/submission state visible, and return an actionable message rather than a generic failure.
+For availability and other server checks, use an asynchronous dynamic validator with submit-then-change revalidation. Keep the field pending/submission state visible, and return an actionable message rather than a generic failure.
 
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -1014,6 +1023,10 @@ export default function FormServerValidationDemo() {
     onSubmit: () => {
       setSubmitted(true);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -1021,7 +1034,7 @@ export default function FormServerValidationDemo() {
       <form.Field
         name="username"
         validators={{
-          onSubmitAsync: ({ value }) => validateUsername(value),
+          onDynamicAsync: ({ value }) => validateUsername(value),
         }}
       >
         {(field) => {
@@ -1052,11 +1065,9 @@ export default function FormServerValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Checking..." : "Submit"}
           </Button>
         )}
@@ -1074,12 +1085,12 @@ export default function FormServerValidationDemo() {
 
 ## Submission State
 
-Use `form.Subscribe` to read `canSubmit` and `isSubmitting`. Disable submission while a request is pending, reset any success feedback when values change, and render a success or failure message in the form itself.
+Use `form.Subscribe` to read `isSubmitting`. Keep the submit button available so a failed attempt can explain what needs correction, but disable it while a request is pending to prevent duplicates. Reset success feedback when values change, and render the result in the form itself.
 
 ```tsx
-<form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-  {([canSubmit, isSubmitting]) => (
-    <Button disabled={!canSubmit} type="submit">
+<form.Subscribe selector={(state) => state.isSubmitting}>
+  {(isSubmitting) => (
+    <Button disabled={isSubmitting} type="submit">
       {isSubmitting ? "Saving..." : "Save changes"}
     </Button>
   )}

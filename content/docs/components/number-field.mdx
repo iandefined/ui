@@ -95,7 +95,7 @@ Pass `Intl.NumberFormat` options through `format` to display values such as curr
 
 ### Invalid
 
-Trigger the invalid-state shake on the number field.
+Submit a quantity outside the permitted range to mark the number field invalid. Changing the value revalidates the range, and only a failed submission triggers the shake.
 
 <ComponentPreview name="number-field/invalid" />
 

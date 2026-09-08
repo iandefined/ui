@@ -89,32 +89,71 @@ import {
 
 ### Validation
 
-Trigger the invalid-state shake on a Field control.
+Submit a short display name to show the complete validation lifecycle. The field keeps its error on focus, revalidates during correction, and shakes only on failed submissions.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 import { Button } from "@/registry/base/button";
-import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
+
+function validateDisplayName(value: string) {
+  const displayName = value.trim();
+
+  if (!displayName) {
+    return "Display name is required.";
+  }
+
+  return displayName.length >= 2 ? undefined : "Enter at least 2 characters.";
+}
 
 export default function FieldValidationDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const form = useForm({
+    defaultValues: { displayName: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <FieldLabel>Display name</FieldLabel>
-        <FieldControl placeholder="Ada Lovelace" />
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="displayName"
+        validators={{ onDynamic: ({ value }) => validateDisplayName(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel>Display name</FieldLabel>
+              <FieldControl
+                onBlur={field.handleBlur}
+                onValueChange={field.handleChange}
+                placeholder="Ada Lovelace"
+                value={field.state.value}
+              />
+              <FieldErrorSlot>
+                <FieldError match={invalid}>{error}</FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -277,7 +316,7 @@ export default function FieldDisabledDemo() {
 
 ## Accessibility
 
-Keep one active description or error directly after the control. `FieldError` uses `role="alert"`, while `FieldErrorSlot` preserves that association during its reduced-motion-safe transition. Do not use label color alone to communicate an error.
+Keep one active description or error directly after the control. `FieldErrorSlot` preserves the error association during its reduced-motion-safe transition. Do not add `role="alert"` to an inline error that is already associated through `aria-describedby`, and do not use label color alone to communicate an error.
 
 ## API Reference
 

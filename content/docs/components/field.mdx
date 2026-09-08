@@ -67,7 +67,7 @@ import {
 
 ### Validation
 
-Trigger the invalid-state shake on a Field control.
+Submit a short display name to show the complete validation lifecycle. The field keeps its error on focus, revalidates during correction, and shakes only on failed submissions.
 
 <ComponentPreview name="field/validation" />
 
@@ -97,7 +97,7 @@ Disable Field to cascade the state to its Base UI controls.
 
 ## Accessibility
 
-Keep one active description or error directly after the control. `FieldError` uses `role="alert"`, while `FieldErrorSlot` preserves that association during its reduced-motion-safe transition. Do not use label color alone to communicate an error.
+Keep one active description or error directly after the control. `FieldErrorSlot` preserves the error association during its reduced-motion-safe transition. Do not add `role="alert"` to an inline error that is already associated through `aria-describedby`, and do not use label color alone to communicate an error.
 
 ## API Reference
 

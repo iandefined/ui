@@ -154,11 +154,9 @@ export default function FormZodValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
         )}

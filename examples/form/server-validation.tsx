@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -35,6 +35,10 @@ export default function FormServerValidationDemo() {
     onSubmit: () => {
       setSubmitted(true);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -42,7 +46,7 @@ export default function FormServerValidationDemo() {
       <form.Field
         name="username"
         validators={{
-          onSubmitAsync: ({ value }) => validateUsername(value),
+          onDynamicAsync: ({ value }) => validateUsername(value),
         }}
       >
         {(field) => {
@@ -73,11 +77,9 @@ export default function FormServerValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Checking..." : "Submit"}
           </Button>
         )}

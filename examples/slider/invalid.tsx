@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field } from "@/registry/base/field";
+import { Field, FieldError, FieldErrorSlot } from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   Slider,
   SliderContent,
@@ -13,30 +15,61 @@ import {
 } from "@/registry/base/slider";
 
 export default function SliderInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
-  const [value, setValue] = useState(50);
+  const errorId = useId();
+  const form = useForm({
+    defaultValues: { volume: 0 },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <Slider
-          value={value}
-          onValueChange={(nextValue) => setValue(nextValue as number)}
-        >
-          <SliderControl>
-            <SliderContent>
-              <SliderLabel>Volume</SliderLabel>
-              <SliderValue className="ms-auto" />
-            </SliderContent>
-          </SliderControl>
-        </Slider>
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="volume"
+        validators={{
+          onDynamic: ({ value }) =>
+            value >= 20 ? undefined : "Choose a volume of at least 20%.",
+        }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <Slider
+                className="grid gap-2"
+                max={100}
+                min={0}
+                value={field.state.value}
+                onValueChange={(value) =>
+                  field.handleChange(
+                    Array.isArray(value) ? (value[0] ?? 0) : value
+                  )
+                }
+              >
+                <SliderContent>
+                  <SliderLabel>Volume</SliderLabel>
+                  <SliderValue className="ms-auto" />
+                </SliderContent>
+                <SliderControl
+                  aria-describedby={invalid ? errorId : undefined}
+                  aria-invalid={invalid || undefined}
+                />
+              </Slider>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }

@@ -1902,12 +1902,13 @@ export default function AutocompleteUseFilterDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the autocomplete input.
+Submit without accepting a listed tag to mark the autocomplete invalid. Query text and accepted values are validated separately, so correction clears the error only after a listed option is chosen.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import {
   AutocompleteEmpty,
@@ -1918,40 +1919,96 @@ import {
   AutocompleteRoot,
 } from "@/registry/base/autocomplete";
 import { Button } from "@/registry/base/button";
-import { Field } from "@/registry/base/field";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 
 const tags = ["feature", "fix", "bug", "docs"];
 
+type TagFieldValue = {
+  accepted: boolean;
+  text: string;
+};
+
+function validateTag(value: TagFieldValue) {
+  if (!value.text.trim()) {
+    return "Choose a tag.";
+  }
+
+  return value.accepted && tags.includes(value.text)
+    ? undefined
+    : "Choose a tag from the list.";
+}
+
 export default function AutocompleteInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const tagErrorId = useId();
+  const form = useForm({
+    defaultValues: {
+      tag: { accepted: false, text: "" } as TagFieldValue,
+    },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <AutocompleteRoot items={tags}>
-          <AutocompleteInput
-            aria-label="Search tags"
-            placeholder="Search tags..."
-          />
-          <AutocompletePopup>
-            <AutocompleteEmpty>No tags found.</AutocompleteEmpty>
-            <AutocompleteList>
-              {(tag: string) => (
-                <AutocompleteItem key={tag} value={tag}>
-                  {tag}
-                </AutocompleteItem>
-              )}
-            </AutocompleteList>
-          </AutocompletePopup>
-        </AutocompleteRoot>
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="tag"
+        validators={{ onDynamic: ({ value }) => validateTag(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Tag</FieldLabel>
+              <AutocompleteRoot
+                items={tags}
+                onValueChange={(value, eventDetails) =>
+                  field.handleChange({
+                    accepted: eventDetails.reason === "item-press",
+                    text: value,
+                  })
+                }
+                value={field.state.value.text}
+              >
+                <AutocompleteInput
+                  aria-describedby={invalid ? tagErrorId : undefined}
+                  aria-invalid={invalid || undefined}
+                  id={inputId}
+                  placeholder="Choose a tag..."
+                />
+                <AutocompletePopup>
+                  <AutocompleteEmpty>No tags found.</AutocompleteEmpty>
+                  <AutocompleteList>
+                    {(tag: string) => (
+                      <AutocompleteItem key={tag} value={tag}>
+                        {tag}
+                      </AutocompleteItem>
+                    )}
+                  </AutocompleteList>
+                </AutocompletePopup>
+              </AutocompleteRoot>
+              <FieldErrorSlot>
+                <FieldError id={tagErrorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Validate tag</Button>
+    </Form>
   );
 }
 ```
@@ -4453,29 +4510,72 @@ export default function CheckboxIconsDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the checkbox.
+Submit without accepting the terms to mark the checkbox invalid and run one shake. Checking it clears the associated group error; unchecking it later revalidates without shaking until the next failed submission.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
 import { Checkbox } from "@/registry/base/checkbox";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 
 export default function CheckboxInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const errorId = useId();
+  const form = useForm({
+    defaultValues: { terms: false },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <Checkbox aria-invalid={invalid || undefined} aria-label="Accept terms" />
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="terms"
+        validators={{
+          onDynamic: ({ value }) =>
+            value ? undefined : "Accept the terms to continue.",
+        }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel className="cursor-pointer">
+                <Checkbox
+                  aria-describedby={invalid ? errorId : undefined}
+                  aria-invalid={invalid || undefined}
+                  checked={field.state.value}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onCheckedChange={(checked) => field.handleChange(checked)}
+                />
+                I accept the terms and privacy policy.
+              </FieldLabel>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -5850,12 +5950,13 @@ export default function ComboboxGroupsDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the combobox input.
+Submit without choosing an accepted fruit to mark the combobox invalid. Typing alone does not count as a valid selection; choosing a listed value clears the error without another shake.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
 import {
@@ -5865,40 +5966,77 @@ import {
   ComboboxList,
   ComboboxPopup,
 } from "@/registry/base/combobox";
-import { Field } from "@/registry/base/field";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 
 const fruits = ["Apple", "Banana", "Cherry", "Orange"];
 
 export default function ComboboxInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const fruitErrorId = useId();
+  const form = useForm({
+    defaultValues: { fruit: null as string | null },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <Combobox items={fruits}>
-          <ComboboxInput
-            aria-label="Select a fruit"
-            className="w-full"
-            placeholder="Select a fruit..."
-          />
-          <ComboboxPopup>
-            <ComboboxList>
-              {(fruit: string) => (
-                <ComboboxItem key={fruit} value={fruit}>
-                  {fruit}
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </Combobox>
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="fruit"
+        validators={{
+          onDynamic: ({ value }) =>
+            value ? undefined : "Choose a fruit from the list.",
+        }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Fruit</FieldLabel>
+              <Combobox
+                items={fruits}
+                onValueChange={(value) => field.handleChange(value)}
+                value={field.state.value}
+              >
+                <ComboboxInput
+                  aria-describedby={invalid ? fruitErrorId : undefined}
+                  aria-invalid={invalid || undefined}
+                  className="w-full"
+                  id={inputId}
+                  placeholder="Choose a fruit..."
+                />
+                <ComboboxPopup>
+                  <ComboboxList>
+                    {(fruit: string) => (
+                      <ComboboxItem key={fruit} value={fruit}>
+                        {fruit}
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxPopup>
+              </Combobox>
+              <FieldErrorSlot>
+                <FieldError id={fruitErrorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Validate fruit</Button>
+    </Form>
   );
 }
 ```
@@ -6747,29 +6885,84 @@ export default function DateInputStates() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the segmented input.
+Submit an incomplete or unavailable date to mark the segmented input invalid. Completing a permitted date clears the error without shaking during segment edits.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
 import { DateInput } from "@/registry/base/date-input";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
+
+function validateDate(value: Date[]) {
+  const date = value[0];
+
+  if (!date) {
+    return "Enter a date.";
+  }
+
+  if (Number.isNaN(date.getTime())) {
+    return "Enter a valid date.";
+  }
+
+  return date.getDay() === 0 || date.getDay() === 6
+    ? "Choose a weekday."
+    : undefined;
+}
 
 export default function DateInputInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const dateErrorId = useId();
+  const form = useForm({
+    defaultValues: { date: [] as Date[] },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <DateInput aria-label="Event date" className="w-full" invalid={invalid} />
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="date"
+        validators={{ onDynamic: ({ value }) => validateDate(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Event date</FieldLabel>
+              <DateInput
+                aria-describedby={invalid ? dateErrorId : undefined}
+                className="w-full"
+                id={inputId}
+                invalid={invalid}
+                onValueChange={(details) => field.handleChange(details.value)}
+                value={field.state.value}
+              />
+              <FieldErrorSlot>
+                <FieldError id={dateErrorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Validate date</Button>
+    </Form>
   );
 }
 ```
@@ -7254,12 +7447,13 @@ export default function DatePickerTime() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the date picker trigger.
+Submit without choosing a permitted weekday to mark the picker invalid. Selecting a weekday clears the error, while another failed submission replays the shake once.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
 import {
@@ -7268,24 +7462,73 @@ import {
   DatePickerLabel,
   DatePickerTrigger,
 } from "@/registry/base/date-picker";
+import { Field, FieldError, FieldErrorSlot } from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
+
+function validateDate(value: Date[]) {
+  const date = value[0];
+
+  if (!date) {
+    return "Choose a date.";
+  }
+
+  if (Number.isNaN(date.getTime())) {
+    return "Choose a valid date.";
+  }
+
+  return date.getDay() === 0 || date.getDay() === 6
+    ? "Choose a weekday."
+    : undefined;
+}
 
 export default function DatePickerInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const dateErrorId = useId();
+  const form = useForm({
+    defaultValues: { date: [] as Date[] },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <DatePicker className="w-full" invalid={invalid}>
-        <DatePickerLabel>Event date</DatePickerLabel>
-        <DatePickerTrigger className="w-full justify-start" invalid={invalid} />
-        <DatePickerContent />
-      </DatePicker>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="date"
+        validators={{ onDynamic: ({ value }) => validateDate(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <DatePicker
+                className="w-full"
+                invalid={invalid}
+                onValueChange={(details) => field.handleChange(details.value)}
+                value={field.state.value}
+              >
+                <DatePickerLabel>Event date</DatePickerLabel>
+                <DatePickerTrigger
+                  aria-describedby={invalid ? dateErrorId : undefined}
+                  className="w-full justify-start"
+                  invalid={invalid}
+                />
+                <DatePickerContent />
+              </DatePicker>
+              <FieldErrorSlot>
+                <FieldError id={dateErrorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Validate date</Button>
+    </Form>
   );
 }
 ```
@@ -7330,7 +7573,7 @@ Use `DatePicker` inside a [Form](./form) `Field` with TanStack Form for validati
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -7362,6 +7605,10 @@ export default function FormWithDatePickerDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmitted({ title: value.title, date: value.date[0] });
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -7369,7 +7616,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="title"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             !value.trim() ? "Event title is required." : undefined,
         }}
       >
@@ -7404,7 +7651,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="date"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.length === 0 ? "Pick a date." : undefined,
         }}
       >
@@ -7439,11 +7686,9 @@ export default function FormWithDatePickerDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating event..." : "Create event"}
           </Button>
         )}
@@ -10588,32 +10833,71 @@ import {
 
 ### Validation
 
-Trigger the invalid-state shake on a Field control.
+Submit a short display name to show the complete validation lifecycle. The field keeps its error on focus, revalidates during correction, and shakes only on failed submissions.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 import { Button } from "@/registry/base/button";
-import { Field, FieldControl, FieldLabel } from "@/registry/base/field";
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
+
+function validateDisplayName(value: string) {
+  const displayName = value.trim();
+
+  if (!displayName) {
+    return "Display name is required.";
+  }
+
+  return displayName.length >= 2 ? undefined : "Enter at least 2 characters.";
+}
 
 export default function FieldValidationDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const form = useForm({
+    defaultValues: { displayName: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <FieldLabel>Display name</FieldLabel>
-        <FieldControl placeholder="Ada Lovelace" />
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="displayName"
+        validators={{ onDynamic: ({ value }) => validateDisplayName(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel>Display name</FieldLabel>
+              <FieldControl
+                onBlur={field.handleBlur}
+                onValueChange={field.handleChange}
+                placeholder="Ada Lovelace"
+                value={field.state.value}
+              />
+              <FieldErrorSlot>
+                <FieldError match={invalid}>{error}</FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -10776,7 +11060,7 @@ export default function FieldDisabledDemo() {
 
 ## Accessibility
 
-Keep one active description or error directly after the control. `FieldError` uses `role="alert"`, while `FieldErrorSlot` preserves that association during its reduced-motion-safe transition. Do not use label color alone to communicate an error.
+Keep one active description or error directly after the control. `FieldErrorSlot` preserves the error association during its reduced-motion-safe transition. Do not add `role="alert"` to an inline error that is already associated through `aria-describedby`, and do not use label color alone to communicate an error.
 
 ## API Reference
 
@@ -11126,7 +11410,7 @@ Use `Form` when TanStack Form owns submission and validation. For native constra
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -11166,6 +11450,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -11173,8 +11461,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -11206,11 +11493,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -11308,7 +11593,7 @@ Use field-level validators, mapped metadata, pending submit feedback, and a subm
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -11348,6 +11633,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -11355,8 +11644,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -11388,11 +11676,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -11672,11 +11958,9 @@ export default function FormZodValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
         )}
@@ -11694,12 +11978,12 @@ export default function FormZodValidationDemo() {
 
 ### Async Validation
 
-Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
+Use asynchronous submit-then-change validation for checks that require a server round trip. Try `admin` to see the error persist until the username becomes valid.
 
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -11734,6 +12018,10 @@ export default function FormServerValidationDemo() {
     onSubmit: () => {
       setSubmitted(true);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -11741,7 +12029,7 @@ export default function FormServerValidationDemo() {
       <form.Field
         name="username"
         validators={{
-          onSubmitAsync: ({ value }) => validateUsername(value),
+          onDynamicAsync: ({ value }) => validateUsername(value),
         }}
       >
         {(field) => {
@@ -11772,11 +12060,9 @@ export default function FormServerValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Checking..." : "Submit"}
           </Button>
         )}
@@ -11799,7 +12085,7 @@ Wire a `DatePicker` inside `Field` to collect a date with validation and invalid
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -11831,6 +12117,10 @@ export default function FormWithDatePickerDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmitted({ title: value.title, date: value.date[0] });
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -11838,7 +12128,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="title"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             !value.trim() ? "Event title is required." : undefined,
         }}
       >
@@ -11873,7 +12163,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="date"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.length === 0 ? "Pick a date." : undefined,
         }}
       >
@@ -11908,11 +12198,9 @@ export default function FormWithDatePickerDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating event..." : "Create event"}
           </Button>
         )}
@@ -12235,11 +12523,9 @@ export default function FormCompleteDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating profile..." : "Create profile"}
           </Button>
         )}
@@ -12258,7 +12544,7 @@ export default function FormCompleteDemo() {
 
 ## Accessibility
 
-Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics.
+Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics. After a failed submission, `Form` moves focus to the first invalid control and replays its transient shake while the persistent error styling remains tied to validation state.
 
 ## API Reference
 
@@ -12416,34 +12702,74 @@ export default function InputControlledDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on demand.
+Submit an empty or malformed email to mark the input invalid and run one shake. The error persists on focus, revalidates while you edit, and clears only when the email is valid.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import { Input } from "@/registry/base/input";
 
+function validateEmail(value: string) {
+  if (!value.trim()) {
+    return "Enter your email address.";
+  }
+
+  return /^\S+@\S+\.\S+$/.test(value)
+    ? undefined
+    : "Enter a valid email address.";
+}
+
 export default function InputInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const form = useForm({
+    defaultValues: { email: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Input
-        aria-label="Email address"
-        aria-invalid={invalid || undefined}
-        className="w-full"
-        placeholder="you@example.com"
-      />
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="email"
+        validators={{ onDynamic: ({ value }) => validateEmail(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel>Email address</FieldLabel>
+              <Input
+                autoComplete="email"
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                placeholder="you@example.com"
+                type="email"
+                value={field.state.value}
+              />
+              <FieldErrorSlot>
+                <FieldError match={invalid}>{error}</FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -12909,40 +13235,91 @@ export default function InputGroupMenuDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the input group.
+Submit an incomplete website address to mark the whole input group invalid. Correction clears the error when the hostname is valid, while another failed submission replays the shake.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/registry/base/input-group";
 
+function validateDomain(value: string) {
+  const domain = value.trim();
+
+  if (!domain) {
+    return "Website is required.";
+  }
+
+  try {
+    const url = new URL(`https://${domain}`);
+
+    return url.hostname === domain && domain.includes(".")
+      ? undefined
+      : "Enter a valid domain such as example.com.";
+  } catch {
+    return "Enter a valid domain such as example.com.";
+  }
+}
+
 export default function InputGroupInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const form = useForm({
+    defaultValues: { website: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <InputGroup className="w-full">
-        <InputGroupInput
-          aria-invalid={invalid || undefined}
-          aria-label="Website"
-          placeholder="example.com"
-        />
-        <InputGroupAddon>https://</InputGroupAddon>
-      </InputGroup>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="website"
+        validators={{ onDynamic: ({ value }) => validateDomain(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Website</FieldLabel>
+              <InputGroup>
+                <InputGroupAddon>https://</InputGroupAddon>
+                <InputGroupInput
+                  aria-label="Website"
+                  id={inputId}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  placeholder="example.com"
+                  value={field.state.value}
+                />
+              </InputGroup>
+              <FieldErrorSlot>
+                <FieldError match={invalid}>{error}</FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -13136,14 +13513,22 @@ export default function InputOTPSizesDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the OTP slots.
+Submit an incomplete verification code to mark the OTP slots invalid. Entering all digits clears the associated error, and another failed submission replays one shake.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   InputOTP,
   InputOTPGroup,
@@ -13157,28 +13542,64 @@ const SLOT_KEYS = Array.from(
 );
 
 export default function InputOTPInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const errorId = useId();
+  const form = useForm({
+    defaultValues: { code: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <InputOTP
-        aria-invalid={invalid || undefined}
-        maxLength={OTP_LENGTH}
-        aria-label="Verification code"
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="code"
+        validators={{
+          onDynamic: ({ value }) =>
+            value.length === OTP_LENGTH && /^\d+$/.test(value)
+              ? undefined
+              : `Enter the ${OTP_LENGTH}-digit verification code.`,
+        }}
       >
-        <InputOTPGroup>
-          {SLOT_KEYS.map((key, index) => (
-            <InputOTPSlot index={index} key={key} />
-          ))}
-        </InputOTPGroup>
-      </InputOTP>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
-      >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Verification code</FieldLabel>
+              <InputOTP
+                aria-describedby={invalid ? errorId : undefined}
+                aria-invalid={invalid || undefined}
+                id={inputId}
+                inputMode="numeric"
+                maxLength={OTP_LENGTH}
+                name={field.name}
+                pattern="[0-9]*"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(value) => field.handleChange(value)}
+              >
+                <InputOTPGroup>
+                  {SLOT_KEYS.map((key, index) => (
+                    <InputOTPSlot index={index} key={key} />
+                  ))}
+                </InputOTPGroup>
+              </InputOTP>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Verify code</Button>
+    </Form>
   );
 }
 ```
@@ -13861,15 +14282,22 @@ export default function NumberFieldFormattingDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the number field.
+Submit a quantity outside the permitted range to mark the number field invalid. Changing the value revalidates the range, and only a failed submission triggers the shake.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field } from "@/registry/base/field";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   NumberField,
   NumberFieldDecrement,
@@ -13878,27 +14306,62 @@ import {
   NumberFieldInput,
 } from "@/registry/base/number-field";
 
+function validateQuantity(value: number) {
+  return Number.isInteger(value) && value > 0
+    ? undefined
+    : "Enter a quantity greater than zero.";
+}
+
 export default function NumberFieldInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const inputId = useId();
+  const form = useForm({
+    defaultValues: { quantity: 0 },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <NumberField defaultValue={10} className="max-w-none">
-          <NumberFieldGroup>
-            <NumberFieldDecrement />
-            <NumberFieldInput aria-label="Quantity" />
-            <NumberFieldIncrement />
-          </NumberFieldGroup>
-        </NumberField>
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="quantity"
+        validators={{ onDynamic: ({ value }) => validateQuantity(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel htmlFor={inputId}>Quantity</FieldLabel>
+              <NumberField
+                className="max-w-none"
+                min={0}
+                onValueChange={(value) => field.handleChange(value ?? 0)}
+                value={field.state.value}
+              >
+                <NumberFieldGroup>
+                  <NumberFieldDecrement />
+                  <NumberFieldInput
+                    aria-label="Quantity"
+                    id={inputId}
+                    name={field.name}
+                    onBlur={field.handleBlur}
+                  />
+                  <NumberFieldIncrement />
+                </NumberFieldGroup>
+              </NumberField>
+              <FieldErrorSlot>
+                <FieldError match={invalid}>{error}</FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -15149,46 +15612,91 @@ export default function RadioGroupCustomIndicatorDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the radio group.
+Submit without choosing a plan to mark the radio group invalid and show one group-level error. Selecting an option clears the error, and later failed submissions replay the shake once.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldItem,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Fieldset, FieldsetLegend } from "@/registry/base/fieldset";
+import { Form } from "@/registry/base/form";
 import { Radio, RadioGroup } from "@/registry/base/radio-group";
 
+const plans = [
+  { label: "Starter", value: "starter" },
+  { label: "Pro", value: "pro" },
+  { label: "Business", value: "business" },
+] as const;
+
 export default function RadioGroupInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const errorId = useId();
+  const form = useForm({
+    defaultValues: { plan: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <RadioGroup
-        aria-invalid={invalid || undefined}
-        aria-label="Choose a plan"
-        defaultValue="pro"
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="plan"
+        validators={{
+          onDynamic: ({ value }) =>
+            plans.some((plan) => plan.value === value)
+              ? undefined
+              : "Choose a plan to continue.",
+        }}
       >
-        <label
-          className="flex items-center gap-2 text-sm"
-          htmlFor="radio-invalid-starter"
-        >
-          <Radio id="radio-invalid-starter" value="starter" /> Starter
-        </label>
-        <label
-          className="flex items-center gap-2 text-sm"
-          htmlFor="radio-invalid-pro"
-        >
-          <Radio id="radio-invalid-pro" value="pro" /> Pro
-        </label>
-      </RadioGroup>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
-      >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <Fieldset>
+                <FieldsetLegend>Choose a plan</FieldsetLegend>
+                <RadioGroup
+                  aria-describedby={invalid ? errorId : undefined}
+                  aria-invalid={invalid || undefined}
+                  name={field.name}
+                  onValueChange={(value) => field.handleChange(value)}
+                  required
+                  value={field.state.value}
+                >
+                  {plans.map((plan) => (
+                    <FieldItem key={plan.value}>
+                      <FieldLabel className="cursor-pointer">
+                        <Radio value={plan.value} />
+                        {plan.label}
+                      </FieldLabel>
+                    </FieldItem>
+                  ))}
+                </RadioGroup>
+              </Fieldset>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -15921,15 +16429,22 @@ export default function SelectMultipleSelectionDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the select trigger.
+Submit without choosing a framework to mark the select trigger invalid. Selecting a permitted value clears the error immediately, while shaking remains tied to failed submissions.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field } from "@/registry/base/field";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   Select,
   SelectIcon,
@@ -15945,37 +16460,76 @@ const frameworks = [
   { label: "Next.js", value: "next" },
   { label: "Vite", value: "vite" },
   { label: "Astro", value: "astro" },
-];
+] as const;
 
 export default function SelectInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const errorId = useId();
+  const labelId = useId();
+  const form = useForm({
+    defaultValues: { framework: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <Select items={frameworks}>
-          <SelectTrigger aria-label="Select a framework" className="w-full">
-            <SelectValue placeholder="Select a framework" />
-            <SelectIcon />
-          </SelectTrigger>
-          <SelectPopup>
-            <SelectList>
-              {frameworks.map((framework) => (
-                <SelectItem key={framework.value} value={framework.value}>
-                  <SelectItemText>{framework.label}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-          </SelectPopup>
-        </Select>
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="framework"
+        validators={{
+          onDynamic: ({ value }) =>
+            frameworks.some((framework) => framework.value === value)
+              ? undefined
+              : "Choose a framework to continue.",
+        }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field className="w-full" invalid={invalid} name={field.name}>
+              <FieldLabel id={labelId}>Framework</FieldLabel>
+              <Select
+                items={frameworks}
+                name={field.name}
+                value={field.state.value}
+                onValueChange={(value) =>
+                  field.handleChange((value as string | null) ?? "")
+                }
+              >
+                <SelectTrigger
+                  aria-describedby={invalid ? errorId : undefined}
+                  aria-invalid={invalid || undefined}
+                  aria-labelledby={labelId}
+                  className="w-full"
+                >
+                  <SelectValue placeholder="Select a framework" />
+                  <SelectIcon />
+                </SelectTrigger>
+                <SelectPopup>
+                  <SelectList>
+                    {frameworks.map((framework) => (
+                      <SelectItem key={framework.value} value={framework.value}>
+                        <SelectItemText>{framework.label}</SelectItemText>
+                      </SelectItem>
+                    ))}
+                  </SelectList>
+                </SelectPopup>
+              </Select>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -17995,15 +18549,17 @@ export default function SliderWithoutTooltipDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the slider control.
+Submit a value below the required threshold to mark the slider invalid. Dragging revalidates without shaking, and the error clears as soon as the threshold is met.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
-import { Field } from "@/registry/base/field";
+import { Field, FieldError, FieldErrorSlot } from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import {
   Slider,
   SliderContent,
@@ -18013,31 +18569,62 @@ import {
 } from "@/registry/base/slider";
 
 export default function SliderInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
-  const [value, setValue] = useState(50);
+  const errorId = useId();
+  const form = useForm({
+    defaultValues: { volume: 0 },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Field className="w-full" invalid={invalid}>
-        <Slider
-          value={value}
-          onValueChange={(nextValue) => setValue(nextValue as number)}
-        >
-          <SliderControl>
-            <SliderContent>
-              <SliderLabel>Volume</SliderLabel>
-              <SliderValue className="ms-auto" />
-            </SliderContent>
-          </SliderControl>
-        </Slider>
-      </Field>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="volume"
+        validators={{
+          onDynamic: ({ value }) =>
+            value >= 20 ? undefined : "Choose a volume of at least 20%.",
+        }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <Slider
+                className="grid gap-2"
+                max={100}
+                min={0}
+                value={field.state.value}
+                onValueChange={(value) =>
+                  field.handleChange(
+                    Array.isArray(value) ? (value[0] ?? 0) : value
+                  )
+                }
+              >
+                <SliderContent>
+                  <SliderLabel>Volume</SliderLabel>
+                  <SliderValue className="ms-auto" />
+                </SliderContent>
+                <SliderControl
+                  aria-describedby={invalid ? errorId : undefined}
+                  aria-invalid={invalid || undefined}
+                />
+              </Slider>
+              <FieldErrorSlot>
+                <FieldError id={errorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -19667,34 +20254,73 @@ export default function TextareaControlledDemo() {
 
 ### Invalid
 
-Trigger the invalid-state shake on demand.
+Submit a short message to mark the textarea invalid and run one shake. After that attempt, editing revalidates the message without repeatedly shaking the control.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 import { Button } from "@/registry/base/button";
+import {
+  Field,
+  FieldError,
+  FieldErrorSlot,
+  FieldLabel,
+} from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
 import { Textarea } from "@/registry/base/textarea";
 
+function validateMessage(value: string) {
+  const message = value.trim();
+
+  if (!message) {
+    return "Message is required.";
+  }
+
+  return message.length >= 10 ? undefined : "Enter at least 10 characters.";
+}
+
 export default function TextareaInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const form = useForm({
+    defaultValues: { message: "" },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <Textarea
-        aria-label="Message"
-        aria-invalid={invalid || undefined}
-        className="w-full"
-        placeholder="Tell us more..."
-      />
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="message"
+        validators={{ onDynamic: ({ value }) => validateMessage(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <FieldLabel>Message</FieldLabel>
+              <Textarea
+                aria-label="Message"
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                placeholder="Tell us more..."
+                value={field.state.value}
+              />
+              <FieldErrorSlot>
+                <FieldError match={invalid}>{error}</FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Continue</Button>
+    </Form>
   );
 }
 ```
@@ -21227,7 +21853,7 @@ Registry controls are composable rather than tied to one form library. Use a nat
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -21267,6 +21893,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -21274,8 +21904,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -21307,11 +21936,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -21403,13 +22030,14 @@ export default function FormNativeConstraintDemo() {
 Create the form with `useForm`, connect each registry control to `form.Field`, and give the registry `Form` the form API.
 
 ```tsx
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldControl,
   FieldError,
+  FieldErrorSlot,
   FieldLabel,
 } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
@@ -21418,6 +22046,10 @@ function NewsletterForm() {
   const form = useForm({
     defaultValues: { email: "" },
     onSubmit: ({ value }) => console.info(value),
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -21425,7 +22057,7 @@ function NewsletterForm() {
       <form.Field
         name="email"
         validators={{
-          onBlur: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.includes("@") ? undefined : "Enter a valid email address.",
         }}
       >
@@ -21446,7 +22078,11 @@ function NewsletterForm() {
                 type="email"
                 value={field.state.value}
               />
-              <FieldError match={typeof error === "string"}>{error}</FieldError>
+              <FieldErrorSlot>
+                <FieldError match={typeof error === "string"}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
             </Field>
           );
         }}
@@ -21460,7 +22096,7 @@ function NewsletterForm() {
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -21500,6 +22136,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -21507,8 +22147,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -21540,11 +22179,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -21867,11 +22504,9 @@ export default function FormCompleteDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating profile..." : "Create profile"}
           </Button>
         )}
@@ -21994,6 +22629,8 @@ export default function FormWithFieldsetDemo() {
 ## Validation
 
 Use field validators for small local rules. Use a schema when rules depend on multiple values. The Zod example validates on submission, then revalidates when a value changes so corrected fields clear their errors.
+
+Treat invalid styling as persistent state and shaking as transient feedback. A failed submission marks the control invalid, announces its associated error when focus moves there, and runs one shake. Focus alone does not clear the error. After that first attempt, revalidate as the value changes and remove `invalid` only when the rule passes. If a later submission still fails, `Form` replays the shake without changing the persistent invalid state. Reduced-motion preferences suppress the shake, so error text remains the primary feedback.
 
 ```tsx
 import { revalidateLogic, useForm } from "@tanstack/react-form";
@@ -22170,11 +22807,9 @@ export default function FormZodValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
         )}
@@ -22190,12 +22825,12 @@ export default function FormZodValidationDemo() {
 }
 ```
 
-For availability and other server checks, use an asynchronous validator such as `onSubmitAsync`. Keep the field pending/submission state visible, and return an actionable message rather than a generic failure.
+For availability and other server checks, use an asynchronous dynamic validator with submit-then-change revalidation. Keep the field pending/submission state visible, and return an actionable message rather than a generic failure.
 
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -22230,6 +22865,10 @@ export default function FormServerValidationDemo() {
     onSubmit: () => {
       setSubmitted(true);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -22237,7 +22876,7 @@ export default function FormServerValidationDemo() {
       <form.Field
         name="username"
         validators={{
-          onSubmitAsync: ({ value }) => validateUsername(value),
+          onDynamicAsync: ({ value }) => validateUsername(value),
         }}
       >
         {(field) => {
@@ -22268,11 +22907,9 @@ export default function FormServerValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Checking..." : "Submit"}
           </Button>
         )}
@@ -22290,12 +22927,12 @@ export default function FormServerValidationDemo() {
 
 ## Submission State
 
-Use `form.Subscribe` to read `canSubmit` and `isSubmitting`. Disable submission while a request is pending, reset any success feedback when values change, and render a success or failure message in the form itself.
+Use `form.Subscribe` to read `isSubmitting`. Keep the submit button available so a failed attempt can explain what needs correction, but disable it while a request is pending to prevent duplicates. Reset success feedback when values change, and render the result in the form itself.
 
 ```tsx
-<form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-  {([canSubmit, isSubmitting]) => (
-    <Button disabled={!canSubmit} type="submit">
+<form.Subscribe selector={(state) => state.isSubmitting}>
+  {(isSubmitting) => (
+    <Button disabled={isSubmitting} type="submit">
       {isSubmitting ? "Saving..." : "Save changes"}
     </Button>
   )}

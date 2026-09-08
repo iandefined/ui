@@ -11,7 +11,7 @@ Use `Form` when TanStack Form owns submission and validation. For native constra
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -51,6 +51,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -58,8 +62,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -91,11 +94,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -193,7 +194,7 @@ Use field-level validators, mapped metadata, pending submit feedback, and a subm
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -233,6 +234,10 @@ export default function FormDefaultDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmittedUrl(value.url);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -240,8 +245,7 @@ export default function FormDefaultDemo() {
       <form.Field
         name="url"
         validators={{
-          onBlur: ({ value }) => validateUrl(value),
-          onSubmit: ({ value }) => validateUrl(value),
+          onDynamic: ({ value }) => validateUrl(value),
         }}
       >
         {(field) => {
@@ -273,11 +277,9 @@ export default function FormDefaultDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         )}
@@ -557,11 +559,9 @@ export default function FormZodValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
         )}
@@ -579,12 +579,12 @@ export default function FormZodValidationDemo() {
 
 ### Async Validation
 
-Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
+Use asynchronous submit-then-change validation for checks that require a server round trip. Try `admin` to see the error persist until the username becomes valid.
 
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -619,6 +619,10 @@ export default function FormServerValidationDemo() {
     onSubmit: () => {
       setSubmitted(true);
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -626,7 +630,7 @@ export default function FormServerValidationDemo() {
       <form.Field
         name="username"
         validators={{
-          onSubmitAsync: ({ value }) => validateUsername(value),
+          onDynamicAsync: ({ value }) => validateUsername(value),
         }}
       >
         {(field) => {
@@ -657,11 +661,9 @@ export default function FormServerValidationDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Checking..." : "Submit"}
           </Button>
         )}
@@ -684,7 +686,7 @@ Wire a `DatePicker` inside `Field` to collect a date with validation and invalid
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -716,6 +718,10 @@ export default function FormWithDatePickerDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmitted({ title: value.title, date: value.date[0] });
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -723,7 +729,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="title"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             !value.trim() ? "Event title is required." : undefined,
         }}
       >
@@ -758,7 +764,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="date"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.length === 0 ? "Pick a date." : undefined,
         }}
       >
@@ -793,11 +799,9 @@ export default function FormWithDatePickerDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating event..." : "Create event"}
           </Button>
         )}
@@ -1120,11 +1124,9 @@ export default function FormCompleteDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating profile..." : "Create profile"}
           </Button>
         )}
@@ -1143,7 +1145,7 @@ export default function FormCompleteDemo() {
 
 ## Accessibility
 
-Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics.
+Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics. After a failed submission, `Form` moves focus to the first invalid control and replays its transient shake while the persistent error styling remains tied to validation state.
 
 ## API Reference
 

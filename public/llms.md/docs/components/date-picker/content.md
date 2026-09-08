@@ -328,12 +328,13 @@ export default function DatePickerTime() {
 
 ### Invalid
 
-Trigger the invalid-state shake on the date picker trigger.
+Submit without choosing a permitted weekday to mark the picker invalid. Selecting a weekday clears the error, while another failed submission replays the shake once.
 
 ```tsx
 "use client";
 
-import { useState } from "react";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
 import {
@@ -342,24 +343,73 @@ import {
   DatePickerLabel,
   DatePickerTrigger,
 } from "@/registry/base/date-picker";
+import { Field, FieldError, FieldErrorSlot } from "@/registry/base/field";
+import { Form } from "@/registry/base/form";
+
+function validateDate(value: Date[]) {
+  const date = value[0];
+
+  if (!date) {
+    return "Choose a date.";
+  }
+
+  if (Number.isNaN(date.getTime())) {
+    return "Choose a valid date.";
+  }
+
+  return date.getDay() === 0 || date.getDay() === 6
+    ? "Choose a weekday."
+    : undefined;
+}
 
 export default function DatePickerInvalidDemo() {
-  const [invalid, setInvalid] = useState(false);
+  const dateErrorId = useId();
+  const form = useForm({
+    defaultValues: { date: [] as Date[] },
+    onSubmit: () => undefined,
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+  });
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-3">
-      <DatePicker className="w-full" invalid={invalid}>
-        <DatePickerLabel>Event date</DatePickerLabel>
-        <DatePickerTrigger className="w-full justify-start" invalid={invalid} />
-        <DatePickerContent />
-      </DatePicker>
-      <Button
-        onClick={() => setInvalid((current) => !current)}
-        variant={invalid ? "default" : "destructive"}
+    <Form className="grid w-full max-w-sm gap-3" form={form}>
+      <form.Field
+        name="date"
+        validators={{ onDynamic: ({ value }) => validateDate(value) }}
       >
-        {invalid ? "Reset" : "Trigger Error"}
-      </Button>
-    </div>
+        {(field) => {
+          const error = field.state.meta.errors[0];
+          const invalid = typeof error === "string";
+
+          return (
+            <Field invalid={invalid} name={field.name}>
+              <DatePicker
+                className="w-full"
+                invalid={invalid}
+                onValueChange={(details) => field.handleChange(details.value)}
+                value={field.state.value}
+              >
+                <DatePickerLabel>Event date</DatePickerLabel>
+                <DatePickerTrigger
+                  aria-describedby={invalid ? dateErrorId : undefined}
+                  className="w-full justify-start"
+                  invalid={invalid}
+                />
+                <DatePickerContent />
+              </DatePicker>
+              <FieldErrorSlot>
+                <FieldError id={dateErrorId} match={invalid}>
+                  {error}
+                </FieldError>
+              </FieldErrorSlot>
+            </Field>
+          );
+        }}
+      </form.Field>
+      <Button type="submit">Validate date</Button>
+    </Form>
   );
 }
 ```
@@ -404,7 +454,7 @@ Use `DatePicker` inside a [Form](./form) `Field` with TanStack Form for validati
 ```tsx
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -436,6 +486,10 @@ export default function FormWithDatePickerDemo() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       setSubmitted({ title: value.title, date: value.date[0] });
     },
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
   });
 
   return (
@@ -443,7 +497,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="title"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             !value.trim() ? "Event title is required." : undefined,
         }}
       >
@@ -478,7 +532,7 @@ export default function FormWithDatePickerDemo() {
       <form.Field
         name="date"
         validators={{
-          onSubmit: ({ value }) =>
+          onDynamic: ({ value }) =>
             value.length === 0 ? "Pick a date." : undefined,
         }}
       >
@@ -513,11 +567,9 @@ export default function FormWithDatePickerDemo() {
         }}
       </form.Field>
 
-      <form.Subscribe
-        selector={(state) => [state.canSubmit, state.isSubmitting]}
-      >
-        {([canSubmit, isSubmitting]) => (
-          <Button disabled={!canSubmit} type="submit">
+      <form.Subscribe selector={(state) => state.isSubmitting}>
+        {(isSubmitting) => (
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Creating event..." : "Create event"}
           </Button>
         )}

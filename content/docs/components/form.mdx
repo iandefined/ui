@@ -102,7 +102,7 @@ Validate a complete value object with Zod after submit, then revalidate as the u
 
 ### Async Validation
 
-Use `onSubmitAsync` for checks that require a server round trip. Try `admin` to see the asynchronous error.
+Use asynchronous submit-then-change validation for checks that require a server round trip. Try `admin` to see the error persist until the username becomes valid.
 
 <ComponentPreview name="form/server-validation" />
 
@@ -120,7 +120,7 @@ Compose text, choice, range, switch, and checkbox controls in one form with Zod 
 
 ## Accessibility
 
-Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics.
+Use [Field](/docs/components/field) to connect labels, descriptions, and errors. Give trigger-based controls such as Select and Slider their component label, and place one group-level error after a Radio Group. Keep native input `name` attributes aligned with their TanStack field names when a submission needs standard form semantics. After a failed submission, `Form` moves focus to the first invalid control and replays its transient shake while the persistent error styling remains tied to validation state.
 
 ## API Reference
 
