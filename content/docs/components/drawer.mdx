@@ -168,13 +168,13 @@ Wrap the page surface with `DrawerIndent` inside `DrawerProvider` to scale and r
 
 ### Menu Rows
 
-Use the drawer menu parts for touch-sized actions, toggles, groups, and single-choice rows.
+Use `DrawerMenuRow` to compose existing inputs such as `Switch`, `Checkbox`, `Radio`, and `Select` into a touch-sized drawer layout. The example also uses `TransitionPanel` to reveal related settings without opening another drawer.
 
 <ComponentPreview name="drawer/menu" />
 
 ## Accessibility
 
-Include `DrawerTitle` inside every popup so Base UI can name the dialog. Add `DrawerDescription` when the panel needs supporting context, and provide a visible `DrawerCloseTrigger` for modal drawers. For `dismissible={false}`, provide at least one visible `DrawerCloseTrigger` and compose it around the button content with `render`. `DrawerMenuCheckboxItem` and `DrawerMenuRadioItem` are individually focusable controls, so give the surrounding menu a label when it is not otherwise named.
+Include `DrawerTitle` inside every popup so Base UI can name the dialog. Add `DrawerDescription` when the panel needs supporting context, and provide a visible `DrawerCloseTrigger` for modal drawers. For `dismissible={false}`, provide at least one visible `DrawerCloseTrigger` and compose it around the button content with `render`. Do not place a composed input inside `DrawerMenuItem`, because the item is already a button. Render `DrawerMenuRow` as a `Label` instead so the row labels the input without nesting interactive controls.
 
 ## API Reference
 
@@ -295,64 +295,6 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
   </ApiProp>
 </ApiPropsList>
 
-#### DrawerMenuCheckboxItem
-
-A focusable Base UI checkbox row with a reserved indicator column.
-
-<ApiPropsList>
-  <ApiProp
-    name="indicator"
-    fullType='"check" | "switch"'
-    simpleType="string"
-    defaultValue='"check"'
-  >
-    Shows a checkmark or a non-interactive switch visual. The whole row remains
-    the checkbox control.
-  </ApiProp>
-  <ApiProp
-    name="switchColor"
-    fullType='"primary" | "neutral"'
-    simpleType="string"
-    defaultValue='"primary"'
-  >
-    Sets the checked switch track color when `indicator="switch"`.
-  </ApiProp>
-  <ApiProp
-    name="switchShape"
-    fullType='"circle" | "pill" | "squircle"'
-    simpleType="string"
-    defaultValue='"circle"'
-  >
-    Sets the switch track and thumb shape when `indicator="switch"`.
-  </ApiProp>
-  <ApiProp
-    name="switchSize"
-    fullType='"xs" | "sm" | "default" | "lg"'
-    simpleType="string"
-    defaultValue='"sm"'
-  >
-    Sets the switch visual size when `indicator="switch"`.
-  </ApiProp>
-  <ApiProp
-    name="switchMotion"
-    fullType='"default" | "stretch"'
-    simpleType="string"
-    defaultValue='"default"'
-  >
-    Chooses the switch visual transition style when `indicator="switch"`.
-  </ApiProp>
-</ApiPropsList>
-
-#### DrawerMenuRadioItem
-
-Focusable radio row for use inside `DrawerMenuRadioGroup`.
-
-<ApiPropsList>
-  <ApiProp name="value" fullType="string" required>
-    Identifies the option within the surrounding radio group.
-  </ApiProp>
-</ApiPropsList>
-
 ### Components
 
 | Component                | Responsibility                                             |
@@ -366,12 +308,12 @@ Focusable radio row for use inside `DrawerMenuRadioGroup`.
 | `DrawerIndentBackground` | Renders the background layer for the indent effect.        |
 | `DrawerSwipeArea`        | Adds an invisible edge area for swipe-to-open gestures.    |
 | `DrawerMenu`             | Groups drawer menu rows in a semantic `nav`.               |
+| `DrawerMenuRow`          | Lays out composed inputs and supporting content.           |
 | `DrawerMenuItem`         | Renders an action row.                                     |
 | `DrawerMenuTrigger`      | Renders a row that opens a nested drawer.                  |
 | `DrawerMenuSeparator`    | Divides menu groups.                                       |
 | `DrawerMenuGroup`        | Groups related menu rows.                                  |
 | `DrawerMenuGroupLabel`   | Labels a menu group.                                       |
-| `DrawerMenuRadioGroup`   | Coordinates single-choice rows.                            |
 
 ### Drawer CSS Variables
 

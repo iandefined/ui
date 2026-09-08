@@ -1,13 +1,10 @@
 "use client";
 
-import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
 import { mergeProps } from "@base-ui/react/merge-props";
-import { Radio as RadioPrimitive } from "@base-ui/react/radio";
-import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { useRender } from "@base-ui/react/use-render";
 import { cn } from "cn";
-import { CheckIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import { animate, useReducedMotion } from "motion/react";
 import * as React from "react";
 
@@ -1168,6 +1165,26 @@ function DrawerMenu({
   });
 }
 
+function DrawerMenuRow({
+  className,
+  render,
+  ...props
+}: useRender.ComponentProps<"div">) {
+  const defaultProps = {
+    className: cn(
+      "flex min-h-11 w-full items-center gap-3 rounded-md px-2 py-1 text-base text-foreground sm:min-h-9 sm:text-sm",
+      className
+    ),
+    "data-slot": "drawer-menu-row",
+  };
+
+  return useRender({
+    defaultTagName: "div",
+    props: mergeProps<"div">(defaultProps, props),
+    render,
+  });
+}
+
 function DrawerMenuItem({
   className,
   variant = "default",
@@ -1272,190 +1289,6 @@ function DrawerMenuTrigger({
   );
 }
 
-type DrawerSwitchColor = "primary" | "neutral";
-type DrawerSwitchShape = "circle" | "pill" | "squircle";
-type DrawerSwitchSize = "xs" | "sm" | "default" | "lg";
-type DrawerSwitchMotion = "default" | "stretch";
-
-const drawerSwitchSizeClasses: Record<
-  DrawerSwitchSize,
-  { track: string; thumb: string; checked: string }
-> = {
-  xs: {
-    track: "h-4 w-7 p-0.5",
-    thumb: "size-3",
-    checked: "in-data-checked:translate-x-3",
-  },
-  sm: {
-    track: "h-5 w-9 p-0.5",
-    thumb: "size-4",
-    checked: "in-data-checked:translate-x-4",
-  },
-  default: {
-    track: "h-6 w-11 p-0.5",
-    thumb: "size-5",
-    checked: "in-data-checked:translate-x-5",
-  },
-  lg: {
-    track: "h-7 w-[3.25rem] p-0.5",
-    thumb: "size-6",
-    checked: "in-data-checked:translate-x-6",
-  },
-};
-
-function DrawerSwitchIndicator({
-  color,
-  motion,
-  shape,
-  size,
-}: {
-  color: DrawerSwitchColor;
-  motion: DrawerSwitchMotion;
-  shape: DrawerSwitchShape;
-  size: DrawerSwitchSize;
-}) {
-  const metrics = drawerSwitchSizeClasses[size];
-
-  return (
-    <CheckboxPrimitive.Indicator
-      aria-hidden
-      className="group/drawer-switch col-start-2 flex shrink-0 items-center justify-center"
-      data-motion={motion}
-      keepMounted
-    >
-      <span
-        data-motion={motion}
-        className={cn(
-          "relative inline-flex shrink-0 items-center bg-input transition-colors duration-100 data-[motion=stretch]:[&>span]:transition-[transform,width]",
-          "in-data-checked:bg-primary",
-          color === "neutral" && "in-data-checked:bg-foreground/70",
-          shape === "circle" && "rounded-full",
-          shape === "pill" && "rounded-md",
-          shape === "squircle" && "rounded-[35%]",
-          metrics.track,
-          "motion-reduce:transition-none"
-        )}
-      >
-        <span
-          className={cn(
-            "block shrink-0 bg-background shadow-sm transition-transform duration-150 motion-reduce:transition-none",
-            shape === "circle" && "rounded-full",
-            shape === "pill" && "rounded-md",
-            shape === "squircle" && "rounded-[35%]",
-            metrics.thumb,
-            metrics.checked
-          )}
-        />
-      </span>
-    </CheckboxPrimitive.Indicator>
-  );
-}
-
-interface DrawerMenuCheckboxItemProps extends CheckboxPrimitive.Root.Props {
-  indicator?: "check" | "switch";
-  switchColor?: DrawerSwitchColor;
-  switchShape?: DrawerSwitchShape;
-  switchSize?: DrawerSwitchSize;
-  switchMotion?: DrawerSwitchMotion;
-}
-
-function DrawerMenuCheckboxItem({
-  className,
-  children,
-  indicator = "check",
-  switchColor = "primary",
-  switchShape = "circle",
-  switchSize = "sm",
-  switchMotion = "default",
-  ...props
-}: DrawerMenuCheckboxItemProps) {
-  return (
-    <CheckboxPrimitive.Root
-      className={cn(
-        "group/drawer-checkbox grid min-h-11 w-full cursor-pointer select-none items-center rounded-md px-2 py-1 text-base text-foreground outline-none hover:bg-muted hover:text-accent-foreground focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid data-disabled:pointer-events-none data-disabled:opacity-60 sm:min-h-9 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        indicator === "switch"
-          ? "grid-cols-[1fr_auto] gap-4 pe-1.5"
-          : "grid-cols-[1fr_1rem] gap-2 pe-2",
-        className
-      )}
-      data-slot="drawer-menu-checkbox-item"
-      {...props}
-    >
-      <span className="col-start-1 flex min-w-0 items-center gap-2">
-        {children}
-      </span>
-      {indicator === "switch" ? (
-        <DrawerSwitchIndicator
-          color={switchColor}
-          motion={switchMotion}
-          shape={switchShape}
-          size={switchSize}
-        />
-      ) : (
-        <CheckboxPrimitive.Indicator
-          aria-hidden
-          className="col-start-2 flex items-center justify-center text-primary"
-          keepMounted
-        >
-          <CheckIcon
-            className="scale-75 opacity-0 transition-[opacity,transform] duration-150 in-data-checked:scale-100 in-data-checked:opacity-100 motion-reduce:transition-none"
-            strokeWidth={2.5}
-          />
-        </CheckboxPrimitive.Indicator>
-      )}
-    </CheckboxPrimitive.Root>
-  );
-}
-
-function DrawerMenuRadioGroup({
-  className,
-  ...props
-}: RadioGroupPrimitive.Props) {
-  return (
-    <RadioGroupPrimitive
-      className={cn("flex flex-col", className)}
-      data-slot="drawer-menu-radio-group"
-      {...props}
-    />
-  );
-}
-
-interface DrawerMenuRadioItemProps extends RadioPrimitive.Root.Props {
-  value: string;
-}
-
-function DrawerMenuRadioItem({
-  className,
-  children,
-  ...props
-}: DrawerMenuRadioItemProps) {
-  return (
-    <RadioPrimitive.Root
-      className={cn(
-        "grid min-h-11 w-full cursor-pointer select-none grid-cols-[1fr_1rem] items-center gap-2 rounded-md px-2 py-1 text-base text-foreground outline-none hover:bg-muted hover:text-accent-foreground focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid data-disabled:pointer-events-none data-disabled:opacity-60 sm:min-h-9 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
-      data-slot="drawer-menu-radio-item"
-      {...props}
-      value={props.value}
-    >
-      <span className="col-start-1 flex min-w-0 items-center gap-2">
-        {children}
-      </span>
-      <RadioPrimitive.Indicator
-        aria-hidden
-        className="col-start-2 flex items-center justify-center text-primary"
-        keepMounted
-      >
-        <CheckIcon
-          className="scale-75 opacity-0 transition-[opacity,transform] duration-150 in-data-checked:scale-100 in-data-checked:opacity-100 motion-reduce:transition-none"
-          strokeWidth={2.5}
-        />
-      </RadioPrimitive.Indicator>
-    </RadioPrimitive.Root>
-  );
-}
-
 export {
   Drawer,
   DrawerBackdrop,
@@ -1468,12 +1301,10 @@ export {
   DrawerIndent,
   DrawerIndentBackground,
   DrawerMenu,
-  DrawerMenuCheckboxItem,
   DrawerMenuItem,
   DrawerMenuGroup,
   DrawerMenuGroupLabel,
-  DrawerMenuRadioGroup,
-  DrawerMenuRadioItem,
+  DrawerMenuRow,
   DrawerMenuSeparator,
   DrawerMenuTrigger,
   DrawerPanel,
@@ -1491,8 +1322,6 @@ export {
 export type {
   DrawerFooterProps,
   DrawerHeaderProps,
-  DrawerMenuCheckboxItemProps,
-  DrawerMenuRadioItemProps,
   DrawerPanelProps,
   DrawerPopupProps,
   DrawerProps,

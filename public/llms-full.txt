@@ -9551,14 +9551,28 @@ export default function DrawerIndentDemo() {
 
 ### Menu Rows
 
-Use the drawer menu parts for touch-sized actions, toggles, groups, and single-choice rows.
+Use `DrawerMenuRow` to compose existing inputs such as `Switch`, `Checkbox`, `Radio`, and `Select` into a touch-sized drawer layout. The example also uses `TransitionPanel` to reveal related settings without opening another drawer.
 
 ```tsx
 "use client";
 
+import {
+  ArrowLeftIcon,
+  BellIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  Globe2Icon,
+  MonitorIcon,
+  MoonIcon,
+  NewspaperIcon,
+  PaletteIcon,
+  SunIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/registry/base/button";
+import { Checkbox } from "@/registry/base/checkbox";
 import {
   Drawer,
   DrawerCloseTrigger,
@@ -9566,22 +9580,54 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerMenu,
-  DrawerMenuCheckboxItem,
   DrawerMenuGroup,
   DrawerMenuGroupLabel,
-  DrawerMenuRadioGroup,
-  DrawerMenuRadioItem,
+  DrawerMenuItem,
+  DrawerMenuRow,
   DrawerMenuSeparator,
   DrawerPanel,
   DrawerPopup,
   DrawerTitle,
   DrawerTrigger,
 } from "@/registry/base/drawer";
+import { Label } from "@/registry/base/label";
+import { Radio, RadioGroup } from "@/registry/base/radio-group";
+import {
+  Select,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
+} from "@/registry/base/select";
+import { Switch } from "@/registry/base/switch";
+import {
+  TransitionPanel,
+  TransitionPanelView,
+} from "@/registry/base/transition-panel";
+
+const languages = [
+  { label: "English", value: "en" },
+  { label: "Deutsch", value: "de" },
+  { label: "Español", value: "es" },
+];
+
+const themes = [
+  { icon: MonitorIcon, label: "System", value: "system" },
+  { icon: SunIcon, label: "Light", value: "light" },
+  { icon: MoonIcon, label: "Dark", value: "dark" },
+];
 
 export default function DrawerMenuDemo() {
-  const [wifi, setWifi] = useState(true);
-  const [bluetooth, setBluetooth] = useState(false);
-  const [quality, setQuality] = useState("high");
+  const [view, setView] = useState("menu");
+  const [notifications, setNotifications] = useState(true);
+  const [weeklyDigest, setWeeklyDigest] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [language, setLanguage] = useState<string | null>("en");
+  const [theme, setTheme] = useState("system");
 
   return (
     <Drawer>
@@ -9590,46 +9636,181 @@ export default function DrawerMenuDemo() {
       </DrawerTrigger>
       <DrawerPopup className="max-w-xl" showBar>
         <DrawerHeader>
-          <DrawerTitle>Settings</DrawerTitle>
+          <DrawerTitle>Workspace settings</DrawerTitle>
           <DrawerDescription>
-            Checkbox rows toggle immediately, while radio rows choose one
-            option.
+            Compose drawer rows with the same controls used throughout your
+            application.
           </DrawerDescription>
         </DrawerHeader>
-        <DrawerPanel scrollable={false}>
-          <DrawerMenu aria-label="Settings">
-            <DrawerMenuGroup>
-              <DrawerMenuGroupLabel>Connections</DrawerMenuGroupLabel>
-              <DrawerMenuCheckboxItem
-                checked={wifi}
-                indicator="switch"
-                onCheckedChange={setWifi}
-              >
-                Wi-Fi
-              </DrawerMenuCheckboxItem>
-              <DrawerMenuCheckboxItem
-                checked={bluetooth}
-                indicator="switch"
-                onCheckedChange={setBluetooth}
-              >
-                Bluetooth
-              </DrawerMenuCheckboxItem>
-            </DrawerMenuGroup>
-            <DrawerMenuSeparator />
-            <DrawerMenuGroup>
-              <DrawerMenuGroupLabel>Streaming quality</DrawerMenuGroupLabel>
-              <DrawerMenuRadioGroup
-                value={quality}
-                onValueChange={(value) => setQuality(value as string)}
-              >
-                <DrawerMenuRadioItem value="low">Low</DrawerMenuRadioItem>
-                <DrawerMenuRadioItem value="standard">
-                  Standard
-                </DrawerMenuRadioItem>
-                <DrawerMenuRadioItem value="high">High</DrawerMenuRadioItem>
-              </DrawerMenuRadioGroup>
-            </DrawerMenuGroup>
-          </DrawerMenu>
+        <DrawerPanel scrollFade>
+          <TransitionPanel activeKey={view}>
+            <TransitionPanelView viewKey="menu" initialFocus={false}>
+              <DrawerMenu aria-label="Workspace settings">
+                <DrawerMenuGroup>
+                  <DrawerMenuGroupLabel>General</DrawerMenuGroupLabel>
+                  <DrawerMenuItem onClick={() => setView("appearance")}>
+                    <PaletteIcon aria-hidden="true" />
+                    <span className="min-w-0 flex-1 text-start">
+                      <span className="block font-medium">Appearance</span>
+                      <span className="block truncate text-xs text-muted-foreground">
+                        Theme and motion preferences
+                      </span>
+                    </span>
+                    <span className="ms-auto text-xs text-muted-foreground">
+                      {themes.find((option) => option.value === theme)?.label}
+                    </span>
+                    <ChevronRightIcon aria-hidden="true" />
+                  </DrawerMenuItem>
+                  <DrawerMenuRow>
+                    <Globe2Icon
+                      aria-hidden="true"
+                      className="size-4 shrink-0 opacity-80"
+                    />
+                    <span className="min-w-0 flex-1 font-medium">Language</span>
+                    <Select
+                      items={languages}
+                      value={language}
+                      onValueChange={(nextValue) =>
+                        setLanguage(nextValue as string | null)
+                      }
+                    >
+                      <SelectTrigger
+                        aria-label="Language"
+                        className="ms-auto min-w-32"
+                      >
+                        <SelectValue />
+                        <SelectIcon>
+                          <ChevronDownIcon aria-hidden="true" />
+                        </SelectIcon>
+                      </SelectTrigger>
+                      <SelectPopup>
+                        <SelectList>
+                          {languages.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              <SelectItemText>{option.label}</SelectItemText>
+                              <SelectItemIndicator>
+                                <CheckIcon
+                                  aria-hidden="true"
+                                  className="size-3"
+                                />
+                              </SelectItemIndicator>
+                            </SelectItem>
+                          ))}
+                        </SelectList>
+                      </SelectPopup>
+                    </Select>
+                  </DrawerMenuRow>
+                </DrawerMenuGroup>
+
+                <DrawerMenuSeparator />
+
+                <DrawerMenuGroup>
+                  <DrawerMenuGroupLabel>Notifications</DrawerMenuGroupLabel>
+                  <DrawerMenuRow
+                    className="cursor-pointer select-none hover:bg-muted"
+                    render={<Label htmlFor="drawer-notifications" />}
+                  >
+                    <BellIcon
+                      aria-hidden="true"
+                      className="size-4 shrink-0 opacity-80"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium">
+                        Desktop notifications
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        Alerts for mentions and assigned work
+                      </span>
+                    </span>
+                    <Switch
+                      id="drawer-notifications"
+                      checked={notifications}
+                      onCheckedChange={setNotifications}
+                      size="sm"
+                    />
+                  </DrawerMenuRow>
+                  <DrawerMenuRow
+                    className="cursor-pointer select-none hover:bg-muted"
+                    render={<Label htmlFor="drawer-weekly-digest" />}
+                  >
+                    <NewspaperIcon
+                      aria-hidden="true"
+                      className="size-4 shrink-0 opacity-80"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium">Weekly digest</span>
+                      <span className="block text-xs text-muted-foreground">
+                        A Monday summary of workspace activity
+                      </span>
+                    </span>
+                    <Checkbox
+                      id="drawer-weekly-digest"
+                      checked={weeklyDigest}
+                      onCheckedChange={setWeeklyDigest}
+                    />
+                  </DrawerMenuRow>
+                </DrawerMenuGroup>
+              </DrawerMenu>
+            </TransitionPanelView>
+
+            <TransitionPanelView viewKey="appearance">
+              <DrawerMenu aria-label="Appearance settings">
+                <DrawerMenuItem onClick={() => setView("menu")}>
+                  <ArrowLeftIcon aria-hidden="true" />
+                  Back to settings
+                </DrawerMenuItem>
+                <DrawerMenuSeparator />
+                <DrawerMenuGroup>
+                  <DrawerMenuGroupLabel>Color theme</DrawerMenuGroupLabel>
+                  <RadioGroup
+                    aria-label="Color theme"
+                    className="gap-0"
+                    value={theme}
+                    onValueChange={(nextValue) => setTheme(nextValue as string)}
+                  >
+                    {themes.map((option) => {
+                      const Icon = option.icon;
+
+                      return (
+                        <DrawerMenuRow
+                          key={option.value}
+                          className="cursor-pointer select-none hover:bg-muted"
+                          render={<Label />}
+                        >
+                          <Icon
+                            aria-hidden="true"
+                            className="size-4 shrink-0 opacity-80"
+                          />
+                          <span className="flex-1 font-medium">
+                            {option.label}
+                          </span>
+                          <Radio value={option.value} />
+                        </DrawerMenuRow>
+                      );
+                    })}
+                  </RadioGroup>
+                </DrawerMenuGroup>
+                <DrawerMenuSeparator />
+                <DrawerMenuRow
+                  className="cursor-pointer select-none hover:bg-muted"
+                  render={<Label htmlFor="drawer-reduce-motion" />}
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-medium">Reduce motion</span>
+                    <span className="block text-xs text-muted-foreground">
+                      Use simpler interface transitions
+                    </span>
+                  </span>
+                  <Switch
+                    id="drawer-reduce-motion"
+                    checked={reduceMotion}
+                    onCheckedChange={setReduceMotion}
+                    size="sm"
+                  />
+                </DrawerMenuRow>
+              </DrawerMenu>
+            </TransitionPanelView>
+          </TransitionPanel>
         </DrawerPanel>
         <DrawerFooter>
           <DrawerCloseTrigger render={<Button variant="outline" />}>
@@ -9644,7 +9825,7 @@ export default function DrawerMenuDemo() {
 
 ## Accessibility
 
-Include `DrawerTitle` inside every popup so Base UI can name the dialog. Add `DrawerDescription` when the panel needs supporting context, and provide a visible `DrawerCloseTrigger` for modal drawers. For `dismissible={false}`, provide at least one visible `DrawerCloseTrigger` and compose it around the button content with `render`. `DrawerMenuCheckboxItem` and `DrawerMenuRadioItem` are individually focusable controls, so give the surrounding menu a label when it is not otherwise named.
+Include `DrawerTitle` inside every popup so Base UI can name the dialog. Add `DrawerDescription` when the panel needs supporting context, and provide a visible `DrawerCloseTrigger` for modal drawers. For `dismissible={false}`, provide at least one visible `DrawerCloseTrigger` and compose it around the button content with `render`. Do not place a composed input inside `DrawerMenuItem`, because the item is already a button. Render `DrawerMenuRow` as a `Label` instead so the row labels the input without nesting interactive controls.
 
 ## API Reference
 
@@ -9694,26 +9875,6 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
 | `sticky` | `boolean` | `false` | Keeps a bottom drawer footer pinned while the drawer moves or changes snap points. Top, side, and floating footers remain surface-bound to avoid detaching during dismissal. By default, every footer moves with the drawer surface. |
 | `allowSelection` | `boolean` | `true` | Uses `DrawerContent` for selectable footer content. |
 
-#### DrawerMenuCheckboxItem
-
-A focusable Base UI checkbox row with a reserved indicator column.
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `indicator` | `"check" \| "switch"` | `check` | Shows a checkmark or a non-interactive switch visual. The whole row remains the checkbox control. |
-| `switchColor` | `"primary" \| "neutral"` | `primary` | Sets the checked switch track color when `indicator="switch"`. |
-| `switchShape` | `"circle" \| "pill" \| "squircle"` | `circle` | Sets the switch track and thumb shape when `indicator="switch"`. |
-| `switchSize` | `"xs" \| "sm" \| "default" \| "lg"` | `sm` | Sets the switch visual size when `indicator="switch"`. |
-| `switchMotion` | `"default" \| "stretch"` | `default` | Chooses the switch visual transition style when `indicator="switch"`. |
-
-#### DrawerMenuRadioItem
-
-Focusable radio row for use inside `DrawerMenuRadioGroup`.
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `value` | `string` | `-` | Identifies the option within the surrounding radio group. |
-
 ### Components
 
 | Component                | Responsibility                                             |
@@ -9727,12 +9888,12 @@ Focusable radio row for use inside `DrawerMenuRadioGroup`.
 | `DrawerIndentBackground` | Renders the background layer for the indent effect.        |
 | `DrawerSwipeArea`        | Adds an invisible edge area for swipe-to-open gestures.    |
 | `DrawerMenu`             | Groups drawer menu rows in a semantic `nav`.               |
+| `DrawerMenuRow`          | Lays out composed inputs and supporting content.           |
 | `DrawerMenuItem`         | Renders an action row.                                     |
 | `DrawerMenuTrigger`      | Renders a row that opens a nested drawer.                  |
 | `DrawerMenuSeparator`    | Divides menu groups.                                       |
 | `DrawerMenuGroup`        | Groups related menu rows.                                  |
 | `DrawerMenuGroupLabel`   | Labels a menu group.                                       |
-| `DrawerMenuRadioGroup`   | Coordinates single-choice rows.                            |
 
 ### Drawer CSS Variables
 
