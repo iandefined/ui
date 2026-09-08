@@ -1088,7 +1088,7 @@ export default function DrawerMenuDemo() {
                         Theme and motion preferences
                       </span>
                     </span>
-                    <span className="ms-auto text-xs text-muted-foreground">
+                    <span className="ms-auto text-sms text-muted-foreground">
                       {themes.find((option) => option.value === theme)?.label}
                     </span>
                     <ChevronRightIcon aria-hidden="true" />
@@ -1158,7 +1158,6 @@ export default function DrawerMenuDemo() {
                       id="drawer-notifications"
                       checked={notifications}
                       onCheckedChange={setNotifications}
-                      size="sm"
                     />
                   </DrawerMenuRow>
                   <DrawerMenuRow
@@ -1237,7 +1236,6 @@ export default function DrawerMenuDemo() {
                     id="drawer-reduce-motion"
                     checked={reduceMotion}
                     onCheckedChange={setReduceMotion}
-                    size="sm"
                   />
                 </DrawerMenuRow>
               </DrawerMenu>

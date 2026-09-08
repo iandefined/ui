@@ -1162,7 +1162,7 @@ function DrawerMenu({
   ...props
 }: useRender.ComponentProps<"nav">) {
   const defaultProps = {
-    className: cn("-m-2 flex flex-col", className),
+    className: cn("flex flex-col", className),
     "data-slot": "drawer-menu",
   };
 
