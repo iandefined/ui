@@ -1,6 +1,7 @@
 "use client";
 
 import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { ChevronsUpDownIcon } from "lucide-react";
 import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -73,7 +74,9 @@ export default function SelectInvalidDemo() {
                   className="w-full"
                 >
                   <SelectValue placeholder="Select a framework" />
-                  <SelectIcon />
+                  <SelectIcon className="flex items-center self-center">
+                    <ChevronsUpDownIcon className="size-3.5" />
+                  </SelectIcon>
                 </SelectTrigger>
                 <SelectPopup>
                   <SelectList>

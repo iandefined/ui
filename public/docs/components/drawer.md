@@ -1074,7 +1074,7 @@ export default function DrawerMenuDemo() {
             application.
           </DrawerDescription>
         </DrawerHeader>
-        <DrawerPanel scrollFade>
+        <DrawerPanel className="px-4" scrollFade>
           <TransitionPanel activeKey={view}>
             <TransitionPanelView viewKey="menu" initialFocus={false}>
               <DrawerMenu aria-label="Workspace settings">

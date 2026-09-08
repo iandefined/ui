@@ -9887,7 +9887,7 @@ export default function DrawerMenuDemo() {
             application.
           </DrawerDescription>
         </DrawerHeader>
-        <DrawerPanel scrollFade>
+        <DrawerPanel className="px-4" scrollFade>
           <TransitionPanel activeKey={view}>
             <TransitionPanelView viewKey="menu" initialFocus={false}>
               <DrawerMenu aria-label="Workspace settings">
@@ -15664,7 +15664,7 @@ export default function RadioGroupInvalidDemo() {
 
           return (
             <Field invalid={invalid} name={field.name}>
-              <Fieldset>
+              <Fieldset className="mb-4">
                 <FieldsetLegend>Choose a plan</FieldsetLegend>
                 <RadioGroup
                   aria-describedby={invalid ? errorId : undefined}
@@ -16433,6 +16433,7 @@ Submit without choosing a framework to mark the select trigger invalid. Selectin
 "use client";
 
 import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { ChevronsUpDownIcon } from "lucide-react";
 import { useId } from "react";
 
 import { Button } from "@/registry/base/button";
@@ -16505,7 +16506,9 @@ export default function SelectInvalidDemo() {
                   className="w-full"
                 >
                   <SelectValue placeholder="Select a framework" />
-                  <SelectIcon />
+                  <SelectIcon className="flex items-center self-center">
+                    <ChevronsUpDownIcon className="size-3.5" />
+                  </SelectIcon>
                 </SelectTrigger>
                 <SelectPopup>
                   <SelectList>

@@ -18,49 +18,7 @@ const AutocompleteRoot = BaseAutocomplete.Root;
 
 const PositionerContext = createContext<boolean>(false);
 
-export function ChevronsUpDownIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      height="20"
-      viewBox="0 0 20 20"
-      width="20"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        className="group-data-popup-open:translate-y-[8.5px] [transition-property:translate] duration-200 ease-out"
-        d="M10.53 2.72a.75.75 0 0 0-1.06 0L5.22 6.97a.75.75 0 0 0 1.06 1.06L10 4.31l3.72 3.72a.75.75 0 1 0 1.06-1.06z"
-        fill="currentColor"
-      />
-      <path
-        className="group-data-popup-open:-translate-y-[8.5px] [transition-property:translate] duration-200 ease-out"
-        d="M14.78 13.03l-4.25 4.25a.75.75 0 0 1-1.06 0l-4.25-4.25a.75.75 0 1 1 1.06-1.06L10 15.69l3.72-3.72a.75.75 0 1 1 1.06 1.06"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
-export function CloseIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      height="24"
-      viewBox="0 0 24 24"
-      width="24"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M18 6L6 18m12 0L6 6"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
+import { ChevronsUpDownIcon, X } from "lucide-react";
 
 interface AutocompleteInputProps extends BaseAutocomplete.Input.Props {
   isClearable?: boolean;
@@ -160,7 +118,7 @@ function AutocompleteClear({
       data-slot="autocomplete-clear"
       {...props}
     >
-      {children ?? <CloseIcon />}
+      {children ?? <X />}
     </BaseAutocomplete.Clear>
   );
 }

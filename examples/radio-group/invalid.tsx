@@ -49,7 +49,7 @@ export default function RadioGroupInvalidDemo() {
 
           return (
             <Field invalid={invalid} name={field.name}>
-              <Fieldset>
+              <Fieldset className="mb-4">
                 <FieldsetLegend>Choose a plan</FieldsetLegend>
                 <RadioGroup
                   aria-describedby={invalid ? errorId : undefined}

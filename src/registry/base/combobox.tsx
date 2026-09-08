@@ -123,71 +123,7 @@ function ComboboxValue(props: ComboboxPrimitive.Value.Props) {
   return <ComboboxPrimitive.Value data-slot="combobox-value" {...props} />;
 }
 
-export function ChevronsUpDownIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      height="20"
-      viewBox="0 0 20 20"
-      width="20"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        className="group-data-popup-open:translate-y-[8.5px] [transition-property:translate] duration-200 ease-out"
-        d="M10.53 2.72a.75.75 0 0 0-1.06 0L5.22 6.97a.75.75 0 0 0 1.06 1.06L10 4.31l3.72 3.72a.75.75 0 1 0 1.06-1.06z"
-        fill="currentColor"
-      />
-      <path
-        className="group-data-popup-open:-translate-y-[8.5px] [transition-property:translate] duration-200 ease-out"
-        d="M14.78 13.03l-4.25 4.25a.75.75 0 0 1-1.06 0l-4.25-4.25a.75.75 0 1 1 1.06-1.06L10 15.69l3.72-3.72a.75.75 0 1 1 1.06 1.06"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
-export function CloseIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      height="24"
-      viewBox="0 0 24 24"
-      width="24"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M18 6L6 18m12 0L6 6"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
-
-export function CheckIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      height="24"
-      viewBox="0 0 24 24"
-      width="24"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        className="group-data-selected:[stroke-dashoffset:0] transition-[stroke-dashoffset] duration-200 ease-out"
-        d="m5 12 5 5L20 7"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-}
+import { ChevronsUpDownIcon, X, Check } from "lucide-react";
 
 type ComboboxInputProps = ComboboxPrimitive.Input.Props & {
   isClearable?: boolean;
@@ -247,7 +183,7 @@ function ComboboxInput({
           aria-label="Clear selection"
           className="absolute end-1 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] transition-[scale,opacity] duration-100 data-starting-style:scale-98 data-ending-style:scale-98 data-starting-style:opacity-0 data-ending-style:opacity-0 in-data-[slot=combobox-chips]:hidden [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:size-7 sm:[&_svg:not([class*='size-'])]:size-4"
         >
-          <CloseIcon />
+          <X />
         </ComboboxClear>
       )}
     </div>
@@ -482,7 +418,7 @@ function ComboboxChipRemove({
       data-slot="combobox-chip-remove"
       {...props}
     >
-      {children ?? <CloseIcon />}
+      {children ?? <X />}
     </ComboboxPrimitive.ChipRemove>
   );
 }
@@ -614,7 +550,7 @@ function ComboboxItem({
       {...props}
     >
       <ComboboxPrimitive.ItemIndicator className="col-start-1">
-        <CheckIcon />
+        <Check />
       </ComboboxPrimitive.ItemIndicator>
       <div className="col-start-2">{children}</div>
     </ComboboxPrimitive.Item>
