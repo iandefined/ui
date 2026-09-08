@@ -26,6 +26,7 @@ type DrawerSnapPoint = number | string;
 
 interface DrawerContextValue {
   drawerId?: string;
+  isNested?: boolean;
   position: DrawerPosition;
   dismissible: boolean;
   overlay: DrawerOverlay;
@@ -268,7 +269,9 @@ function Drawer({
   actionsRef,
   ...props
 }: DrawerProps) {
+  const parentContext = React.useContext(DrawerContext);
   const drawerId = React.useId();
+  const isNested = parentContext.drawerId !== undefined;
   const [keepMounted, setKeepMounted] = React.useState(false);
   const internalActionsRef = React.useRef<DrawerPrimitive.Root.Actions | null>(
     null
@@ -367,6 +370,7 @@ function Drawer({
   const contextValue = React.useMemo<DrawerContextValue>(
     () => ({
       drawerId,
+      isNested,
       dismissible,
       overlay,
       position,
@@ -380,6 +384,7 @@ function Drawer({
     }),
     [
       drawerId,
+      isNested,
       dismissible,
       overlay,
       position,
@@ -592,13 +597,15 @@ function useOutsideDrawerWheel(
 
 function DrawerBackdrop({
   className,
+  forceRender,
   onWheel,
   ...props
 }: DrawerPrimitive.Backdrop.Props) {
-  const { overlay, drawerId, snapPoints, keepMounted } =
+  const { overlay, drawerId, isNested, snapPoints, keepMounted } =
     React.useContext(DrawerContext);
   const handleWheel = useOutsideDrawerWheel(onWheel);
   const hasSnapPoints = Boolean(snapPoints?.length);
+  const resolvedOverlay = isNested ? "transparent" : overlay;
 
   return (
     <DrawerPrimitive.Backdrop
@@ -607,14 +614,15 @@ function DrawerBackdrop({
         hasSnapPoints
           ? "opacity-[max(0.25,calc(1-var(--drawer-swipe-progress,0)))]"
           : "opacity-[calc(1-var(--drawer-swipe-progress,0))]",
-        overlay === "blur" && "bg-black/40 backdrop-blur-sm",
-        overlay === "brightness" && "bg-black/50",
-        overlay === "transparent" && "bg-transparent",
+        resolvedOverlay === "blur" && "bg-black/40 backdrop-blur-sm",
+        resolvedOverlay === "brightness" && "bg-black/50",
+        resolvedOverlay === "transparent" && "bg-transparent",
         keepMounted && "[&[hidden]]:invisible [&[hidden]]:block!",
         className
       )}
       data-slot="drawer-backdrop"
       data-drawer-id={drawerId}
+      forceRender={Boolean(forceRender || isNested)}
       onWheel={handleWheel}
       {...props}
     />
@@ -1092,7 +1100,7 @@ function DrawerPanel({
           !usesFloatingSnapHeight &&
             "in-[[data-slot=drawer-popup][data-position=bottom]:has([data-slot=drawer-footer]:not([data-sticky]))]:mb-(--drawer-snap-offset)",
           !usesFloatingSnapHeight &&
-            "in-[[data-slot=drawer-popup][data-position=bottom]:has([data-slot=drawer-footer][data-sticky])]:mb-[calc(var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))+var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px)))]"
+            "in-[[data-slot=drawer-popup][data-position=bottom]:has([data-slot=drawer-footer][data-sticky])]:mb-[calc(1px+var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))+var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px)))]"
         )}
         ref={scrollAreaRef}
         scrollShadow={scrollFade ? "vertical" : "none"}

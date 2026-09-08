@@ -233,20 +233,6 @@ function DialogContent({
     (node: HTMLDivElement | null) => {
       popupRef.current = node;
 
-      if (node) {
-        window.requestAnimationFrame(() => {
-          if (
-            node.isConnected &&
-            window
-              .getComputedStyle(node)
-              .getPropertyValue("--nested-dialogs")
-              .trim() === "0"
-          ) {
-            dialogStack?.setActivePopup(node);
-          }
-        });
-      }
-
       if (typeof ref !== "function") {
         if (ref) ref.current = node;
 
@@ -264,7 +250,7 @@ function DialogContent({
         else ref(null);
       };
     },
-    [dialogStack, ref]
+    [ref]
   );
 
   const updateStackOffset = React.useCallback(() => {
@@ -272,6 +258,7 @@ function DialogContent({
 
     if (
       !popup ||
+      popup.hasAttribute("data-starting-style") ||
       window
         .getComputedStyle(popup)
         .getPropertyValue("--nested-dialogs")
@@ -287,8 +274,20 @@ function DialogContent({
     const popup = popupRef.current;
     if (!popup) return;
 
-    const observer = new MutationObserver(updateStackOffset);
-    const resizeObserver = new ResizeObserver(updateStackOffset);
+    let animationFrame: number | null = null;
+    const scheduleStackOffsetUpdate = () => {
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = null;
+        updateStackOffset();
+      });
+    };
+
+    const observer = new MutationObserver(scheduleStackOffsetUpdate);
+    const resizeObserver = new ResizeObserver(scheduleStackOffsetUpdate);
     const viewport = window.visualViewport;
 
     observer.observe(popup, {
@@ -298,24 +297,26 @@ function DialogContent({
         "data-nested-dialog-open",
         "data-starting-style",
         "hidden",
-        "style",
       ],
     });
     resizeObserver.observe(popup);
-    window.addEventListener("resize", updateStackOffset);
-    viewport?.addEventListener("resize", updateStackOffset);
+    window.addEventListener("resize", scheduleStackOffsetUpdate);
+    viewport?.addEventListener("resize", scheduleStackOffsetUpdate);
     // Base UI attaches the portal after this layout effect. Measure on the
     // following frame so the popup can resolve its owning viewport.
-    let animationFrame = window.requestAnimationFrame(() => {
-      animationFrame = window.requestAnimationFrame(updateStackOffset);
+    const mountAnimationFrame = window.requestAnimationFrame(() => {
+      scheduleStackOffsetUpdate();
     });
 
     return () => {
       observer.disconnect();
       resizeObserver.disconnect();
-      window.removeEventListener("resize", updateStackOffset);
-      viewport?.removeEventListener("resize", updateStackOffset);
-      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", scheduleStackOffsetUpdate);
+      viewport?.removeEventListener("resize", scheduleStackOffsetUpdate);
+      window.cancelAnimationFrame(mountAnimationFrame);
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
     };
   }, [updateStackOffset]);
 
