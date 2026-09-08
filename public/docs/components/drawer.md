@@ -280,9 +280,107 @@ export default function DrawerPositionsDemo() {
 | `"left"`   | Slides in from the left.   |
 | `"right"`  | Slides in from the right.  |
 
+### Footer Positions
+
+`DrawerFooter` remains below the independently scrollable panel and follows top, left, and right drawer surfaces as they move. Passing `sticky` is safe in these positions but intentionally does not counter-translate the footer: pinning it to the viewport would detach it from the closing surface. Viewport-pinned movement and snap-point compensation are specific to bottom drawers.
+
+```tsx
+import { Button } from "@/registry/base/button";
+import {
+  Drawer,
+  DrawerCloseTrigger,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerPanel,
+  DrawerPopup,
+  DrawerTitle,
+  DrawerTrigger,
+  type DrawerPosition,
+} from "@/registry/base/drawer";
+
+const footerVariants: Array<{
+  position: Exclude<DrawerPosition, "bottom">;
+  sticky: boolean;
+}> = [
+  { position: "top", sticky: false },
+  { position: "top", sticky: true },
+  { position: "left", sticky: false },
+  { position: "left", sticky: true },
+  { position: "right", sticky: false },
+  { position: "right", sticky: true },
+];
+
+const cards = Array.from({ length: 12 }, (_, index) => ({
+  description: `Scrollable drawer content item ${index + 1}.`,
+  title: `Card ${index + 1}`,
+}));
+
+export default function DrawerFooterPositionsDemo() {
+  return (
+    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {footerVariants.map(({ position, sticky }) => {
+        const positionLabel =
+          position.charAt(0).toUpperCase() + position.slice(1);
+        const behaviorLabel = sticky ? "Sticky" : "Following";
+
+        return (
+          <Drawer key={`${position}-${behaviorLabel}`} position={position}>
+            <DrawerTrigger
+              render={
+                <Button
+                  className="h-auto min-h-8 w-full whitespace-normal"
+                  size="sm"
+                  variant="outline"
+                />
+              }
+            >
+              {positionLabel}, {behaviorLabel}
+            </DrawerTrigger>
+            <DrawerPopup showBar>
+              <DrawerHeader>
+                <DrawerTitle>{positionLabel} drawer</DrawerTitle>
+                <DrawerDescription>
+                  {sticky
+                    ? "Viewport pinning is bottom-only, so this footer remains safely attached to the surface."
+                    : `This footer follows the drawer toward the ${position} edge.`}
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerPanel scrollFade>
+                <div className="grid gap-3">
+                  {cards.map((card) => (
+                    <div
+                      key={card.title}
+                      className="rounded-lg border bg-muted/40 p-4"
+                    >
+                      <div className="text-sm font-medium">{card.title}</div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </DrawerPanel>
+              <DrawerFooter sticky={sticky} className="border-t py-4">
+                <DrawerCloseTrigger
+                  render={<Button size="sm" variant="outline" />}
+                >
+                  Close
+                </DrawerCloseTrigger>
+                <Button size="sm">{behaviorLabel} action</Button>
+              </DrawerFooter>
+            </DrawerPopup>
+          </Drawer>
+        );
+      })}
+    </div>
+  );
+}
+```
+
 ### Snap Points
 
-Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. A `DrawerFooter` stays pinned while the panel changes between snap points.
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. Add `sticky` to `DrawerFooter` when it should stay pinned while the panel changes between snap points.
 
 ```tsx
 import { Button } from "@/registry/base/button";
@@ -339,7 +437,7 @@ export default function DrawerSnapPointsDemo() {
             ))}
           </div>
         </DrawerPanel>
-        <DrawerFooter>
+        <DrawerFooter sticky>
           <DrawerCloseTrigger render={<Button variant="outline" />}>
             Done
           </DrawerCloseTrigger>
@@ -352,7 +450,7 @@ export default function DrawerSnapPointsDemo() {
 
 ### Sticky Footer
 
-Use `DrawerFooter` with `border-t` to keep action buttons or inputs pinned at the bottom edge while long content scrolls inside `DrawerPanel`. Combined with snap points, the footer remains anchored as the drawer moves between heights.
+Use `<DrawerFooter sticky>` with `border-t` to keep action buttons or inputs pinned at the bottom edge while long content scrolls inside `DrawerPanel`. Without `sticky`, the footer remains part of the drawer surface and moves with it during a swipe. Combined with snap points, a sticky footer remains anchored as the drawer moves between heights.
 
 ```tsx
 "use client";
@@ -486,7 +584,7 @@ export default function DrawerStickyFooterDemo() {
             ))}
           </div>
         </DrawerPanel>
-        <DrawerFooter className="border-t py-4 sm:flex-row">
+        <DrawerFooter sticky className="border-t py-4 sm:flex-row">
           <form
             className="flex w-full gap-2"
             onSubmit={(e) => {
@@ -1025,6 +1123,7 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `variant` | `"default" \| "inset"` | `default` | Uses standard action spacing or adds a bordered muted footer surface. |
+| `sticky` | `boolean` | `false` | Keeps a bottom drawer footer pinned while the drawer moves or changes snap points. Top and side footers remain surface-bound to avoid detaching during dismissal. By default, every footer moves with the drawer surface. |
 | `allowSelection` | `boolean` | `true` | Uses `DrawerContent` for selectable footer content. |
 
 #### DrawerMenuCheckboxItem

@@ -7978,6 +7978,105 @@ export default function DialogOutsideScrollDemo() {
 }
 ```
 
+### Footer Behavior
+
+Compare default and inset footer styles with both scroll modes. Inside scrolling keeps the footer visible while `DialogBody` scrolls; outside scrolling moves the footer with the complete dialog card.
+
+```tsx
+import { Button } from "@/registry/base/button";
+import {
+  Dialog,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/registry/base/dialog";
+
+const footerVariants = [
+  { scroll: "inside", variant: "default" },
+  { scroll: "inside", variant: "inset" },
+  { scroll: "outside", variant: "default" },
+  { scroll: "outside", variant: "inset" },
+] as const;
+
+const cards = Array.from({ length: 12 }, (_, index) => ({
+  description: `Scrollable dialog content item ${index + 1}.`,
+  title: `Card ${index + 1}`,
+}));
+
+function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+export default function DialogFooterBehaviorDemo() {
+  return (
+    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+      {footerVariants.map(({ scroll, variant }) => {
+        const scrollLabel = capitalize(scroll);
+        const variantLabel = capitalize(variant);
+
+        return (
+          <Dialog key={`${scroll}-${variant}`}>
+            <DialogTrigger
+              render={
+                <Button
+                  className="h-auto min-h-8 w-full whitespace-normal"
+                  size="sm"
+                  variant="outline"
+                />
+              }
+            >
+              {scrollLabel}, {variantLabel}
+            </DialogTrigger>
+            <DialogContent
+              className="sm:max-w-lg"
+              scroll={scroll}
+              variant={variant}
+            >
+              <DialogHeader>
+                <DialogTitle>{scrollLabel}-scroll dialog</DialogTitle>
+                <DialogDescription>
+                  {scroll === "inside"
+                    ? "The body scrolls while the footer remains visible."
+                    : "The footer travels with the complete dialog card."}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogBody fadeEdges={scroll === "inside" ? "y" : false}>
+                <div className="grid gap-3">
+                  {cards.map((card) => (
+                    <div
+                      key={card.title}
+                      className="rounded-lg border bg-muted/40 p-4"
+                    >
+                      <div className="text-sm font-medium">{card.title}</div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </DialogBody>
+              <DialogFooter>
+                <DialogCloseTrigger
+                  render={<Button size="sm" variant="outline" />}
+                >
+                  Close
+                </DialogCloseTrigger>
+                <Button size="sm">{variantLabel} action</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      })}
+    </div>
+  );
+}
+```
+
 ### Inset Footer
 
 Set `variant="inset"` to separate the footer with a muted background and top border.
@@ -8701,9 +8800,107 @@ export default function DrawerPositionsDemo() {
 | `"left"`   | Slides in from the left.   |
 | `"right"`  | Slides in from the right.  |
 
+### Footer Positions
+
+`DrawerFooter` remains below the independently scrollable panel and follows top, left, and right drawer surfaces as they move. Passing `sticky` is safe in these positions but intentionally does not counter-translate the footer: pinning it to the viewport would detach it from the closing surface. Viewport-pinned movement and snap-point compensation are specific to bottom drawers.
+
+```tsx
+import { Button } from "@/registry/base/button";
+import {
+  Drawer,
+  DrawerCloseTrigger,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerPanel,
+  DrawerPopup,
+  DrawerTitle,
+  DrawerTrigger,
+  type DrawerPosition,
+} from "@/registry/base/drawer";
+
+const footerVariants: Array<{
+  position: Exclude<DrawerPosition, "bottom">;
+  sticky: boolean;
+}> = [
+  { position: "top", sticky: false },
+  { position: "top", sticky: true },
+  { position: "left", sticky: false },
+  { position: "left", sticky: true },
+  { position: "right", sticky: false },
+  { position: "right", sticky: true },
+];
+
+const cards = Array.from({ length: 12 }, (_, index) => ({
+  description: `Scrollable drawer content item ${index + 1}.`,
+  title: `Card ${index + 1}`,
+}));
+
+export default function DrawerFooterPositionsDemo() {
+  return (
+    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {footerVariants.map(({ position, sticky }) => {
+        const positionLabel =
+          position.charAt(0).toUpperCase() + position.slice(1);
+        const behaviorLabel = sticky ? "Sticky" : "Following";
+
+        return (
+          <Drawer key={`${position}-${behaviorLabel}`} position={position}>
+            <DrawerTrigger
+              render={
+                <Button
+                  className="h-auto min-h-8 w-full whitespace-normal"
+                  size="sm"
+                  variant="outline"
+                />
+              }
+            >
+              {positionLabel}, {behaviorLabel}
+            </DrawerTrigger>
+            <DrawerPopup showBar>
+              <DrawerHeader>
+                <DrawerTitle>{positionLabel} drawer</DrawerTitle>
+                <DrawerDescription>
+                  {sticky
+                    ? "Viewport pinning is bottom-only, so this footer remains safely attached to the surface."
+                    : `This footer follows the drawer toward the ${position} edge.`}
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerPanel scrollFade>
+                <div className="grid gap-3">
+                  {cards.map((card) => (
+                    <div
+                      key={card.title}
+                      className="rounded-lg border bg-muted/40 p-4"
+                    >
+                      <div className="text-sm font-medium">{card.title}</div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </DrawerPanel>
+              <DrawerFooter sticky={sticky} className="border-t py-4">
+                <DrawerCloseTrigger
+                  render={<Button size="sm" variant="outline" />}
+                >
+                  Close
+                </DrawerCloseTrigger>
+                <Button size="sm">{behaviorLabel} action</Button>
+              </DrawerFooter>
+            </DrawerPopup>
+          </Drawer>
+        );
+      })}
+    </div>
+  );
+}
+```
+
 ### Snap Points
 
-Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. A `DrawerFooter` stays pinned while the panel changes between snap points.
+Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. Add `sticky` to `DrawerFooter` when it should stay pinned while the panel changes between snap points.
 
 ```tsx
 import { Button } from "@/registry/base/button";
@@ -8760,7 +8957,7 @@ export default function DrawerSnapPointsDemo() {
             ))}
           </div>
         </DrawerPanel>
-        <DrawerFooter>
+        <DrawerFooter sticky>
           <DrawerCloseTrigger render={<Button variant="outline" />}>
             Done
           </DrawerCloseTrigger>
@@ -8773,7 +8970,7 @@ export default function DrawerSnapPointsDemo() {
 
 ### Sticky Footer
 
-Use `DrawerFooter` with `border-t` to keep action buttons or inputs pinned at the bottom edge while long content scrolls inside `DrawerPanel`. Combined with snap points, the footer remains anchored as the drawer moves between heights.
+Use `<DrawerFooter sticky>` with `border-t` to keep action buttons or inputs pinned at the bottom edge while long content scrolls inside `DrawerPanel`. Without `sticky`, the footer remains part of the drawer surface and moves with it during a swipe. Combined with snap points, a sticky footer remains anchored as the drawer moves between heights.
 
 ```tsx
 "use client";
@@ -8907,7 +9104,7 @@ export default function DrawerStickyFooterDemo() {
             ))}
           </div>
         </DrawerPanel>
-        <DrawerFooter className="border-t py-4 sm:flex-row">
+        <DrawerFooter sticky className="border-t py-4 sm:flex-row">
           <form
             className="flex w-full gap-2"
             onSubmit={(e) => {
@@ -9446,6 +9643,7 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `variant` | `"default" \| "inset"` | `default` | Uses standard action spacing or adds a bordered muted footer surface. |
+| `sticky` | `boolean` | `false` | Keeps a bottom drawer footer pinned while the drawer moves or changes snap points. Top and side footers remain surface-bound to avoid detaching during dismissal. By default, every footer moves with the drawer surface. |
 | `allowSelection` | `boolean` | `true` | Uses `DrawerContent` for selectable footer content. |
 
 #### DrawerMenuCheckboxItem
@@ -15960,6 +16158,110 @@ export default function SheetPositionsDemo() {
 | `"left"`   | Slides in from the left.   |
 | `"top"`    | Slides down from the top.  |
 | `"bottom"` | Slides up from the bottom. |
+
+### Footer Positions
+
+Compare default and inset footers across every sheet edge. In each case, `SheetBody` owns the long scroll area while `SheetFooter` remains attached to the sheet surface.
+
+```tsx
+import { Button } from "@/registry/base/button";
+import {
+  Sheet,
+  SheetBody,
+  SheetCloseTrigger,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  type SheetFooterVariant,
+  type SheetSide,
+} from "@/registry/base/sheet";
+
+const footerVariants: Array<{
+  side: SheetSide;
+  footerVariant: SheetFooterVariant;
+}> = [
+  { side: "top", footerVariant: "default" },
+  { side: "top", footerVariant: "inset" },
+  { side: "bottom", footerVariant: "default" },
+  { side: "bottom", footerVariant: "inset" },
+  { side: "left", footerVariant: "default" },
+  { side: "left", footerVariant: "inset" },
+  { side: "right", footerVariant: "default" },
+  { side: "right", footerVariant: "inset" },
+];
+
+const cards = Array.from({ length: 12 }, (_, index) => ({
+  description: `Scrollable sheet content item ${index + 1}.`,
+  title: `Card ${index + 1}`,
+}));
+
+function capitalize(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+export default function SheetFooterPositionsDemo() {
+  return (
+    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {footerVariants.map(({ side, footerVariant }) => {
+        const sideLabel = capitalize(side);
+        const footerLabel = capitalize(footerVariant);
+
+        return (
+          <Sheet key={`${side}-${footerVariant}`}>
+            <SheetTrigger
+              render={
+                <Button
+                  className="h-auto min-h-8 w-full whitespace-normal"
+                  size="sm"
+                  variant="outline"
+                />
+              }
+            >
+              {sideLabel}, {footerLabel}
+            </SheetTrigger>
+            <SheetContent side={side} footerVariant={footerVariant}>
+              <SheetHeader>
+                <SheetTitle>{sideLabel} sheet</SheetTitle>
+                <SheetDescription>
+                  The body scrolls independently while the{" "}
+                  {footerLabel.toLowerCase()} footer remains attached to the
+                  sheet.
+                </SheetDescription>
+              </SheetHeader>
+              <SheetBody fadeEdges="y">
+                <div className="grid gap-3">
+                  {cards.map((card) => (
+                    <div
+                      key={card.title}
+                      className="rounded-lg border bg-muted/40 p-4"
+                    >
+                      <div className="text-sm font-medium">{card.title}</div>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {card.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </SheetBody>
+              <SheetFooter>
+                <SheetCloseTrigger
+                  render={<Button size="sm" variant="outline" />}
+                >
+                  Close
+                </SheetCloseTrigger>
+                <Button size="sm">{footerLabel} action</Button>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        );
+      })}
+    </div>
+  );
+}
+```
 
 ### Floating Variant
 

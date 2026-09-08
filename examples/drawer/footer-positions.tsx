@@ -31,7 +31,7 @@ const cards = Array.from({ length: 12 }, (_, index) => ({
 
 export default function DrawerFooterPositionsDemo() {
   return (
-    <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3">
+    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {footerVariants.map(({ position, sticky }) => {
         const positionLabel =
           position.charAt(0).toUpperCase() + position.slice(1);
@@ -41,7 +41,11 @@ export default function DrawerFooterPositionsDemo() {
           <Drawer key={`${position}-${behaviorLabel}`} position={position}>
             <DrawerTrigger
               render={
-                <Button className="w-full" size="sm" variant="outline" />
+                <Button
+                  className="h-auto min-h-8 w-full whitespace-normal"
+                  size="sm"
+                  variant="outline"
+                />
               }
             >
               {positionLabel}, {behaviorLabel}
