@@ -844,12 +844,13 @@ function DrawerFooter({
   ...props
 }: DrawerFooterProps) {
   const { position } = React.useContext(DrawerContext);
+  const isViewportPinned = sticky && position === "bottom";
 
   const defaultProps = {
     className: cn(
       "w-full relative z-10 mt-auto flex flex-col-reverse gap-2 bg-popover px-6 pb-[env(safe-area-inset-bottom,0px)] sm:flex-row sm:justify-end",
-      sticky &&
-        "will-change-transform data-[position=bottom]:transform-[translateY(calc(-1px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))-var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px))))] data-[position=bottom]:transition-transform data-[position=bottom]:duration-300 data-[position=bottom]:ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
+      isViewportPinned &&
+        "will-change-transform transform-[translateY(calc(-1px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))-var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px))))] transition-transform duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
       !allowSelection && "cursor-default",
       variant === "default" &&
         "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 rounded-b-xl pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",
@@ -1007,7 +1008,7 @@ function DrawerBar({
   const defaultProps = {
     "aria-hidden": true as const,
     className: cn(
-      "absolute flex touch-none items-center justify-center p-3",
+      "absolute z-20 flex touch-none items-center justify-center p-3",
       "cursor-grab active:cursor-grabbing",
       "after:absolute after:-inset-2 after:pointer-events-auto after:content-['']",
       horizontal

@@ -110,6 +110,12 @@ Set `position` on `Drawer` to choose the edge where the drawer opens.
 | `"left"`   | Slides in from the left.   |
 | `"right"`  | Slides in from the right.  |
 
+### Footer Positions
+
+`DrawerFooter` remains below the independently scrollable panel and follows top, left, and right drawer surfaces as they move. Passing `sticky` is safe in these positions but intentionally does not counter-translate the footer: pinning it to the viewport would detach it from the closing surface. Viewport-pinned movement and snap-point compensation are specific to bottom drawers.
+
+<ComponentPreview name="drawer/footer-positions" />
+
 ### Snap Points
 
 Pass `snapPoints` to create multiple resting positions. `snapToSequentialPoints` prevents fast swipes from skipping a position. Add `sticky` to `DrawerFooter` when it should stay pinned while the panel changes between snap points.
@@ -279,9 +285,9 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
     Uses standard action spacing or adds a bordered muted footer surface.
   </ApiProp>
   <ApiProp name="sticky" fullType="boolean" defaultValue="false">
-    Keeps a bottom-positioned footer pinned to the viewport while the drawer is
-    swiped or moved between snap points. By default, the footer moves with the
-    drawer surface.
+    Keeps a bottom drawer footer pinned while the drawer moves or changes snap
+    points. Top and side footers remain surface-bound to avoid detaching during
+    dismissal. By default, every footer moves with the drawer surface.
   </ApiProp>
   <ApiProp name="allowSelection" fullType="boolean" defaultValue="true">
     Uses `DrawerContent` for selectable footer content.
