@@ -24,16 +24,36 @@ import { tv } from "tailwind-variants";
 // Styles for invalid animation shake
 const invalidShakeStyles = `
   @keyframes iandefined-invalid-shake-replay {
-    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
-    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
-    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
-    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
-    100% { transform: translateX(0); }
+    0% {
+      transform: translateX(0);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    28.57% {
+      transform: translateX(6px);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    57.14% {
+      transform: translateX(-6px);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    78.57% {
+      transform: translateX(4px);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    100% {
+      transform: translateX(0);
+    }
   }
+
   [data-invalid-shake="owner"] {
     animation-duration: 280ms;
     animation-timing-function: linear;
   }
+
   [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
   [data-invalid-shake="owner"].is-shaking[data-invalid],
   [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
@@ -41,6 +61,7 @@ const invalidShakeStyles = `
     animation-name: iandefined-invalid-shake-replay;
     will-change: transform;
   }
+
   @media (prefers-reduced-motion: reduce) {
     [data-invalid-shake="owner"] {
       animation: none !important;
@@ -76,10 +97,16 @@ type InputOTPChildrenProps = Extract<
 >;
 
 type InputOTPProps = Omit<InputOTPChildrenProps, "size"> & {
-  /** Visually obscures entered characters while preserving the real input value. */
+  /**
+   * Visually obscures entered characters while preserving the real input value.
+   */
   mask?: boolean;
-  /** Matches the heights of the corresponding Input sizes. */
+
+  /**
+   * Matches the heights of the corresponding Input sizes.
+   */
   size?: "sm" | "default" | "lg";
+
   variant?: "bordered" | "underlined";
 };
 
@@ -91,12 +118,15 @@ function InputOTP({
   variant = "bordered",
   ...props
 }: InputOTPProps) {
+  const invalid = isInvalid(props["aria-invalid"]);
+
   return (
     <>
       <style>{invalidShakeStyles}</style>
+
       <InputOTPContext.Provider
         value={{
-          invalid: isInvalid(props["aria-invalid"]),
+          invalid,
           mask,
           size,
           variant,
@@ -117,10 +147,38 @@ function InputOTP({
   );
 }
 
+const inputOtpGroupVariants = tv({
+  base: [
+    "relative inline-flex w-fit items-center gap-1",
+    "outline-0 outline-offset-0 outline-transparent outline-solid",
+    "[transition:outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out]",
+  ],
+  variants: {
+    variant: {
+      bordered: "rounded-lg",
+      underlined: "rounded-sm",
+    },
+    invalid: {
+      true: ["outline-2", "outline-offset-2", "outline-destructive/64"],
+      false: "",
+    },
+  },
+});
+
 function InputOTPGroup({ className, ...props }: ComponentProps<"div">) {
+  const { invalid, variant } = useContext(InputOTPContext);
+
   return (
     <div
-      className={cn("flex items-center gap-1", className)}
+      className={cn(
+        inputOtpGroupVariants({
+          invalid,
+          variant,
+        }),
+        className
+      )}
+      data-invalid={invalid || undefined}
+      data-invalid-shake="owner"
       data-slot="input-otp-group"
       {...props}
     />
@@ -128,18 +186,50 @@ function InputOTPGroup({ className, ...props }: ComponentProps<"div">) {
 }
 
 const inputOtpSlotVariants = tv({
-  base: "relative flex shrink-0 select-none items-center justify-center text-foreground outline-none",
+  base: [
+    "relative flex shrink-0 select-none items-center justify-center",
+    "text-foreground outline-none",
+  ],
+
   variants: {
     size: {
       sm: "size-8 text-sm",
       default: "size-9 text-sm",
       lg: "size-10 text-base",
     },
+
     variant: {
-      bordered:
-        "rounded-lg border border-input/70 not-dark:border-input bg-background shadow-xs outline-0 outline-offset-0 outline-transparent outline-solid [transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out] data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:outline-2 data-[active=true]:outline-offset-2 data-[active=true]:outline-ring/50 data-[invalid=true]:border-destructive data-[invalid=true]:outline-2 data-[invalid=true]:outline-offset-2 data-[invalid=true]:outline-destructive/50 data-[active=true]:data-[invalid=true]:border-destructive data-[active=true]:data-[invalid=true]:outline-destructive/50 dark:bg-input/32",
-      underlined:
-        "border-b border-input/70 not-dark:border-input bg-transparent [transition:border-color_150ms_ease-out] data-[active=true]:border-ring data-[invalid=true]:border-destructive/64",
+      bordered: [
+        "rounded-lg",
+        "border border-input/70",
+        "not-dark:border-input",
+        "bg-background",
+        "shadow-xs",
+
+        "outline-0",
+        "outline-offset-0",
+        "outline-transparent",
+        "outline-solid",
+
+        "[transition:border-color_150ms_ease-out,outline-width_100ms_ease-out,outline-offset_100ms_ease-out,outline-color_100ms_ease-out]",
+
+        // Active/focus visualization stays on the individual slot.
+        "data-[active=true]:z-10",
+        "data-[active=true]:border-ring",
+        "data-[active=true]:outline-2",
+        "data-[active=true]:outline-offset-2",
+        "data-[active=true]:outline-ring/50",
+
+        "dark:bg-input/32",
+      ],
+
+      underlined: [
+        "border-b border-input/70",
+        "not-dark:border-input",
+        "bg-transparent",
+        "[transition:border-color_150ms_ease-out]",
+        "data-[active=true]:border-ring",
+      ],
     },
   },
 });
@@ -150,22 +240,29 @@ type InputOTPSlotProps = Omit<ComponentProps<typeof motion.div>, "children"> & {
 
 function InputOTPSlot({ className, index, ...props }: InputOTPSlotProps) {
   const otpContext = useContext(OTPInputContextPrimitive);
-  const { invalid, mask, size, variant } = useContext(InputOTPContext);
+  const { mask, size, variant } = useContext(InputOTPContext);
+
   const { char, hasFakeCaret, isActive } = otpContext?.slots[index] ?? {};
+
   const visibleCharacter = mask && char ? "•" : char;
 
   return (
     <MotionConfig reducedMotion="user">
       <motion.div
         aria-hidden
-        className={cn(inputOtpSlotVariants({ size, variant }), className)}
+        className={cn(
+          inputOtpSlotVariants({
+            size,
+            variant,
+          }),
+          className
+        )}
         data-active={isActive}
-        data-invalid={invalid || undefined}
-        data-invalid-shake="owner"
         data-slot="input-otp-slot"
         {...props}
       >
         <AnimatedCharacter value={visibleCharacter} />
+
         {hasFakeCaret && <FakeCaret />}
       </motion.div>
     </MotionConfig>
@@ -187,16 +284,27 @@ const characterMotion: Record<
   "animate" | "exit" | "initial",
   TargetAndTransition
 > = {
-  initial: { opacity: 0, y: 6 },
+  initial: {
+    opacity: 0,
+    y: 6,
+  },
+
   animate: {
     opacity: 1,
-    transition: { duration: 0.18, ease: [0.25, 0.1, 0.25, 1] },
     y: 0,
+    transition: {
+      duration: 0.18,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
   },
+
   exit: {
     opacity: 0,
-    transition: { duration: 0.12, ease: [0.25, 0.1, 0.25, 1] },
     y: 6,
+    transition: {
+      duration: 0.12,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
   },
 };
 
@@ -228,7 +336,9 @@ function FakeCaret() {
     >
       <motion.span
         aria-hidden
-        animate={{ opacity: [1, 0, 0, 1, 1] }}
+        animate={{
+          opacity: [1, 0, 0, 1, 1],
+        }}
         className="h-4.5 w-px bg-foreground"
         transition={{
           duration: 1,
@@ -242,4 +352,5 @@ function FakeCaret() {
 }
 
 export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };
+
 export type { InputOTPProps, InputOTPSize, InputOTPVariant };
