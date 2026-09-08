@@ -36,6 +36,8 @@ interface DrawerContextValue {
   closeDrawer?: () => void;
   isAtFullSnap?: boolean;
   isTransitioningSnap?: boolean;
+  preloaded?: boolean;
+  preloadDrawer?: () => void;
 }
 
 const DrawerContext = React.createContext<DrawerContextValue>({
@@ -45,6 +47,15 @@ const DrawerContext = React.createContext<DrawerContextValue>({
   isAtFullSnap: true,
   isTransitioningSnap: false,
 });
+
+interface DrawerPopupContextValue {
+  position: DrawerPosition;
+  variant: DrawerVariant;
+}
+
+const DrawerPopupContext = React.createContext<DrawerPopupContextValue | null>(
+  null
+);
 
 const directionMap: Record<
   DrawerPosition,
@@ -215,6 +226,36 @@ function findSnapIndex(
   return 0;
 }
 
+const floatingDrawerMaxHeight = "calc(100dvh - 4rem)";
+
+function getFloatingDrawerSnapOffset(
+  snapPoint: DrawerSnapPoint | null | undefined
+) {
+  let snapHeight: string;
+
+  if (typeof snapPoint === "number") {
+    if (!Number.isFinite(snapPoint)) return "0px";
+    snapHeight =
+      snapPoint <= 1
+        ? `${Math.min(Math.max(snapPoint, 0), 1) * 100}dvh`
+        : `${Math.max(snapPoint, 0)}px`;
+  } else if (typeof snapPoint === "string") {
+    const value = Number.parseFloat(snapPoint);
+    const unit = snapPoint.trim().endsWith("rem")
+      ? "rem"
+      : snapPoint.trim().endsWith("px")
+        ? "px"
+        : null;
+
+    if (!Number.isFinite(value) || !unit) return "0px";
+    snapHeight = `${Math.max(value, 0)}${unit}`;
+  } else {
+    return "0px";
+  }
+
+  return `clamp(0px, calc(${floatingDrawerMaxHeight} - ${snapHeight}), ${floatingDrawerMaxHeight})`;
+}
+
 function Drawer({
   dismissible = true,
   disablePointerDismissal = false,
@@ -230,9 +271,14 @@ function Drawer({
   ...props
 }: DrawerProps) {
   const drawerId = React.useId();
+  const [preloaded, setPreloaded] = React.useState(false);
   const internalActionsRef = React.useRef<DrawerPrimitive.Root.Actions | null>(
     null
   );
+
+  const preloadDrawer = React.useCallback(() => {
+    setPreloaded(true);
+  }, []);
 
   React.useImperativeHandle(
     actionsRef,
@@ -346,9 +392,13 @@ function Drawer({
         setUncontrolledSnapPoint(defaultSnapPoint);
       }
 
+      if (nextOpen) {
+        preloadDrawer();
+      }
+
       onOpenChange?.(nextOpen, eventDetails);
     },
-    [dismissible, isControlled, defaultSnapPoint, onOpenChange]
+    [dismissible, isControlled, defaultSnapPoint, onOpenChange, preloadDrawer]
   );
 
   const contextValue = React.useMemo<DrawerContextValue>(
@@ -364,6 +414,8 @@ function Drawer({
       closeDrawer,
       isAtFullSnap,
       isTransitioningSnap,
+      preloaded,
+      preloadDrawer,
     }),
     [
       drawerId,
@@ -377,6 +429,8 @@ function Drawer({
       closeDrawer,
       isAtFullSnap,
       isTransitioningSnap,
+      preloaded,
+      preloadDrawer,
     ]
   );
 
@@ -402,10 +456,32 @@ function DrawerPortal(props: DrawerPrimitive.Portal.Props) {
   return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
 }
 
-function DrawerTrigger(
-  props: DrawerPrimitive.Trigger.Props
-): React.ReactElement {
-  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
+function DrawerTrigger({
+  onFocus,
+  onPointerDown,
+  onPointerEnter,
+  ...props
+}: DrawerPrimitive.Trigger.Props): React.ReactElement {
+  const { preloadDrawer } = React.useContext(DrawerContext);
+
+  return (
+    <DrawerPrimitive.Trigger
+      data-slot="drawer-trigger"
+      onFocus={(event) => {
+        preloadDrawer?.();
+        onFocus?.(event);
+      }}
+      onPointerDown={(event) => {
+        preloadDrawer?.();
+        onPointerDown?.(event);
+      }}
+      onPointerEnter={(event) => {
+        preloadDrawer?.();
+        onPointerEnter?.(event);
+      }}
+      {...props}
+    />
+  );
 }
 
 function DrawerCloseTrigger(
@@ -583,16 +659,22 @@ function DrawerBackdrop({
   onWheel,
   ...props
 }: DrawerPrimitive.Backdrop.Props) {
-  const { overlay, drawerId } = React.useContext(DrawerContext);
+  const { overlay, drawerId, snapPoints, preloaded } =
+    React.useContext(DrawerContext);
   const handleWheel = useOutsideDrawerWheel(onWheel);
+  const hasSnapPoints = Boolean(snapPoints?.length);
 
   return (
     <DrawerPrimitive.Backdrop
       className={cn(
-        "fixed inset-0 z-50 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
+        "pointer-events-auto fixed inset-0 z-50 transition-opacity duration-200 data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*200ms)] data-starting-style:opacity-0 data-swiping:duration-0 motion-reduce:transition-none supports-[-webkit-touch-callout:none]:absolute",
+        hasSnapPoints
+          ? "opacity-[max(0.25,calc(1-var(--drawer-swipe-progress,0)))]"
+          : "opacity-[calc(1-var(--drawer-swipe-progress,0))]",
         overlay === "blur" && "bg-black/40 backdrop-blur-sm",
         overlay === "brightness" && "bg-black/50",
         overlay === "transparent" && "bg-transparent",
+        preloaded && "[&[hidden]]:invisible [&[hidden]]:block!",
         className
       )}
       data-slot="drawer-backdrop"
@@ -615,13 +697,14 @@ function DrawerViewport({
   onWheel,
   ...props
 }: DrawerViewportProps) {
-  const { dismissible, drawerId } = React.useContext(DrawerContext);
+  const { dismissible, drawerId, preloaded } =
+    React.useContext(DrawerContext);
   const handleWheel = useOutsideDrawerWheel(onWheel);
 
   return (
     <DrawerPrimitive.Viewport
       className={cn(
-        "fixed inset-0 z-50 [--bleed:3rem] [--inset:0px]",
+        "pointer-events-none fixed inset-0 z-50 [--bleed:3rem] [--inset:0px]",
         "touch-none",
         position === "bottom" && "grid grid-cols-1 grid-rows-[1fr_auto] pt-12",
         position === "top" && "grid grid-cols-1 grid-rows-[auto_1fr] pb-12",
@@ -630,6 +713,13 @@ function DrawerViewport({
         variant === "floating" && "px-(--inset) [--inset:1rem]",
         variant === "floating" && position !== "bottom" && "pt-(--inset)",
         variant === "floating" && position !== "top" && "pb-(--inset)",
+        preloaded && "[&[hidden]]:invisible",
+        preloaded &&
+          (position === "bottom" || position === "top") &&
+          "[&[hidden]]:grid!",
+        preloaded &&
+          (position === "left" || position === "right") &&
+          "[&[hidden]]:flex!",
         className
       )}
       data-slot="drawer-viewport"
@@ -664,22 +754,52 @@ function DrawerPopup({
     dismissible,
     position: contextPosition,
     drawerId,
+    snapPoints,
+    currentSnapPoint,
+    preloaded,
   } = React.useContext(DrawerContext);
   const position = positionProp ?? contextPosition;
+  const usesFloatingSnapPoints =
+    variant === "floating" &&
+    position === "bottom" &&
+    Boolean(snapPoints?.length);
+  const popupContextValue = React.useMemo(
+    () => ({ position, variant }),
+    [position, variant]
+  );
+  const floatingSnapOffset = usesFloatingSnapPoints
+    ? getFloatingDrawerSnapOffset(currentSnapPoint)
+    : "0px";
+  const popupChildren = (
+    <>
+      <DrawerPopupContext.Provider value={popupContextValue}>
+        {children}
+      </DrawerPopupContext.Provider>
+      {showBar && dismissible && <DrawerBar position={position} />}
+    </>
+  );
 
   return (
-    <DrawerPortal>
+    <DrawerPortal keepMounted={preloaded}>
       <DrawerBackdrop />
       <DrawerViewport position={position} variant={variant}>
         <DrawerPrimitive.Popup
           className={cn(
-            "pointer-events-auto relative flex max-h-full min-h-0 min-w-0 flex-col bg-popover text-popover-foreground will-change-transform",
+            "group/drawer-popup pointer-events-auto relative flex max-h-full min-h-0 min-w-0 flex-col bg-popover text-popover-foreground will-change-transform",
+            usesFloatingSnapPoints &&
+              "pointer-events-none! focus-visible:outline-hidden!",
             variant === "floating" && "w-full",
             variant === "floating"
-              ? "rounded-2xl border border-border"
+              ? usesFloatingSnapPoints
+                ? "bg-transparent!"
+                : "rounded-2xl border border-border"
               : drawerInnerBorderClasses[position],
-            getDrawerShadowClass(variant, shadowLevel),
-            "transition-[transform,box-shadow,height,background-color,opacity] duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none",
+            !usesFloatingSnapPoints &&
+              getDrawerShadowClass(variant, shadowLevel),
+            usesFloatingSnapPoints
+              ? "transition-[transform,box-shadow,height,padding-top,background-color,opacity] duration-300 ease-out data-ending-style:transition-[transform,box-shadow,height,background-color,opacity] data-starting-style:transition-[transform,box-shadow,height,background-color,opacity]"
+              : "transition-[transform,box-shadow,height,background-color,opacity] duration-300 ease-out",
+            "motion-reduce:transition-none motion-reduce:transform-none",
             "data-swiping:transition-none",
             "focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid forced-colors:focus-visible:outline-[Highlight]",
             "[--peek:1.5rem] [--stack-step:0.05]",
@@ -689,14 +809,17 @@ function DrawerPopup({
             "[--shrink:calc(1-var(--scale))]",
             "[--stack-peek-offset:max(0px,calc((var(--nested-drawers)-var(--stack-progress))*var(--peek)))]",
             "[--stack-limit:3] [opacity:clamp(0,calc(var(--stack-limit)-var(--nested-drawers)),1)]",
-            "[--drawer-snap-offset:var(--drawer-snap-point-offset,0px)]",
-            "[--drawer-swipe-offset-y:var(--drawer-swipe-movement-y,0px)]",
+            !usesFloatingSnapPoints &&
+              "[--drawer-snap-offset:var(--drawer-snap-point-offset,0px)]",
+            !usesFloatingSnapPoints &&
+              "[--drawer-swipe-offset-y:var(--drawer-swipe-movement-y,0px)]",
             "before:pointer-events-none before:absolute before:bg-popover",
             "data-swiping:select-none",
             "data-nested-drawer-open:overflow-hidden",
             "data-nested-drawer-open:pointer-events-none",
             "data-ending-style:shadow-transparent data-starting-style:shadow-transparent",
             "data-swiping:data-ending-style:duration-[calc(var(--drawer-swipe-strength)*200ms)]",
+            preloaded && "[&[hidden]]:invisible [&[hidden]]:flex!",
             position === "bottom" &&
               cn(
                 "mx-auto",
@@ -704,12 +827,17 @@ function DrawerPopup({
                 "w-full",
                 "max-h-[calc(100dvh-3rem)]",
                 variant === "floating" && "max-h-[calc(100dvh-2rem)]",
-                "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]",
-                "data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
-                "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
+                usesFloatingSnapPoints
+                  ? "transform-[translateY(0)]"
+                  : "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]",
+                usesFloatingSnapPoints
+                  ? "data-ending-style:transform-[translateY(calc(100%-var(--drawer-floating-snap-offset,0px)-var(--drawer-swipe-movement-y,0px)+env(safe-area-inset-bottom,0px)+var(--inset)))] data-starting-style:transform-[translateY(calc(100%-var(--drawer-floating-snap-offset,0px)-var(--drawer-swipe-movement-y,0px)+env(safe-area-inset-bottom,0px)+var(--inset)))]"
+                  : "data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))] data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))]",
                 "before:inset-x-0 before:top-full before:h-(--bleed)",
                 "has-data-[slot=drawer-bar]:pt-2",
-                "h-(--drawer-height,auto)",
+                usesFloatingSnapPoints
+                  ? "h-[calc(100dvh-4rem)] box-border"
+                  : "h-(--drawer-height,auto)",
                 "[--height:max(0px,calc(var(--drawer-frontmost-height,var(--drawer-height))))]",
                 "data-nested-drawer-open:h-(--height)",
                 "origin-[50%_calc(100%-var(--inset))]",
@@ -782,12 +910,23 @@ function DrawerPopup({
                 variant === "floating"
                   ? createFloatingShadow(shadowLevel)
                   : createDirectionalShadow(position, shadowLevel),
-              "--drawer-snap-offset": "var(--drawer-snap-point-offset, 0px)",
-              "--drawer-swipe-offset-y": "var(--drawer-swipe-movement-y, 0px)",
+              "--drawer-floating-snap-offset": floatingSnapOffset,
+              paddingTop: usesFloatingSnapPoints
+                ? "clamp(0px, calc(var(--drawer-floating-snap-offset, 0px) + var(--drawer-swipe-movement-y, 0px)), calc(100dvh - 4rem))"
+                : undefined,
+              ...(usesFloatingSnapPoints
+                ? {}
+                : {
+                    "--drawer-snap-offset":
+                      "var(--drawer-snap-point-offset, 0px)",
+                    "--drawer-swipe-offset-y":
+                      "var(--drawer-swipe-movement-y, 0px)",
+                  }),
               ...style,
             } as React.CSSProperties &
               Record<
                 | "--drawer-generated-shadow"
+                | "--drawer-floating-snap-offset"
                 | "--drawer-snap-offset"
                 | "--drawer-swipe-offset-y",
                 string
@@ -795,8 +934,21 @@ function DrawerPopup({
           }
           {...props}
         >
-          {children}
-          {showBar && dismissible && <DrawerBar position={position} />}
+          {usesFloatingSnapPoints ? (
+            <div
+              className={cn(
+                "pointer-events-auto relative mt-auto flex h-full min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground",
+                getDrawerShadowClass("floating", shadowLevel),
+                "group-focus-visible/drawer-popup:outline-ring/50 group-focus-visible/drawer-popup:outline-2 group-focus-visible/drawer-popup:outline-offset-2 group-focus-visible/drawer-popup:outline-solid"
+              )}
+              data-slot="drawer-floating-surface"
+              style={{ contain: "layout paint size" }}
+            >
+              {popupChildren}
+            </div>
+          ) : (
+            popupChildren
+          )}
         </DrawerPrimitive.Popup>
       </DrawerViewport>
     </DrawerPortal>
@@ -843,22 +995,39 @@ function DrawerFooter({
   render,
   ...props
 }: DrawerFooterProps) {
-  const { position } = React.useContext(DrawerContext);
-  const isViewportPinned = sticky && position === "bottom";
+  const { position: rootPosition, snapPoints } =
+    React.useContext(DrawerContext);
+  const popupContext = React.useContext(DrawerPopupContext);
+  const position = popupContext?.position ?? rootPosition;
+  const isFloating = popupContext?.variant === "floating";
+  const isFloatingBottom = isFloating && position === "bottom";
+  const isViewportPinned =
+    sticky && position === "bottom" && !isFloatingBottom;
+  const followsSnapPoint =
+    !sticky &&
+    position === "bottom" &&
+    !isFloatingBottom &&
+    Boolean(snapPoints?.length);
 
   const defaultProps = {
     className: cn(
       "w-full relative z-10 mt-auto flex flex-col-reverse gap-2 bg-popover px-6 pb-[env(safe-area-inset-bottom,0px)] sm:flex-row sm:justify-end",
+      (isViewportPinned || followsSnapPoint) &&
+        "will-change-transform transition-transform duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
       isViewportPinned &&
-        "will-change-transform transform-[translateY(calc(-1px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))-var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px))))] transition-transform duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
+        "transform-[translateY(calc(-1px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))-var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px))))]",
+      followsSnapPoint &&
+        "transform-[translateY(calc(0px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))))]",
       !allowSelection && "cursor-default",
       variant === "default" &&
         "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 rounded-b-xl pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",
       variant === "inset" &&
         "border-t bg-muted pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1rem)]",
+      isFloating && "rounded-b-2xl!",
       className
     ),
     "data-position": position,
+    "data-sticky": sticky ? "" : undefined,
     "data-slot": "drawer-footer",
   };
 
@@ -910,14 +1079,24 @@ function DrawerPanel({
   ...props
 }: DrawerPanelProps) {
   const { position, snapPoints } = React.useContext(DrawerContext);
-  const isBottom = position === "bottom";
+  const popupContext = React.useContext(DrawerPopupContext);
+  const resolvedPosition = popupContext?.position ?? position;
+  const isBottom = resolvedPosition === "bottom";
+  const usesFloatingSnapHeight =
+    popupContext?.variant === "floating" && isBottom;
   const hasSnapPoints = Boolean(snapPoints?.length);
 
   const contentRef = React.useRef<HTMLDivElement | null>(null);
   const scrollAreaRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
-    if (!scrollable || !isBottom || !hasSnapPoints) return;
+    if (
+      !scrollable ||
+      !isBottom ||
+      !hasSnapPoints ||
+      usesFloatingSnapHeight
+    )
+      return;
     const contentElement = contentRef.current;
     const scrollAreaElement = scrollAreaRef.current;
     if (!contentElement || !scrollAreaElement) return;
@@ -952,7 +1131,7 @@ function DrawerPanel({
       }
       scrollAreaElement.style.removeProperty("max-height");
     };
-  }, [hasSnapPoints, isBottom, scrollable]);
+  }, [hasSnapPoints, isBottom, scrollable, usesFloatingSnapHeight]);
 
   const defaultProps = {
     className: cn(
@@ -974,7 +1153,10 @@ function DrawerPanel({
       <ScrollArea
         className={cn(
           "w-full min-h-0 flex-1 touch-auto",
-          "in-[[data-slot=drawer-popup][data-position=bottom]]:mb-[calc(var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))+var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px)))]"
+          !usesFloatingSnapHeight &&
+            "in-[[data-slot=drawer-popup][data-position=bottom]:has([data-slot=drawer-footer]:not([data-sticky]))]:mb-(--drawer-snap-offset)",
+          !usesFloatingSnapHeight &&
+            "in-[[data-slot=drawer-popup][data-position=bottom]:has([data-slot=drawer-footer][data-sticky])]:mb-[calc(var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))+var(--drawer-swipe-offset-y,var(--drawer-swipe-movement-y,0px)))]"
         )}
         ref={scrollAreaRef}
         scrollShadow={scrollFade ? "vertical" : "none"}

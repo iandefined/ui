@@ -130,9 +130,13 @@ Use `<DrawerFooter sticky>` with `border-t` to keep action buttons or inputs pin
 
 ### Floating Surface
 
-Set `variant="floating"` for an inset panel with rounded corners on every edge. The example shows the same surface from all four drawer positions.
+Set `variant="floating"` for an inset panel with rounded corners on every edge. The example shows the same surface from all four drawer positions. Bottom floating drawers with snap points resize a rounded, clipped surface from its viewport-anchored bottom edge so the footer and perimeter remain visible at every height.
 
 <ComponentPreview name="drawer/floating" />
+
+Compare following and sticky floating footers with default and inset styling across two snap points.
+
+<ComponentPreview name="drawer/floating-footer" />
 
 ### Form Content
 
@@ -286,8 +290,9 @@ Both parts support the Base UI `render` contract through `useRender`. `DrawerFoo
   </ApiProp>
   <ApiProp name="sticky" fullType="boolean" defaultValue="false">
     Keeps a bottom drawer footer pinned while the drawer moves or changes snap
-    points. Top and side footers remain surface-bound to avoid detaching during
-    dismissal. By default, every footer moves with the drawer surface.
+    points. Top, side, and floating footers remain surface-bound to avoid
+    detaching during dismissal. By default, every footer moves with the drawer
+    surface.
   </ApiProp>
   <ApiProp name="allowSelection" fullType="boolean" defaultValue="true">
     Uses `DrawerContent` for selectable footer content.
