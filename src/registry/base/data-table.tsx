@@ -471,7 +471,7 @@ function SortableHeader<TData extends RowData>({
   return (
     <button
       type="button"
-      className="group hover:text-foreground -my-2 flex w-full min-w-0 cursor-pointer items-center gap-1.5 py-2 transition-colors overflow-hidden"
+      className="group hover:text-foreground -my-2 flex w-full min-w-0 cursor-pointer items-center gap-1.5 py-2 pr-1 transition-colors overflow-hidden"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >
       <span
