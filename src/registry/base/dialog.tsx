@@ -233,6 +233,20 @@ function DialogContent({
     (node: HTMLDivElement | null) => {
       popupRef.current = node;
 
+      if (node) {
+        window.requestAnimationFrame(() => {
+          if (
+            node.isConnected &&
+            window
+              .getComputedStyle(node)
+              .getPropertyValue("--nested-dialogs")
+              .trim() === "0"
+          ) {
+            dialogStack?.setActivePopup(node);
+          }
+        });
+      }
+
       if (typeof ref !== "function") {
         if (ref) ref.current = node;
 
@@ -250,15 +264,16 @@ function DialogContent({
         else ref(null);
       };
     },
-    [ref]
+    [dialogStack, ref]
   );
 
   const updateStackOffset = React.useCallback(() => {
     const popup = popupRef.current;
 
+    // Anchor the stack while the active popup is entering so every level
+    // starts its transition from the same untransformed center position.
     if (
       !popup ||
-      popup.hasAttribute("data-starting-style") ||
       window
         .getComputedStyle(popup)
         .getPropertyValue("--nested-dialogs")

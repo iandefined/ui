@@ -177,7 +177,7 @@ Submit an incomplete verification code to mark the OTP slots invalid. Entering a
 "use client";
 
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { useId } from "react";
+import { useId, useState } from "react";
 
 import { Button } from "@/registry/base/button";
 import {
@@ -199,16 +199,25 @@ const SLOT_KEYS = Array.from(
   (_, index) => `slot-${index}`
 );
 
-export default function InputOTPInvalidDemo() {
+export function InputOTPInvalidDemo() {
   const inputId = useId();
   const errorId = useId();
+  const [showInvalid, setShowInvalid] = useState(false);
+
   const form = useForm({
-    defaultValues: { code: "" },
-    onSubmit: () => undefined,
+    defaultValues: {
+      code: "",
+    },
     validationLogic: revalidateLogic({
       mode: "submit",
       modeAfterSubmission: "change",
     }),
+    onSubmitInvalid: () => {
+      setShowInvalid(true);
+    },
+    onSubmit: () => {
+      setShowInvalid(false);
+    },
   });
 
   return (
@@ -224,11 +233,13 @@ export default function InputOTPInvalidDemo() {
       >
         {(field) => {
           const error = field.state.meta.errors[0];
-          const invalid = typeof error === "string";
+          const hasError = typeof error === "string";
+          const invalid = hasError && showInvalid;
 
           return (
             <Field invalid={invalid} name={field.name}>
               <FieldLabel htmlFor={inputId}>Verification code</FieldLabel>
+
               <InputOTP
                 aria-describedby={invalid ? errorId : undefined}
                 aria-invalid={invalid || undefined}
@@ -239,7 +250,10 @@ export default function InputOTPInvalidDemo() {
                 pattern="[0-9]*"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(value) => field.handleChange(value)}
+                onChange={(value) => {
+                  setShowInvalid(false);
+                  field.handleChange(value);
+                }}
               >
                 <InputOTPGroup>
                   {SLOT_KEYS.map((key, index) => (
@@ -247,6 +261,7 @@ export default function InputOTPInvalidDemo() {
                   ))}
                 </InputOTPGroup>
               </InputOTP>
+
               <FieldErrorSlot>
                 <FieldError id={errorId} match={invalid}>
                   {error}
@@ -256,6 +271,7 @@ export default function InputOTPInvalidDemo() {
           );
         }}
       </form.Field>
+
       <Button type="submit">Verify code</Button>
     </Form>
   );
