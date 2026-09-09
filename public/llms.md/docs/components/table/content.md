@@ -719,6 +719,7 @@ export default function TableWrappingDemo() {
 | `hoverable` | `boolean` | `true` | Highlights rows on pointer hover, matching hover styles across striped and non-striped cells. |
 | `rowDividers` | `boolean` | `true` | Renders horizontal dividing borders between body rows. |
 | `resizable` | `boolean` | `false` | Enables draggable column resizing with interactive hitboxes and animated separators. |
+| `roundedInset` | `boolean` | `true` | Gives the table body a rounded inset perimeter while keeping the header and footer on the outer table surface. Disable it for a square body inset. |
 | `hideScrollbar` | `boolean` | `false` | Hides the scrollbar track and thumb while retaining horizontal scroll capability. |
 | `scrollShadow` | `"vertical" \| "horizontal" \| "both" \| "none"` | `horizontal` | Renders gradient shadow fades at the scroll container boundaries. |
 | `fadeColor` | `string` | `-` | Sets the custom CSS color used for edge shadow fades. |

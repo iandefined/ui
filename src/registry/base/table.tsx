@@ -24,28 +24,31 @@ export interface TableProps extends React.ComponentProps<"table"> {
 type TableInsetStyle = React.CSSProperties & Record<`--${string}`, string>;
 
 const tableContainerStyle: TableInsetStyle = {
-  "--table-body-height": "0px",
-  "--table-body-top": "0px",
   "--table-inset-radius": "var(--radius-lg)",
+  "--table-scrollbar-bottom": "0px",
+  "--table-scrollbar-top": "0px",
 };
 
-const tableInsetBorderStyle: React.CSSProperties = {
-  height: "var(--table-body-height)",
-  top: "var(--table-body-top)",
+const tableInsetOverlayStyle: React.CSSProperties = {
+  bottom: "var(--table-scrollbar-bottom)",
+  top: "var(--table-scrollbar-top)",
 };
 
-const tableInsetTopCornerStyle: React.CSSProperties = {
+const tableHorizontalScrollbarStyle: React.CSSProperties = {
+  bottom: "var(--table-scrollbar-bottom)",
+};
+
+const tableScrollbarCornerStyle: React.CSSProperties = {
+  bottom: "var(--table-scrollbar-bottom)",
+};
+
+const tableVerticalScrollbarStyle: React.CSSProperties = {
+  bottom: "var(--table-scrollbar-bottom)",
+  top: "var(--table-scrollbar-top)",
+};
+
+const tableInsetCornerStyle: React.CSSProperties = {
   height: "var(--table-inset-radius)",
-  top: "var(--table-body-top)",
-  width: "var(--table-inset-radius)",
-};
-
-const tableInsetBottomCornerStyle: React.CSSProperties = {
-  height: "var(--table-inset-radius)",
-  top: [
-    "calc(var(--table-body-top) + var(--table-body-height)",
-    "- var(--table-inset-radius))",
-  ].join(" "),
   width: "var(--table-inset-radius)",
 };
 
@@ -90,7 +93,7 @@ function Table({
 
   React.useLayoutEffect(() => {
     const container = containerRef.current;
-    if (!container || !roundedInset) return;
+    if (!container) return;
 
     const inset = container.querySelector<HTMLElement>(
       '[data-slot="table-inset"]'
@@ -100,20 +103,34 @@ function Table({
     );
     const body = table?.tBodies[0];
     if (!inset || !table || !body) {
-      container.style.setProperty("--table-body-height", "0px");
+      container.style.setProperty("--table-scrollbar-bottom", "100%");
       return;
     }
 
     const measureBody = () => {
       const insetRect = inset.getBoundingClientRect();
       const bodyRect = body.getBoundingClientRect();
+      const headerBottom = table.tHead?.getBoundingClientRect().bottom;
+      const footerCell = table.tFoot?.querySelector<HTMLElement>("th, td");
+      const footerTop = footerCell?.getBoundingClientRect().top;
+      const visibleBodyTop = Math.max(
+        insetRect.top,
+        bodyRect.top,
+        headerBottom ?? insetRect.top
+      );
+      const visibleBodyBottom = Math.min(
+        insetRect.bottom,
+        bodyRect.bottom,
+        footerTop ?? insetRect.bottom
+      );
+      const clampedBodyBottom = Math.max(visibleBodyTop, visibleBodyBottom);
       container.style.setProperty(
-        "--table-body-top",
-        `${bodyRect.top - insetRect.top}px`
+        "--table-scrollbar-top",
+        `${Math.max(0, visibleBodyTop - insetRect.top)}px`
       );
       container.style.setProperty(
-        "--table-body-height",
-        `${bodyRect.height}px`
+        "--table-scrollbar-bottom",
+        `${Math.max(0, insetRect.bottom - clampedBodyBottom)}px`
       );
     };
 
@@ -135,6 +152,8 @@ function Table({
     observer.observe(inset);
     observer.observe(table);
     observer.observe(body);
+    if (table.tHead) observer.observe(table.tHead);
+    if (table.tFoot) observer.observe(table.tFoot);
     viewport?.addEventListener("scroll", scheduleMeasure, { passive: true });
 
     return () => {
@@ -154,7 +173,7 @@ function Table({
         data-hoverable={hoverable ? "" : undefined}
         data-row-dividers={rowDividers ? "" : undefined}
         data-resizable={resizable ? "" : undefined}
-        data-rounded-inset={roundedInset ? "" : undefined}
+        data-rounded-inset={roundedInset}
         style={tableContainerStyle}
         className={cn(
           "group/table relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 pt-0 md:max-w-2xl [--table-inset-mask:var(--muted)] dark:[--table-inset-mask:var(--card)]",
@@ -169,11 +188,14 @@ function Table({
           )}
         >
           <ScrollArea
+            cornerStyle={tableScrollbarCornerStyle}
             hideScrollbar={hideScrollbar}
             orientation="both"
             scrollShadow={resolvedScrollShadow}
             fadeColor={fadeColor}
             className="min-h-0 min-w-0 flex-1"
+            horizontalScrollbarStyle={tableHorizontalScrollbarStyle}
+            verticalScrollbarStyle={tableVerticalScrollbarStyle}
             viewportClassName={cn(
               "!overscroll-none [--scroll-area-fade-size:8px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
               viewportClassName
@@ -192,46 +214,45 @@ function Table({
             </table>
           </ScrollArea>
           {roundedInset ? (
-            <>
+            <div
+              aria-hidden="true"
+              data-slot="table-inset-overlay"
+              className="pointer-events-none absolute inset-x-0 z-20 overflow-hidden"
+              style={tableInsetOverlayStyle}
+            >
               <div
-                aria-hidden="true"
-                className="pointer-events-none absolute left-0 z-10"
+                className="pointer-events-none absolute top-0 left-0 z-10"
                 style={{
-                  ...tableInsetTopCornerStyle,
+                  ...tableInsetCornerStyle,
                   backgroundImage: tableInsetCornerBackgrounds.topLeft,
                 }}
               />
               <div
-                aria-hidden="true"
-                className="pointer-events-none absolute right-0 z-10"
+                className="pointer-events-none absolute top-0 right-0 z-10"
                 style={{
-                  ...tableInsetTopCornerStyle,
+                  ...tableInsetCornerStyle,
                   backgroundImage: tableInsetCornerBackgrounds.topRight,
                 }}
               />
               <div
-                aria-hidden="true"
-                className="pointer-events-none absolute left-0 z-10"
+                className="pointer-events-none absolute bottom-0 left-0 z-10"
                 style={{
-                  ...tableInsetBottomCornerStyle,
+                  ...tableInsetCornerStyle,
                   backgroundImage: tableInsetCornerBackgrounds.bottomLeft,
                 }}
               />
               <div
-                aria-hidden="true"
-                className="pointer-events-none absolute right-0 z-10"
+                className="pointer-events-none absolute right-0 bottom-0 z-10"
                 style={{
-                  ...tableInsetBottomCornerStyle,
+                  ...tableInsetCornerStyle,
                   backgroundImage: tableInsetCornerBackgrounds.bottomRight,
                 }}
               />
               <div
-                aria-hidden="true"
                 data-slot="table-inset-border"
-                className="pointer-events-none absolute inset-x-0 z-20 rounded-[inherit] border border-border/70 dark:border-border"
-                style={tableInsetBorderStyle}
+                className="pointer-events-none absolute inset-0 z-20 rounded-lg border border-border/70 dark:border-border"
               />
-            </>
+            </div>
           ) : null}
         </div>
       </div>
@@ -248,7 +269,7 @@ function TableHeader({ className, render, ...props }: TableHeaderProps) {
       "[&_tr]:border-0",
       "[&_tr_th]:bg-muted dark:[&_tr_th]:bg-card",
       "[&_tr_th:has(+_th[data-empty])]:after:hidden",
-      "sticky top-0 z-10",
+      "sticky top-0 z-20",
       className
     ),
   };
@@ -268,13 +289,13 @@ function TableBody({ className, render, ...props }: TableBodyProps) {
     className: cn(
       "[&_tr_td]:bg-card dark:[&_tr_td]:bg-background",
       "[&_tr_td]:border-border/70 dark:[&_tr_td]:border-border",
-      "[&_tr:first-child_td]:border-t",
-      "[&_tr:last-child_td]:border-b",
-      "[&_tr:has(+_tr:last-child[hidden])_td]:border-b",
-      "[&_tr_td:first-child]:border-l",
-      "[&_tr_td:last-child]:border-r",
+      "group-data-[rounded-inset=false]/table:[&_tr:first-child_td]:border-t",
+      "group-data-[rounded-inset=false]/table:[&_tr:last-child_td]:border-b",
+      "group-data-[rounded-inset=false]/table:[&_tr:has(+_tr:last-child[hidden])_td]:border-b",
+      "group-data-[rounded-inset=false]/table:[&_tr_td:first-child]:border-l",
+      "group-data-[rounded-inset=false]/table:[&_tr_td:last-child]:border-r",
       "group-data-[row-dividers]/table:[&_tr:not(:last-child)_td]:border-b group-data-[row-dividers]/table:[&_tr_td]:border-border/60",
-      "group-data-bordered/table:[&_tr_td]:border-b group-data-bordered/table:[&_tr_td]:border-r group-data-bordered/table:[&_tr_td]:border-border/70 dark:group-data-bordered/table:[&_tr_td]:border-border",
+      "group-data-bordered/table:[&_tr:not(:last-child)_td]:border-b group-data-bordered/table:[&_tr_td:not(:last-child)]:border-r group-data-bordered/table:[&_tr_td]:border-border/70 dark:group-data-bordered/table:[&_tr_td]:border-border",
       "group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-muted/40 dark:group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-card/30",
       "[@media(hover:hover)]:group-data-hoverable/table:[&_tr:hover_td]:bg-secondary/70 dark:[@media(hover:hover)]:group-data-hoverable/table:[&_tr:hover_td]:bg-muted/50",
       "[@media(hover:hover)]:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-secondary/70 dark:[@media(hover:hover)]:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-muted/50",
@@ -583,7 +604,6 @@ function TableCell({ className, render, sticky, ...props }: TableCellProps) {
     className: cn(
       "bg-card overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap dark:bg-background [[align=center]]:text-center [[align=right]]:text-right",
       "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
-      "group-data-bordered/table:border-b group-data-bordered/table:border-r group-data-bordered/table:first:border-l group-data-bordered/table:border-border/70 dark:group-data-bordered/table:border-border",
       "[[data-state=selected]_&]:bg-secondary/60 dark:[[data-state=selected]_&]:bg-muted/30 dark:[[data-state=selected]:hover_&]:bg-muted/30",
       sticky === "left" && "sticky left-0 z-[1]",
       sticky === "right" && "sticky right-0 z-[1]",

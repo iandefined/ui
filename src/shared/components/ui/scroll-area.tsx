@@ -2,10 +2,14 @@ import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
 import { cn } from "cn";
 
 interface ScrollAreaProps extends ScrollAreaPrimitive.Root.Props {
+  cornerStyle?: React.CSSProperties;
   fadeColor?: string;
   hideScrollbar?: boolean;
+  horizontalScrollbarStyle?: React.CSSProperties;
   orientation?: "horizontal" | "vertical" | "both";
+  scrollbarClassName?: string;
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
+  verticalScrollbarStyle?: React.CSSProperties;
   viewportClassName?: string;
 }
 
@@ -13,11 +17,15 @@ type ScrollAreaStyle = React.CSSProperties & Record<`--${string}`, string>;
 
 function ScrollArea({
   className,
+  cornerStyle,
   fadeColor,
+  horizontalScrollbarStyle,
   viewportClassName,
   hideScrollbar = false,
   orientation = "vertical",
+  scrollbarClassName,
   scrollShadow = "none",
+  verticalScrollbarStyle,
   children,
   ...props
 }: ScrollAreaProps) {
@@ -91,13 +99,32 @@ function ScrollArea({
       {!hideScrollbar &&
         (orientation === "both" ? (
           <>
-            <ScrollBar orientation="vertical" />
-            <ScrollBar orientation="horizontal" />
+            <ScrollBar
+              orientation="vertical"
+              className={scrollbarClassName}
+              style={verticalScrollbarStyle}
+            />
+            <ScrollBar
+              orientation="horizontal"
+              className={scrollbarClassName}
+              style={horizontalScrollbarStyle}
+            />
           </>
         ) : (
-          <ScrollBar orientation={orientation} />
+          <ScrollBar
+            orientation={orientation}
+            className={scrollbarClassName}
+            style={
+              orientation === "vertical"
+                ? verticalScrollbarStyle
+                : horizontalScrollbarStyle
+            }
+          />
         ))}
-      <ScrollAreaPrimitive.Corner data-slot="scroll-area-corner" />
+      <ScrollAreaPrimitive.Corner
+        data-slot="scroll-area-corner"
+        style={cornerStyle}
+      />
       <style>{`
 [data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="vertical"],
 [data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {

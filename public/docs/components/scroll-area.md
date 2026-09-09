@@ -71,3 +71,7 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
 | `scrollShadow` | `"horizontal" \| "vertical" \| "both" \| "none"` | `none` | Adds fades at overflowing horizontal, vertical, or both edges. |
 | `fadeColor` | `string` | `-` | Sets the CSS color used by the edge fades. It accepts any CSS color value, including a theme variable such as `var(--card)` or `var(--popover)`. It defaults to an automatic mask that blends into the surface behind the scroll area. |
 | `hideScrollbar` | `boolean` | `false` | Hides the custom scrollbar while keeping the scroll region available. |
+| `scrollbarClassName` | `string` | `-` | Adds classes to each rendered scrollbar. |
+| `verticalScrollbarStyle` | `React.CSSProperties` | `-` | Applies inline positioning or sizing styles to the vertical scrollbar. |
+| `horizontalScrollbarStyle` | `React.CSSProperties` | `-` | Applies inline positioning or sizing styles to the horizontal scrollbar. |
+| `cornerStyle` | `React.CSSProperties` | `-` | Applies inline positioning or sizing styles to the scrollbar corner. |
