@@ -1,10 +1,11 @@
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
+import * as React from "react";
 
 import {
   DataTable,
   DataTableBody,
+  type DataTableColumnDef,
   DataTableContent,
   DataTableHeader,
   useDataTable,
@@ -71,7 +72,7 @@ const data: Project[] = [
   },
 ];
 
-const columns: ColumnDef<Project>[] = [
+const columns: DataTableColumnDef<Project>[] = [
   {
     accessorKey: "code",
     header: "Code",
@@ -105,8 +106,8 @@ const columns: ColumnDef<Project>[] = [
 ];
 
 function DataTablePaginationBar() {
-  const { table } = useDataTable();
-  const pageIndex = table.getState().pagination.pageIndex;
+  const { pagination, table } = useDataTable();
+  const pageIndex = pagination.pageIndex;
   const pageCount = table.getPageCount();
 
   return (
@@ -157,12 +158,18 @@ function DataTablePaginationBar() {
 }
 
 export default function DataTablePaginationDemo() {
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 3,
+  });
+
   return (
     <DataTable
       columns={columns}
       data={data}
       enablePagination
-      pagination={{ pageIndex: 0, pageSize: 3 }}
+      pagination={pagination}
+      onPaginationChange={setPagination}
     >
       <DataTableContent>
         <DataTableHeader />

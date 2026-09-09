@@ -11,11 +11,10 @@ Use `DataTable` to display complex collections of data with built-in column sort
 ```tsx
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
 import { Badge } from "@/registry/base/badge";
 import {
   DataTable,
+  type DataTableColumnDef,
   DataTableBody,
   DataTableColumnToggle,
   DataTableContent,
@@ -67,7 +66,7 @@ const data: Payment[] = [
   },
 ];
 
-const columns: ColumnDef<Payment>[] = [
+const columns: DataTableColumnDef<Payment>[] = [
   {
     accessorKey: "status",
     header: "Status",
@@ -217,11 +216,10 @@ Enable sortable columns with directional indicator icons.
 ```tsx
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
 import {
   DataTable,
   DataTableBody,
+  type DataTableColumnDef,
   DataTableContent,
   DataTableHeader,
 } from "@/registry/base/data-table";
@@ -240,7 +238,7 @@ const data: User[] = [
   { name: "Emma Jones", department: "Sales", score: 90 },
 ];
 
-const columns: ColumnDef<User>[] = [
+const columns: DataTableColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -280,11 +278,10 @@ Allow selecting individual or all rows with coordinated header and row checkboxe
 ```tsx
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
 import {
   DataTable,
   DataTableBody,
+  type DataTableColumnDef,
   DataTableContent,
   DataTableHeader,
   DataTablePagination,
@@ -303,7 +300,7 @@ const data: Employee[] = [
   { id: "EMP-04", name: "Maya Patel", role: "Engineering Manager" },
 ];
 
-const columns: ColumnDef<Employee>[] = [
+const columns: DataTableColumnDef<Employee>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -351,11 +348,12 @@ Navigate records across discrete pages with page-size bounding.
 ```tsx
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
+import * as React from "react";
 
 import {
   DataTable,
   DataTableBody,
+  type DataTableColumnDef,
   DataTableContent,
   DataTableHeader,
   useDataTable,
@@ -422,7 +420,7 @@ const data: Project[] = [
   },
 ];
 
-const columns: ColumnDef<Project>[] = [
+const columns: DataTableColumnDef<Project>[] = [
   {
     accessorKey: "code",
     header: "Code",
@@ -456,8 +454,8 @@ const columns: ColumnDef<Project>[] = [
 ];
 
 function DataTablePaginationBar() {
-  const { table } = useDataTable();
-  const pageIndex = table.getState().pagination.pageIndex;
+  const { pagination, table } = useDataTable();
+  const pageIndex = pagination.pageIndex;
   const pageCount = table.getPageCount();
 
   return (
@@ -508,12 +506,18 @@ function DataTablePaginationBar() {
 }
 
 export default function DataTablePaginationDemo() {
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 3,
+  });
+
   return (
     <DataTable
       columns={columns}
       data={data}
       enablePagination
-      pagination={{ pageIndex: 0, pageSize: 3 }}
+      pagination={pagination}
+      onPaginationChange={setPagination}
     >
       <DataTableContent>
         <DataTableHeader />
@@ -532,11 +536,10 @@ Enable interactive column resizing with TanStack Table integration. The resizer 
 ```tsx
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
 import {
   DataTable,
   DataTableBody,
+  type DataTableColumnDef,
   DataTableContent,
   DataTableHeader,
 } from "@/registry/base/data-table";
@@ -581,7 +584,7 @@ const data: Project[] = [
   },
 ];
 
-const columns: ColumnDef<Project>[] = [
+const columns: DataTableColumnDef<Project>[] = [
   {
     accessorKey: "title",
     header: "Project",
@@ -634,11 +637,11 @@ export default function DataTableResizableDemo() {
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `columns` | `ColumnDef<TData, TValue>[]` | `-` | Defines the column schema, accessor keys, headers, and cell renderers. |
+| `columns` | `DataTableColumnDef<TData, TValue>[]` | `-` | Defines the column schema, accessor keys, headers, and cell renderers. |
 | `data` | `TData[]` | `-` | The array of record objects rendered in table rows. |
 | `resizable` | `boolean` | `false` | Enables interactive column resizing across all resizable columns. |
 | `enableSorting` | `boolean` | `false` | Enables column sort toggling on compatible column headers. |
-| `enableRowSelection` | `boolean \| ((row: Row<TData>) => boolean)` | `false` | Enables row selection state tracking and selection checkboxes. |
+| `enableRowSelection` | `boolean \| ((row: DataTableRow<TData>) => boolean)` | `false` | Enables row selection state tracking and selection checkboxes. |
 | `enableMultiRowSelection` | `boolean` | `true` | Allows selecting multiple rows simultaneously. |
 | `enableFiltering` | `boolean` | `false` | Enables global text filtering across string cell values. |
 | `enablePagination` | `boolean` | `false` | Enables pagination row splitting and page navigation. |

@@ -1,10 +1,9 @@
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
 import {
   DataTable,
   DataTableBody,
+  type DataTableColumnDef,
   DataTableContent,
   DataTableHeader,
 } from "@/registry/base/data-table";
@@ -23,7 +22,7 @@ const data: User[] = [
   { name: "Emma Jones", department: "Sales", score: 90 },
 ];
 
-const columns: ColumnDef<User>[] = [
+const columns: DataTableColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: "Name",

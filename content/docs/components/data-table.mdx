@@ -113,7 +113,11 @@ Enable interactive column resizing with TanStack Table integration. The resizer 
 #### DataTable
 
 <ApiPropsList>
-  <ApiProp name="columns" fullType="ColumnDef<TData, TValue>[]" required>
+  <ApiProp
+    name="columns"
+    fullType="DataTableColumnDef<TData, TValue>[]"
+    required
+  >
     Defines the column schema, accessor keys, headers, and cell renderers.
   </ApiProp>
   <ApiProp name="data" fullType="TData[]" required>
@@ -127,7 +131,7 @@ Enable interactive column resizing with TanStack Table integration. The resizer 
   </ApiProp>
   <ApiProp
     name="enableRowSelection"
-    fullType="boolean | ((row: Row<TData>) => boolean)"
+    fullType="boolean | ((row: DataTableRow<TData>) => boolean)"
     defaultValue="false"
   >
     Enables row selection state tracking and selection checkboxes.

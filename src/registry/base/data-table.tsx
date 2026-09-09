@@ -1,23 +1,33 @@
 "use client";
 
 import {
+  columnFilteringFeature,
+  columnResizingFeature,
+  columnSizingFeature,
+  columnVisibilityFeature,
+  createFilteredRowModel,
+  createPaginatedRowModel,
+  createSortedRowModel,
+  filterFn_includesString,
+  globalFilteringFeature,
   type Column,
-  type ColumnDef,
+  type ColumnDef as TanStackColumnDef,
   type ColumnFiltersState,
   type ColumnResizeMode,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   type OnChangeFn,
   type PaginationState,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
   type Row,
+  type RowData,
   type RowSelectionState,
+  type ReactTable,
   type SortingState,
-  type Table as ReactTableInstance,
-  useReactTable,
-  type VisibilityState,
+  tableFeatures,
+  useTable,
+  type ColumnVisibilityState as VisibilityState,
 } from "@tanstack/react-table";
 import { cn } from "cn";
 import {
@@ -51,26 +61,51 @@ import {
   type TableProps,
 } from "@/components/ui/table";
 
-interface DataTableContextValue<TData> {
-  table: ReactTableInstance<TData>;
+const dataTableFeatures = tableFeatures({
+  columnFilteringFeature,
+  columnResizingFeature,
+  columnSizingFeature,
+  columnVisibilityFeature,
+  filteredRowModel: createFilteredRowModel(),
+  filterFns: { includesString: filterFn_includesString },
+  globalFilteringFeature,
+  paginatedRowModel: createPaginatedRowModel(),
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  sortedRowModel: createSortedRowModel(),
+});
+
+export type DataTableFeatures = typeof dataTableFeatures;
+
+export type DataTableColumnDef<
+  TData extends RowData,
+  TValue = unknown,
+> = TanStackColumnDef<DataTableFeatures, TData, TValue>;
+
+export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
+
+interface DataTableContextValue<TData extends RowData> {
+  table: ReactTable<DataTableFeatures, TData>;
   isResizable: boolean;
+  globalFilter: string;
+  onGlobalFilterChange: OnChangeFn<string>;
+  pagination: PaginationState;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: generic context requires any; consumer types are enforced via useDataTable<TData>()
-const DataTableContext = React.createContext<DataTableContextValue<any> | null>(
-  null
-);
+const DataTableContext =
+  React.createContext<DataTableContextValue<RowData> | null>(null);
 
-function useDataTable<TData>() {
+function useDataTable<TData extends RowData>(): DataTableContextValue<TData> {
   const context = React.useContext(DataTableContext);
   if (!context) {
     throw new Error("useDataTable must be used within a DataTable");
   }
-  return context as DataTableContextValue<TData>;
+  return context as unknown as DataTableContextValue<TData>;
 }
 
-export interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+export interface DataTableProps<TData extends RowData, TValue = unknown> {
+  columns: DataTableColumnDef<TData, TValue>[];
   data: TData[];
   children: React.ReactNode;
   className?: string;
@@ -80,7 +115,7 @@ export interface DataTableProps<TData, TValue> {
   columnResizeMode?: ColumnResizeMode;
 
   enableSorting?: boolean;
-  enableRowSelection?: boolean | ((row: Row<TData>) => boolean);
+  enableRowSelection?: boolean | ((row: DataTableRow<TData>) => boolean);
   enableMultiRowSelection?: boolean;
   enableFiltering?: boolean;
   enablePagination?: boolean;
@@ -100,10 +135,14 @@ export interface DataTableProps<TData, TValue> {
   globalFilter?: string;
   onGlobalFilterChange?: OnChangeFn<string>;
 
-  getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string;
+  getRowId?: (
+    originalRow: TData,
+    index: number,
+    parent?: DataTableRow<TData>
+  ) => string;
 }
 
-function DataTable<TData, TValue>({
+function DataTable<TData extends RowData, TValue = unknown>({
   columns: userColumns,
   data,
   children,
@@ -153,15 +192,19 @@ function DataTable<TData, TValue>({
   const columnFilters = controlledColumnFilters ?? internalColumnFilters;
   const pagination = controlledPagination ?? internalPagination;
   const globalFilter = controlledGlobalFilter ?? internalGlobalFilter;
+  const handleGlobalFilterChange =
+    onGlobalFilterChange ?? setInternalGlobalFilter;
   const columnVisibility =
     controlledColumnVisibility ?? internalColumnVisibility;
 
   const columns = React.useMemo(() => {
+    const dataColumns = userColumns as unknown as DataTableColumnDef<TData>[];
+
     if (!enableRowSelection || !showSelectionColumn) {
-      return userColumns;
+      return dataColumns;
     }
 
-    const selectionColumn: ColumnDef<TData, unknown> = {
+    const selectionColumn: DataTableColumnDef<TData> = {
       id: "__select__",
       size: 48,
       minSize: 48,
@@ -199,7 +242,7 @@ function DataTable<TData, TValue>({
       enableHiding: false,
     };
 
-    return [selectionColumn, ...userColumns];
+    return [selectionColumn, ...dataColumns];
   }, [
     userColumns,
     enableRowSelection,
@@ -207,9 +250,10 @@ function DataTable<TData, TValue>({
     showSelectionColumn,
   ]);
 
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
+    features: dataTableFeatures,
     defaultColumn: {
       minSize: 48,
     },
@@ -226,22 +270,31 @@ function DataTable<TData, TValue>({
     onRowSelectionChange: onRowSelectionChange ?? setInternalRowSelection,
     onColumnFiltersChange: onColumnFiltersChange ?? setInternalColumnFilters,
     onPaginationChange: onPaginationChange ?? setInternalPagination,
-    onGlobalFilterChange: onGlobalFilterChange ?? setInternalGlobalFilter,
+    onGlobalFilterChange: handleGlobalFilterChange,
     onColumnVisibilityChange:
       onColumnVisibilityChange ?? setInternalColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    ...(enableSorting && { getSortedRowModel: getSortedRowModel() }),
-    ...(enableFiltering && { getFilteredRowModel: getFilteredRowModel() }),
-    ...(enablePagination && { getPaginationRowModel: getPaginationRowModel() }),
+    enableColumnFilters: enableFiltering,
+    enableFilters: enableFiltering,
+    enableGlobalFilter: enableFiltering,
+    enableSorting,
     enableRowSelection,
     enableMultiRowSelection,
     enableColumnResizing: isResizable,
+    manualPagination: !enablePagination,
     columnResizeMode,
     globalFilterFn: "includesString",
   });
 
   return (
-    <DataTableContext.Provider value={{ table, isResizable }}>
+    <DataTableContext.Provider
+      value={{
+        table: table as unknown as ReactTable<DataTableFeatures, RowData>,
+        isResizable,
+        globalFilter,
+        onGlobalFilterChange: handleGlobalFilterChange,
+        pagination,
+      }}
+    >
       <div
         data-slot="data-table"
         className={cn(
@@ -289,7 +342,7 @@ function DataTableToolbarSeparator({
 
 export interface DataTableSearchProps extends Omit<
   React.ComponentProps<typeof Input>,
-  "value" | "onChange"
+  "value" | "onChange" | "onValueChange"
 > {
   placeholder?: string;
 }
@@ -300,14 +353,14 @@ function DataTableSearch({
   className,
   ...props
 }: DataTableSearchProps) {
-  const { table } = useDataTable();
+  const { globalFilter, onGlobalFilterChange } = useDataTable();
 
   return (
     <Input
       placeholder={placeholder}
       size={size}
-      value={table.getState().globalFilter ?? ""}
-      onChange={(e) => table.setGlobalFilter(e.target.value)}
+      value={globalFilter}
+      onValueChange={(value) => onGlobalFilterChange(value)}
       className={cn("w-full sm:w-auto sm:max-w-xs flex-1", className)}
       {...props}
     />
@@ -404,12 +457,12 @@ function DataTableContent({
   );
 }
 
-function SortableHeader<TData>({
+function SortableHeader<TData extends RowData>({
   column,
   children,
   align,
 }: {
-  column: Column<TData, unknown>;
+  column: Column<DataTableFeatures, TData, unknown>;
   children: React.ReactNode;
   align?: "left" | "center" | "right";
   isFirst?: boolean;
@@ -662,7 +715,6 @@ export {
 };
 
 export type {
-  ColumnDef,
   ColumnFiltersState,
   ColumnResizeMode,
   PaginationState,

@@ -1,10 +1,9 @@
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-
 import { Badge } from "@/registry/base/badge";
 import {
   DataTable,
+  type DataTableColumnDef,
   DataTableBody,
   DataTableColumnToggle,
   DataTableContent,
@@ -56,7 +55,7 @@ const data: Payment[] = [
   },
 ];
 
-const columns: ColumnDef<Payment>[] = [
+const columns: DataTableColumnDef<Payment>[] = [
   {
     accessorKey: "status",
     header: "Status",
