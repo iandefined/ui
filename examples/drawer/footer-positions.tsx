@@ -36,6 +36,16 @@ export default function DrawerFooterPositionsDemo() {
         const positionLabel =
           position.charAt(0).toUpperCase() + position.slice(1);
         const behaviorLabel = sticky ? "Sticky" : "Following";
+        const footer = (
+          <DrawerFooter sticky={sticky} className="py-4">
+            <DrawerCloseTrigger
+              render={<Button size="sm" variant="outline" />}
+            >
+              Close
+            </DrawerCloseTrigger>
+            <Button size="sm">{behaviorLabel} action</Button>
+          </DrawerFooter>
+        );
 
         return (
           <Drawer key={`${position}-${behaviorLabel}`} position={position}>
@@ -73,15 +83,9 @@ export default function DrawerFooterPositionsDemo() {
                     </div>
                   ))}
                 </div>
+                {!sticky && footer}
               </DrawerPanel>
-              <DrawerFooter sticky={sticky} className="border-t py-4">
-                <DrawerCloseTrigger
-                  render={<Button size="sm" variant="outline" />}
-                >
-                  Close
-                </DrawerCloseTrigger>
-                <Button size="sm">{behaviorLabel} action</Button>
-              </DrawerFooter>
+              {sticky && footer}
             </DrawerPopup>
           </Drawer>
         );

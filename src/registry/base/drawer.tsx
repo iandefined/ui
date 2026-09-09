@@ -962,6 +962,7 @@ function DrawerFooter({
   const defaultProps = {
     className: cn(
       "w-full relative z-10 mt-auto flex flex-col-reverse gap-2 bg-popover px-6 pb-[env(safe-area-inset-bottom,0px)] sm:flex-row sm:justify-end",
+      !sticky && "in-[[data-slot=drawer-panel]]:px-0",
       (isViewportPinned || followsSnapPoint) &&
         "will-change-transform transition-transform duration-300 ease-out motion-reduce:transition-none motion-reduce:transform-none in-[[data-slot=drawer-popup][data-swiping]]:!transition-none in-[[data-slot=drawer-popup][data-swiping]]:!duration-0 in-[[data-swiping]]:!transition-none in-[[data-swiping]]:!duration-0",
       isViewportPinned &&
@@ -970,7 +971,7 @@ function DrawerFooter({
         "transform-[translateY(calc(0px-var(--drawer-snap-offset,var(--drawer-snap-point-offset,0px))))]",
       !allowSelection && "cursor-default",
       variant === "default" &&
-        "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 rounded-b-xl pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",
+        "rounded-b-xl pt-6 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]",
       variant === "inset" &&
         "border-t bg-muted pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+1rem)]",
       isFloating && "rounded-b-2xl!",
