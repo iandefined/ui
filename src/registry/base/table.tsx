@@ -23,51 +23,42 @@ export interface TableProps extends React.ComponentProps<"table"> {
 
 type TableInsetStyle = React.CSSProperties & Record<`--${string}`, string>;
 
-const tableInsetMaskImage = [
-  "linear-gradient(#000 0 0)",
-  "linear-gradient(#000 0 0)",
-  "linear-gradient(#000 0 0)",
-  "radial-gradient(circle var(--table-inset-radius) at 100% 100%, #000 calc(100% - 0.5px), transparent 100%)",
-  "radial-gradient(circle var(--table-inset-radius) at 0 100%, #000 calc(100% - 0.5px), transparent 100%)",
-  "radial-gradient(circle var(--table-inset-radius) at 100% 0, #000 calc(100% - 0.5px), transparent 100%)",
-  "radial-gradient(circle var(--table-inset-radius) at 0 0, #000 calc(100% - 0.5px), transparent 100%)",
-].join(", ");
-
-const tableInsetMaskPosition = [
-  "0 0",
-  "var(--table-inset-radius) var(--table-header-height)",
-  "0 calc(var(--table-header-height) + var(--table-inset-radius))",
-  "0 var(--table-header-height)",
-  "100% var(--table-header-height)",
-  "0 100%",
-  "100% 100%",
-].join(", ");
-
-const tableInsetMaskSize = [
-  "100% var(--table-header-height)",
-  "calc(100% - var(--table-inset-radius) - var(--table-inset-radius)) calc(100% - var(--table-header-height))",
-  "100% calc(100% - var(--table-header-height) - var(--table-inset-radius) - var(--table-inset-radius))",
-  "var(--table-inset-radius) var(--table-inset-radius)",
-  "var(--table-inset-radius) var(--table-inset-radius)",
-  "var(--table-inset-radius) var(--table-inset-radius)",
-  "var(--table-inset-radius) var(--table-inset-radius)",
-].join(", ");
-
-const tableInsetStyle: TableInsetStyle = {
-  "--table-inset-radius": "var(--radius-lg)",
-  maskImage: tableInsetMaskImage,
-  maskPosition: tableInsetMaskPosition,
-  maskRepeat: "no-repeat",
-  maskSize: tableInsetMaskSize,
-  WebkitMaskImage: tableInsetMaskImage,
-  WebkitMaskPosition: tableInsetMaskPosition,
-  WebkitMaskRepeat: "no-repeat",
-  WebkitMaskSize: tableInsetMaskSize,
-};
-
 const tableContainerStyle: TableInsetStyle = {
-  "--table-header-height": "0px",
+  "--table-body-height": "0px",
+  "--table-body-top": "0px",
+  "--table-inset-radius": "var(--radius-lg)",
 };
+
+const tableInsetBorderStyle: React.CSSProperties = {
+  height: "var(--table-body-height)",
+  top: "var(--table-body-top)",
+};
+
+const tableInsetTopCornerStyle: React.CSSProperties = {
+  height: "var(--table-inset-radius)",
+  top: "var(--table-body-top)",
+  width: "var(--table-inset-radius)",
+};
+
+const tableInsetBottomCornerStyle: React.CSSProperties = {
+  height: "var(--table-inset-radius)",
+  top: [
+    "calc(var(--table-body-top) + var(--table-body-height)",
+    "- var(--table-inset-radius))",
+  ].join(" "),
+  width: "var(--table-inset-radius)",
+};
+
+const tableInsetCornerBackgrounds = {
+  bottomLeft:
+    "radial-gradient(circle var(--table-inset-radius) at 100% 0, transparent calc(100% - 0.5px), var(--table-inset-mask) 100%)",
+  bottomRight:
+    "radial-gradient(circle var(--table-inset-radius) at 0 0, transparent calc(100% - 0.5px), var(--table-inset-mask) 100%)",
+  topLeft:
+    "radial-gradient(circle var(--table-inset-radius) at 100% 100%, transparent calc(100% - 0.5px), var(--table-inset-mask) 100%)",
+  topRight:
+    "radial-gradient(circle var(--table-inset-radius) at 0 100%, transparent calc(100% - 0.5px), var(--table-inset-mask) 100%)",
+} as const;
 
 interface TableContextValue {
   resizable?: boolean;
@@ -101,30 +92,56 @@ function Table({
     const container = containerRef.current;
     if (!container || !roundedInset) return;
 
+    const inset = container.querySelector<HTMLElement>(
+      '[data-slot="table-inset"]'
+    );
     const table = container.querySelector<HTMLTableElement>(
       'table[data-slot="table"]'
     );
-    const header = table?.tHead;
-    if (!header) {
-      container.style.setProperty("--table-header-height", "0px");
+    const body = table?.tBodies[0];
+    if (!inset || !table || !body) {
+      container.style.setProperty("--table-body-height", "0px");
       return;
     }
 
-    const setHeaderHeight = (height: number) => {
-      container.style.setProperty("--table-header-height", `${height}px`);
+    const measureBody = () => {
+      const insetRect = inset.getBoundingClientRect();
+      const bodyRect = body.getBoundingClientRect();
+      container.style.setProperty(
+        "--table-body-top",
+        `${bodyRect.top - insetRect.top}px`
+      );
+      container.style.setProperty(
+        "--table-body-height",
+        `${bodyRect.height}px`
+      );
     };
 
-    setHeaderHeight(header.getBoundingClientRect().height);
+    measureBody();
 
-    const observer = new ResizeObserver(([entry]) => {
-      if (!entry) return;
-      setHeaderHeight(
-        entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height
-      );
-    });
-    observer.observe(header);
+    let frame = 0;
+    const scheduleMeasure = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        measureBody();
+      });
+    };
 
-    return () => observer.disconnect();
+    const viewport = container.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]'
+    );
+    const observer = new ResizeObserver(scheduleMeasure);
+    observer.observe(inset);
+    observer.observe(table);
+    observer.observe(body);
+    viewport?.addEventListener("scroll", scheduleMeasure, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      viewport?.removeEventListener("scroll", scheduleMeasure);
+      if (frame) cancelAnimationFrame(frame);
+    };
   });
 
   return (
@@ -140,7 +157,7 @@ function Table({
         data-rounded-inset={roundedInset ? "" : undefined}
         style={tableContainerStyle}
         className={cn(
-          "group/table relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 pt-0 md:max-w-2xl",
+          "group/table relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 pt-0 md:max-w-2xl [--table-inset-mask:var(--muted)] dark:[--table-inset-mask:var(--card)]",
           className
         )}
       >
@@ -151,41 +168,70 @@ function Table({
             roundedInset && "rounded-lg"
           )}
         >
-          <div
-            data-slot="table-inset-clip"
-            className="min-h-0 min-w-0 flex flex-1 flex-col"
-            style={roundedInset ? tableInsetStyle : undefined}
+          <ScrollArea
+            hideScrollbar={hideScrollbar}
+            orientation="both"
+            scrollShadow={resolvedScrollShadow}
+            fadeColor={fadeColor}
+            className="min-h-0 min-w-0 flex-1"
+            viewportClassName={cn(
+              "!overscroll-none [--scroll-area-fade-size:8px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
+              viewportClassName
+            )}
           >
-            <ScrollArea
-              hideScrollbar={hideScrollbar}
-              orientation="both"
-              scrollShadow={resolvedScrollShadow}
-              fadeColor={fadeColor}
-              className="min-h-0 min-w-0 flex-1"
-              viewportClassName={cn(
-                "!overscroll-none [--scroll-area-fade-size:8px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
-                viewportClassName
+            <table
+              data-slot="table"
+              className={cn(
+                "w-full caption-bottom text-sm border-separate border-spacing-0",
+                resizable && "table-fixed",
+                bordered && "border-separate border-spacing-0"
               )}
+              {...props}
             >
-              <table
-                data-slot="table"
-                className={cn(
-                  "w-full caption-bottom text-sm border-separate border-spacing-0",
-                  resizable && "table-fixed",
-                  bordered && "border-separate border-spacing-0"
-                )}
-                {...props}
-              >
-                {children}
-              </table>
-            </ScrollArea>
-          </div>
+              {children}
+            </table>
+          </ScrollArea>
           {roundedInset ? (
-            <div
-              aria-hidden="true"
-              data-slot="table-inset-border"
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 rounded-[inherit] border border-border/70 dark:border-border [top:var(--table-header-height)]"
-            />
+            <>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 z-10"
+                style={{
+                  ...tableInsetTopCornerStyle,
+                  backgroundImage: tableInsetCornerBackgrounds.topLeft,
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute right-0 z-10"
+                style={{
+                  ...tableInsetTopCornerStyle,
+                  backgroundImage: tableInsetCornerBackgrounds.topRight,
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 z-10"
+                style={{
+                  ...tableInsetBottomCornerStyle,
+                  backgroundImage: tableInsetCornerBackgrounds.bottomLeft,
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute right-0 z-10"
+                style={{
+                  ...tableInsetBottomCornerStyle,
+                  backgroundImage: tableInsetCornerBackgrounds.bottomRight,
+                }}
+              />
+              <div
+                aria-hidden="true"
+                data-slot="table-inset-border"
+                className="pointer-events-none absolute inset-x-0 z-20 rounded-[inherit] border border-border/70 dark:border-border"
+                style={tableInsetBorderStyle}
+              />
+            </>
           ) : null}
         </div>
       </div>
