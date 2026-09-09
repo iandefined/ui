@@ -13,6 +13,33 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const REDUCED_TRANSITION: Transition = { duration: 0 };
 
+const invalidShakeStyles = `
+  @keyframes iandefined-invalid-shake-replay {
+    0% { transform: translateX(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    28.57% { transform: translateX(6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    57.14% { transform: translateX(-6px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    78.57% { transform: translateX(4px); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+    100% { transform: translateX(0); }
+  }
+  [data-invalid-shake="owner"] {
+    animation-duration: 280ms;
+    animation-timing-function: linear;
+  }
+  [data-invalid-shake="owner"].is-shaking[aria-invalid="true"],
+  [data-invalid-shake="owner"].is-shaking[data-invalid],
+  [data-invalid-shake="owner"].is-shaking:has([aria-invalid="true"]),
+  [data-invalid-shake="owner"].is-shaking:has([data-invalid]) {
+    animation-name: iandefined-invalid-shake-replay;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-invalid-shake="owner"] {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+`;
+
 const spring = {
   moderate: {
     type: "spring" as const,
@@ -250,77 +277,81 @@ function Switch({
   }, [effectiveTransition, isChecked, motionX, thumbTravel]);
 
   return (
-    <SwitchPrimitive.Root
-      {...props}
-      data-slot="switch"
-      data-size={size}
-      checked={isChecked}
-      className={cn(
-        "relative inline-flex shrink-0 cursor-pointer touch-manipulation select-none rounded-full bg-input outline-none transition-colors duration-80 data-checked:bg-primary data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),black_16%),inset_0_1px_0_0_rgb(255_255_255_/_0.25)] dark:data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),white_12%),inset_0_1px_0_0_rgb(255_255_255_/_0.55)] data-disabled:cursor-not-allowed data-disabled:opacity-50 motion-reduce:transition-none",
-        "before:content-[''] before:absolute before:-inset-y-1.5 before:inset-x-0",
-        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background forced-colors:focus-visible:outline-[Highlight]",
-        className
-      )}
-      disabled={disabled}
-      onCheckedChange={(nextChecked) => {
-        if (!didDrag.current) {
-          handleCheckedChange(nextChecked);
-        }
-      }}
-      onPointerCancel={handlePointerCancel}
-      onPointerDown={handlePointerDown}
-      onPointerEnter={() => {
-        if (!disabled) {
-          setHovered(true);
-        }
-      }}
-      onPointerLeave={() => {
-        setHovered(false);
-        setPressed(false);
-      }}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      style={{
-        width: metrics.trackWidth,
-        height: metrics.trackHeight,
-      }}
-    >
-      <SwitchPrimitive.Thumb
-        render={(thumbProps) => {
-          const {
-            style: baseStyle,
-            onAnimationEnd: _onAnimationEnd,
-            onAnimationIteration: _onAnimationIteration,
-            onAnimationStart: _onAnimationStart,
-            onDrag: _onDrag,
-            onDragEnd: _onDragEnd,
-            onDragStart: _onDragStart,
-            ...rest
-          } = thumbProps as React.HTMLAttributes<HTMLSpanElement>;
-
-          return (
-            <motion.span
-              {...rest}
-              data-slot="switch-thumb"
-              animate={{
-                y: thumbY,
-                width: thumbWidth,
-                height: thumbHeight,
-              }}
-              className="absolute top-0 left-0 block rounded-full bg-white shadow-sm data-checked:bg-primary-foreground motion-reduce:transition-none"
-              initial={false}
-              style={{
-                ...(baseStyle as React.CSSProperties | undefined),
-                x: motionX,
-              }}
-              transition={
-                hasMounted.current ? effectiveTransition : { duration: 0 }
-              }
-            />
-          );
+    <>
+      <style>{invalidShakeStyles}</style>
+      <SwitchPrimitive.Root
+        {...props}
+        data-invalid-shake="owner"
+        data-slot="switch"
+        data-size={size}
+        checked={isChecked}
+        className={cn(
+          "relative inline-flex shrink-0 cursor-pointer touch-manipulation select-none rounded-full bg-input outline-none transition-colors duration-80 data-checked:bg-primary data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),black_16%),inset_0_1px_0_0_rgb(255_255_255_/_0.25)] dark:data-checked:shadow-[inset_0_0_0_0.5px_color-mix(in_oklch,var(--primary),white_12%),inset_0_1px_0_0_rgb(255_255_255_/_0.55)] data-disabled:cursor-not-allowed data-disabled:opacity-50 motion-reduce:transition-none",
+          "before:content-[''] before:absolute before:-inset-y-1.5 before:inset-x-0",
+          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background forced-colors:focus-visible:outline-[Highlight]",
+          className
+        )}
+        disabled={disabled}
+        onCheckedChange={(nextChecked) => {
+          if (!didDrag.current) {
+            handleCheckedChange(nextChecked);
+          }
         }}
-      />
-    </SwitchPrimitive.Root>
+        onPointerCancel={handlePointerCancel}
+        onPointerDown={handlePointerDown}
+        onPointerEnter={() => {
+          if (!disabled) {
+            setHovered(true);
+          }
+        }}
+        onPointerLeave={() => {
+          setHovered(false);
+          setPressed(false);
+        }}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        style={{
+          width: metrics.trackWidth,
+          height: metrics.trackHeight,
+        }}
+      >
+        <SwitchPrimitive.Thumb
+          render={(thumbProps) => {
+            const {
+              style: baseStyle,
+              onAnimationEnd: _onAnimationEnd,
+              onAnimationIteration: _onAnimationIteration,
+              onAnimationStart: _onAnimationStart,
+              onDrag: _onDrag,
+              onDragEnd: _onDragEnd,
+              onDragStart: _onDragStart,
+              ...rest
+            } = thumbProps as React.HTMLAttributes<HTMLSpanElement>;
+
+            return (
+              <motion.span
+                {...rest}
+                data-slot="switch-thumb"
+                animate={{
+                  y: thumbY,
+                  width: thumbWidth,
+                  height: thumbHeight,
+                }}
+                className="absolute top-0 left-0 block rounded-full bg-white shadow-sm data-checked:bg-primary-foreground motion-reduce:transition-none"
+                initial={false}
+                style={{
+                  ...(baseStyle as React.CSSProperties | undefined),
+                  x: motionX,
+                }}
+                transition={
+                  hasMounted.current ? effectiveTransition : { duration: 0 }
+                }
+              />
+            );
+          }}
+        />
+      </SwitchPrimitive.Root>
+    </>
   );
 }
 
