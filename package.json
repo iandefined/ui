@@ -59,7 +59,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.53.1",
+    "@cloudflare/vite-plugin": "^1.54.4",
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/router-plugin": "catalog:",
     "@types/mdx": "catalog:",
@@ -75,7 +75,7 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "wrangler": "^4.125.0"
+    "wrangler": "^4.129.0"
   },
   "devEngines": {
     "packageManager": {
