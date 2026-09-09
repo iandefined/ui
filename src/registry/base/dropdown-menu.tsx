@@ -125,9 +125,9 @@ function DropdownMenuBackdrop({
     <DropdownMenuPrimitive.Backdrop
       className={cn(
         backdrop === "opaque" &&
-          "fixed inset-0 z-50 bg-black opacity-40 transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:opacity-60",
+          "fixed inset-0 z-50 bg-black opacity-40 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none dark:opacity-60",
         backdrop === "blur" &&
-          "fixed inset-0 z-50 backdrop-blur-sm transition-[opacity] duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed inset-0 z-50 backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none",
         backdrop === "transparent" && "hidden",
         className
       )}

@@ -212,17 +212,24 @@ Pass an `action` with a visible label and callback for a reversible follow-up su
 import { Button } from "@/registry/base/button";
 import { toast } from "@/registry/base/toast";
 
+const actionToastId = "toast-action";
+
 export default function ToastActionDemo() {
   const handleAction = () => {
     const id = toast({
+      id: actionToastId,
       title: "Action performed",
       description: "You can undo this action.",
       action: {
         label: "Undo",
         render: <Button variant="outline" size="sm" />,
         onClick: () => {
-          toast.dismiss(id);
-          toast({ title: "Action undone" });
+          toast.update(actionToastId, {
+            title: "Action undone",
+            description: "Your change has been restored.",
+            type: "success",
+            action: null,
+          });
         },
       },
     });
@@ -339,7 +346,7 @@ toast.promise(saveChanges(), {
 
 ### Anchored Toast
 
-Use `toast.anchored()` for contextual feedback near the control that caused it. The anchor can be missing or disconnected; the provider keeps the notification safe to dismiss in that case.
+Use `toast.anchored()` for contextual feedback near the control that caused it. The anchor can be missing or disconnected; the provider keeps the notification safe to dismiss in that case. Pass a stable `id` to update and re-notify the existing anchored toast instead of layering duplicates.
 
 ```tsx
 "use client";
@@ -348,6 +355,8 @@ import * as React from "react";
 
 import { Button } from "@/registry/base/button";
 import { toast } from "@/registry/base/toast";
+
+const anchoredToastId = "toast-anchored-copy-link";
 
 export default function ToastAnchoredDemo() {
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -359,6 +368,7 @@ export default function ToastAnchoredDemo() {
         variant="outline"
         onClick={() => {
           toast.anchored({
+            id: anchoredToastId,
             title: "Copied",
             description: "The link was copied to your clipboard.",
             anchor: buttonRef.current,
@@ -378,6 +388,7 @@ export default function ToastAnchoredDemo() {
 
 ```tsx
 toast.anchored({
+  id: "copy-link",
   title: "Copied",
   anchor: buttonRef.current,
   side: "top",

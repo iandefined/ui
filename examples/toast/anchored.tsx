@@ -5,6 +5,8 @@ import * as React from "react";
 import { Button } from "@/registry/base/button";
 import { toast } from "@/registry/base/toast";
 
+const anchoredToastId = "toast-anchored-copy-link";
+
 export default function ToastAnchoredDemo() {
   const buttonRef = React.useRef<HTMLButtonElement>(null);
 
@@ -15,6 +17,7 @@ export default function ToastAnchoredDemo() {
         variant="outline"
         onClick={() => {
           toast.anchored({
+            id: anchoredToastId,
             title: "Copied",
             description: "The link was copied to your clipboard.",
             anchor: buttonRef.current,

@@ -770,18 +770,13 @@
       "type": "registry:ui",
       "title": "Toast",
       "description": "Brief, self-dismissing feedback with stacked and anchored placement.",
-      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react", "motion"],
       "registryDependencies": ["https://ui.iandefined.com/r/button.json"],
       "files": [
         {
           "path": "src/registry/base/toast.tsx",
           "type": "registry:ui",
           "target": "components/ui/toast.tsx"
-        },
-        {
-          "path": "src/styles/toast.css",
-          "type": "registry:style",
-          "target": "styles/toast.css"
         }
       ]
     },

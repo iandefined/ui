@@ -125,12 +125,13 @@ toast.promise(saveChanges(), {
 
 ### Anchored Toast
 
-Use `toast.anchored()` for contextual feedback near the control that caused it. The anchor can be missing or disconnected; the provider keeps the notification safe to dismiss in that case.
+Use `toast.anchored()` for contextual feedback near the control that caused it. The anchor can be missing or disconnected; the provider keeps the notification safe to dismiss in that case. Pass a stable `id` to update and re-notify the existing anchored toast instead of layering duplicates.
 
 <ComponentPreview name="toast/anchored" />
 
 ```tsx
 toast.anchored({
+  id: "copy-link",
   title: "Copied",
   anchor: buttonRef.current,
   side: "top",

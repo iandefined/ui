@@ -137,7 +137,7 @@ function AutocompleteBackdrop({
   return (
     <BaseAutocomplete.Backdrop
       className={cn(
-        "fixed inset-0 z-30 bg-black/50 data-ending-style:opacity-0 data-starting-style:opacity-0",
+        "fixed inset-0 z-30 bg-black/50 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none",
         className
       )}
       data-slot="autocomplete-backdrop"

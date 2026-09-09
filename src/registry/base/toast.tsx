@@ -14,11 +14,10 @@ import {
   TriangleAlert,
   X,
 } from "lucide-react";
+import { useAnimate, useReducedMotion } from "motion/react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-
-import "@/styles/toast.css";
 
 const toastManager = ToastPrimitive.createToastManager();
 const anchoredToastManager = ToastPrimitive.createToastManager();
@@ -59,7 +58,8 @@ export interface ToastOptions<TData extends object = object> {
   type?: "default" | "loading" | "success" | "error" | "warning" | "info";
   duration?: number;
   priority?: "low" | "high";
-  action?: ToastAction;
+  /** Pass `null` to `toast.update()` to remove an existing action. */
+  action?: ToastAction | null;
   data?: TData;
   onClose?: () => void;
   onRemove?: () => void;
@@ -119,7 +119,7 @@ interface ToastDataPayload {
 
 type ToastData = BaseToastObject<ToastDataPayload>;
 
-function resolveAction(action: ToastAction | undefined) {
+function resolveAction(action: ToastAction | null | undefined) {
   if (!action) return undefined;
   const { label, nativeButton, render, ...buttonProps } = action;
 
@@ -137,23 +137,12 @@ function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
   return ["right", vertical];
 }
 
-function upsertReplayClassName(toast: {
-  updateKey?: number;
-}): string | undefined {
-  if (!toast.updateKey) return undefined;
-  return toast.updateKey % 2 === 0
-    ? "animate-[pulse-even_0.28s_ease] motion-reduce:animate-none"
-    : "animate-[pulse-odd_0.28s_ease] motion-reduce:animate-none";
-}
-
 const TOAST_SURFACE_CLASSES =
   "border border-border/70 shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:border-border dark:shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]";
 
 const TOAST_ROOT_CLASSES = [
-  "text-popover-foreground data-expanded:bg-(--popup-surface) absolute z-[calc(50-var(--toast-index))] h-(--toast-calc-height) w-full rounded-lg select-none [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s,background-color_.5s] motion-reduce:[transition:opacity_.2s,height_.15s] motion-reduce:transform-none",
+  "group/toast absolute z-[calc(50-var(--toast-index))] h-(--toast-calc-height) w-full select-none [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s] motion-reduce:[transition:opacity_.2s,height_.15s] motion-reduce:transform-none",
   "[--popup-surface:var(--card)]",
-  TOAST_SURFACE_CLASSES,
-  "bg-[color-mix(in_srgb,var(--popup-surface),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))]",
   "data-[position*=top]:top-0 data-[position*=top]:right-0 data-[position*=top]:left-0 data-[position*=top]:origin-[50%_calc(50%-50%*min(var(--toast-index,0),1))]",
   "data-[position*=bottom]:right-0 data-[position*=bottom]:bottom-0 data-[position*=bottom]:left-0 data-[position*=bottom]:origin-[50%_calc(50%+50%*min(var(--toast-index,0),1))]",
   "after:absolute after:left-0 after:h-[calc(var(--toast-gap)+1px)] after:w-full",
@@ -178,6 +167,12 @@ const TOAST_ROOT_CLASSES = [
   "data-expanded:data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+100%+var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
   "data-expanded:data-ending-style:data-[swipe-direction=up]:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-100%-var(--toast-inset)))]",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]",
+].join(" ");
+
+const TOAST_MICROINTERACTION_CLASSES = [
+  "h-full w-full rounded-lg text-popover-foreground [transition:background-color_.5s] motion-reduce:transition-none",
+  TOAST_SURFACE_CLASSES,
+  "bg-[color-mix(in_srgb,var(--popup-surface),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))] group-data-expanded/toast:bg-(--popup-surface)",
 ].join(" ");
 
 function resolveAnchor(
@@ -417,6 +412,44 @@ function ToastIcon({ type }: { type: ToastType }) {
   );
 }
 
+function useToastMicrointeraction(toast: ToastData) {
+  const type = (toast.type || "default") as ToastType;
+  const updateKey = toast.updateKey ?? 0;
+  const previousToastRef = React.useRef({ type, updateKey });
+  const [microinteractionRef, animate] = useAnimate<HTMLDivElement>();
+  const prefersReducedMotion = useReducedMotion();
+
+  React.useEffect(() => {
+    const previousToast = previousToastRef.current;
+    const becameError = type === "error" && previousToast.type !== "error";
+    const wasUpserted = updateKey > previousToast.updateKey;
+
+    previousToastRef.current = { type, updateKey };
+
+    if (
+      prefersReducedMotion ||
+      !microinteractionRef.current ||
+      (!becameError && !wasUpserted)
+    ) {
+      return;
+    }
+
+    void animate(
+      microinteractionRef.current,
+      becameError
+        ? { x: [0, -4, 4, -2, 2, 0], y: 0, scale: 1 }
+        : { x: 0, y: [0, -3.5, 1, 0], scale: [1, 1.045, 0.985, 1] },
+      {
+        duration: becameError ? 0.28 : 0.32,
+        times: becameError ? undefined : [0, 0.42, 0.72, 1],
+        ease: [0.22, 1, 0.36, 1],
+      }
+    );
+  }, [animate, microinteractionRef, prefersReducedMotion, type, updateKey]);
+
+  return microinteractionRef;
+}
+
 function StackedToastItem({
   toast: toastItem,
   position,
@@ -427,6 +460,7 @@ function StackedToastItem({
   swipeDirection: SwipeDirection[];
 }) {
   const type = (toastItem.type || "default") as ToastType;
+  const microinteractionRef = useToastMicrointeraction(toastItem);
   const data = toastItem.data;
   const hasCustomJSX = Boolean(data && "customJSX" in data);
   const showCloseButton = data?.showCloseButton !== false;
@@ -437,55 +471,61 @@ function StackedToastItem({
       swipeDirection={swipeDirection}
       data-slot="toast"
       data-position={position}
-      className={cn(TOAST_ROOT_CLASSES, upsertReplayClassName(toastItem))}
+      className={TOAST_ROOT_CLASSES}
     >
-      <ToastPrimitive.Content
-        data-slot="toast-content"
-        className={cn(
-          "flex items-start gap-3 overflow-hidden px-3.5 py-3 text-sm",
-          "transition-opacity duration-250 motion-reduce:transition-none",
-          "data-behind:pointer-events-none data-behind:opacity-0",
-          "data-expanded:pointer-events-auto data-expanded:opacity-100"
-        )}
+      <div
+        ref={microinteractionRef}
+        data-slot="toast-microinteraction"
+        className={TOAST_MICROINTERACTION_CLASSES}
       >
-        {hasCustomJSX ? (
-          <div className="w-full">{data?.customJSX}</div>
-        ) : (
-          <>
-            <ToastIcon type={type} />
-            <div className="flex min-w-0 flex-1 flex-col items-start gap-0.5">
-              <div className="flex w-full min-w-0 items-start gap-2">
-                <ToastPrimitive.Title
-                  data-slot="toast-title"
-                  className="min-w-0 flex-1 text-sm leading-5 font-medium"
+        <ToastPrimitive.Content
+          data-slot="toast-content"
+          className={cn(
+            "flex items-start gap-3 overflow-hidden px-3.5 py-3 text-sm",
+            "transition-opacity duration-250 motion-reduce:transition-none",
+            "data-behind:pointer-events-none data-behind:opacity-0",
+            "data-expanded:pointer-events-auto data-expanded:opacity-100"
+          )}
+        >
+          {hasCustomJSX ? (
+            <div className="w-full">{data?.customJSX}</div>
+          ) : (
+            <>
+              <ToastIcon type={type} />
+              <div className="flex min-w-0 flex-1 flex-col items-start gap-0.5">
+                <div className="flex w-full min-w-0 items-start gap-2">
+                  <ToastPrimitive.Title
+                    data-slot="toast-title"
+                    className="min-w-0 flex-1 text-sm leading-5 font-medium"
+                  />
+                  {showCloseButton ? (
+                    <ToastPrimitive.Close
+                      data-slot="toast-close"
+                      className="hitbox-4 -mt-1 -mr-1 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] touch-manipulation"
+                      aria-label="Close notification"
+                    >
+                      <X aria-hidden="true" className="size-4" />
+                      <span className="sr-only">Close notification</span>
+                    </ToastPrimitive.Close>
+                  ) : null}
+                </div>
+                <ToastPrimitive.Description
+                  data-slot="toast-description"
+                  className="w-full text-muted-foreground text-sm leading-5"
                 />
-                {showCloseButton ? (
-                  <ToastPrimitive.Close
-                    data-slot="toast-close"
-                    className="hitbox-4 -mt-1 -mr-1 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] touch-manipulation"
-                    aria-label="Close notification"
-                  >
-                    <X aria-hidden="true" className="size-4" />
-                    <span className="sr-only">Close notification</span>
-                  </ToastPrimitive.Close>
+                {toastItem.actionProps ? (
+                  <ToastPrimitive.Action
+                    data-slot="toast-action"
+                    render={data?.actionRender}
+                    nativeButton={data?.actionNativeButton}
+                    className="hitbox-4 mt-1.5 cursor-pointer touch-manipulation"
+                  />
                 ) : null}
               </div>
-              <ToastPrimitive.Description
-                data-slot="toast-description"
-                className="w-full text-muted-foreground text-sm leading-5"
-              />
-              {toastItem.actionProps ? (
-                <ToastPrimitive.Action
-                  data-slot="toast-action"
-                  render={data?.actionRender}
-                  nativeButton={data?.actionNativeButton}
-                  className="hitbox-4 mt-1.5 cursor-pointer touch-manipulation"
-                />
-              ) : null}
-            </div>
-          </>
-        )}
-      </ToastPrimitive.Content>
+            </>
+          )}
+        </ToastPrimitive.Content>
+      </div>
     </ToastPrimitive.Root>
   );
 }
@@ -530,6 +570,7 @@ function ToastArrowSvg() {
 }
 
 function AnchoredToastItem({ toast: toastItem }: { toast: ToastData }) {
+  const microinteractionRef = useToastMicrointeraction(toastItem);
   const data = toastItem.data;
   const showArrow = data?.arrow === true;
   const showCloseButton = data?.showCloseButton !== false;
@@ -544,53 +585,59 @@ function AnchoredToastItem({ toast: toastItem }: { toast: ToastData }) {
         toast={toastItem}
         data-slot="toast"
         className={cn(
-          "relative flex w-max max-w-[min(24rem,var(--available-width))] origin-(--transform-origin) flex-col rounded-lg border border-border bg-popover px-4 py-4 text-popover-foreground shadow-md",
+          "relative w-max max-w-[min(24rem,var(--available-width))] origin-(--transform-origin)",
           "transition-[transform,opacity] duration-200 motion-reduce:transition-none motion-reduce:transform-none",
           "data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight]"
         )}
         swipeDirection={[]}
       >
-        {showArrow ? (
-          <ToastPrimitive.Arrow
-            data-slot="toast-arrow"
-            className="data-[side=bottom]:top-[-9px] data-[side=left]:right-[-14px] data-[side=left]:rotate-90 data-[side=right]:left-[-14px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-9px] data-[side=top]:rotate-180"
-          >
-            <ToastArrowSvg />
-          </ToastPrimitive.Arrow>
-        ) : null}
-        <ToastPrimitive.Content
-          data-slot="toast-content"
-          className={cn(showCloseButton && "pe-8")}
+        <div
+          ref={microinteractionRef}
+          data-slot="toast-microinteraction"
+          className="relative flex w-full flex-col rounded-lg border border-border bg-popover px-4 py-4 text-popover-foreground shadow-md"
         >
-          <ToastPrimitive.Title
-            data-slot="toast-title"
-            className="text-base text-popover-foreground font-medium"
-          />
-          <ToastPrimitive.Description
-            data-slot="toast-description"
-            className="text-sm text-popover-foreground/70 max-w-[35ch] [&:not(:first-child)]:mt-1"
-          />
-          {toastItem.actionProps ? (
-            <ToastPrimitive.Action
-              data-slot="toast-action"
-              render={data?.actionRender}
-              nativeButton={data?.actionNativeButton}
-              className="hitbox-4 mt-1.5 w-fit cursor-pointer touch-manipulation"
-            />
+          {showArrow ? (
+            <ToastPrimitive.Arrow
+              data-slot="toast-arrow"
+              className="data-[side=bottom]:top-[-9px] data-[side=left]:right-[-14px] data-[side=left]:rotate-90 data-[side=right]:left-[-14px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-9px] data-[side=top]:rotate-180"
+            >
+              <ToastArrowSvg />
+            </ToastPrimitive.Arrow>
           ) : null}
-        </ToastPrimitive.Content>
-        {showCloseButton ? (
-          <ToastPrimitive.Close
-            data-slot="toast-close"
-            aria-label="Close notification"
-            className="absolute end-2 top-2 text-muted-foreground"
-            render={<Button size="icon-sm" variant="ghost" />}
+          <ToastPrimitive.Content
+            data-slot="toast-content"
+            className={cn(showCloseButton && "pe-8")}
           >
-            <X aria-hidden="true" className="size-4" />
-            <span className="sr-only">Close notification</span>
-          </ToastPrimitive.Close>
-        ) : null}
+            <ToastPrimitive.Title
+              data-slot="toast-title"
+              className="text-base text-popover-foreground font-medium"
+            />
+            <ToastPrimitive.Description
+              data-slot="toast-description"
+              className="text-sm text-popover-foreground/70 max-w-[35ch] [&:not(:first-child)]:mt-1"
+            />
+            {toastItem.actionProps ? (
+              <ToastPrimitive.Action
+                data-slot="toast-action"
+                render={data?.actionRender}
+                nativeButton={data?.actionNativeButton}
+                className="hitbox-4 mt-1.5 w-fit cursor-pointer touch-manipulation"
+              />
+            ) : null}
+          </ToastPrimitive.Content>
+          {showCloseButton ? (
+            <ToastPrimitive.Close
+              data-slot="toast-close"
+              aria-label="Close notification"
+              className="absolute end-2 top-2 text-muted-foreground"
+              render={<Button size="icon-sm" variant="ghost" />}
+            >
+              <X aria-hidden="true" className="size-4" />
+              <span className="sr-only">Close notification</span>
+            </ToastPrimitive.Close>
+          ) : null}
+        </div>
       </ToastPrimitive.Root>
     </ToastPrimitive.Positioner>
   );
