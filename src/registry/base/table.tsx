@@ -14,11 +14,60 @@ export interface TableProps extends React.ComponentProps<"table"> {
   hoverable?: boolean;
   rowDividers?: boolean;
   resizable?: boolean;
+  roundedInset?: boolean;
   hideScrollbar?: boolean;
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
   fadeColor?: string;
   viewportClassName?: string;
 }
+
+type TableInsetStyle = React.CSSProperties & Record<`--${string}`, string>;
+
+const tableInsetMaskImage = [
+  "linear-gradient(#000 0 0)",
+  "linear-gradient(#000 0 0)",
+  "linear-gradient(#000 0 0)",
+  "radial-gradient(circle var(--table-inset-radius) at 100% 100%, #000 calc(100% - 0.5px), transparent 100%)",
+  "radial-gradient(circle var(--table-inset-radius) at 0 100%, #000 calc(100% - 0.5px), transparent 100%)",
+  "radial-gradient(circle var(--table-inset-radius) at 100% 0, #000 calc(100% - 0.5px), transparent 100%)",
+  "radial-gradient(circle var(--table-inset-radius) at 0 0, #000 calc(100% - 0.5px), transparent 100%)",
+].join(", ");
+
+const tableInsetMaskPosition = [
+  "0 0",
+  "var(--table-inset-radius) var(--table-header-height)",
+  "0 calc(var(--table-header-height) + var(--table-inset-radius))",
+  "0 var(--table-header-height)",
+  "100% var(--table-header-height)",
+  "0 100%",
+  "100% 100%",
+].join(", ");
+
+const tableInsetMaskSize = [
+  "100% var(--table-header-height)",
+  "calc(100% - var(--table-inset-radius) - var(--table-inset-radius)) calc(100% - var(--table-header-height))",
+  "100% calc(100% - var(--table-header-height) - var(--table-inset-radius) - var(--table-inset-radius))",
+  "var(--table-inset-radius) var(--table-inset-radius)",
+  "var(--table-inset-radius) var(--table-inset-radius)",
+  "var(--table-inset-radius) var(--table-inset-radius)",
+  "var(--table-inset-radius) var(--table-inset-radius)",
+].join(", ");
+
+const tableInsetStyle: TableInsetStyle = {
+  "--table-inset-radius": "var(--radius-lg)",
+  maskImage: tableInsetMaskImage,
+  maskPosition: tableInsetMaskPosition,
+  maskRepeat: "no-repeat",
+  maskSize: tableInsetMaskSize,
+  WebkitMaskImage: tableInsetMaskImage,
+  WebkitMaskPosition: tableInsetMaskPosition,
+  WebkitMaskRepeat: "no-repeat",
+  WebkitMaskSize: tableInsetMaskSize,
+};
+
+const tableContainerStyle: TableInsetStyle = {
+  "--table-header-height": "0px",
+};
 
 interface TableContextValue {
   resizable?: boolean;
@@ -36,6 +85,7 @@ function Table({
   hoverable = true,
   rowDividers = true,
   resizable = false,
+  roundedInset = true,
   hideScrollbar = false,
   scrollShadow,
   fadeColor,
@@ -43,46 +93,101 @@ function Table({
   children,
   ...props
 }: TableProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const isStriped = Boolean(striped || stripedRows);
   const resolvedScrollShadow = scrollShadow ?? "none";
+
+  React.useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container || !roundedInset) return;
+
+    const table = container.querySelector<HTMLTableElement>(
+      'table[data-slot="table"]'
+    );
+    const header = table?.tHead;
+    if (!header) {
+      container.style.setProperty("--table-header-height", "0px");
+      return;
+    }
+
+    const setHeaderHeight = (height: number) => {
+      container.style.setProperty("--table-header-height", `${height}px`);
+    };
+
+    setHeaderHeight(header.getBoundingClientRect().height);
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      setHeaderHeight(
+        entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height
+      );
+    });
+    observer.observe(header);
+
+    return () => observer.disconnect();
+  });
 
   return (
     <TableContext.Provider value={{ resizable }}>
       <div
+        ref={containerRef}
         data-slot="table-container"
         data-bordered={bordered ? "" : undefined}
         data-striped={isStriped ? "" : undefined}
         data-hoverable={hoverable ? "" : undefined}
         data-row-dividers={rowDividers ? "" : undefined}
         data-resizable={resizable ? "" : undefined}
+        data-rounded-inset={roundedInset ? "" : undefined}
+        style={tableContainerStyle}
         className={cn(
           "group/table relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-muted dark:bg-card p-1 pt-0 md:max-w-2xl",
           className
         )}
       >
-        <ScrollArea
-          hideScrollbar={hideScrollbar}
-          orientation="both"
-          scrollShadow={resolvedScrollShadow}
-          fadeColor={fadeColor}
-          className="min-h-0 min-w-0 flex-1 rounded-lg overflow-hidden"
-          viewportClassName={cn(
-            "!overscroll-none [--scroll-area-fade-size:8px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
-            viewportClassName
+        <div
+          data-slot="table-inset"
+          className={cn(
+            "relative min-h-0 min-w-0 flex flex-1 flex-col overflow-hidden",
+            roundedInset && "rounded-lg"
           )}
         >
-          <table
-            data-slot="table"
-            className={cn(
-              "w-full caption-bottom text-sm border-separate border-spacing-0",
-              resizable && "table-fixed",
-              bordered && "border-separate border-spacing-0"
-            )}
-            {...props}
+          <div
+            data-slot="table-inset-clip"
+            className="min-h-0 min-w-0 flex flex-1 flex-col"
+            style={roundedInset ? tableInsetStyle : undefined}
           >
-            {children}
-          </table>
-        </ScrollArea>
+            <ScrollArea
+              hideScrollbar={hideScrollbar}
+              orientation="both"
+              scrollShadow={resolvedScrollShadow}
+              fadeColor={fadeColor}
+              className="min-h-0 min-w-0 flex-1"
+              viewportClassName={cn(
+                "!overscroll-none [--scroll-area-fade-size:8px] outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
+                viewportClassName
+              )}
+            >
+              <table
+                data-slot="table"
+                className={cn(
+                  "w-full caption-bottom text-sm border-separate border-spacing-0",
+                  resizable && "table-fixed",
+                  bordered && "border-separate border-spacing-0"
+                )}
+                {...props}
+              >
+                {children}
+              </table>
+            </ScrollArea>
+          </div>
+          {roundedInset ? (
+            <div
+              aria-hidden="true"
+              data-slot="table-inset-border"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 rounded-[inherit] border border-border/70 dark:border-border [top:var(--table-header-height)]"
+            />
+          ) : null}
+        </div>
       </div>
     </TableContext.Provider>
   );
@@ -122,9 +227,6 @@ function TableBody({ className, render, ...props }: TableBodyProps) {
       "[&_tr:has(+_tr:last-child[hidden])_td]:border-b",
       "[&_tr_td:first-child]:border-l",
       "[&_tr_td:last-child]:border-r",
-      "[&_tr:first-child_td:first-child]:rounded-tl-lg [&_tr:first-child_td:last-child]:rounded-tr-lg",
-      "[&_tr:last-child_td:first-child]:rounded-bl-lg [&_tr:last-child_td:last-child]:rounded-br-lg",
-      "[&_tr:has(+_tr:last-child[hidden])_td:first-child]:rounded-bl-lg [&_tr:has(+_tr:last-child[hidden])_td:last-child]:rounded-br-lg",
       "group-data-[row-dividers]/table:[&_tr:not(:last-child)_td]:border-b group-data-[row-dividers]/table:[&_tr_td]:border-border/60",
       "group-data-bordered/table:[&_tr_td]:border-b group-data-bordered/table:[&_tr_td]:border-r group-data-bordered/table:[&_tr_td]:border-border/70 dark:group-data-bordered/table:[&_tr_td]:border-border",
       "group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-muted/40 dark:group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-card/30",
