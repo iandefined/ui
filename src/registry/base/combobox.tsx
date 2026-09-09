@@ -13,7 +13,6 @@ import {
   useState,
   type ComponentProps,
   type RefObject,
-  type SVGProps,
 } from "react";
 
 import { Input } from "@/components/ui/input";

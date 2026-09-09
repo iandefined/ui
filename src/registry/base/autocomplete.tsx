@@ -7,7 +7,6 @@ import {
   useContext,
   type ComponentProps,
   type Ref,
-  type SVGProps,
 } from "react";
 
 import { Input } from "@/components/ui/input";

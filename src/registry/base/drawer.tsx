@@ -711,14 +711,15 @@ function DrawerPopup({
     () => ({ position, variant }),
     [position, variant]
   );
-  const lastVisibleSnapPointRef = React.useRef<DrawerSnapPoint | null>(
-    currentSnapPoint ?? snapPoints?.[0] ?? null
-  );
-  if (currentSnapPoint != null) {
-    lastVisibleSnapPointRef.current = currentSnapPoint;
+  const [lastVisibleSnapPoint, setLastVisibleSnapPoint] =
+    React.useState<DrawerSnapPoint | null>(
+      currentSnapPoint ?? snapPoints?.[0] ?? null
+    );
+  if (currentSnapPoint != null && currentSnapPoint !== lastVisibleSnapPoint) {
+    setLastVisibleSnapPoint(currentSnapPoint);
   }
   const floatingSnapOffset = usesFloatingSnapPoints
-    ? getFloatingDrawerSnapOffset(lastVisibleSnapPointRef.current)
+    ? getFloatingDrawerSnapOffset(currentSnapPoint ?? lastVisibleSnapPoint)
     : "0px";
   const popupChildren = (
     <>

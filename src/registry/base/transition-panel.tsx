@@ -58,13 +58,11 @@ function supportsDiscreteDisplayExit() {
 }
 
 function useCssExitSupported() {
-  const [supported, setSupported] = React.useState(true);
-
-  React.useEffect(() => {
-    setSupported(supportsDiscreteDisplayExit());
-  }, []);
-
-  return supported;
+  return React.useSyncExternalStore(
+    () => () => {},
+    supportsDiscreteDisplayExit,
+    () => true
+  );
 }
 
 type HeightAnimationState = {
@@ -375,11 +373,14 @@ function TransitionPanelView({
   }, [initialFocus, registerView, viewKey]);
 
   const [hidden, setHidden] = React.useState(!isActive);
+  if (isActive && hidden) {
+    setHidden(false);
+  }
+
   React.useEffect(() => {
     if (cssExit) return;
 
     if (isActive) {
-      setHidden(false);
       return;
     }
 
