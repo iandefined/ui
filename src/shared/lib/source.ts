@@ -1,5 +1,5 @@
 import type { InferPageType } from "fumadocs-core/source";
-import { loader, source as createSource } from "fumadocs-core/source";
+import { loader } from "fumadocs-core/source";
 
 import { ROUTES } from "@/shared/constants/routes";
 import { docsContentRoute, docsImageRoute } from "@/shared/lib/docs";
@@ -216,10 +216,7 @@ const getSourcePages = (): SourcePageEntry[] =>
 
 export const source = loader({
   baseUrl: ROUTES.DOCS,
-  source: createSource({
-    metas: getSourceMetas(),
-    pages: getSourcePages(),
-  }),
+  source: { files: [...getSourceMetas(), ...getSourcePages()] },
 });
 
 export const getPageImage = (page: InferPageType<typeof source>) => {
