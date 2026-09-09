@@ -44,7 +44,7 @@ function Table({
   ...props
 }: TableProps) {
   const isStriped = Boolean(striped || stripedRows);
-  const resolvedScrollShadow = scrollShadow ?? "horizontal";
+  const resolvedScrollShadow = scrollShadow ?? "none";
 
   return (
     <TableContext.Provider value={{ resizable }}>
