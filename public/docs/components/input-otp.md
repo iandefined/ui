@@ -199,7 +199,7 @@ const SLOT_KEYS = Array.from(
   (_, index) => `slot-${index}`
 );
 
-export function InputOTPInvalidDemo() {
+export default function InputOTPInvalidDemo() {
   const inputId = useId();
   const errorId = useId();
   const [showInvalid, setShowInvalid] = useState(false);
