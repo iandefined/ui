@@ -147,7 +147,7 @@ const cssTransitionPresets = {
 type CSSAnimationPresets = keyof typeof cssAnimationPresets;
 type CSSTransitionPresets = keyof typeof cssTransitionPresets;
 
-type Backdrop = "opaque" | "blur" | "transparent";
+type Backdrop = "dim" | "blur" | "transparent";
 
 interface SelectContextType {
   backdrop?: Backdrop;
@@ -166,7 +166,7 @@ function useSelect() {
 interface SelectRootProps extends React.ComponentProps<
   typeof SelectPrimitive.Root
 > {
-  backdrop?: "opaque" | "blur" | "transparent";
+  backdrop?: "dim" | "blur" | "transparent";
 }
 
 function Select({ backdrop = "transparent", ...props }: SelectRootProps) {
@@ -284,7 +284,7 @@ function SelectBackdrop({ className, ...props }: SelectBackdropProps) {
     <SelectPrimitive.Backdrop
       data-slot="select-backdrop"
       className={cn(
-        backdrop === "opaque" &&
+        backdrop === "dim" &&
           "fixed inset-0 z-50 bg-black opacity-40 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none dark:opacity-60",
         backdrop === "blur" &&
           "fixed inset-0 z-50 backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none",

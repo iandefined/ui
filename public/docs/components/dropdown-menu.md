@@ -571,7 +571,7 @@ Use clear item labels. Give an icon-only trigger an `aria-label`, and keep destr
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `animationPreset` | `"none" \| "scale" \| "fade" \| "slideOutside" \| "slideInside" \| "motion" \| "motionBlur"` | `scale` | Sets the entry and exit animation. |
-| `backdrop` | `"opaque" \| "blur" \| "transparent"` | `transparent` | Sets the modal backdrop treatment. |
+| `backdrop` | `"dim" \| "blur" \| "transparent"` | `transparent` | Sets the modal backdrop treatment. |
 
 ### DropdownMenuItem Props
 

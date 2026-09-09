@@ -94,7 +94,7 @@ const transitionPresets: Record<PopoverTransitionPreset, string> = {
   none: "none",
 };
 
-type PopoverBackdropStyle = "opaque" | "blur" | "transparent";
+type PopoverBackdropStyle = "dim" | "blur" | "transparent";
 
 interface PopoverContextType {
   backdrop?: PopoverBackdropStyle;
@@ -112,7 +112,7 @@ function usePopover() {
 }
 
 type PopoverProps<Payload = unknown> = PopoverPrimitive.Root.Props<Payload> & {
-  backdrop?: "opaque" | "blur" | "transparent";
+  backdrop?: "dim" | "blur" | "transparent";
   /** Prevents closing from outside presses, Escape, and focus loss. */
   dismissible?: boolean;
 };
@@ -181,7 +181,7 @@ function PopoverBackdrop({
     <PopoverPrimitive.Backdrop
       data-slot="popover-backdrop"
       className={cn(
-        backdrop === "opaque" &&
+        backdrop === "dim" &&
           "fixed inset-0 z-50 bg-black opacity-40 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none dark:opacity-60",
         backdrop === "blur" &&
           "fixed inset-0 z-50 backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none",

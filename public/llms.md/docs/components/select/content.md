@@ -1054,7 +1054,7 @@ export default function SelectAnimationDemo() {
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `backdrop` | `"transparent" \| "opaque" \| "blur"` | `transparent` | Sets the backdrop rendered while the popup is open. |
+| `backdrop` | `"transparent" \| "dim" \| "blur"` | `transparent` | Sets the backdrop rendered while the popup is open. |
 
 #### SelectPopup
 

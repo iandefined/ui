@@ -24,7 +24,7 @@ type DropdownMenuTransitionPreset =
   | "swiftOut"
   | "snappyOut";
 
-type DropdownMenuBackdrop = "opaque" | "blur" | "transparent";
+type DropdownMenuBackdrop = "dim" | "blur" | "transparent";
 
 const animationPresets: Record<DropdownMenuAnimationPreset, string> = {
   none: "transition-none",
@@ -83,7 +83,7 @@ function DropdownMenu({
   backdrop = "transparent",
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
-  backdrop?: "opaque" | "blur" | "transparent";
+  backdrop?: "dim" | "blur" | "transparent";
 }) {
   const contextValue = useMemo(() => ({ backdrop }), [backdrop]);
 
@@ -124,7 +124,7 @@ function DropdownMenuBackdrop({
   return (
     <DropdownMenuPrimitive.Backdrop
       className={cn(
-        backdrop === "opaque" &&
+        backdrop === "dim" &&
           "fixed inset-0 z-50 bg-black opacity-40 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none dark:opacity-60",
         backdrop === "blur" &&
           "fixed inset-0 z-50 backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none",

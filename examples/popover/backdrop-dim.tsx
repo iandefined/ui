@@ -8,14 +8,14 @@ import {
   PopoverTrigger,
 } from "@/registry/base/popover";
 
-export default function PopoverBackdropOpaqueDemo() {
+export default function PopoverBackdropDimDemo() {
   return (
-    <Popover backdrop="opaque" modal>
+    <Popover backdrop="dim" modal>
       <PopoverTrigger render={<Button variant="outline" />}>
-        Opaque backdrop
+        Dim backdrop
       </PopoverTrigger>
       <PopoverPopup className="w-72">
-        <PopoverTitle>Opaque backdrop</PopoverTitle>
+        <PopoverTitle>Dim backdrop</PopoverTitle>
         <PopoverDescription className="mt-2">
           The page is dimmed while the popover is open.
         </PopoverDescription>
