@@ -41,6 +41,14 @@ Use `lightSource` with `variant="solid"` to add a one-pixel surface edge and its
 
 Set a custom solid line color with `className`. Directional separators use the theme's `--border` token for the edge and the current `--background` token for the opposing shadow, so the contrast follows the card surface in both themes.
 
+### Content
+
+Pass children to `Separator` to place content between two divider hairlines. Use
+`Separator.Root` and `Separator.Content` when you want the Base UI-style compound
+syntax and a dedicated styling slot.
+
+<ComponentPreview name="separator/content" />
+
 ### Dashed
 
 Use `variant="dashed"` for a dashed divider. Dashed separators do not apply the directional light-source treatment.
@@ -71,5 +79,8 @@ Use `variant="dashed"` for a dashed divider. Dashed separators do not apply the 
   >
     Adds a fixed shadow opposite the selected light direction for solid
     separators.
+  </ApiProp>
+  <ApiProp name="children" fullType="ReactNode">
+    Renders centered content between two separator hairlines.
   </ApiProp>
 </ApiPropsList>

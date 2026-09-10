@@ -17226,6 +17226,46 @@ export default function SeparatorLightSourceDemo() {
 
 Set a custom solid line color with `className`. Directional separators use the theme's `--border` token for the edge and the current `--background` token for the opposing shadow, so the contrast follows the card surface in both themes.
 
+### Content
+
+Pass children to `Separator` to place content between two divider hairlines. Use
+`Separator.Root` and `Separator.Content` when you want the Base UI-style compound
+syntax and a dedicated styling slot.
+
+```tsx
+import { Button } from "@/registry/base/button";
+import { Separator } from "@/registry/base/separator";
+
+export default function SeparatorContentDemo() {
+  return (
+    <div className="grid w-full max-w-lg gap-8">
+      <Separator.Root>
+        <Separator.Content className="text-xs text-border">
+          Continue with
+        </Separator.Content>
+      </Separator.Root>
+
+      <Separator.Root>
+        <Separator.Content className="rounded-lg border border-border bg-background px-3 py-1 text-sm">
+          Label
+        </Separator.Content>
+      </Separator.Root>
+
+      <Separator.Root>
+        <Separator.Content className="flex overflow-hidden rounded-lg border border-border bg-background p-0 text-sm">
+          <span className="border-e border-border px-3 py-2">Label</span>
+          <span className="border-e border-border px-3 py-2">Label</span>
+          <span className="border-e border-border px-3 py-2">Label</span>
+          <Button variant="outline" size="sm" className="rounded-none border-0">
+            See more
+          </Button>
+        </Separator.Content>
+      </Separator.Root>
+    </div>
+  );
+}
+```
+
 ### Dashed
 
 Use `variant="dashed"` for a dashed divider. Dashed separators do not apply the directional light-source treatment.
@@ -17252,6 +17292,7 @@ export default function SeparatorDashedDemo() {
 | :--- | :--- | :--- | :--- |
 | `variant` | `"solid" \| "dashed"` | `solid` | Sets the separator treatment. Light-source styling applies only to `"solid"`. |
 | `lightSource` | `"none" \| "above" \| "below" \| "right" \| "left"` | `none` | Adds a fixed shadow opposite the selected light direction for solid separators. |
+| `children` | `ReactNode` | `-` | Renders centered content between two separator hairlines. |
 
 # Sheet
 
