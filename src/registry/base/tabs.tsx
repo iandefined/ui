@@ -89,7 +89,8 @@ function TabsList({
       data-variant={variant}
       className={cn(
         "relative z-0 flex max-w-full w-fit items-center justify-start gap-x-0.5 text-muted-foreground data-[orientation=vertical]:flex-col max-sm:data-[orientation=horizontal]:overflow-x-auto max-sm:data-[orientation=horizontal]:overflow-y-hidden",
-        variant === "segmented" && "rounded-[12px] bg-muted dark:bg-card p-1",
+        variant === "segmented" &&
+          "rounded-[12px] bg-muted p-1 shadow-[inset_0_1px_4px_rgb(0_0_0_/_0.05)] dark:bg-card dark:shadow-[inset_0_1px_4px_rgb(0_0_0_/_0.14)]",
         variant === "underline" &&
           "data-[orientation=vertical]:px-1 data-[orientation=horizontal]:py-1",
         variant === "card" && "p-1",
@@ -104,7 +105,7 @@ function TabsList({
           className={cn(
             "-translate-y-(--active-tab-bottom) absolute bottom-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] will-change-[translate,width] transform-gpu motion-reduce:transition-none motion-reduce:transform-none",
             variant === "segmented" &&
-              "h-(--active-tab-height) rounded-md bg-card dark:bg-secondary shadow-xs border border-border/10 -z-1",
+              "h-(--active-tab-height) rounded-md border border-transparent bg-background shadow-sm dark:border-border/10 dark:bg-secondary -z-1",
             variant === "underline" &&
               "data-[orientation=vertical]:-translate-x-px z-10 bg-primary data-[orientation=horizontal]:h-0.5 data-[orientation=vertical]:w-0.5 data-[orientation=horizontal]:translate-y-[1.3px]",
             variant === "card" &&
@@ -136,7 +137,7 @@ function TabsTrigger({
       data-size={size}
       data-slot="tabs-trigger"
       className={cn(
-        "flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap text-sm text-secondary-foreground/66 data-active:text-foreground hover:text-foreground px-3 font-medium break-keep outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[orientation=vertical]:w-full data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        "flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap text-foreground dark:text-secondary-foreground/66 data-active:text-foreground dark:data-active:text-foreground hover:text-foreground px-3 font-medium break-keep outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[orientation=vertical]:w-full data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
         tabsTriggerSizeClasses[size],
         variant === "segmented" && "rounded-md",
         variant === "underline" &&

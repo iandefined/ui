@@ -115,7 +115,7 @@ export const CodeBlockCommand = ({
         value={packageManager}
       >
         <div className="border-border/50 flex items-center gap-2 border-b px-3 py-1">
-          <TabsList className="rounded-none bg-transparent p-0 [&_svg]:me-2 [&_svg]:size-4 [&_svg]:text-muted-foreground">
+          <TabsList className="rounded-none bg-transparent p-0 shadow-none dark:shadow-none [&_svg]:me-2 [&_svg]:size-4 [&_svg]:text-muted-foreground">
             {getIconForPackageManager(packageManager)}
 
             {commandEntries.map(([key]) => (

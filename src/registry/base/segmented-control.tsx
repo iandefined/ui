@@ -173,7 +173,7 @@ function SegmentedControl<Value = string>({
       <SegmentedControlContext.Provider value={{ size }}>
         <RadioGroupPrimitive
           className={cn(
-            "relative z-0 flex max-w-full w-fit items-center justify-start gap-x-0.5 rounded-[12px] border border-transparent bg-muted p-1 text-muted-foreground outline-0 outline-offset-0 outline-transparent outline-solid [transition-property:border-color,outline-width,outline-offset,outline-color] duration-100 ease-out dark:bg-card",
+            "relative z-0 flex max-w-full w-fit items-center justify-start gap-x-0.5 rounded-[12px] border border-transparent bg-muted p-1 text-muted-foreground shadow-[inset_0_1px_4px_rgb(0_0_0_/_0.05)] outline-0 outline-offset-0 outline-transparent outline-solid [transition-property:border-color,outline-width,outline-offset,outline-color] duration-100 ease-out dark:bg-card dark:shadow-[inset_0_1px_4px_rgb(0_0_0_/_0.14)]",
             segmentedControlSizeClasses[size],
             "data-disabled:pointer-events-none data-disabled:opacity-50",
             "aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50",
@@ -192,7 +192,7 @@ function SegmentedControl<Value = string>({
           {children}
           <span
             aria-hidden="true"
-            className="-translate-y-(--active-tab-bottom) pointer-events-none absolute bottom-0 left-0 z-[-1] h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-border/10 bg-card opacity-0 shadow-xs transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[ready]:opacity-100 dark:bg-secondary motion-reduce:transition-none motion-reduce:transform-none"
+            className="-translate-y-(--active-tab-bottom) pointer-events-none absolute bottom-0 left-0 z-[-1] h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-transparent bg-background opacity-0 shadow-sm transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[ready]:opacity-100 dark:border-border/10 dark:bg-secondary motion-reduce:transition-none motion-reduce:transform-none"
             data-slot="segmented-control-indicator"
             ref={indicatorRef}
           />
@@ -213,7 +213,7 @@ function SegmentedControlItem<Value = string>({
   return (
     <RadioPrimitive.Root
       className={cn(
-        "relative flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap break-keep text-secondary-foreground/66 outline-none [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] hover:text-foreground data-checked:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap break-keep text-foreground dark:text-secondary-foreground/66 outline-none [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] hover:text-foreground data-checked:text-foreground dark:data-checked:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
         "data-checked:font-medium",
         segmentedControlItemSizeClasses[size],
         className

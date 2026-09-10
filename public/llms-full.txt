@@ -17240,23 +17240,18 @@ export default function SeparatorContentDemo() {
   return (
     <div className="grid w-full max-w-lg gap-8">
       <Separator.Root>
-        <Separator.Content className="text-xs text-border">
-          Continue with
+        <Separator.Content className="text-xs text-muted-foreground">
+          or continue with
         </Separator.Content>
       </Separator.Root>
 
       <Separator.Root>
-        <Separator.Content className="rounded-lg border border-border bg-background px-3 py-1 text-sm">
-          Label
-        </Separator.Content>
-      </Separator.Root>
-
-      <Separator.Root>
-        <Separator.Content className="flex overflow-hidden rounded-lg border border-border bg-background p-0 text-sm">
-          <span className="border-e border-border px-3 py-2">Label</span>
-          <span className="border-e border-border px-3 py-2">Label</span>
-          <span className="border-e border-border px-3 py-2">Label</span>
-          <Button variant="outline" size="sm" className="rounded-none border-0">
+        <Separator.Content>
+          <Button
+            variant="ghost"
+            size="xs"
+            className="-mx-2 text-muted-foreground"
+          >
             See more
           </Button>
         </Separator.Content>
