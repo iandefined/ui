@@ -29,6 +29,7 @@
 - [Pagination](https://ui.iandefined.com/docs/components/pagination.md) - Accessible pagination navigation with page links, next and previous triggers, and ellipsis disclosure.
 - [Popover](https://ui.iandefined.com/docs/components/popover.md) - An accessible popup anchored to a button.
 - [Scroll Area](https://ui.iandefined.com/docs/components/scroll-area.md) - A scrollable region with custom scrollbars and optional background fades.
+- [Segmented Control](https://ui.iandefined.com/docs/components/segmented-control.md) - A radio-group input for choosing one value from a compact set of options.
 - [Separator](https://ui.iandefined.com/docs/components/separator.md) - Visually or semantically separates content.
 - [Sheet](https://ui.iandefined.com/docs/components/sheet.md) - A sliding panel from a screen edge for navigation, forms, or supplementary content.
 - [Skeleton](https://ui.iandefined.com/docs/components/skeleton.md) - A shimmer placeholder for loading content.

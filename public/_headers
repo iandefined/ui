@@ -106,6 +106,9 @@
 /docs/components/scroll-area.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/components/segmented-control.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/components/select.md
   Content-Type: text/markdown; charset=utf-8
 

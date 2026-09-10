@@ -912,6 +912,20 @@
       ]
     },
     {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented Control",
+      "description": "A compact radio-group input for choosing one value from a small set of options.",
+      "dependencies": ["@base-ui/react", "cn"],
+      "files": [
+        {
+          "path": "src/registry/base/segmented-control.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/segmented-control.tsx"
+        }
+      ]
+    },
+    {
       "name": "transition-panel",
       "type": "registry:ui",
       "title": "Transition Panel",

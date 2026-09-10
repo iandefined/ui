@@ -1,0 +1,109 @@
+---
+title: Segmented Control
+description: A radio-group input for choosing one value from a compact set of options.
+---
+
+Use `SegmentedControl` when a form needs one value from a small set, such as a shirt size. It keeps radio-group semantics and keyboard behavior while using the same animated segmented surface as `Tabs`.
+
+## Preview
+
+<ComponentPreview name="segmented-control/default" />
+
+## Installation
+
+<ComponentInstall name="segmented-control" />
+
+## Usage
+
+```tsx
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+} from "@/components/ui/segmented-control";
+
+<SegmentedControl aria-label="Shirt size" defaultValue="m" name="shirtSize">
+  <SegmentedControlItem value="s">S</SegmentedControlItem>
+  <SegmentedControlItem value="m">M</SegmentedControlItem>
+  <SegmentedControlItem value="l">L</SegmentedControlItem>
+</SegmentedControl>;
+```
+
+## Composition
+
+Use `FieldsetLegend` for the visible group label. The root renders a radio group with native hidden radio inputs, so `name`, `required`, `value`, `defaultValue`, and `onValueChange` work with form state and native form submission.
+
+```tsx
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+} from "@/components/ui/segmented-control";
+
+<Fieldset>
+  <FieldsetLegend>Shirt size</FieldsetLegend>
+  <SegmentedControl aria-label="Shirt size" defaultValue="m">
+    <SegmentedControlItem value="s">S</SegmentedControlItem>
+    <SegmentedControlItem value="m">M</SegmentedControlItem>
+    <SegmentedControlItem value="l">L</SegmentedControlItem>
+  </SegmentedControl>
+</Fieldset>;
+```
+
+## Examples
+
+### Sizes
+
+Use `size` to align the control with neighboring form controls.
+
+<ComponentPreview name="segmented-control/sizes" />
+
+### With Field
+
+Place the group inside `Field` to connect its label and description.
+
+<ComponentPreview name="segmented-control/with-field" />
+
+### Invalid
+
+Submit without choosing a size to show the persistent destructive outline, one group-level error, and the invalid shake. Selecting a size clears the error, and another failed submission replays the shake.
+
+<ComponentPreview name="segmented-control/invalid" />
+
+### With Form
+
+Connect `SegmentedControl` to a TanStack Form field through `Field`. The selected value is submitted with the form and shown after saving.
+
+<ComponentPreview name="segmented-control/form" />
+
+## Accessibility
+
+Give the group an accessible name with `aria-label` or a surrounding `FieldsetLegend`. Use arrow keys to move between options and `Space` to select the focused option. For validation, put `aria-invalid` and `aria-describedby` on the segmented root and render one `FieldError` after the group.
+
+## API Reference
+
+`SegmentedControl` and `SegmentedControlItem` wrap the corresponding [Base UI Radio Group primitives](https://base-ui.com/react/components/radio). Supported Base UI props pass through.
+
+### SegmentedControl
+
+<ApiPropsList>
+  <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg"'
+    simpleType="string"
+    defaultValue='"default"'
+  >
+    Sets the item density for the control.
+  </ApiProp>
+  <ApiProp fullType="boolean" name="invalid">
+    Applies the invalid state to the group root. `aria-invalid` and
+    `data-invalid` can also be passed directly.
+  </ApiProp>
+</ApiPropsList>
+
+### SegmentedControlItem
+
+<ApiPropsList>
+  <ApiProp name="size" fullType='"sm" | "default" | "lg"' simpleType="string">
+    Overrides the size inherited from `SegmentedControl`.
+  </ApiProp>
+</ApiPropsList>

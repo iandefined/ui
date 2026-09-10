@@ -43,6 +43,7 @@
     "label",
     "number-field",
     "radio-group",
+    "segmented-control",
     "select",
     "slider",
     "switch",
