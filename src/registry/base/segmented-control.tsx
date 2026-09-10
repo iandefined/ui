@@ -192,7 +192,7 @@ function SegmentedControl<Value = string>({
           {children}
           <span
             aria-hidden="true"
-            className="-translate-y-(--active-tab-bottom) pointer-events-none absolute bottom-0 left-0 z-[-1] h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-transparent bg-background opacity-0 shadow-sm transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[ready]:opacity-100 dark:border-border/10 dark:bg-secondary motion-reduce:transition-none motion-reduce:transform-none"
+            className="-translate-y-(--active-tab-bottom) pointer-events-none absolute bottom-0 left-0 z-[-1] h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-transparent bg-background opacity-0 shadow-xs transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[ready]:opacity-100 dark:border-border/10 dark:bg-secondary motion-reduce:transition-none motion-reduce:transform-none"
             data-slot="segmented-control-indicator"
             ref={indicatorRef}
           />

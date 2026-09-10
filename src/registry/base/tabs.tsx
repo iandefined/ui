@@ -105,7 +105,7 @@ function TabsList({
           className={cn(
             "-translate-y-(--active-tab-bottom) absolute bottom-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] will-change-[translate,width] transform-gpu motion-reduce:transition-none motion-reduce:transform-none",
             variant === "segmented" &&
-              "h-(--active-tab-height) rounded-md border border-transparent bg-background shadow-sm dark:border-border/10 dark:bg-secondary -z-1",
+              "h-(--active-tab-height) rounded-md border border-transparent bg-background shadow-xs dark:border-border/10 dark:bg-secondary -z-1",
             variant === "underline" &&
               "data-[orientation=vertical]:-translate-x-px z-10 bg-primary data-[orientation=horizontal]:h-0.5 data-[orientation=vertical]:w-0.5 data-[orientation=horizontal]:translate-y-[1.3px]",
             variant === "card" &&

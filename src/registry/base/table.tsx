@@ -287,7 +287,7 @@ function TableBody({ className, render, ...props }: TableBodyProps) {
   const defaultProps = {
     "data-slot": "table-body",
     className: cn(
-      "[&_tr_td]:bg-card dark:[&_tr_td]:bg-background",
+      "[&_tr_td]:bg-background",
       "[&_tr_td]:border-border/70 dark:[&_tr_td]:border-border",
       "group-data-[rounded-inset=false]/table:[&_tr:first-child_td]:border-t",
       "group-data-[rounded-inset=false]/table:[&_tr:last-child_td]:border-b",
