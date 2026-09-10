@@ -23,7 +23,7 @@ import { Badge } from "@/components/ui/badge";
 
 ## Features
 
-Set `color` only with `translucent` or `dot`. Semantic variants such as `success` and `warning` own their color.
+Set `color` with `translucent` to choose a palette-driven appearance. Semantic variants such as `success` and `warning` own their color.
 
 ## Examples
 
@@ -72,7 +72,7 @@ Communicate a compact count.
 <ApiPropsList>
   <ApiProp
     name="variant"
-    fullType='"default" | "secondary" | "outline" | "destructive" | "error" | "info" | "success" | "warning" | "translucent" | "dot"'
+    fullType='"default" | "secondary" | "outline" | "destructive" | "error" | "info" | "success" | "warning" | "translucent"'
     simpleType="string"
     defaultValue='"default"'
   >
@@ -84,7 +84,7 @@ Communicate a compact count.
     simpleType="string"
     defaultValue='"gray"'
   >
-    Sets a palette color when `variant` is `"translucent"` or `"dot"`.
+    Sets a palette color when `variant` is `"translucent"`.
   </ApiProp>
   <ApiProp
     name="size"

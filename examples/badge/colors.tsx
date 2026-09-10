@@ -30,13 +30,6 @@ export default function BadgeColorsDemo() {
           </Badge>
         ))}
       </div>
-      <div className="flex flex-wrap gap-2">
-        {colors.map((color) => (
-          <Badge color={color} key={color} variant="dot">
-            {color}
-          </Badge>
-        ))}
-      </div>
     </div>
   );
 }

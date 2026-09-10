@@ -32,7 +32,7 @@ import { Badge } from "@/components/ui/badge";
 
 ## Features
 
-Set `color` only with `translucent` or `dot`. Semantic variants such as `success` and `warning` own their color.
+Set `color` with `translucent` to choose a palette-driven appearance. Semantic variants such as `success` and `warning` own their color.
 
 ## Examples
 
@@ -100,13 +100,6 @@ export default function BadgeColorsDemo() {
       <div className="flex flex-wrap gap-2">
         {colors.map((color) => (
           <Badge color={color} key={color} variant="translucent">
-            {color}
-          </Badge>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {colors.map((color) => (
-          <Badge color={color} key={color} variant="dot">
             {color}
           </Badge>
         ))}
@@ -195,6 +188,6 @@ export default function BadgeWithCountDemo() {
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent" \| "dot"` | `default` | Sets the semantic or palette-driven appearance. |
-| `color` | `BadgeColor` | `gray` | Sets a palette color when `variant` is `"translucent"` or `"dot"`. |
+| `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent"` | `default` | Sets the semantic or palette-driven appearance. |
+| `color` | `BadgeColor` | `gray` | Sets a palette color when `variant` is `"translucent"`. |
 | `size` | `"default" \| "compact"` | `default` | Sets the badge height and spacing. |

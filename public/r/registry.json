@@ -221,7 +221,7 @@
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
-      "description": "A compact label with semantic, translucent, and dot variants.",
+      "description": "A compact label with semantic and translucent variants.",
       "dependencies": ["@base-ui/react", "class-variance-authority", "cn"],
       "cssVars": {
         "light": {
