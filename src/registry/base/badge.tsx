@@ -100,10 +100,10 @@ const badgeVariants = cva(
         default: "h-6 min-w-6 text-xs",
         compact: "h-5 min-w-5 gap-1 text-[11px]",
       },
-    depth: {
-      none: "",
-      subtle:
-        "shadow-[inset_0_1px_0_var(--badge-highlight)] dark:shadow-[inset_0_1px_0_var(--badge-highlight-dark)]",
+      depth: {
+        none: "",
+        subtle:
+          "shadow-[inset_0_1px_0_var(--badge-highlight)] dark:shadow-[inset_0_1px_0_var(--badge-highlight-dark)]",
       },
     },
     compoundVariants: [
@@ -156,7 +156,7 @@ const badgeVariants = cva(
       size: "default",
       depth: "subtle",
     },
-  },
+  }
 );
 
 type BadgeStyle = React.CSSProperties & {
@@ -215,15 +215,19 @@ function Badge({
 }: BadgeProps): React.ReactElement {
   const isPaletteVariant = variant === "translucent";
   const resolvedColor = color ?? "gray";
-	const badgeStyle: BadgeStyle = {
-		"--badge-border":
-			"color-mix(in oklab, var(--badge-color, var(--foreground)) 4%, transparent)",
+  const badgeSurface =
+    resolvedColor === "gray"
+      ? "var(--muted)"
+      : `color-mix(in srgb, ${badgeColors[resolvedColor]} 15%, var(--background))`;
+  const badgeStyle: BadgeStyle = {
+    "--badge-border":
+      "color-mix(in oklab, var(--badge-color, var(--foreground)) 4%, transparent)",
     "--badge-border-dark":
       "color-mix(in oklab, var(--badge-color, var(--foreground)) 4%, transparent)",
     "--badge-highlight":
       "color-mix(in oklab, var(--background) 34%, transparent)",
     "--badge-highlight-dark":
-      "color-mix(in oklab, var(--foreground) 26%, transparent)",
+      "color-mix(in oklab, var(--foreground) 22%, transparent)",
     ...(variant === "translucent"
       ? {
           "--badge-color": badgeColors[resolvedColor],
@@ -231,10 +235,13 @@ function Badge({
             badgeColorForegrounds[resolvedColor].light,
           "--badge-color-foreground-dark":
             badgeColorForegrounds[resolvedColor].dark,
-          backgroundColor:
-            resolvedColor === "gray"
-              ? "var(--muted)"
-              : `color-mix(in srgb, ${badgeColors[resolvedColor]} 15%, var(--background))`,
+          backgroundColor: badgeSurface,
+          ...(depth === "subtle"
+            ? {
+                borderColor: "transparent",
+                background: `linear-gradient(${badgeSurface}, ${badgeSurface}) padding-box, linear-gradient(to top, color-mix(in oklab, ${badgeColors[resolvedColor]} 18%, ${badgeSurface}), color-mix(in oklab, ${badgeColors[resolvedColor]} 8%, ${badgeSurface})) border-box`,
+              }
+            : {}),
         }
       : {}),
   };

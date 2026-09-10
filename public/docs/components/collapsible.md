@@ -188,14 +188,14 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Website</span>
             </div>
-            <a
-              href="https://claude.ai"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-2 py-0.5 text-xs font-medium transition-colors hover:bg-accent"
-            >
-              <span>https://claude.ai</span>
-            </a>
+            <Badge
+              variant="secondary"
+              render={
+                <a href="https://claude.ai" target="_blank" rel="noreferrer">
+                  <span>https://claude.ai</span>
+                </a>
+              }
+            />
           </div>
 
           <div className="flex items-center justify-between gap-2">
@@ -251,20 +251,20 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Founders</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-1.5 py-0.5 dark:bg-card">
+              <Badge variant="secondary">
                 <img
                   src="https://github.com/shadcn.png"
                   alt="Founder"
                   className="size-4 rounded-full"
                 />
                 <span className="text-xs font-medium">shadcn</span>
-              </div>
-              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-accent/60 px-2 py-0.5 dark:bg-card">
+              </Badge>
+              <Badge variant="secondary">
                 <span className="text-xs font-medium">
                   <span className="sm:hidden">+5</span>
                   <span className="hidden sm:inline">+5 more</span>
                 </span>
-              </div>
+              </Badge>
             </div>
           </div>
         </div>

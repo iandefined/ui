@@ -11,7 +11,7 @@ Fuzzy matching hook for filtering and sorting items by relevance.
 
 import { useMemo, useState } from "react";
 
-import { Badge } from "@/registry/base/badge";
+import { Badge, type BadgeColor } from "@/registry/base/badge";
 import { Input } from "@/registry/base/input";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 
@@ -19,6 +19,7 @@ interface Item {
   id: string;
   name: string;
   category: string;
+  color: BadgeColor;
   description: string;
 }
 
@@ -27,36 +28,42 @@ const items: Item[] = [
     id: "1",
     name: "React",
     category: "Library",
+    color: "violet",
     description: "A JavaScript library for building user interfaces",
   },
   {
     id: "2",
     name: "TanStack Router",
     category: "Routing",
+    color: "blue",
     description: "Type-safe routing for modern React applications",
   },
   {
     id: "3",
     name: "Tailwind CSS",
     category: "Styling",
+    color: "cyan",
     description: "A utility-first CSS framework for rapid UI development",
   },
   {
     id: "4",
     name: "Base UI",
     category: "Primitives",
+    color: "emerald",
     description: "Unstyled UI components with accessible defaults",
   },
   {
     id: "5",
     name: "Vite",
     category: "Build Tool",
+    color: "amber",
     description: "Next generation frontend tooling and bundler",
   },
   {
     id: "6",
     name: "TypeScript",
     category: "Language",
+    color: "indigo",
     description: "Typed superset of JavaScript that compiles to plain JS",
   },
 ];
@@ -98,7 +105,11 @@ export default function UseFuzzyFilterDefaultDemo() {
                   {item.description}
                 </span>
               </div>
-              <Badge className="shrink-0" variant="secondary">
+              <Badge
+                className="shrink-0"
+                color={item.color}
+                variant="translucent"
+              >
                 {item.category}
               </Badge>
             </div>
