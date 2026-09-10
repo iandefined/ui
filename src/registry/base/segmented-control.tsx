@@ -39,9 +39,15 @@ const invalidShakeStyles = `
 `;
 
 const segmentedControlItemSizeClasses = {
-  sm: "px-2 py-0.5 text-xs",
-  default: "px-3 py-1 text-sm",
-  lg: "px-4 py-1.5 text-base",
+  sm: "h-[22px] px-3 text-sm",
+  default: "h-[26px] px-3 text-sm",
+  lg: "h-[30px] px-3 text-sm",
+} as const;
+
+const segmentedControlSizeClasses = {
+  sm: "h-8",
+  default: "h-9",
+  lg: "h-10",
 } as const;
 
 export interface SegmentedControlProps<
@@ -168,6 +174,7 @@ function SegmentedControl<Value = string>({
         <RadioGroupPrimitive
           className={cn(
             "relative z-0 flex max-w-full w-fit items-center justify-start gap-x-0.5 rounded-[12px] border border-transparent bg-muted p-1 text-muted-foreground outline-0 outline-offset-0 outline-transparent outline-solid [transition-property:border-color,outline-width,outline-offset,outline-color] duration-100 ease-out dark:bg-card",
+            segmentedControlSizeClasses[size],
             "data-disabled:pointer-events-none data-disabled:opacity-50",
             "aria-invalid:border-destructive aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive/50 data-invalid:border-destructive data-invalid:outline-2 data-invalid:outline-offset-2 data-invalid:outline-destructive/50",
             "focus-within:aria-invalid:border-destructive focus-within:aria-invalid:outline-destructive/50 focus-within:data-invalid:border-destructive focus-within:data-invalid:outline-destructive/50",
@@ -177,6 +184,7 @@ function SegmentedControl<Value = string>({
           aria-invalid={invalid || undefined}
           data-invalid={invalid ? "" : undefined}
           data-invalid-shake="owner"
+          data-size={size}
           data-slot="segmented-control"
           ref={rootRef}
           {...props}

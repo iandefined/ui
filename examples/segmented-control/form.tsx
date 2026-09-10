@@ -27,7 +27,7 @@ export default function SegmentedControlFormDemo() {
       <form.Field name="shirtSize">
         {(field) => (
           <Field name={field.name}>
-            <Fieldset>
+            <Fieldset className="mb-2">
               <FieldsetLegend>Shirt size</FieldsetLegend>
               <SegmentedControl
                 aria-label="Shirt size"

@@ -42,7 +42,7 @@ export default function SegmentedControlInvalidDemo() {
 
           return (
             <Field invalid={invalid} name={field.name}>
-              <Fieldset>
+              <Fieldset className="mb-2">
                 <FieldsetLegend>Shirt size</FieldsetLegend>
                 <SegmentedControl
                   aria-describedby={invalid ? errorId : undefined}

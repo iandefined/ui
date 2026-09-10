@@ -82,7 +82,7 @@ import {
 
 ### Sizes
 
-Use `size` to align the control with neighboring form controls.
+Use the same `size` values as `Input` to align the control with neighboring form controls.
 
 ```tsx
 import {
@@ -212,7 +212,7 @@ export default function SegmentedControlInvalidDemo() {
 
           return (
             <Field invalid={invalid} name={field.name}>
-              <Fieldset>
+              <Fieldset className="mb-2">
                 <FieldsetLegend>Shirt size</FieldsetLegend>
                 <SegmentedControl
                   aria-describedby={invalid ? errorId : undefined}
@@ -284,7 +284,7 @@ export default function SegmentedControlFormDemo() {
       <form.Field name="shirtSize">
         {(field) => (
           <Field name={field.name}>
-            <Fieldset>
+            <Fieldset className="mb-2">
               <FieldsetLegend>Shirt size</FieldsetLegend>
               <SegmentedControl
                 aria-label="Shirt size"

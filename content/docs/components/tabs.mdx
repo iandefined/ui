@@ -65,6 +65,12 @@ import {
 
 <ComponentPreview name="tabs/card" />
 
+### Sizes
+
+Every tab variant supports `sm`, `default`, and `lg` to match the sizing of `Input` controls in the same form.
+
+<ComponentPreview name="tabs/sizes" />
+
 ### Orientation
 
 You can change the orientation of the tabs to horizontal or vertical using the `orientation` prop.
@@ -99,6 +105,14 @@ Wrap panels with `TabsPanelsWrapper` to smoothly animate the container height wh
 
 <ApiPropsList>
   <ApiProp
+    name="size"
+    fullType='"sm" | "default" | "lg"'
+    simpleType="string"
+    defaultValue='"default"'
+  >
+    Sets the size of the tab triggers.
+  </ApiProp>
+  <ApiProp
     name="variant"
     fullType='"segmented" | "underline" | "card"'
     simpleType="string"
@@ -111,6 +125,9 @@ Wrap panels with `TabsPanelsWrapper` to smoothly animate the container height wh
 #### TabsList and TabsTrigger
 
 <ApiPropsList>
+  <ApiProp name="size" fullType='"sm" | "default" | "lg"' simpleType="string">
+    Overrides the size inherited from `Tabs`.
+  </ApiProp>
   <ApiProp
     name="variant"
     fullType='"segmented" | "underline" | "card"'

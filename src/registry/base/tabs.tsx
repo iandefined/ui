@@ -6,6 +6,13 @@ import type * as React from "react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 type TabsVariant = NonNullable<TabsProps["variant"]>;
+type TabsSize = NonNullable<TabsProps["size"]>;
+
+const tabsTriggerSizeClasses = {
+  sm: "py-0.5",
+  default: "py-1",
+  lg: "py-1.5",
+} as const;
 
 function isValidVariant(variant: TabsVariant): variant is TabsVariant {
   return (
@@ -14,10 +21,12 @@ function isValidVariant(variant: TabsVariant): variant is TabsVariant {
 }
 
 interface TabsContextValue {
+  size: TabsSize;
   variant: TabsVariant;
 }
 
 const TabsContext = createContext<TabsContextValue>({
+  size: "default",
   variant: "segmented",
 });
 
@@ -30,15 +39,22 @@ function useTabs(): TabsContextValue {
 }
 
 interface TabsProps extends TabsPrimitive.Root.Props {
+  size?: "sm" | "default" | "lg";
   variant?: "segmented" | "underline" | "card";
 }
 
-function Tabs({ className, variant = "segmented", ...props }: TabsProps) {
+function Tabs({
+  className,
+  size = "default",
+  variant = "segmented",
+  ...props
+}: TabsProps) {
   const finalVariant = isValidVariant(variant) ? variant : "segmented";
 
   return (
-    <TabsContext.Provider value={{ variant: finalVariant }}>
+    <TabsContext.Provider value={{ size, variant: finalVariant }}>
       <TabsPrimitive.Root
+        data-size={size}
         data-slot="tabs"
         className={cn(
           "flex gap-2 data-[orientation=vertical]:flex-row data-[orientation=horizontal]:flex-col",
@@ -51,21 +67,25 @@ function Tabs({ className, variant = "segmented", ...props }: TabsProps) {
 }
 
 interface TabsListProps extends TabsPrimitive.List.Props {
+  size?: "sm" | "default" | "lg";
   variant?: "segmented" | "underline" | "card";
 }
 
 function TabsList({
   className,
   children,
+  size: sizeProp,
   variant: variantProp,
   ...props
 }: TabsListProps) {
-  const { variant: contextVariant } = useTabs();
+  const { size: contextSize, variant: contextVariant } = useTabs();
+  const size = sizeProp ?? contextSize;
   const variant = variantProp ?? contextVariant;
 
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
+      data-size={size}
       data-variant={variant}
       className={cn(
         "relative z-0 flex max-w-full w-fit items-center justify-start gap-x-0.5 text-muted-foreground data-[orientation=vertical]:flex-col max-sm:data-[orientation=horizontal]:overflow-x-auto max-sm:data-[orientation=horizontal]:overflow-y-hidden",
@@ -77,43 +97,50 @@ function TabsList({
       )}
       {...props}
     >
-      {children}
-      <TabsPrimitive.Indicator
-        data-slot="tabs-indicator"
-        className={cn(
-          "-translate-y-(--active-tab-bottom) absolute bottom-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] will-change-[translate,width] transform-gpu motion-reduce:transition-none motion-reduce:transform-none",
-          variant === "segmented" &&
-            "h-(--active-tab-height) rounded-md bg-card dark:bg-secondary shadow-xs border border-border/10 -z-1",
-          variant === "underline" &&
-            "data-[orientation=vertical]:-translate-x-px z-10 bg-primary data-[orientation=horizontal]:h-0.5 data-[orientation=vertical]:w-0.5 data-[orientation=horizontal]:translate-y-[1.3px]",
-          variant === "card" &&
-            "rounded-md bg-secondary shadow-xs border border-border/10 -z-1"
-        )}
-      />
+      <TabsContext.Provider value={{ size, variant }}>
+        {children}
+        <TabsPrimitive.Indicator
+          data-slot="tabs-indicator"
+          className={cn(
+            "-translate-y-(--active-tab-bottom) absolute bottom-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] will-change-[translate,width] transform-gpu motion-reduce:transition-none motion-reduce:transform-none",
+            variant === "segmented" &&
+              "h-(--active-tab-height) rounded-md bg-card dark:bg-secondary shadow-xs border border-border/10 -z-1",
+            variant === "underline" &&
+              "data-[orientation=vertical]:-translate-x-px z-10 bg-primary data-[orientation=horizontal]:h-0.5 data-[orientation=vertical]:w-0.5 data-[orientation=horizontal]:translate-y-[1.3px]",
+            variant === "card" &&
+              "rounded-md bg-secondary shadow-xs border border-border/10 -z-1"
+          )}
+        />
+      </TabsContext.Provider>
     </TabsPrimitive.List>
   );
 }
 
 interface TabsTriggerProps extends TabsPrimitive.Tab.Props {
+  size?: "sm" | "default" | "lg";
   variant?: "segmented" | "underline" | "card";
 }
 
 function TabsTrigger({
   className,
+  size: sizeProp,
   variant: variantProp,
   ...props
 }: TabsTriggerProps) {
-  const { variant: contextVariant } = useTabs();
+  const { size: contextSize, variant: contextVariant } = useTabs();
+  const size = sizeProp ?? contextSize;
   const variant = variantProp ?? contextVariant;
 
   return (
     <TabsPrimitive.Tab
+      data-size={size}
       data-slot="tabs-trigger"
       className={cn(
-        "flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap text-sm text-secondary-foreground/66 data-active:text-foreground hover:text-foreground px-3 py-1 font-medium break-keep outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[orientation=vertical]:w-full data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        "flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap text-sm text-secondary-foreground/66 data-active:text-foreground hover:text-foreground px-3 font-medium break-keep outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[orientation=vertical]:w-full data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        tabsTriggerSizeClasses[size],
         variant === "segmented" && "rounded-md",
         variant === "underline" &&
-          "data-[orientation=vertical]:px-2 data-[orientation=horizontal]:py-1.5 data-[orientation=vertical]:items-start data-[orientation=vertical]:justify-start",
+          "data-[orientation=vertical]:px-2 data-[orientation=vertical]:items-start data-[orientation=vertical]:justify-start",
         variant === "card" && "rounded-md",
         className
       )}
@@ -203,5 +230,6 @@ export type {
   TabsPanelsWrapperProps,
   TabsProps,
   TabsTriggerProps,
+  TabsSize,
   TabsVariant,
 };
