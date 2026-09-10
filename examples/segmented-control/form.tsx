@@ -23,7 +23,7 @@ export default function SegmentedControlFormDemo() {
   });
 
   return (
-    <Form className="grid w-full max-w-sm gap-4" form={form}>
+    <Form className="grid w-full max-w-sm gap-2" form={form}>
       <form.Field name="shirtSize">
         {(field) => (
           <Field name={field.name}>

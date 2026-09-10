@@ -15937,7 +15937,7 @@ export default function SegmentedControlFormDemo() {
   });
 
   return (
-    <Form className="grid w-full max-w-sm gap-4" form={form}>
+    <Form className="grid w-full max-w-sm gap-2" form={form}>
       <form.Field name="shirtSize">
         {(field) => (
           <Field name={field.name}>
@@ -17163,9 +17163,102 @@ export default function SeparatorDefaultDemo() {
 }
 ```
 
+### Light sources
+
+Use `lightSource` with `variant="solid"` to add a one-pixel surface edge and its opposing shadow.
+
+```tsx
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/registry/base/card";
+import { Separator } from "@/registry/base/separator";
+
+const horizontalLightSources = ["above", "below"] as const;
+
+export default function SeparatorLightSourceDemo() {
+  return (
+    <div className="grid w-full max-w-lg gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Horizontal separators</CardTitle>
+          <CardDescription>
+            The shadow falls away from the light source.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {horizontalLightSources.map((lightSource) => (
+            <div className="space-y-2" key={lightSource}>
+              <p className="text-xs text-muted-foreground capitalize">
+                Light source: {lightSource}
+              </p>
+              <Separator lightSource={lightSource} />
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Vertical separators</CardTitle>
+          <CardDescription>
+            The same treatment follows the horizontal axis.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-20 items-center justify-center gap-4 text-sm">
+            <span>Left</span>
+            <Separator
+              orientation="vertical"
+              lightSource="left"
+              className="h-12!"
+            />
+            <span>Surface</span>
+            <Separator
+              orientation="vertical"
+              lightSource="right"
+              className="h-12!"
+            />
+            <span>Right</span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+```
+
+Set a custom solid line color with `className`. Directional separators use the theme's `--border` token for the edge and the current `--background` token for the opposing shadow, so the contrast follows the card surface in both themes.
+
+### Dashed
+
+Use `variant="dashed"` for a dashed divider. Dashed separators do not apply the directional light-source treatment.
+
+```tsx
+import { Separator } from "@/registry/base/separator";
+
+export default function SeparatorDashedDemo() {
+  return (
+    <div className="w-full max-w-lg px-6 py-8">
+      <Separator variant="dashed" />
+    </div>
+  );
+}
+```
+
 ## API Reference
 
 `Separator` wraps the [Base UI Separator](https://base-ui.com/react/components/separator). Supported Base UI props pass through.
+
+### Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `"solid" \| "dashed"` | `solid` | Sets the separator treatment. Light-source styling applies only to `"solid"`. |
+| `lightSource` | `"none" \| "above" \| "below" \| "right" \| "left"` | `none` | Adds a fixed shadow opposite the selected light direction for solid separators. |
 
 # Sheet
 
@@ -20252,13 +20345,16 @@ const sizes = [
 
 export default function TabsSizesDemo() {
   return (
-    <div className="grid w-full gap-6 lg:grid-cols-3">
+    <div className="grid w-full gap-6 lg:grid-cols-2 2xl:grid-cols-3">
       {variants.map((variant) => (
         <div className="flex min-w-0 flex-col gap-3" key={variant.value}>
           <p className="text-sm font-medium">{variant.label}</p>
           <div className="flex flex-col gap-3">
             {sizes.map((size) => (
-              <div className="flex min-w-0 items-center gap-3" key={size.value}>
+              <div
+                className="flex min-w-0 flex-wrap items-center gap-3"
+                key={size.value}
+              >
                 <span className="w-14 shrink-0 text-xs text-muted-foreground">
                   {size.label}
                 </span>
@@ -23998,6 +24094,238 @@ Then use the token like any other Tailwind color utility:
 Browse the utility components and effects available in this registry.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+# Backlight
+
+Add a soft, saturated glow around images, SVGs, videos, and other content.
+
+> For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+`Backlight` wraps content in an SVG blur and saturation filter to create a soft glow around its edges. Use it for media, logos, cards, and other visual content that benefits from a saturated halo.
+
+## Preview
+
+```tsx
+import { Backlight } from "@/registry/base/backlight";
+
+const imageUrl =
+  "https://images.unsplash.com/photo-1778807262782-bf2775ddd405?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+export default function BacklightDefaultDemo() {
+  return (
+    <div className="flex w-full items-center justify-center px-6 py-10">
+      <Backlight className="w-full max-w-xl">
+        <div className="w-full">
+          <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-950">
+            <img
+              alt="A misty mountain landscape reflected in still water"
+              className="size-full object-cover"
+              height="1463"
+              src={imageUrl}
+              width="2340"
+            />
+          </div>
+        </div>
+      </Backlight>
+    </div>
+  );
+}
+```
+
+## Installation
+
+```bash
+npx shadcn@latest add https://ui.iandefined.com/r/backlight.json
+```
+
+## Usage
+
+```tsx
+import { Backlight } from "@/components/ui/backlight";
+```
+
+```tsx
+<Backlight>
+  <img alt="A misty mountain landscape" src="/mountains.jpg" />
+</Backlight>
+```
+
+The component keeps the filter definition hidden and applies it directly to a single native element or to an internal wrapper around grouped content. Same-origin media can use the SVG filter directly. Cross-origin iframes can block SVG filter input, so use a same-page glow source behind an embedded player. Set `blur` to control the glow intensity.
+
+## Examples
+
+### Image
+
+This example applies the backlight to the requested Unsplash image.
+
+```tsx
+import { Backlight } from "@/registry/base/backlight";
+
+const imageUrl =
+  "https://images.unsplash.com/photo-1778807262782-bf2775ddd405?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+export default function BacklightDefaultDemo() {
+  return (
+    <div className="flex w-full items-center justify-center px-6 py-10">
+      <Backlight className="w-full max-w-xl">
+        <div className="w-full">
+          <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-950">
+            <img
+              alt="A misty mountain landscape reflected in still water"
+              className="size-full object-cover"
+              height="1463"
+              src={imageUrl}
+              width="2340"
+            />
+          </div>
+        </div>
+      </Backlight>
+    </div>
+  );
+}
+```
+
+### SVG
+
+The filter works with inline SVG content, including the supplied React logo SVG.
+
+```tsx
+import { Backlight } from "@/registry/base/backlight";
+
+export default function BacklightSvgDemo() {
+  return (
+    <div className="flex w-full items-center justify-center px-6 py-10">
+      <Backlight className="rounded-full">
+        <svg
+          aria-label="React logo"
+          className="size-48 sm:size-56"
+          fill="none"
+          role="img"
+          viewBox="0 0 569 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill="#58C4DC" fillRule="evenodd">
+            <path d="M285.5,201 C255.400481,201 231,225.400481 231,255.5 C231,285.599519 255.400481,310 285.5,310 C315.599519,310 340,285.599519 340,255.5 C340,225.400481 315.599519,201 285.5,201" />
+            <path d="M568.959856,255.99437 C568.959856,213.207656 529.337802,175.68144 466.251623,150.985214 C467.094645,145.423543 467.85738,139.922107 468.399323,134.521063 C474.621631,73.0415145 459.808523,28.6686204 426.709856,9.5541429 C389.677085,-11.8291748 337.36955,3.69129898 284.479928,46.0162134 C231.590306,3.69129898 179.282771,-11.8291748 142.25,9.5541429 C109.151333,28.6686204 94.3382249,73.0415145 100.560533,134.521063 C101.102476,139.922107 101.845139,145.443621 102.708233,151.02537 C97.4493791,153.033193 92.2908847,155.161486 87.3331099,157.39017 C31.0111824,182.708821 0,217.765415 0,255.99437 C0,298.781084 39.6220545,336.307301 102.708233,361.003527 C101.845139,366.565197 101.102476,372.066633 100.560533,377.467678 C94.3382249,438.947226 109.151333,483.32012 142.25,502.434597 C153.629683,508.887578 166.52439,512.186771 179.603923,511.991836 C210.956328,511.991836 247.567589,495.487529 284.479928,465.972527 C321.372196,495.487529 358.003528,511.991836 389.396077,511.991836 C402.475265,512.183856 415.36922,508.884856 426.75,502.434597 C459.848667,483.32012 474.661775,438.947226 468.439467,377.467678 C467.897524,372.066633 467.134789,366.565197 466.291767,361.003527 C529.377946,336.347457 569,298.761006 569,255.99437 M389.155214,27.1025182 C397.565154,26.899606 405.877839,28.9368502 413.241569,33.0055186 C436.223966,46.2772304 446.540955,82.2775015 441.522965,131.770345 C441.181741,135.143488 440.780302,138.556788 440.298575,141.990165 C414.066922,134.08804 387.205771,128.452154 360.010724,125.144528 C343.525021,103.224055 325.192524,82.7564475 305.214266,63.9661533 C336.586743,39.7116483 366.032313,27.1025182 389.135142,27.1025182 M378.356498,310.205598 C368.204912,327.830733 357.150626,344.919965 345.237759,361.405091 C325.045049,363.479997 304.758818,364.51205 284.459856,364.497299 C264.167589,364.51136 243.888075,363.479308 223.702025,361.405091 C211.820914,344.919381 200.80007,327.83006 190.683646,310.205598 C180.532593,292.629285 171.306974,274.534187 163.044553,255.99437 C171.306974,237.454554 180.532593,219.359455 190.683646,201.783142 C200.784121,184.229367 211.770999,167.201087 223.601665,150.764353 C243.824636,148.63809 264.145559,147.579168 284.479928,147.591877 C304.772146,147.579725 325.051559,148.611772 345.237759,150.68404 C357.109048,167.14607 368.136094,184.201112 378.27621,201.783142 C388.419418,219.363718 397.644825,237.458403 405.915303,255.99437 C397.644825,274.530337 388.419418,292.625022 378.27621,310.205598 M419.724813,290.127366 C426.09516,307.503536 431.324985,325.277083 435.380944,343.334682 C417.779633,348.823635 399.836793,353.149774 381.668372,356.285142 C388.573127,345.871232 395.263781,335.035679 401.740334,323.778483 C408.143291,312.655143 414.144807,301.431411 419.805101,290.207679 M246.363271,390.377981 C258.848032,391.140954 271.593728,391.582675 284.5,391.582675 C297.406272,391.582675 310.232256,391.140954 322.737089,390.377981 C310.880643,404.583418 298.10766,417.997563 284.5,430.534446 C270.921643,417.999548 258.18192,404.585125 246.363271,390.377981 Z M187.311556,356.244986 C169.137286,353.123646 151.187726,348.810918 133.578912,343.334682 C137.618549,325.305649 142.828222,307.559058 149.174827,290.207679 C154.754833,301.431411 160.736278,312.655143 167.239594,323.778483 C173.74291,334.901824 180.467017,345.864539 187.311556,356.285142 M149.174827,221.760984 C142.850954,204.473938 137.654787,186.794745 133.619056,168.834762 C151.18418,163.352378 169.085653,159.013101 187.211197,155.844146 C180.346585,166.224592 173.622478,176.986525 167.139234,188.210257 C160.65599,199.433989 154.734761,210.517173 149.074467,221.760984 M322.616657,121.590681 C310.131896,120.827708 297.3862,120.385987 284.379568,120.385987 C271.479987,120.385987 258.767744,120.787552 246.242839,121.590681 C258.061488,107.383537 270.801211,93.9691137 284.379568,81.4342157 C297.99241,93.9658277 310.765727,107.380324 322.616657,121.590681 Z M401.70019,188.210257 C395.196875,176.939676 388.472767,166.09743 381.527868,155.68352 C399.744224,158.819049 417.734224,163.151949 435.380944,168.654058 C431.331963,186.680673 426.122466,204.426664 419.785029,221.781062 C414.205023,210.55733 408.203506,199.333598 401.720262,188.230335 M127.517179,131.790423 C122.438973,82.3176579 132.816178,46.2973086 155.778503,33.0255968 C163.144699,28.9632474 171.455651,26.9264282 179.864858,27.1225964 C202.967687,27.1225964 232.413257,39.7317265 263.785734,63.9862316 C243.794133,82.7898734 225.448298,103.270812 208.949132,125.204763 C181.761691,128.528025 154.90355,134.14313 128.661281,141.990165 C128.199626,138.556788 127.778115,135.163566 127.456963,131.790423 M98.4529773,182.106474 C101.54406,180.767925 104.695358,179.429376 107.906872,178.090828 C114.220532,204.735668 122.781793,230.7969 133.498624,255.99437 C122.761529,281.241316 114.193296,307.357063 107.8868,334.058539 C56.7434387,313.076786 27.0971497,284.003505 27.0971497,255.99437 C27.0971497,229.450947 53.1907013,202.526037 98.4529773,182.106474 Z M155.778503,478.963143 C132.816178,465.691432 122.438973,429.671082 127.517179,380.198317 C127.838331,376.825174 128.259842,373.431953 128.721497,369.978497 C154.953686,377.878517 181.814655,383.514365 209.009348,386.824134 C225.500295,408.752719 243.832321,429.233234 263.805806,448.042665 C220.069,481.834331 180.105722,492.97775 155.838719,478.963143 M441.502893,380.198317 C446.520883,429.691161 436.203894,465.691432 413.221497,478.963143 C388.974566,493.017906 348.991216,481.834331 305.274481,448.042665 C325.241364,429.232737 343.566681,408.752215 360.050868,386.824134 C387.245915,383.516508 414.107066,377.880622 440.338719,369.978497 C440.820446,373.431953 441.221885,376.825174 441.563109,380.198317 M461.193488,334.018382 C454.869166,307.332523 446.294494,281.231049 435.561592,255.99437 C446.289797,230.744081 454.857778,204.629101 461.173416,177.930202 C512.216417,198.911955 541.942994,227.985236 541.942994,255.99437 C541.942994,284.003505 512.296705,313.076786 461.153344,334.058539" />
+          </g>
+        </svg>
+      </Backlight>
+    </div>
+  );
+}
+```
+
+### PNG Image
+
+Use `Backlight` with a local PNG asset such as the cute React wordmark.
+
+```tsx
+import { Backlight } from "@/registry/base/backlight";
+
+export default function BacklightPngDemo() {
+  return (
+    <div className="flex w-full items-center justify-center px-6 py-10">
+      <Backlight className="w-full max-w-2xl">
+        <div className="w-full">
+          <div className="w-full overflow-hidden rounded-xl">
+            <img
+              alt="Cute React wordmark"
+              className="h-auto w-full object-contain"
+              height="400"
+              src="/assets/cute-react-wordmark.png"
+              width="782"
+            />
+          </div>
+        </div>
+      </Backlight>
+    </div>
+  );
+}
+```
+
+### Video
+
+Use a same-origin `<video>` element with a direct video file when the glow should follow the video frames.
+
+```tsx
+import { Backlight } from "@/registry/base/backlight";
+
+export default function BacklightVideoDemo() {
+  return (
+    <div className="flex w-full items-center justify-center px-6 py-10">
+      <Backlight blur={20} className="w-full max-w-2xl">
+        <div className="w-full">
+          <div className="aspect-video w-full overflow-hidden rounded-xl">
+            <video
+              aria-label="Cyberpunk demo video"
+              autoPlay
+              className="size-full object-cover"
+              controls
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              src="/assets/cyberpunk-demo.mp4"
+            />
+          </div>
+        </div>
+      </Backlight>
+    </div>
+  );
+}
+```
+
+### YouTube and cross-origin embeds
+
+YouTube videos and embedded videos from different origins run in cross-origin iframes. The parent page cannot use an SVG filter to sample their live pixels, so they cannot produce a frame-synced Backlight. As a workaround, place a thumbnail or other same-page image behind the iframe and apply `Backlight` only to that image. This example uses YouTube's `maxresdefault.jpg` thumbnail.
+
+```tsx
+import { Backlight } from "@/registry/base/backlight";
+
+const youtubeThumbnailUrl =
+  "https://i.ytimg.com/vi/q-74HTjRbuY/maxresdefault.jpg";
+
+export default function BacklightYoutubeDemo() {
+  return (
+    <div className="flex w-full items-center justify-center px-6 py-10">
+      <div className="relative w-full max-w-2xl">
+        <Backlight
+          blur={20}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <div className="w-full">
+            <div className="aspect-video w-full overflow-hidden rounded-xl">
+              <img
+                alt=""
+                className="size-full object-cover opacity-70"
+                src={youtubeThumbnailUrl}
+              />
+            </div>
+          </div>
+        </Backlight>
+        <iframe
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="relative z-10 aspect-video w-full rounded-xl"
+          src="https://www.youtube.com/embed/q-74HTjRbuY"
+          title="The Complete Svelte 5 Course"
+        />
+      </div>
+    </div>
+  );
+}
+```
+
+## API Reference
+
+### Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `blur` | `number` | `10` | Sets the `stdDeviation` value used by the SVG Gaussian blur filter. Higher values create a wider glow. |
+
+All standard `div` props, including `className`, `style`, and `aria-*` attributes, pass through to the outer wrapper.
 
 # Hitbox
 

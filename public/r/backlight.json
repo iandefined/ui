@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "backlight",
+  "title": "Backlight",
+  "description": "An SVG filter wrapper that adds a soft, saturated backlight glow around wrapped content.",
+  "files": [
+    {
+      "path": "src/registry/base/backlight.tsx",
+      "content": "\"use client\";\n\nimport { useId } from \"react\";\nimport { Children, cloneElement, isValidElement } from \"react\";\nimport type React from \"react\";\n\ntype BacklightProps = React.ComponentProps<\"div\"> & {\n  /**\n   * Blur intensity used by the SVG filter.\n   * @default 10\n   */\n  blur?: number;\n};\n\nfunction Backlight({ blur = 10, children, ...props }: BacklightProps) {\n  const filterId = `backlight-${useId().replaceAll(\":\", \"\")}`;\n  const filterStyle = { filter: `url(#${filterId})` };\n  const child = Children.toArray(children);\n  const content =\n    child.length === 1 &&\n    isValidElement<{ style?: React.CSSProperties }>(child[0]) &&\n    typeof child[0].type === \"string\" ? (\n      cloneElement(child[0], {\n        style: { ...child[0].props.style, ...filterStyle },\n      })\n    ) : (\n      <div style={filterStyle}>{children}</div>\n    );\n\n  return (\n    <div {...props} data-slot=\"backlight\">\n      <svg\n        aria-hidden=\"true\"\n        focusable=\"false\"\n        height=\"0\"\n        width=\"0\"\n        xmlns=\"http://www.w3.org/2000/svg\"\n      >\n        <filter height=\"200%\" id={filterId} width=\"200%\" x=\"-50%\" y=\"-50%\">\n          <feGaussianBlur\n            in=\"SourceGraphic\"\n            result=\"blurred\"\n            stdDeviation={blur}\n          />\n          <feColorMatrix in=\"blurred\" type=\"saturate\" values=\"4\" />\n          <feComposite in=\"SourceGraphic\" operator=\"over\" />\n        </filter>\n      </svg>\n      {content}\n    </div>\n  );\n}\n\nexport { Backlight };\nexport type { BacklightProps };\n",
+      "type": "registry:ui",
+      "target": "components/ui/backlight.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -4,6 +4,19 @@
   "homepage": "https://ui.iandefined.com",
   "items": [
     {
+      "name": "backlight",
+      "type": "registry:ui",
+      "title": "Backlight",
+      "description": "An SVG filter wrapper that adds a soft, saturated backlight glow around wrapped content.",
+      "files": [
+        {
+          "path": "src/registry/base/backlight.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/backlight.tsx"
+        }
+      ]
+    },
+    {
       "name": "calendar",
       "type": "registry:ui",
       "title": "Calendar",
@@ -610,7 +623,7 @@
       "type": "registry:ui",
       "title": "Separator",
       "description": "A visual or semantic divider with horizontal and vertical orientations.",
-      "dependencies": ["@base-ui/react", "cn"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "cn"],
       "files": [
         {
           "path": "src/registry/base/separator.tsx",

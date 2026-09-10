@@ -172,6 +172,9 @@
 /docs/utilities.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/utilities/backlight.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/utilities/hitbox.md
   Content-Type: text/markdown; charset=utf-8
 

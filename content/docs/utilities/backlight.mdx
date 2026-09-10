@@ -1,0 +1,73 @@
+---
+title: Backlight
+description: Add a soft, saturated glow around images, SVGs, videos, and other content.
+---
+
+`Backlight` wraps content in an SVG blur and saturation filter to create a soft glow around its edges. Use it for media, logos, cards, and other visual content that benefits from a saturated halo.
+
+## Preview
+
+<ComponentPreview name="backlight/default" />
+
+## Installation
+
+<ComponentInstall name="backlight" />
+
+## Usage
+
+```tsx
+import { Backlight } from "@/components/ui/backlight";
+```
+
+```tsx
+<Backlight>
+  <img alt="A misty mountain landscape" src="/mountains.jpg" />
+</Backlight>
+```
+
+The component keeps the filter definition hidden and applies it directly to a single native element or to an internal wrapper around grouped content. Same-origin media can use the SVG filter directly. Cross-origin iframes can block SVG filter input, so use a same-page glow source behind an embedded player. Set `blur` to control the glow intensity.
+
+## Examples
+
+### Image
+
+This example applies the backlight to the requested Unsplash image.
+
+<ComponentPreview name="backlight/default" />
+
+### SVG
+
+The filter works with inline SVG content, including the supplied React logo SVG.
+
+<ComponentPreview name="backlight/svg" />
+
+### PNG Image
+
+Use `Backlight` with a local PNG asset such as the cute React wordmark.
+
+<ComponentPreview name="backlight/png" />
+
+### Video
+
+Use a same-origin `<video>` element with a direct video file when the glow should follow the video frames.
+
+<ComponentPreview name="backlight/video" />
+
+### YouTube and cross-origin embeds
+
+YouTube videos and embedded videos from different origins run in cross-origin iframes. The parent page cannot use an SVG filter to sample their live pixels, so they cannot produce a frame-synced Backlight. As a workaround, place a thumbnail or other same-page image behind the iframe and apply `Backlight` only to that image. This example uses YouTube's `maxresdefault.jpg` thumbnail.
+
+<ComponentPreview name="backlight/youtube" />
+
+## API Reference
+
+### Props
+
+<ApiPropsList>
+  <ApiProp name="blur" fullType="number" defaultValue="10">
+    Sets the `stdDeviation` value used by the SVG Gaussian blur filter. Higher
+    values create a wider glow.
+  </ApiProp>
+</ApiPropsList>
+
+All standard `div` props, including `className`, `style`, and `aria-*` attributes, pass through to the outer wrapper.

@@ -33,6 +33,43 @@ Use `orientation="vertical"` when the separator divides content arranged side by
 
 <ComponentPreview name="separator/default" />
 
+### Light sources
+
+Use `lightSource` with `variant="solid"` to add a one-pixel surface edge and its opposing shadow.
+
+<ComponentPreview name="separator/light-source" />
+
+Set a custom solid line color with `className`. Directional separators use the theme's `--border` token for the edge and the current `--background` token for the opposing shadow, so the contrast follows the card surface in both themes.
+
+### Dashed
+
+Use `variant="dashed"` for a dashed divider. Dashed separators do not apply the directional light-source treatment.
+
+<ComponentPreview name="separator/dashed" />
+
 ## API Reference
 
 `Separator` wraps the [Base UI Separator](https://base-ui.com/react/components/separator). Supported Base UI props pass through.
+
+### Props
+
+<ApiPropsList>
+  <ApiProp
+    name="variant"
+    fullType='"solid" | "dashed"'
+    simpleType="string"
+    defaultValue='"solid"'
+  >
+    Sets the separator treatment. Light-source styling applies only to
+    `"solid"`.
+  </ApiProp>
+  <ApiProp
+    name="lightSource"
+    fullType='"none" | "above" | "below" | "right" | "left"'
+    simpleType="string"
+    defaultValue='"none"'
+  >
+    Adds a fixed shadow opposite the selected light direction for solid
+    separators.
+  </ApiProp>
+</ApiPropsList>

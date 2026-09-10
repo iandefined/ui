@@ -14,13 +14,16 @@ const sizes = [
 
 export default function TabsSizesDemo() {
   return (
-    <div className="grid w-full gap-6 lg:grid-cols-3">
+    <div className="grid w-full gap-6 lg:grid-cols-2 2xl:grid-cols-3">
       {variants.map((variant) => (
         <div className="flex min-w-0 flex-col gap-3" key={variant.value}>
           <p className="text-sm font-medium">{variant.label}</p>
           <div className="flex flex-col gap-3">
             {sizes.map((size) => (
-              <div className="flex min-w-0 items-center gap-3" key={size.value}>
+              <div
+                className="flex min-w-0 flex-wrap items-center gap-3"
+                key={size.value}
+              >
                 <span className="w-14 shrink-0 text-xs text-muted-foreground">
                   {size.label}
                 </span>
