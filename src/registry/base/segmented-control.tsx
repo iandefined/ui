@@ -39,15 +39,15 @@ const invalidShakeStyles = `
 `;
 
 const segmentedControlItemSizeClasses = {
-  sm: "h-[22px] px-3 text-sm",
-  default: "h-[26px] px-3 text-sm",
-  lg: "h-[30px] px-3 text-sm",
+  sm: "min-h-[22px] px-3 text-sm",
+  default: "min-h-[26px] px-3 text-sm",
+  lg: "min-h-[30px] px-3 text-sm",
 } as const;
 
 const segmentedControlSizeClasses = {
-  sm: "h-8",
-  default: "h-9",
-  lg: "h-10",
+  sm: "min-h-8",
+  default: "min-h-9",
+  lg: "min-h-10",
 } as const;
 
 export interface SegmentedControlProps<
@@ -121,8 +121,8 @@ function useSegmentedControlIndicator(
           `${selectedRect.height}px`
         );
         indicator.style.setProperty(
-          "--active-tab-bottom",
-          `${rootRect.bottom - selectedRect.bottom}px`
+          "--active-tab-top",
+          `${selectedRect.top - rootRect.top - root.clientTop}px`
         );
         indicator.setAttribute("data-ready", "");
 
@@ -192,7 +192,7 @@ function SegmentedControl<Value = string>({
           {children}
           <span
             aria-hidden="true"
-            className="-translate-y-(--active-tab-bottom) pointer-events-none absolute bottom-0 left-0 z-[-1] h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-transparent bg-background opacity-0 shadow-xs transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[ready]:opacity-100 dark:border-border/10 dark:bg-secondary motion-reduce:transition-none motion-reduce:transform-none"
+            className="pointer-events-none absolute left-0 top-(--active-tab-top) z-[-1] h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-transparent bg-background opacity-0 shadow-xs transition-[translate,width] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[ready]:opacity-100 dark:border-border/10 dark:bg-secondary motion-reduce:transition-none motion-reduce:transform-none"
             data-slot="segmented-control-indicator"
             ref={indicatorRef}
           />
@@ -213,7 +213,7 @@ function SegmentedControlItem<Value = string>({
   return (
     <RadioPrimitive.Root
       className={cn(
-        "relative flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap break-keep text-foreground dark:text-secondary-foreground/66 leading-none outline-none [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] hover:text-foreground data-checked:text-foreground dark:data-checked:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap break-keep text-foreground dark:text-secondary-foreground/66 outline-none [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] hover:text-foreground data-checked:text-foreground dark:data-checked:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
         "data-checked:font-medium",
         segmentedControlItemSizeClasses[size],
         className
