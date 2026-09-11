@@ -1,5 +1,6 @@
 import { cn } from "cn";
-import { CheckIcon, ChevronDownIcon } from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon, TagIcon } from "lucide-react";
+import { useState } from "react";
 
 import type { CategoryInfo, IconCategory } from "@/icons/catalog";
 import { Button } from "@/registry/base/button";
@@ -8,6 +9,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/registry/base/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/shared/components/ui/command";
 
 export interface CategoryFilterProps {
   categories: CategoryInfo[];
@@ -60,59 +69,93 @@ export function IconCategoryMobileSelect({
   onSelectCategory,
   className,
 }: CategoryFilterProps) {
+  const [open, setOpen] = useState(false);
   const currentCategory =
     categories.find((c) => c.id === selectedCategory) ?? categories[0];
+  const categoryGroup = [
+    {
+      value: "Categories",
+      items: categories.map((category) => ({
+        value: category.id,
+        label: category.label,
+      })),
+    },
+  ];
 
   return (
-    <Popover>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger
         render={
           <Button
             variant="outline"
             size="sm"
             className={cn(
-              "h-9 gap-1.5 text-sm font-medium cursor-pointer",
+              "h-9 justify-between gap-2 text-sm font-medium cursor-pointer",
               className
             )}
           >
-            <span>{currentCategory.label}</span>
-            <ChevronDownIcon className="text-muted-foreground size-3.5" />
+            <span className="flex min-w-0 items-center gap-2">
+              <TagIcon className="size-4 shrink-0" />
+              <span className="truncate">{currentCategory.label}</span>
+            </span>
+            <ChevronsUpDownIcon className="text-muted-foreground size-4 shrink-0 opacity-70" />
           </Button>
         }
       />
-      <PopoverContent align="start" className="w-56 p-1">
-        <div className="flex flex-col gap-0.5">
-          {categories.map((category) => {
-            const isSelected = selectedCategory === category.id;
-            return (
-              <button
-                key={category.id}
-                type="button"
-                onClick={() => onSelectCategory(category.id)}
-                className={cn(
-                  "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors cursor-pointer",
-                  "focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-hidden",
-                  isSelected
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                <div className="flex items-center gap-2">
-                  <CheckIcon
-                    className={cn(
-                      "size-3.5",
-                      isSelected ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  <span>{category.label}</span>
-                </div>
-                <span className="tabular-nums text-sm text-muted-foreground">
-                  {category.count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+      <PopoverContent
+        align="start"
+        animationPreset="scale"
+        transitionPreset="outQuint"
+        className="w-56 p-0"
+      >
+        <Command items={categoryGroup}>
+          <CommandInput placeholder="Search category..." />
+          <CommandList
+            className="max-h-96"
+            renderItem={(groupValue) => {
+              const group = groupValue as (typeof categoryGroup)[number];
+
+              return (
+                <CommandGroup
+                  key={group.value}
+                  items={group.items}
+                  renderItem={(itemValue) => {
+                    const category = itemValue as {
+                      value: "all" | IconCategory;
+                      label: string;
+                    };
+                    const isSelected = selectedCategory === category.value;
+
+                    return (
+                      <CommandItem
+                        key={category.value}
+                        onSelect={() => {
+                          setOpen(false);
+                          onSelectCategory(category.value);
+                        }}
+                        value={category}
+                      >
+                        <CheckIcon
+                          className={cn(
+                            "size-4",
+                            isSelected ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <span className="flex-1">{category.label}</span>
+                        <span className="tabular-nums text-muted-foreground">
+                          {categories.find((item) => item.id === category.value)
+                            ?.count ?? 0}
+                        </span>
+                      </CommandItem>
+                    );
+                  }}
+                />
+              );
+            }}
+          >
+            <CommandEmpty>No category found.</CommandEmpty>
+          </CommandList>
+        </Command>
       </PopoverContent>
     </Popover>
   );

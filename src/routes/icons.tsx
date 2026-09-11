@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { AppLayout } from "@/app-layout";
 import { ICON_CATALOG } from "@/icons/catalog";
@@ -12,6 +13,29 @@ const ICONS_DESCRIPTION = `Explore ${ICON_CATALOG.length} alternative visual sty
 
 export const Route = createFileRoute("/icons")({
   component: IconsRoute,
+  validateSearch: z.object({
+    q: z.string().trim().default("").catch(""),
+    category: z
+      .enum(["all", "navigation", "notifications", "files", "communication"])
+      .default("all")
+      .catch("all"),
+    variant: z.enum(["all", "duotone"]).default("all").catch("all"),
+    icon: z.string().trim().optional().catch(undefined),
+    iconVariant: z
+      .enum(["duotone", "outline"])
+      .default("duotone")
+      .catch("duotone"),
+    size: z
+      .enum(["16", "20", "24", "32", "40", "48", "64", "80"])
+      .default("24")
+      .catch("24"),
+    syntax: z.enum(["svg", "react"]).default("svg").catch("svg"),
+  }),
+  search: {
+    middlewares: [
+      stripSearchParams({ q: "", category: "all", variant: "all" }),
+    ],
+  },
   head: () =>
     createPageHead({
       description: ICONS_DESCRIPTION,

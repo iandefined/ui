@@ -77,7 +77,7 @@ const badgeColorForegrounds = {
 >;
 
 const badgeVariants = cva(
-  "relative inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border font-medium outline-none transition-[background-color,box-shadow,color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3 [a&,button&]:cursor-pointer",
+  "relative inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border font-medium outline-none transition-[background-color,box-shadow,color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background forced-colors:focus-visible:outline-[Highlight] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-2.5 [a&,button&]:cursor-pointer",
   {
     variants: {
       variant: {

@@ -1,5 +1,6 @@
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { SearchXIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { IconCatalogItem, IconCategory } from "@/icons/catalog";
 import { getCategoryCounts, getIconSvg, ICON_CATALOG } from "@/icons/catalog";
@@ -25,14 +26,23 @@ import { IconDetailDialog } from "./icon-detail-dialog";
 import { IconToolbar } from "./icon-toolbar";
 
 export function IconCatalog() {
-  const [selectedCategory, setSelectedCategory] = useState<
-    "all" | IconCategory
-  >("all");
-  const [selectedVariant, setSelectedVariant] = useState<"all" | "duotone">(
-    "all"
+  const search = useSearch({ from: "/icons" });
+  const navigate = useNavigate({ from: "/icons" });
+  const [dialogItem, setDialogItem] = useState<IconCatalogItem | null>(null);
+
+  const activeItem = useMemo(
+    () =>
+      search.icon
+        ? (ICON_CATALOG.find((item) => item.name === search.icon) ?? null)
+        : null,
+    [search.icon]
   );
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeItem, setActiveItem] = useState<IconCatalogItem | null>(null);
+
+  useEffect(() => {
+    if (activeItem) {
+      setDialogItem(activeItem);
+    }
+  }, [activeItem]);
 
   const { filter } = useFuzzyFilter<IconCatalogItem>({
     keys: ["name", "title", "category", "tags"],
@@ -43,16 +53,46 @@ export function IconCatalog() {
 
   // Filter items by fuzzy search, selected category, and selected variant
   const filteredItems = useMemo(() => {
-    const searchFiltered = filter([...ICON_CATALOG], searchQuery);
+    const searchFiltered = filter([...ICON_CATALOG], search.q);
 
     return searchFiltered.filter((item) => {
       const matchesCategory =
-        selectedCategory === "all" || item.category === selectedCategory;
+        search.category === "all" || item.category === search.category;
       const matchesVariant =
-        selectedVariant === "all" || item.variant === selectedVariant;
+        search.variant === "all" || item.variant === search.variant;
       return matchesCategory && matchesVariant;
     });
-  }, [filter, searchQuery, selectedCategory, selectedVariant]);
+  }, [filter, search.category, search.q, search.variant]);
+
+  const updateCatalogSearch = (next: {
+    q?: string;
+    category?: "all" | IconCategory;
+    variant?: "all" | "duotone";
+  }) => {
+    navigate({
+      replace: true,
+      search: (previous) => ({ ...previous, ...next }),
+    });
+  };
+
+  const openIcon = (item: IconCatalogItem) => {
+    setDialogItem(item);
+    navigate({
+      search: (previous) => ({
+        ...previous,
+        icon: item.name,
+        iconVariant: item.variant,
+        size: "24",
+      }),
+    });
+  };
+
+  const closeIcon = () => {
+    navigate({
+      replace: true,
+      search: (previous) => ({ ...previous, icon: undefined }),
+    });
+  };
 
   return (
     <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
@@ -61,8 +101,8 @@ export function IconCatalog() {
         <div className="sticky top-20">
           <IconCategorySidebar
             categories={categoryCounts}
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
+            selectedCategory={search.category}
+            onSelectCategory={(category) => updateCatalogSearch({ category })}
           />
         </div>
       </aside>
@@ -72,12 +112,12 @@ export function IconCatalog() {
         {/* Toolbar */}
         <IconToolbar
           categories={categoryCounts}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-          selectedVariant={selectedVariant}
-          onSelectVariant={setSelectedVariant}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          selectedCategory={search.category}
+          onSelectCategory={(category) => updateCatalogSearch({ category })}
+          selectedVariant={search.variant}
+          onSelectVariant={(variant) => updateCatalogSearch({ variant })}
+          searchQuery={search.q}
+          onSearchChange={(q) => updateCatalogSearch({ q })}
         />
 
         {/* Grid or Empty State */}
@@ -90,7 +130,7 @@ export function IconCatalog() {
                   item={item}
                   svg={getIconSvg(item.name)}
                   tooltipHandle={iconTooltipHandle}
-                  onClick={() => setActiveItem(item)}
+                  onClick={() => openIcon(item)}
                 />
               ))}
             </div>
@@ -116,7 +156,7 @@ export function IconCatalog() {
               </EmptyMedia>
               <EmptyTitle>No icons found</EmptyTitle>
               <EmptyDescription>
-                We couldn't find any icons matching &ldquo;{searchQuery}&rdquo;.
+                We couldn't find any icons matching &ldquo;{search.q}&rdquo;.
                 Try searching for something else.
               </EmptyDescription>
             </EmptyHeader>
@@ -126,10 +166,10 @@ export function IconCatalog() {
 
       {/* Detail Dialog */}
       <IconDetailDialog
-        item={activeItem}
+        item={dialogItem}
         open={activeItem !== null}
         onOpenChange={(open) => {
-          if (!open) setActiveItem(null);
+          if (!open) closeIcon();
         }}
       />
     </div>
