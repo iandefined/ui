@@ -213,7 +213,7 @@ function SegmentedControlItem<Value = string>({
   return (
     <RadioPrimitive.Root
       className={cn(
-        "relative flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap break-keep text-foreground dark:text-secondary-foreground/66 outline-none [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] hover:text-foreground data-checked:text-foreground dark:data-checked:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap break-keep text-sm/5 text-foreground dark:text-secondary-foreground/66 outline-none [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] hover:text-foreground data-checked:text-foreground dark:data-checked:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
         "data-checked:font-medium",
         segmentedControlItemSizeClasses[size],
         className
