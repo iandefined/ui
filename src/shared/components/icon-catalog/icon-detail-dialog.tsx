@@ -1,15 +1,17 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { CheckIcon, ChevronsUpDownIcon, Tag } from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon, CodeXml, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import type { IconCatalogItem, IconVariant } from "@/icons/catalog";
 import { CATEGORY_LABELS, getIconSvg } from "@/icons/catalog";
 import { Badge, type BadgeColor } from "@/registry/base/badge";
+import { Button } from "@/registry/base/button";
 import {
   Dialog,
   DialogBody,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/registry/base/dialog";
@@ -25,6 +27,7 @@ import {
   SelectValue,
 } from "@/registry/base/select";
 import { CopyButton } from "@/shared/components/copy-button";
+import { GITHUB, LINK } from "@/shared/constants/links";
 import { highlightCode } from "@/shared/lib/highlight-code";
 
 import { IconPreview } from "./icon-preview";
@@ -134,6 +137,10 @@ export function IconDetailDialog({
   const svg = item ? getIconSvg(item.name, variant, numericSize) : "";
   const code = codeFormat === "react" ? toReactSvg(svg) : svg;
   const codeLanguage = codeFormat === "react" ? "tsx" : "html";
+  const sourceVariant = variant === "filled" ? "filled" : "duotone";
+  const sourceUrl = item
+    ? `${LINK.GITHUB}/blob/${GITHUB.branch}/src/icons/${sourceVariant}/${item.name}.svg`
+    : "";
 
   useEffect(() => {
     if (!code) {
@@ -352,6 +359,22 @@ export function IconDetailDialog({
             </figure>
           </div>
         </DialogBody>
+
+        <DialogFooter className="flex-row justify-end">
+          <Button
+            render={
+              <a
+                href={sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            }
+            nativeButton={false}
+          >
+            <CodeXml />
+            View Source
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
