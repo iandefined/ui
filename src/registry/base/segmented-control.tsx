@@ -110,7 +110,7 @@ function useSegmentedControlIndicator(
 
         indicator.style.setProperty(
           "--active-tab-left",
-          `${selectedRect.left - rootRect.left}px`
+          `${selectedRect.left - rootRect.left - root.clientLeft}px`
         );
         indicator.style.setProperty(
           "--active-tab-width",
