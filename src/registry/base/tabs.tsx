@@ -9,9 +9,9 @@ type TabsVariant = NonNullable<TabsProps["variant"]>;
 type TabsSize = NonNullable<TabsProps["size"]>;
 
 const tabsTriggerSizeClasses = {
-  sm: "py-0.5",
-  default: "py-1",
-  lg: "py-1.5",
+  sm: "h-6",
+  default: "h-7",
+  lg: "h-8",
 } as const;
 
 function isValidVariant(variant: TabsVariant): variant is TabsVariant {
@@ -137,7 +137,7 @@ function TabsTrigger({
       data-size={size}
       data-slot="tabs-trigger"
       className={cn(
-        "flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap text-foreground dark:text-secondary-foreground/66 data-active:text-foreground dark:data-active:text-foreground hover:text-foreground px-3 font-medium break-keep outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[orientation=vertical]:w-full data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+        "flex items-center justify-center gap-2 shrink-0 cursor-pointer whitespace-nowrap text-sm leading-none text-foreground dark:text-secondary-foreground/66 data-active:text-foreground dark:data-active:text-foreground hover:text-foreground px-3 font-medium break-keep outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 forced-colors:focus-visible:outline-[Highlight] [transition-property:color] duration-200 ease-[cubic-bezier(.25,.46,.45,.94)] data-[orientation=vertical]:w-full data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
         tabsTriggerSizeClasses[size],
         variant === "segmented" && "rounded-md",
         variant === "underline" &&
