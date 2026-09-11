@@ -55,6 +55,7 @@ function getCategoryBadgeColor(category: string): BadgeColor {
 const VARIANTS: { label: string; value: IconVariant }[] = [
   { label: "Stroke", value: "outline" },
   { label: "Duotone", value: "duotone" },
+  { label: "Filled", value: "filled" },
 ];
 
 const SIZES = [
@@ -109,7 +110,13 @@ export function IconDetailDialog({
   const navigate = useNavigate({ from: "/icons" });
   const [codeHtml, setCodeHtml] = useState<string>("");
 
-  const variant = search.iconVariant;
+  const availableVariants = item
+    ? VARIANTS.filter(({ value }) => item.variants.includes(value))
+    : [];
+  const variant =
+    item && item.variants.includes(search.iconVariant)
+      ? search.iconVariant
+      : (item?.variant ?? availableVariants[0]?.value ?? "duotone");
   const size = search.size;
   const codeFormat = search.syntax;
 
@@ -239,7 +246,7 @@ export function IconDetailDialog({
                 Variant
               </span>
               <Select
-                items={VARIANTS}
+                items={availableVariants}
                 value={variant}
                 onValueChange={(val) => {
                   if (val)
@@ -257,7 +264,7 @@ export function IconDetailDialog({
                 </SelectTrigger>
                 <SelectPopup>
                   <SelectList>
-                    {VARIANTS.map(({ label, value: val }) => (
+                    {availableVariants.map(({ label, value: val }) => (
                       <SelectItem key={val} value={val}>
                         <SelectItemText>{label}</SelectItemText>
                         <SelectItemIndicator>

@@ -1,6 +1,6 @@
 import { cn } from "cn";
 
-import type { IconCatalogItem } from "@/icons/catalog";
+import type { IconCatalogItem, IconVariant } from "@/icons/catalog";
 import { type Tooltip, TooltipTrigger } from "@/registry/base/tooltip";
 
 import { IconPreview } from "./icon-preview";
@@ -9,6 +9,7 @@ export type IconTooltipHandle = ReturnType<typeof Tooltip.createHandle<string>>;
 
 export interface IconCardProps {
   item: IconCatalogItem;
+  variant: IconVariant;
   svg: string;
   tooltipHandle?: IconTooltipHandle;
   onClick: () => void;
@@ -17,11 +18,14 @@ export interface IconCardProps {
 
 export function IconCard({
   item,
+  variant,
   svg,
   tooltipHandle,
   onClick,
   className,
 }: IconCardProps) {
+  const variantLabel = variant === "outline" ? "Stroke" : variant;
+
   return (
     <TooltipTrigger
       handle={tooltipHandle}
@@ -32,7 +36,7 @@ export function IconCard({
         <button
           type="button"
           onClick={onClick}
-          aria-label={`View ${item.title} icon details`}
+          aria-label={`View ${item.title} ${variantLabel} icon details`}
           className={cn(
             "group relative flex aspect-square items-center justify-center rounded-xl border border-border/70 bg-card p-2 sm:p-2.5",
             "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-hidden",

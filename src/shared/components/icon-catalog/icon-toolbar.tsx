@@ -11,8 +11,8 @@ export interface IconToolbarProps {
   categories: CategoryInfo[];
   selectedCategory: "all" | IconCategory;
   onSelectCategory: (category: "all" | IconCategory) => void;
-  selectedVariant: "all" | "duotone";
-  onSelectVariant: (variant: "all" | "duotone") => void;
+  selectedVariant: "all" | "duotone" | "filled";
+  onSelectVariant: (variant: "all" | "duotone" | "filled") => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   className?: string;
@@ -73,11 +73,14 @@ export function IconToolbar({
         <div className="ml-auto flex shrink-0 items-center">
           <Tabs
             value={selectedVariant}
-            onValueChange={(val) => onSelectVariant(val as "all" | "duotone")}
+            onValueChange={(val) =>
+              onSelectVariant(val as "all" | "duotone" | "filled")
+            }
           >
             <TabsList>
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="duotone">Duotone</TabsTrigger>
+              <TabsTrigger value="filled">Filled</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>

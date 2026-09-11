@@ -2,7 +2,11 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { SearchXIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-import type { IconCatalogItem, IconCategory } from "@/icons/catalog";
+import type {
+  IconCatalogItem,
+  IconCategory,
+  IconVariant,
+} from "@/icons/catalog";
 import { getCategoryCounts, getIconSvg, ICON_CATALOG } from "@/icons/catalog";
 import {
   Tooltip,
@@ -10,8 +14,6 @@ import {
   TooltipProvider,
 } from "@/registry/base/tooltip";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
-
-const iconTooltipHandle = Tooltip.createHandle<string>();
 import {
   Empty,
   EmptyDescription,
@@ -24,6 +26,13 @@ import { IconCard } from "./icon-card";
 import { IconCategorySidebar } from "./icon-category-filter";
 import { IconDetailDialog } from "./icon-detail-dialog";
 import { IconToolbar } from "./icon-toolbar";
+
+const iconTooltipHandle = Tooltip.createHandle<string>();
+
+interface IconDisplayItem {
+  item: IconCatalogItem;
+  variant: IconVariant;
+}
 
 export function IconCatalog() {
   const search = useSearch({ from: "/icons" });
@@ -48,8 +57,11 @@ export function IconCatalog() {
     keys: ["name", "title", "category", "tags"],
   });
 
-  // Calculate category counts from full catalog
-  const categoryCounts = useMemo(() => getCategoryCounts(ICON_CATALOG), []);
+  // Calculate category counts from the active variant's available icons.
+  const categoryCounts = useMemo(
+    () => getCategoryCounts(ICON_CATALOG, search.variant),
+    [search.variant]
+  );
 
   // Filter items by fuzzy search, selected category, and selected variant
   const filteredItems = useMemo(() => {
@@ -59,15 +71,28 @@ export function IconCatalog() {
       const matchesCategory =
         search.category === "all" || item.category === search.category;
       const matchesVariant =
-        search.variant === "all" || item.variant === search.variant;
+        search.variant === "all" || item.variants.includes(search.variant);
       return matchesCategory && matchesVariant;
     });
   }, [filter, search.category, search.q, search.variant]);
 
+  const displayItems = useMemo<IconDisplayItem[]>(
+    () =>
+      filteredItems.flatMap((item) => {
+        const variants =
+          search.variant === "all"
+            ? item.variants.filter((variant) => variant !== "outline")
+            : item.variants.filter((variant) => variant === search.variant);
+
+        return variants.map((variant) => ({ item, variant }));
+      }),
+    [filteredItems, search.variant]
+  );
+
   const updateCatalogSearch = (next: {
     q?: string;
     category?: "all" | IconCategory;
-    variant?: "all" | "duotone";
+    variant?: "all" | "duotone" | "filled";
   }) => {
     navigate({
       replace: true,
@@ -75,13 +100,13 @@ export function IconCatalog() {
     });
   };
 
-  const openIcon = (item: IconCatalogItem) => {
+  const openIcon = (item: IconCatalogItem, variant: IconVariant) => {
     setDialogItem(item);
     navigate({
       search: (previous) => ({
         ...previous,
         icon: item.name,
-        iconVariant: item.variant,
+        iconVariant: variant,
         size: "24",
       }),
     });
@@ -121,16 +146,17 @@ export function IconCatalog() {
         />
 
         {/* Grid or Empty State */}
-        {filteredItems.length > 0 ? (
+        {displayItems.length > 0 ? (
           <TooltipProvider delay={0} closeDelay={100}>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-10 sm:gap-2.5">
-              {filteredItems.map((item) => (
+              {displayItems.map(({ item, variant }) => (
                 <IconCard
-                  key={item.name}
+                  key={`${item.name}-${variant}`}
                   item={item}
-                  svg={getIconSvg(item.name)}
+                  variant={variant}
+                  svg={getIconSvg(item.name, variant)}
                   tooltipHandle={iconTooltipHandle}
-                  onClick={() => openIcon(item)}
+                  onClick={() => openIcon(item, variant)}
                 />
               ))}
             </div>

@@ -1,8 +1,12 @@
-import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  stripSearchParams,
+  useSearch,
+} from "@tanstack/react-router";
 import { z } from "zod";
 
 import { AppLayout } from "@/app-layout";
-import { ICON_CATALOG } from "@/icons/catalog";
+import { getIconCount, ICON_CATALOG } from "@/icons/catalog";
 import { IconCatalog } from "@/shared/components/icon-catalog/icon-catalog";
 import { Link } from "@/shared/components/link";
 import { ROUTES } from "@/shared/constants/routes";
@@ -19,10 +23,10 @@ export const Route = createFileRoute("/icons")({
       .enum(["all", "navigation", "notifications", "files", "communication"])
       .default("all")
       .catch("all"),
-    variant: z.enum(["all", "duotone"]).default("all").catch("all"),
+    variant: z.enum(["all", "duotone", "filled"]).default("all").catch("all"),
     icon: z.string().trim().optional().catch(undefined),
     iconVariant: z
-      .enum(["duotone", "outline"])
+      .enum(["duotone", "outline", "filled"])
       .default("duotone")
       .catch("duotone"),
     size: z
@@ -45,6 +49,9 @@ export const Route = createFileRoute("/icons")({
 });
 
 function IconsRoute() {
+  const search = useSearch({ from: "/icons" });
+  const iconCount = getIconCount(ICON_CATALOG, search.variant);
+
   return (
     <AppLayout>
       <div className="container py-10 md:py-14">
@@ -53,7 +60,7 @@ function IconsRoute() {
             {ICONS_TITLE}
           </h1>
           <p className="text-muted-foreground max-w-2xl text-base md:text-lg">
-            Explore {ICON_CATALOG.length} alternative visual styles for{" "}
+            Explore {iconCount} alternative visual styles for{" "}
             <Link
               href="https://lucide.dev"
               target="_blank"
@@ -64,6 +71,10 @@ function IconsRoute() {
             </Link>{" "}
             icons.
           </p>
+          <span className="sr-only" role="status" aria-live="polite">
+            {iconCount} {iconCount === 1 ? "icon" : "icons"} available for the
+            selected variant.
+          </span>
         </div>
 
         <IconCatalog />

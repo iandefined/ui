@@ -1,4 +1,5 @@
-export type IconVariant = "duotone" | "outline";
+export type IconVariant = "duotone" | "outline" | "filled";
+export type IconVariantFilter = "all" | IconVariant;
 
 export type IconCategory =
   | "navigation"
@@ -12,6 +13,7 @@ export interface IconCatalogItem {
   category: IconCategory;
   tags: string[];
   variant: IconVariant;
+  variants: readonly IconVariant[];
 }
 
 export interface CategoryInfo {
@@ -21,11 +23,57 @@ export interface CategoryInfo {
 }
 
 // Vite static raw SVG imports
-const svgModules = import.meta.glob("./duotone/*.svg", {
+const duotoneSvgModules = import.meta.glob("./duotone/*.svg", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>;
+const filledSvgModules = import.meta.glob("./filled/*.svg", {
+  eager: true,
+  import: "default",
+  query: "?raw",
+}) as Record<string, string>;
+
+const svgModules: Record<"duotone" | "filled", Record<string, string>> = {
+  duotone: duotoneSvgModules,
+  filled: filledSvgModules,
+};
+
+const VARIANT_ORDER: readonly IconVariant[] = ["outline", "duotone", "filled"];
+
+const variantModules: Record<IconVariant, Record<string, string>> = {
+  outline: duotoneSvgModules,
+  duotone: duotoneSvgModules,
+  filled: filledSvgModules,
+};
+
+function hasIconSvg(modules: Record<string, string>, name: string) {
+  return Object.keys(modules).some((path) => path.endsWith(`/${name}.svg`));
+}
+
+export function getIconVariants(name: string): readonly IconVariant[] {
+  return VARIANT_ORDER.filter((variant) =>
+    hasIconSvg(variantModules[variant], name)
+  );
+}
+
+function getDefaultIconVariant(name: string): IconVariant {
+  const variants = getIconVariants(name);
+  return variants.includes("duotone") ? "duotone" : (variants[0] ?? "outline");
+}
+
+function getIconVariantCount(
+  item: IconCatalogItem,
+  variant: IconVariantFilter
+) {
+  if (variant === "all") {
+    // The All filter represents the catalog-visible Duotone and Filled entries.
+    return item.variants.filter((itemVariant) => itemVariant !== "outline")
+      .length;
+  }
+
+  return item.variants.includes(variant) ? 1 : 0;
+}
 
 export const ICON_CATALOG: readonly IconCatalogItem[] = [
   {
@@ -33,35 +81,40 @@ export const ICON_CATALOG: readonly IconCatalogItem[] = [
     title: "House",
     category: "navigation",
     tags: ["home", "dashboard", "navigation", "building"],
-    variant: "duotone",
+    variant: getDefaultIconVariant("house"),
+    variants: getIconVariants("house"),
   },
   {
     name: "map-pin",
     title: "Map Pin",
     category: "navigation",
     tags: ["location", "place", "navigation", "marker"],
-    variant: "duotone",
+    variant: getDefaultIconVariant("map-pin"),
+    variants: getIconVariants("map-pin"),
   },
   {
     name: "bell",
     title: "Bell",
     category: "notifications",
     tags: ["alert", "notification", "reminder", "alarm"],
-    variant: "duotone",
+    variant: getDefaultIconVariant("bell"),
+    variants: getIconVariants("bell"),
   },
   {
     name: "folder",
     title: "Folder",
     category: "files",
     tags: ["file", "directory", "storage", "archive"],
-    variant: "duotone",
+    variant: getDefaultIconVariant("folder"),
+    variants: getIconVariants("folder"),
   },
   {
     name: "mail",
     title: "Mail",
     category: "communication",
     tags: ["email", "message", "communication", "inbox", "envelope"],
-    variant: "duotone",
+    variant: getDefaultIconVariant("mail"),
+    variants: getIconVariants("mail"),
   },
 ] as const;
 
@@ -70,7 +123,8 @@ export function getIconSvg(
   variant: IconVariant = "duotone",
   size = 24
 ): string {
-  const entry = Object.entries(svgModules).find(([path]) =>
+  const sourceVariant = variant === "outline" ? "duotone" : variant;
+  const entry = Object.entries(svgModules[sourceVariant]).find(([path]) =>
     path.endsWith(`/${name}.svg`)
   );
   if (!entry) {
@@ -105,7 +159,8 @@ export const CATEGORY_LABELS: Record<"all" | IconCategory, string> = {
 };
 
 export function getCategoryCounts(
-  items: readonly IconCatalogItem[] = ICON_CATALOG
+  items: readonly IconCatalogItem[] = ICON_CATALOG,
+  variant: IconVariantFilter = "all"
 ): CategoryInfo[] {
   const counts: Record<IconCategory, number> = {
     navigation: 0,
@@ -113,13 +168,16 @@ export function getCategoryCounts(
     files: 0,
     communication: 0,
   };
+  let total = 0;
 
   for (const item of items) {
-    counts[item.category] = (counts[item.category] || 0) + 1;
+    const itemCount = getIconVariantCount(item, variant);
+    counts[item.category] = (counts[item.category] || 0) + itemCount;
+    total += itemCount;
   }
 
   return [
-    { id: "all", label: CATEGORY_LABELS.all, count: items.length },
+    { id: "all", label: CATEGORY_LABELS.all, count: total },
     {
       id: "navigation",
       label: CATEGORY_LABELS.navigation,
@@ -137,4 +195,14 @@ export function getCategoryCounts(
       count: counts.communication,
     },
   ];
+}
+
+export function getIconCount(
+  items: readonly IconCatalogItem[] = ICON_CATALOG,
+  variant: IconVariantFilter = "all"
+): number {
+  return items.reduce(
+    (total, item) => total + getIconVariantCount(item, variant),
+    0
+  );
 }
