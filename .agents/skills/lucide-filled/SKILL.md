@@ -672,6 +672,51 @@ For Filled `folder`:
 - do not shrink body inward
 - do not enlarge tab
 
+# Container Enclosure Icons: Enclosed vs. Escaping Features
+
+A crucial distinction exists for icons featuring a geometric container (`square-*`, `circle-*`) with directional arrows:
+
+## 1. Fully Enclosed Arrows (Fill the Container, Cut Out the Arrow)
+
+When the arrow or internal feature is **fully contained within** the enclosure boundary (e.g., `square-arrow-down`, `square-arrow-up`, `square-arrow-down-left`, `square-arrow-down-right`, `circle-arrow-down`, `circle-arrow-left`):
+
+- Solidify the outer container (`<rect width="18" height="18" x="3" y="3" rx="2" fill="currentColor" />` or `<circle cx="12" cy="12" r="10" fill="currentColor" />`)
+- Subtract the arrow from the solid mass as an inverse white-space seam using a `<mask>` or compound path
+- The inverse arrow stroke must preserve Lucide's 2px weight, rounded caps, and rounded joins
+
+## 2. Escaping / Outward Features (The Arrow-Out Rule: Do NOT Fill)
+
+When an icon represents an arrow or feature **emerging, escaping, or breaking out** across the container boundary (e.g., `circle-arrow-out-*`, `square-arrow-out-*`, `square-arrow-right-exit`, `square-arrow-right-enter`):
+
+> **Do NOT force a filled variant.**
+
+Solidifying the container behind an escaping arrow produces an unnatural, unbalanced shape (such as a solid pacman wedge or an amputated box) where the arrow either looks awkwardly detached or half-submerged into the solid mass.
+
+**Required Treatment**:
+- Revert the Filled variant to the **exact canonical Lucide outline stroke** (identical to the base icon, root `fill="none"` with `stroke="currentColor"`).
+- Never invent custom chamfered polygons or solid wedge silhouettes for arrow-out icons.
+
+# Mostly Linear & Alphanumeric Icons
+
+Some Lucide icons have no meaningful closed solid body:
+
+- Pure directional arrows (`arrow-right`, `arrow-down-up`, `arrow-left-right`)
+- Chevrons (`chevron-right`, `chevrons-up-down`)
+- Sorting and ranking arrows with characters (`arrow-down-0-1`, `arrow-down-a-z`, `arrow-up-z-a`)
+- Tools without a solid material body (e.g., `search`)
+- Controls, sliders, and separators
+
+For these icons:
+
+> **The Filled variant must be identical to the canonical Lucide outline stroke.**
+
+Do not invent arbitrary solid blobs, filled backgrounds, or fake silhouettes. If there is no natural material body to fill, preserve the stroke.
+
+# Canonical Lucide Inspection Traps
+
+1. **Non-First Container Nodes**: In Lucide canonical `__iconNode`, container primitives (such as `<rect>` in `square-arrow-down-left`) are not always the first child node. Always inspect every node in `__iconNode`, rather than assuming `node[0]` is the container.
+2. **Path Coordinate Direction**: Pay strict attention to relative vs absolute commands when verifying paths against Lucide upstream (e.g., `M13 21h6...` drawing rightward vs accidental `M13 21H5...` drawing leftward across an open corner). Always confirm against upstream Lucide definitions.
+
 # Visual Harmonic Consistency
 
 A good Filled icon must preserve:
@@ -849,6 +894,15 @@ Reject immediately if:
 - curves become generic pills
 - detached detail spacing changes
 - icon only works after a global transform
+
+## Containers with Escaping Features
+
+- creating a solid container silhouette behind an arrow that exits or enters the enclosure (`circle-arrow-out-*`, `square-arrow-out-*`, `square-arrow-right-exit`)
+- solidifying containers into pacman wedges or chamfered polygons
+
+## Linear & Alphanumeric Icons
+
+- creating arbitrary solid blobs or artificial silhouettes for icons without a natural material body (e.g., pure arrows, chevrons, `search`, `arrow-down-0-1`, `arrow-down-a-z`)
 
 # Authoring Workflow
 

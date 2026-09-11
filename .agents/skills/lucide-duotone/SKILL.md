@@ -527,6 +527,72 @@ Do not sacrifice clarity just to force visible duotone treatment.
 
 ---
 
+# Container Enclosure Icons with Escaping Features (The Arrow-Out Rule)
+
+When an icon features a container or enclosure from which an arrow or feature emerges, escapes, or enters (e.g., `circle-arrow-out-*`, `square-arrow-out-*`, `square-arrow-right-enter`, `square-arrow-right-exit`):
+
+> **Fill the ENTIRE underlying geometric enclosure without chopping or chamfering the opening.**
+
+Do not cut out a pie wedge ("pacman" shape) or chamfer the container corner diagonally along the missing stroke.
+
+- For circular popout containers (`circle-arrow-out-*`):
+  ```xml
+  <circle cx="12" cy="12" r="10" fill="currentColor" fill-opacity="0.33" stroke="none" />
+  ```
+- For square popout/enter/exit containers (`square-arrow-out-*`, `square-arrow-right-*`):
+  ```xml
+  <rect width="18" height="18" x="3" y="3" rx="2" fill="currentColor" fill-opacity="0.33" stroke="none" />
+  ```
+
+Foreground strokes render directly on top of this complete enclosure. The unbroken tint communicates the structural container mass, while the foreground strokes clearly describe the open wall and the escaping arrow.
+
+---
+
+# Alphanumeric Counters and Character Loops Rule
+
+For icons containing typographic glyphs or numerals (e.g. sorting and ranking arrows `arrow-down-0-1`, `arrow-up-1-0`, `arrow-down-a-z`, `arrow-up-z-a`):
+
+> **Add duotone tint to the interior enclosed counters / loops of characters that possess them.**
+
+- **`0`**: The interior capsule/pill counter receives duotone tint:
+  ```xml
+  <rect x="15" y="4" width="4" height="6" rx="2" ry="2" fill="currentColor" fill-opacity="0.33" stroke="none" />
+  ```
+- **`A`**: The enclosed upper triangular/rounded counter above the crossbar receives duotone tint:
+  ```xml
+  <path d="M15 8v-1.5a2.5 2.5 0 0 1 5 0V8z" fill="currentColor" fill-opacity="0.33" stroke="none" />
+  ```
+  Do **not** tint the open space between the lower legs of the 'A' (that is open void with no bounding bottom stroke).
+- **Open glyphs (`1`, `Z`)**: Characters without closed interior loops remain stroke-only and receive no tint, preserving crisp readability and visual balance.
+
+---
+
+# Runtime Catalog Outline Extraction Compatibility
+
+The icon catalog runtime automatically extracts the `outline` variant from duotone assets using:
+
+```javascript
+variant === "outline"
+  ? rawSvg.replace(/<(path|rect|circle|polygon)[^>]*fill-opacity=[^>]*\/>\s*/gi, "")
+  : rawSvg
+```
+
+To ensure outline extraction functions cleanly:
+
+- Every secondary tint element MUST be a self-closing element (`<path ... />`, `<rect ... />`, `<circle ... />`, `<polygon ... />`)
+- Every secondary tint element MUST include `fill-opacity="0.33"`
+- Secondary tint elements MUST be placed before all foreground stroke elements
+- Do not use wrapper `<g>` tags with `fill-opacity` for tint geometry
+
+---
+
+# Canonical Lucide Inspection Traps
+
+1. **Non-First Container Nodes**: In Lucide canonical `__iconNode`, container primitives (such as `<rect>` in `square-arrow-down-left`) are not always the first child node. Always inspect every node in `__iconNode`, rather than assuming `node[0]` is the container.
+2. **Path Coordinate Direction**: Pay strict attention to relative vs absolute commands when verifying paths against Lucide upstream (e.g., `M13 21h6...` drawing rightward vs accidental `M13 21H5...` drawing leftward across an open corner).
+
+---
+
 # Multiple Objects
 
 When an icon contains multiple objects, use tint to establish hierarchy.
