@@ -13,11 +13,11 @@ const activity = [
 
 export default function ScrollAreaVerticalShadowDemo() {
   return (
-    <div className="rounded-md border bg-card">
+    <div className="rounded-md border">
       <ScrollArea className="h-64 w-80" scrollShadow="vertical">
         <ScrollAreaContent className="space-y-3 p-4">
           {activity.map((item, index) => (
-            <div className="rounded-md border p-3 text-sm" key={item}>
+            <div className="rounded-md border bg-card p-3 text-sm" key={item}>
               <p>{item}</p>
               <p className="text-muted-foreground mt-1 text-xs">
                 {index + 1} hour{index === 0 ? "" : "s"} ago

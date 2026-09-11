@@ -6,7 +6,7 @@ import {
 import { z } from "zod";
 
 import { AppLayout } from "@/app-layout";
-import { getIconCount, ICON_CATALOG } from "@/icons/catalog";
+import { getIconCount, ICON_CATALOG, ICON_CATEGORIES } from "@/icons/catalog";
 import { IconCatalog } from "@/shared/components/icon-catalog/icon-catalog";
 import { Link } from "@/shared/components/link";
 import { ROUTES } from "@/shared/constants/routes";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/icons")({
   validateSearch: z.object({
     q: z.string().trim().default("").catch(""),
     category: z
-      .enum(["all", "navigation", "notifications", "files", "communication"])
+      .enum(["all", ...ICON_CATEGORIES])
       .default("all")
       .catch("all"),
     variant: z.enum(["all", "duotone", "filled"]).default("all").catch("all"),

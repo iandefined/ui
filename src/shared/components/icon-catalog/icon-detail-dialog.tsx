@@ -187,7 +187,7 @@ export function IconDetailDialog({
         </DialogHeader>
 
         <DialogBody
-          nativeScroll
+          fadeEdges="y"
           className="flex min-w-0 w-full max-w-full flex-col gap-4 py-2 overflow-x-hidden"
         >
           {/* Section 1: Aliases */}

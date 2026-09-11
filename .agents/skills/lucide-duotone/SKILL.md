@@ -586,33 +586,86 @@ To ensure outline extraction functions cleanly:
 
 ---
 
-# Canonical Lucide Inspection Traps
+# Catalog Metadata Standards: Categories & Aliases (Non-Negotiable)
 
-1. **Non-First Container Nodes**: In Lucide canonical `__iconNode`, container primitives (such as `<rect>` in `square-arrow-down-left`) are not always the first child node. Always inspect every node in `__iconNode`, rather than assuming `node[0]` is the container.
-2. **Path Coordinate Direction**: Pay strict attention to relative vs absolute commands when verifying paths against Lucide upstream (e.g., `M13 21h6...` drawing rightward vs accidental `M13 21H5...` drawing leftward across an open corner).
+When registering any icon in `src/icons/catalog.ts`:
+
+## 1. Upstream Lucide Categories (Mandatory)
+
+Always inspect the official upstream Lucide icon JSON (`https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/<name>.json`):
+- **Use the canonical Lucide category** (`categories[0]`).
+- Never invent arbitrary categories or force icons into an artificial subset.
+- For example:
+  - `settings` → `"account"` (not "navigation")
+  - `star` → `"account"`
+  - `bookmark` → `"account"`
+  - `user` → `"account"`
+  - `minus` → `"math"`
+  - `copy` → `"text"`
+  - `moon` → `"accessibility"`
+  - `heart` → `"medical"`
+  - directional arrows / chevrons → `"arrows"`
+  - alphanumeric sorting arrows (`arrow-down-0-1`, `arrow-down-a-z`) → `"text"`
+
+## 2. Upstream Lucide Tags & Aliases (Mandatory & Non-Negotiable)
+
+The `tags` array in `ICON_CATALOG` powers the search bar and alias badges:
+- **Include ALL original Lucide tags first**: You MUST copy the exact tags from the official Lucide icon metadata (`tags` array in `icons/<name>.json`).
+- **Additional aliases**: You may add your own interpretations, synonyms, and directional descriptors after the original tags, but the official Lucide tags are non-negotiable.
+- Always include the canonical icon name as well.
 
 ---
 
-# Multiple Objects
+# Multiple Objects & Duplicate Sheets (The Copy Rule)
 
-When an icon contains multiple objects, use tint to establish hierarchy.
+When an icon contains multiple or overlapping objects, use tint deliberately to establish visual hierarchy.
 
-Preferred pattern:
+## Overlapping Duplicates & Stacked Sheets (`copy`, etc.)
 
+For duplicated object actions such as `copy`:
+- Apply the secondary tint (`fill-opacity="0.33"`) to the **primary foreground sheet** (`x="8" y="8"`), while rendering the rear/background sheet (`x="2" y="2"`) with primary outline stroke.
+- This creates immediate foreground focus, optical depth, and crisp separation between the active copied item and its source outline.
+- Both sheets receive full foreground strokes on top of the tint.
+
+```xml
+<svg ...>
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" fill="currentColor" fill-opacity="0.33" stroke="none" />
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+</svg>
+```
+
+## Rear/Supporting Object Tint Pattern
+
+In multi-object contexts where the front object is an opaque modifier or distinct subject (e.g. `layers`, cards):
 ```text
 rear/supporting object → secondary tint
 front/important object → primary
 ```
 
-Examples:
-
-- overlapping documents
-- users
-- layers
-- cards
-- panels
-
 Do not necessarily tint every object equally.
+
+---
+
+# Mechanical Voids & Center Apertures (The Settings Rule)
+
+When an icon represents a mechanical part, tool, or geometry with an intentional center aperture or axle hole (e.g., `settings` gear with center `cx="12" cy="12" r="3"`):
+
+> **The center aperture is a True Void, not material. It must remain transparent.**
+
+In the secondary tint geometry:
+- Carve out the center hole using `fill-rule="evenodd"` on the self-closing tint `<path ... />` element:
+  ```xml
+  <path
+    d="M9.671 4.136... M 15 12 a 3 3 0 1 0 -6 0 a 3 3 0 1 0 6 0 Z"
+    fill="currentColor"
+    fill-opacity="0.33"
+    fill-rule="evenodd"
+    stroke="none"
+  />
+  ```
+- Overlay the canonical foreground strokes (gear body path + center `<circle cx="12" cy="12" r="3" />`) on top.
+- This maintains structural recognizability as an interlocking gear, rather than filling the axle hole into a solid disc.
 
 ---
 

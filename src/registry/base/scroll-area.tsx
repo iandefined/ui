@@ -43,8 +43,16 @@ function ScrollArea({
         data-slot="scroll-area-viewport"
         className={cn(
           "size-full min-h-0 flex-1 overscroll-contain rounded-[inherit] outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+          orientation === "vertical" &&
+            "overflow-x-hidden! [overflow-x:hidden!important]",
+          orientation === "horizontal" &&
+            "overflow-y-hidden! [overflow-y:hidden!important]",
           viewportClassName
         )}
+        style={{
+          ...(orientation === "vertical" ? { overflowX: "hidden" } : {}),
+          ...(orientation === "horizontal" ? { overflowY: "hidden" } : {}),
+        }}
       >
         <div
           data-slot="scroll-area-vertical-shadow"
@@ -209,7 +217,7 @@ function ScrollAreaContent({
   className,
   children,
   ...props
-}: ScrollAreaPrimitive.Viewport.Props) {
+}: ScrollAreaPrimitive.Content.Props) {
   return (
     <ScrollAreaPrimitive.Content
       data-slot="scroll-area-content"

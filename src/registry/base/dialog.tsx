@@ -426,6 +426,15 @@ function getScrollShadow(fadeEdges: DialogFadeEdges) {
   return "none" as const;
 }
 
+interface DialogBodyProps extends React.ComponentProps<"div"> {
+  nativeScroll?: boolean;
+  fadeEdges?: DialogFadeEdges;
+  scrollbarGutter?: boolean;
+  persistScrollbar?: boolean;
+  hideScrollbar?: boolean;
+  viewportClassName?: string;
+}
+
 function DialogBody({
   className,
   nativeScroll = false,
@@ -433,18 +442,16 @@ function DialogBody({
   scrollbarGutter = false,
   persistScrollbar = false,
   hideScrollbar = false,
+  viewportClassName,
   children,
   ...props
-}: React.ComponentProps<"div"> & {
-  nativeScroll?: boolean;
-  fadeEdges?: DialogFadeEdges;
-  scrollbarGutter?: boolean;
-  persistScrollbar?: boolean;
-  hideScrollbar?: boolean;
-}) {
+}: DialogBodyProps) {
   const scroll = React.useContext(DialogScrollContext);
   const content = (
-    <div className={cn("px-6 py-1", className)} {...props}>
+    <div
+      className={cn("min-w-0 w-full max-w-full px-6 py-1", className)}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -453,8 +460,8 @@ function DialogBody({
     <div
       data-slot="dialog-body"
       className={cn(
-        "min-h-0",
-        scroll === "inside" && "flex min-h-0 flex-1 flex-col",
+        "min-h-0 min-w-0 w-full max-w-full",
+        scroll === "inside" && "flex min-h-0 min-w-0 w-full flex-1 flex-col",
         "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-header]))]:pt-5",
         "in-[[data-slot=dialog-content]:not(:has([data-slot=dialog-footer]))]:pb-5",
         "in-data-[variant=inset]:in-[[data-slot=dialog-content]:has([data-slot=dialog-footer])]:pb-5"
@@ -466,9 +473,10 @@ function DialogBody({
         <div
           data-slot="dialog-body-scroll"
           className={cn(
-            "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+            "min-h-0 min-w-0 w-full flex-1 overflow-y-auto overscroll-contain",
             scrollbarGutter && "[scrollbar-gutter:stable]",
-            hideScrollbar && "[scrollbar-width:none]"
+            hideScrollbar && "[scrollbar-width:none]",
+            viewportClassName
           )}
         >
           {content}
@@ -476,15 +484,22 @@ function DialogBody({
       ) : (
         <ScrollArea
           className={cn(
-            "flex-1",
+            "min-h-0 min-w-0 w-full flex-1",
             persistScrollbar &&
               "[&_[data-slot=scroll-area-scrollbar]]:opacity-100"
           )}
-          viewportClassName={cn(scrollbarGutter && "[scrollbar-gutter:stable]")}
+          viewportClassName={cn(
+            "min-w-0 overflow-x-hidden! [overflow-x:hidden!important]",
+            scrollbarGutter && "[scrollbar-gutter:stable]",
+            viewportClassName
+          )}
           scrollShadow={getScrollShadow(fadeEdges)}
           hideScrollbar={hideScrollbar}
         >
-          <ScrollAreaContent className="min-h-full">
+          <ScrollAreaContent
+            className="min-h-full min-w-0 w-full max-w-full"
+            style={{ minWidth: 0, maxWidth: "100%" }}
+          >
             {content}
           </ScrollAreaContent>
         </ScrollArea>
@@ -550,4 +565,9 @@ export {
   DialogViewport,
   createDialogHandle,
 };
-export type { DialogFadeEdge, DialogFadeEdges, DialogScroll };
+export type {
+  DialogBodyProps,
+  DialogFadeEdge,
+  DialogFadeEdges,
+  DialogScroll,
+};

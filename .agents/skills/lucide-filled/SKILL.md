@@ -712,10 +712,81 @@ For these icons:
 
 Do not invent arbitrary solid blobs, filled backgrounds, or fake silhouettes. If there is no natural material body to fill, preserve the stroke.
 
-# Canonical Lucide Inspection Traps
+# Copy & Overlapping Layer Rule
 
-1. **Non-First Container Nodes**: In Lucide canonical `__iconNode`, container primitives (such as `<rect>` in `square-arrow-down-left`) are not always the first child node. Always inspect every node in `__iconNode`, rather than assuming `node[0]` is the container.
-2. **Path Coordinate Direction**: Pay strict attention to relative vs absolute commands when verifying paths against Lucide upstream (e.g., `M13 21h6...` drawing rightward vs accidental `M13 21H5...` drawing leftward across an open corner). Always confirm against upstream Lucide definitions.
+Icons depicting stacked or overlapping sheets/surfaces (such as `copy`, stacked documents, and layered cards) require deliberate negative-space separation in their Filled variant.
+
+When multiple solid layers overlap:
+- Do **not** allow the solid shapes to simply touch or merge into a single indistinct silhouette.
+- Separate overlapping layers with an **inverse whitespace line (negative-space seam)** that matches the visual width of a standard Lucide stroke: **`2px`** (or 2 SVG units).
+
+## Mask Geometry for 2px Seams
+
+When using an SVG mask on the background layer:
+1. The foreground layer is drawn with canonical rounded stroke (`stroke-width="2"` and `stroke-linejoin="round"`), which extends 1 SVG unit outward from its path centerline.
+2. To achieve an exact 2px uniform whitespace gap around the foreground layer, expand the black subtractive cutout on the background layer by using `stroke-width="6"` with matching `stroke-linejoin="round"` on the same path:
+   ```xml
+   <defs>
+     <mask id="copy-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+       <rect width="24" height="24" fill="white" />
+       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" fill="black" stroke="black" stroke-width="6" stroke-linejoin="round" />
+     </mask>
+   </defs>
+   <rect width="14" height="14" x="2" y="2" rx="2" ry="2" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" mask="url(#copy-filled-mask)" />
+   <rect width="14" height="14" x="8" y="8" rx="2" ry="2" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+   ```
+3. The math:
+   - Foreground outer edge: `path + 1px`
+   - Cutout outer edge: `path + 3px`
+   - Resulting negative-space gap: `3px - 1px = 2px`
+4. This produces a perfectly uniform 2px whitespace gap along straight edges AND concentric rounded corner arcs (`rx=2`), maintaining exact Lucide stroke rhythm and corner continuity.
+
+# Settings & Mechanical Center Aperture Rule
+
+For icons with mechanical apertures, axle holes, or center openings (e.g. `settings` center hole `r=3`):
+- The center hole is a **True Void**, not material.
+- It must remain completely transparent in the Filled variant.
+- Use `fill-rule="evenodd"` on the filled path to carve out the aperture, preserving the canonical outline hole with its 2px stroke border:
+  ```xml
+  <path
+    d="M9.671 4.136... M 15 12 a 3 3 0 1 0 -6 0 a 3 3 0 1 0 6 0 Z"
+    fill="currentColor"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill-rule="evenodd"
+  />
+  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none" />
+  ```
+
+# Catalog Metadata Standards: Categories & Aliases (Non-Negotiable)
+
+When registering any icon in `src/icons/catalog.ts`:
+
+## 1. Upstream Lucide Categories (Mandatory)
+
+Always inspect the official upstream Lucide icon JSON (`https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/<name>.json`):
+- **Use the canonical Lucide category** (`categories[0]`).
+- Never invent arbitrary categories or force icons into an artificial subset.
+- For example:
+  - `settings` → `"account"` (not "navigation")
+  - `star` → `"account"`
+  - `bookmark` → `"account"`
+  - `user` → `"account"`
+  - `minus` → `"math"`
+  - `copy` → `"text"`
+  - `moon` → `"accessibility"`
+  - `heart` → `"medical"`
+  - directional arrows / chevrons → `"arrows"`
+  - alphanumeric sorting arrows (`arrow-down-0-1`, `arrow-down-a-z`) → `"text"`
+
+## 2. Upstream Lucide Tags & Aliases (Mandatory & Non-Negotiable)
+
+The `tags` array in `ICON_CATALOG` powers the search bar and alias badges:
+- **Include ALL original Lucide tags first**: You MUST copy the exact tags from the official Lucide icon metadata (`tags` array in `icons/<name>.json`).
+- **Additional aliases**: You may add your own interpretations, synonyms, and directional descriptors after the original tags, but the official Lucide tags are non-negotiable.
+- Always include the canonical icon name as well.
 
 # Visual Harmonic Consistency
 
@@ -971,6 +1042,12 @@ For every icon:
 - [ ] hole is circular
 - [ ] hole's perceived size matches Outline
 - [ ] hole is optically enlarged slightly if Filled mass makes it look too small
+
+## Overlapping Layers (Copy, Stacked Sheets)
+
+- [ ] overlapping shapes do not touch or merge into a blob
+- [ ] whitespace line separating layers has exact 2px visual width
+- [ ] mask cutout matches foreground corner radius concentrically
 
 ## Validation
 
