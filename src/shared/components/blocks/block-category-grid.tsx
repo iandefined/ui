@@ -686,10 +686,10 @@ export function BlockCategoryGrid() {
   return (
     <div className="container py-10 md:py-14">
       <div className="mb-6 space-y-2">
-        <h1 className="scroll-m-20 text-neutral-800 dark:text-neutral-300 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
+        <h1 className="scroll-m-20 text-neutral-800 dark:text-neutral-300 text-3xl font-semibold tracking-tight md:text-4xl">
           Blocks
         </h1>
-        <p className="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
+        <p className="text-muted-foreground max-w-2xl text-base md:text-lg">
           Browse production-ready registry blocks and copy them directly to your
           project.
         </p>

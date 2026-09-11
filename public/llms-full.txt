@@ -8977,9 +8977,7 @@ export default function DrawerFooterPositionsDemo() {
         const behaviorLabel = sticky ? "Sticky" : "Following";
         const footer = (
           <DrawerFooter sticky={sticky} className="py-4">
-            <DrawerCloseTrigger
-              render={<Button size="sm" variant="outline" />}
-            >
+            <DrawerCloseTrigger render={<Button size="sm" variant="outline" />}>
               Close
             </DrawerCloseTrigger>
             <Button size="sm">{behaviorLabel} action</Button>
@@ -20360,53 +20358,39 @@ Every tab variant supports `sm`, `default`, and `lg` to match the sizing of `Inp
 ```tsx
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 
-const variants = [
-  { label: "Segmented", value: "segmented" },
-  { label: "Underline", value: "underline" },
-  { label: "Card", value: "card" },
-] as const;
+const variants = ["segmented", "underline", "card"] as const;
 
-const sizes = [
-  { label: "Small", value: "sm" },
-  { label: "Default", value: "default" },
-  { label: "Large", value: "lg" },
-] as const;
+const sizes = ["sm", "default", "lg"] as const;
 
 export default function TabsSizesDemo() {
   return (
-    <div className="grid w-full gap-6 lg:grid-cols-2 2xl:grid-cols-3">
+    <div className="grid w-full gap-4 lg:grid-cols-2 2xl:grid-cols-3">
       {variants.map((variant) => (
-        <div className="flex min-w-0 flex-col gap-3" key={variant.value}>
-          <p className="text-sm font-medium">{variant.label}</p>
-          <div className="flex flex-col gap-3">
-            {sizes.map((size) => (
-              <div
-                className="flex min-w-0 flex-wrap items-center gap-3"
-                key={size.value}
+        <div className="flex min-w-0 flex-col gap-3" key={variant}>
+          {sizes.map((size) => (
+            <div
+              className="flex min-w-0 flex-wrap items-center gap-3"
+              key={size}
+            >
+              <Tabs
+                className="min-w-0"
+                defaultValue="home"
+                size={size}
+                variant={variant}
               >
-                <span className="w-14 shrink-0 text-xs text-muted-foreground">
-                  {size.label}
-                </span>
-                <Tabs
-                  className="min-w-0"
-                  defaultValue="account"
-                  size={size.value}
-                  variant={variant.value}
+                <TabsList
+                  className={
+                    variant === "underline"
+                      ? "border-b border-border"
+                      : undefined
+                  }
                 >
-                  <TabsList
-                    className={
-                      variant.value === "underline"
-                        ? "border-b border-border"
-                        : undefined
-                    }
-                  >
-                    <TabsTrigger value="account">Account</TabsTrigger>
-                    <TabsTrigger value="password">Password</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-            ))}
-          </div>
+                  <TabsTrigger value="home">Home</TabsTrigger>
+                  <TabsTrigger value="docs">Docs</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          ))}
         </div>
       ))}
     </div>

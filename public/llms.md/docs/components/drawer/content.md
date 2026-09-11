@@ -325,9 +325,7 @@ export default function DrawerFooterPositionsDemo() {
         const behaviorLabel = sticky ? "Sticky" : "Following";
         const footer = (
           <DrawerFooter sticky={sticky} className="py-4">
-            <DrawerCloseTrigger
-              render={<Button size="sm" variant="outline" />}
-            >
+            <DrawerCloseTrigger render={<Button size="sm" variant="outline" />}>
               Close
             </DrawerCloseTrigger>
             <Button size="sm">{behaviorLabel} action</Button>

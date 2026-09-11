@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlocksRouteImport } from './routes/blocks'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as IconsRouteImport } from './routes/icons'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as BlocksIndexRouteImport } from './routes/blocks.index'
 import { Route as BlocksBlockRouteImport } from './routes/blocks.$block'
@@ -34,6 +35,11 @@ const BlocksRoute = BlocksRouteImport.update({
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
   path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IconsRoute = IconsRouteImport.update({
+  id: '/icons',
+  path: '/icons',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blocks': typeof BlocksRouteWithChildren
   '/docs': typeof DocsRouteWithChildren
+  '/icons': typeof IconsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/blocks/$block': typeof BlocksBlockRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/icons': typeof IconsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/docs/$': typeof DocsSplatRoute
   '/view/$name': typeof ViewNameRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/blocks': typeof BlocksRouteWithChildren
   '/docs': typeof DocsRouteWithChildren
+  '/icons': typeof IconsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/blocks/$block': typeof BlocksBlockRouteWithChildren
   '/docs/$': typeof DocsSplatRoute
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blocks'
     | '/docs'
+    | '/icons'
     | '/llms.txt'
     | '/blocks/$block'
     | '/docs/$'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/icons'
     | '/llms.txt'
     | '/docs/$'
     | '/view/$name'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blocks'
     | '/docs'
+    | '/icons'
     | '/llms.txt'
     | '/blocks/$block'
     | '/docs/$'
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlocksRoute: typeof BlocksRouteWithChildren
   DocsRoute: typeof DocsRouteWithChildren
+  IconsRoute: typeof IconsRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   ViewNameRoute: typeof ViewNameRoute
 }
@@ -182,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/icons': {
+      id: '/icons'
+      path: '/icons'
+      fullPath: '/icons'
+      preLoaderRoute: typeof IconsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llms.txt': {
@@ -286,6 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlocksRoute: BlocksRouteWithChildren,
   DocsRoute: DocsRouteWithChildren,
+  IconsRoute: IconsRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   ViewNameRoute: ViewNameRoute,
 }

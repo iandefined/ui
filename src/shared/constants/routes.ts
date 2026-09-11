@@ -10,6 +10,7 @@ export const ROUTES = {
   DOCS_INSTALLATION: "/docs/installation",
   DOCS_UTILITIES: "/docs/utilities",
   HOME: "/",
+  ICONS: "/icons",
   LLMS: "/llms.txt",
   LLMS_FULL: "/llms-full.txt",
   LLMS_MD: "/llms.md",

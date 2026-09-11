@@ -17,6 +17,7 @@ const navItems = [
   { href: ROUTES.DOCS_HOOKS, label: "Hooks" },
   { href: ROUTES.DOCS_UTILITIES, label: "Utilities" },
   { href: ROUTES.BLOCKS, label: "Blocks" },
+  { href: ROUTES.ICONS, label: "Icons" },
 ];
 
 export const SiteHeader = () => (
