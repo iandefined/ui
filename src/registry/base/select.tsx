@@ -5,7 +5,7 @@
 import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { cn } from "cn";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 
 // Styles for invalid animation shake
 const invalidShakeStyles = `
@@ -211,6 +211,12 @@ function SelectValue({
   placeholder = "Select...",
   ...props
 }: SelectValueProps) {
+  const hasMountedRef = useRef(false);
+
+  useEffect(() => {
+    hasMountedRef.current = true;
+  }, []);
+
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
@@ -238,7 +244,9 @@ function SelectValue({
             key={newValue}
             {...renderProps}
             className={cn(
-              "w-full truncate text-left transition-[opacity,translate,filter] duration-200 ease-out starting:translate-y-1.5 starting:opacity-0 starting:blur-[6px]",
+              "w-full truncate text-left",
+              hasMountedRef.current &&
+                "transition-[opacity,translate,filter] duration-200 ease-out starting:translate-y-1.5 starting:opacity-0 starting:blur-[6px]",
               className
             )}
           />
