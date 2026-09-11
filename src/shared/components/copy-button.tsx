@@ -43,18 +43,31 @@ export const CopyButton = ({
     timeout: 1000,
   });
 
-  const handleCopy = useCallback(async () => {
-    const text = await getValue();
-    const hasCopied = await copyToClipboard(text);
+  const handleCopy = useCallback(() => {
+    const valueToCopy = getValue();
 
-    if (hasCopied && event) {
-      trackEvent({
-        name: event,
-        properties: {
-          code: text,
-        },
+    const trackCopy = (text: string, hasCopied: boolean) => {
+      if (hasCopied && event) {
+        trackEvent({
+          name: event,
+          properties: {
+            code: text,
+          },
+        });
+      }
+    };
+
+    if (typeof valueToCopy === "string") {
+      void copyToClipboard(valueToCopy).then((hasCopied) => {
+        trackCopy(valueToCopy, hasCopied);
       });
+      return;
     }
+
+    void valueToCopy.then(async (text) => {
+      const hasCopied = await copyToClipboard(text);
+      trackCopy(text, hasCopied);
+    });
   }, [copyToClipboard, event, getValue]);
 
   const copyButton = (
@@ -65,7 +78,7 @@ export const CopyButton = ({
       className={cn(
         children
           ? ""
-          : "bg-code absolute top-3 right-2 z-auto size-7 hover:opacity-100 focus-visible:opacity-100",
+          : "bg-code absolute top-3 right-2 z-auto size-7 hitbox-2 hover:opacity-100 focus-visible:opacity-100",
         className
       )}
       onClick={handleCopy}

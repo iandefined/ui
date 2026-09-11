@@ -7,7 +7,16 @@ const legacyCopyToClipboard = (value: string) => {
   textArea.value = value;
   textArea.setAttribute("readonly", "");
   textArea.style.position = "fixed";
-  textArea.style.opacity = "0";
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.width = "2px";
+  textArea.style.height = "2px";
+  textArea.style.padding = "0";
+  textArea.style.border = "0";
+  textArea.style.outline = "0";
+  textArea.style.boxShadow = "none";
+  textArea.style.background = "transparent";
+  textArea.style.opacity = "0.01";
   textArea.style.pointerEvents = "none";
 
   document.body.append(textArea);
