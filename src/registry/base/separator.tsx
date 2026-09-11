@@ -28,22 +28,22 @@ const separatorVariants = cva(
       {
         variant: "solid",
         lightSource: "above",
-        className: "[box-shadow:0_1px_0_0_var(--background)]",
-      },
-      {
-        variant: "solid",
-        lightSource: "below",
         className: "[box-shadow:0_-1px_0_0_var(--background)]",
       },
       {
         variant: "solid",
+        lightSource: "below",
+        className: "[box-shadow:0_1px_0_0_var(--background)]",
+      },
+      {
+        variant: "solid",
         lightSource: "right",
-        className: "[box-shadow:-1px_0_0_0_var(--background)]",
+        className: "[box-shadow:1px_0_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "left",
-        className: "[box-shadow:1px_0_0_0_var(--background)]",
+        className: "[box-shadow:-1px_0_0_0_var(--background)]",
       },
     ],
     defaultVariants: {
