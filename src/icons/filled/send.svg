@@ -9,6 +9,10 @@
     <mask id="send-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
       <rect width="24" height="24" fill="white" />
       <path d="M25 -1 5 19" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path
+        d="M20.388 2.198 L21.095 2.905 L23.216 0.784 L20.845 -2.032 L19.924 1.454 A0.45 0.45 0 0 1 20.388 2.198 Z M21.802 3.612 L21.095 2.905 L23.216 0.784 L26.032 3.155 L22.546 4.076 A0.45 0.45 0 0 0 21.802 3.612 Z M9.539 13.046 L10.246 13.754 L8.479 15.521 L7.033 15.127 L8.892 13.179 A0.6 0.6 0 0 0 9.539 13.046 Z M10.954 14.461 L10.246 13.754 L8.479 15.521 L8.873 16.967 L10.821 15.108 A0.6 0.6 0 0 1 10.954 14.461 Z"
+        fill="black"
+      />
     </mask>
   </defs>
   <path
