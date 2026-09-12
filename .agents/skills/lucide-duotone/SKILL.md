@@ -612,31 +612,29 @@ To ensure outline extraction functions cleanly:
 
 # Catalog Metadata Standards: Categories & Aliases (Non-Negotiable)
 
-When registering any icon in `src/icons/catalog.ts`:
+When registering or auditing any icon in `src/icons/catalog.ts`:
 
-## 1. Upstream Lucide Categories (Mandatory)
+## 1. Exact Upstream Lucide Category
 
-Always inspect the official upstream Lucide icon JSON (`https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/<name>.json`):
-- **Use the canonical Lucide category** (`categories[0]`).
-- Never invent arbitrary categories or force icons into an artificial subset.
-- For example:
-  - `settings` → `"account"` (not "navigation")
-  - `star` → `"account"`
-  - `bookmark` → `"account"`
-  - `user` → `"account"`
-  - `minus` → `"math"`
-  - `copy` → `"text"`
-  - `moon` → `"accessibility"`
-  - `heart` → `"medical"`
-  - directional arrows / chevrons → `"arrows"`
-  - alphanumeric sorting arrows (`arrow-down-0-1`, `arrow-down-a-z`) → `"text"`
+Read the official upstream icon JSON for the exact icon name:
+`https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/<name>.json`.
 
-## 2. Upstream Lucide Tags & Aliases (Mandatory & Non-Negotiable)
+- Store **exactly** `categories[0]` as the catalog `category` ID.
+- Never choose a category from the icon's name, visual meaning, a related category, or a personal interpretation. Never use a later category in the array.
+- Keep the catalog category ID lowercase and unchanged. Examples: `command` → `development`, `paperclip` → `text`, `settings` → `account`, `minus` → `math`.
+- The catalog's display label must remain a 1:1 name for that ID: `development` → `Development`, `text` → `Text`. Do not substitute a marketing or expanded label such as `Coding & development` or `Text formatting`.
+- If an old Lucide name redirects to a renamed icon, resolve the redirect and use the replacement icon's `categories[0]`; document the alias instead of inventing a category.
 
-The `tags` array in `ICON_CATALOG` powers the search bar and alias badges:
-- **Include ALL original Lucide tags first**: You MUST copy the exact tags from the official Lucide icon metadata (`tags` array in `icons/<name>.json`).
-- **Additional aliases**: You may add your own interpretations, synonyms, and directional descriptors after the original tags, but the official Lucide tags are non-negotiable.
-- Always include the canonical icon name as well.
+## 2. Exact Upstream Tags, Then Clean Aliases
+
+The `tags` array in `ICON_CATALOG` powers search and alias badges:
+
+- Copy the upstream `tags` array from the same icon JSON **first and in the exact upstream order**. Do not prepend the icon name or reorder tags.
+- Add the catalog icon name after the upstream tags when it is not already present.
+- Supplemental aliases are allowed only after those entries. They may be useful synonyms or directional descriptors, but they must be intentional, readable words or phrases; never add separator/punctuation artifacts such as `---`.
+- Keep upstream operator tags only when they are meaningful Lucide tags; do not invent symbol-only aliases.
+- Deduplicate aliases and never duplicate an upstream tag.
+- For renamed icons, retain the catalog's legacy name as an alias and include the replacement name when it improves lookup.
 
 ---
 
