@@ -44,7 +44,7 @@ export const Route = createFileRoute("/icons")({
     createPageHead({
       description: ICONS_DESCRIPTION,
       path: ROUTES.ICONS,
-      title: `${ICONS_TITLE} - Icons`,
+      title: ICONS_TITLE,
     }),
 });
 
