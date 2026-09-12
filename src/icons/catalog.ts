@@ -116,7 +116,136 @@ function getIconVariantCount(
   return item.variants.includes(variant) ? 1 : 0;
 }
 
-export const ICON_CATALOG: readonly IconCatalogItem[] = [
+// Snapshot of Lucide's current /icons Popularity ordering. Icons not listed
+// here retain their authored order after the ranked entries.
+const LUCIDE_POPULARITY_ORDER = [
+  "x",
+  "check",
+  "search",
+  "chevron-down",
+  "plus",
+  "chevron-right",
+  "info",
+  "user",
+  "arrow-right",
+  "house",
+  "circle-check",
+  "eye",
+  "menu",
+  "map-pin",
+  "mail",
+  "settings",
+  "triangle-alert",
+  "users",
+  "star",
+  "chevron-left",
+  "sparkles",
+  "pencil",
+  "file-text",
+  "circle-x",
+  "calendar",
+  "log-out",
+  "download",
+  "arrow-left",
+  "square-pen",
+  "ellipsis-vertical",
+  "phone",
+  "heart",
+  "circle-alert",
+  "shield-check",
+  "trash",
+  "loader-circle",
+  "loader",
+  "clock",
+  "ellipsis",
+  "circle-check-big",
+  "globe",
+  "send",
+  "play",
+  "copy",
+  "shopping-cart",
+  "move-right",
+  "bell",
+  "layout-dashboard",
+  "user-round",
+  "circle-question-mark",
+  "circle-plus",
+  "zap",
+  "calendar-days",
+  "lock",
+  "bot",
+  "badge-check",
+  "external-link",
+  "rotate-ccw",
+  "arrow-up-right",
+  "link",
+  "image",
+  "bookmark",
+  "refresh-cw",
+  "list",
+  "circle-user-round",
+  "message-circle",
+  "funnel",
+  "upload",
+  "chevron-up",
+  "refresh-ccw",
+  "users-round",
+  "activity",
+  "sliders-horizontal",
+  "handshake",
+  "trending-up",
+  "save",
+  "lightbulb",
+  "eye-off",
+  "square-arrow-out-up-right",
+  "brain",
+  "shield",
+  "file",
+  "hand-coins",
+  "credit-card",
+  "minus",
+  "layout-grid",
+  "camera",
+  "graduation-cap",
+  "sun",
+  "check-check",
+  "rocket",
+  "dot",
+  "chart-no-axes-combined",
+  "wallet",
+  "book-open",
+  "circle",
+  "landmark",
+  "store",
+  "layers",
+  "briefcase-business",
+  "flame",
+  "package",
+  "truck",
+  "circle-dollar-sign",
+  "list-filter",
+  "share-2",
+  "message-square",
+  "moon",
+  "ban",
+  "wrench",
+  "dollar-sign",
+  "clipboard-list",
+  "settings-2",
+  "circle-user",
+  "notebook-pen",
+  "database",
+  "messages-square",
+  "trophy",
+  "arrow-up",
+  "message-circle-more",
+] as const;
+
+const iconPopularityRank = new Map<string, number>(
+  LUCIDE_POPULARITY_ORDER.map((name, index) => [name, index])
+);
+
+const ICON_CATALOG_SOURCE: readonly IconCatalogItem[] = [
   {
     name: "house",
     title: "House",
@@ -5305,6 +5434,24 @@ export const ICON_CATALOG: readonly IconCatalogItem[] = [
     variants: getIconVariants("code"),
   },
 ] as const;
+
+const iconSourceOrder = new Map(
+  ICON_CATALOG_SOURCE.map((item, index) => [item.name, index])
+);
+
+export const ICON_CATALOG: readonly IconCatalogItem[] = [
+  ...ICON_CATALOG_SOURCE,
+].sort((left, right) => {
+  const leftRank = iconPopularityRank.get(left.name) ?? Number.MAX_SAFE_INTEGER;
+  const rightRank =
+    iconPopularityRank.get(right.name) ?? Number.MAX_SAFE_INTEGER;
+
+  return (
+    leftRank - rightRank ||
+    (iconSourceOrder.get(left.name) ?? 0) -
+      (iconSourceOrder.get(right.name) ?? 0)
+  );
+});
 
 export function getIconSvg(
   name: string,
