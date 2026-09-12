@@ -689,6 +689,23 @@ In the secondary tint geometry:
 - Overlay the canonical foreground strokes (gear body path + center `<circle cx="12" cy="12" r="3" />`) on top.
 - This maintains structural recognizability as an interlocking gear, rather than filling the axle hole into a solid disc.
 
+The same rule applies to media controls such as `circle-stop`: the outer disc
+may receive tint, but the stop square is a true void and must be cut out of the
+tint geometry before the canonical square stroke is rendered.
+
+---
+
+# Git-Style Node Markers
+
+For workflow icons with repeated node markers such as `git-branch`, `git-fork`,
+`git-merge`, `git-pull-request`, `git-commit-horizontal`, and
+`git-compare-arrows`:
+
+- treat each closed node circle as material and tint every node consistently;
+- keep connectors, branches, and arrow paths as primary foreground geometry;
+- do not tint only a selected node unless the icon's semantics establish a
+  deliberate foreground/background hierarchy.
+
 ---
 
 # Modifier Icons
@@ -732,6 +749,23 @@ The review order is:
 Do not add tint to a shared region merely because the current icon has a different
 foreground detail. Only change the shared treatment when the current icon's
 semantics require a genuinely different material or void.
+
+## Open Contours With Local Material
+
+Some icons combine open linework with a locally enclosed body. Tint only the
+local material surface; do not close or fill the surrounding open strokes merely
+because they visually surround a region.
+
+- `speech`: a closed tint contour may follow the main speaker/person form, while
+  the sound-wave arcs remain primary stroke-only geometry.
+- `headphones`: tint the two enclosed ear pads, while leaving the open headband
+  and connecting arc as foreground strokes.
+- `audio-waveform`: remain stroke-only because the waveform has no meaningful
+  material surface to tint.
+
+When a tint contour is derived from an open canonical path, close it only at an
+existing natural boundary, such as the body's baseline. Never introduce a new
+visible closing stroke.
 
 ---
 

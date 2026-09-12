@@ -106,7 +106,7 @@
     </style>
   </head>
   <body>
-    <h1>Icon QA — B and C</h1>
+    <h1>Icon QA — B, C, D, and E</h1>
     <p>
       Compare Duotone and Filled at 16, 20, 24, and 32px. Labels are
       intentionally visible for OCR/accessibility verification.
@@ -142,6 +142,29 @@
           "list-todo",
           "save",
         ],
+        "Batch D — Git & Agent Development Workflows": [
+          "git-branch",
+          "git-fork",
+          "git-merge",
+          "git-pull-request",
+          "git-commit-horizontal",
+          "git-compare-arrows",
+          "iteration-cw",
+          "split",
+          "combine",
+        ],
+        "Batch E — Voice, Chat & Agent Conversation": [
+          "mic-off",
+          "audio-waveform",
+          "speech",
+          "headphones",
+          "message-circle",
+          "messages-square",
+          "bot-message-square",
+          "message-square-code",
+          "message-square-text",
+          "circle-stop",
+        ],
       };
       const sizes = [16, 20, 24, 32];
       const title = (name) =>
@@ -149,8 +172,10 @@
           .split("-")
           .map((part) => part[0].toUpperCase() + part.slice(1))
           .join(" ");
-      const renderVariant = (name, variant) =>
-        `<div class="variant ${variant}"><h3>${variant}</h3><div class="sizes">${sizes.map((size) => `<figure><img src="src/icons/${variant}/${name}.svg" width="${size}" height="${size}" alt="${title(name)} ${variant} ${size}px" /><figcaption>${size}</figcaption></figure>`).join("")}</div></div>`;
+      const renderVariant = (name, variant) => {
+        if (name === "messages-square" && variant === "filled") return "";
+        return `<div class="variant ${variant}"><h3>${variant}</h3><div class="sizes">${sizes.map((size) => `<figure><img src="src/icons/${variant}/${name}.svg" width="${size}" height="${size}" alt="${title(name)} ${variant} ${size}px" /><figcaption>${size}</figcaption></figure>`).join("")}</div></div>`;
+      };
       document.querySelector("#app").innerHTML = Object.entries(batches)
         .map(
           ([batch, names]) =>

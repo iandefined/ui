@@ -187,6 +187,22 @@ Filled outer silhouette
 
 The Filled outer silhouette should match the canonical rendered envelope without exceeding it.
 
+## Fill-Only Footprint Compensation
+
+When a closed canonical object loses its stroke and becomes a fill-only shape,
+size the fill to the canonical rendered envelope, not to the original path
+centerline. Keep the same center and rounded proportions while compensating for
+the removed half-strokes.
+
+Reference conversions for a canonical `stroke-width="2"`:
+
+- a circle with `r="3"` becomes a fill-only circle with `r="4"`;
+- a rounded rectangle `x="3" y="3" width="7" height="7" rx="1"` becomes
+  `x="2" y="2" width="9" height="9" rx="2"`.
+
+Apply the same envelope calculation to other closed nodes and rounded squares.
+Do not enlarge open paths or use this rule to change the icon's overall bounds.
+
 # Hard Footprint Acceptance Test
 
 At 24px, determine the canonical rendered:
@@ -724,6 +740,13 @@ For these icons:
 
 Do not invent arbitrary solid blobs, filled backgrounds, or fake silhouettes. If there is no natural material body to fill, preserve the stroke.
 
+## Explicit Variant Omission
+
+If the user explicitly identifies an icon or a particular Filled treatment as
+not useful, it is valid to omit that asset. Keep the catalog and QA surface in
+sync so the remaining variant resolves cleanly and no broken placeholder is
+shown.
+
 # Copy & Overlapping Layer Rule
 
 Icons depicting stacked or overlapping sheets/surfaces (such as `copy`, stacked documents, and layered cards) require deliberate negative-space separation in their Filled variant.
@@ -752,6 +775,18 @@ When using an SVG mask on the background layer:
    - Cutout outer edge: `path + 3px`
    - Resulting negative-space gap: `3px - 1px = 2px`
 4. This produces a perfectly uniform 2px whitespace gap along straight edges AND concentric rounded corner arcs (`rx=2`), maintaining exact Lucide stroke rhythm and corner continuity.
+
+### Direct Mask Replacement
+
+The `stroke-width="6"` example above applies only when the masked background
+layer is followed by a separately redrawn canonical foreground stroke and the
+desired result is an additional 2px gap around that foreground stroke.
+
+When the mask itself replaces an internal canonical detail with transparent
+whitespace and that detail is **not** redrawn, such as bot eyes or message
+text/code, use the canonical `stroke-width="2"` directly in the black mask path.
+Using 3–4px in that situation makes the whitespace visibly heavier than the
+original icon. Verify the seam at 16–24px instead of widening it for emphasis.
 
 # Settings & Mechanical Center Aperture Rule
 
