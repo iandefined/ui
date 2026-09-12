@@ -1,0 +1,22 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+  <defs>
+    <mask id="truck-filled-wheel-holes" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="white" />
+      <circle cx="17" cy="18" r="1.25" fill="black" />
+      <circle cx="7" cy="18" r="1.25" fill="black" />
+    </mask>
+  </defs>
+  <g mask="url(#truck-filled-wheel-holes)">
+    <path d="M2 17V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12H3a1 1 0 0 1-1-1z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+    <path d="M14 8h3.52a1 1 0 0 1 .78.376l3.48 4.35a1 1 0 0 1 .22.624V17a1 1 0 0 1-1 1H14z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+  </g>
+  <path d="M15 18H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+  <circle cx="17" cy="18" r="3" fill="currentColor" mask="url(#truck-filled-wheel-holes)" />
+  <circle cx="7" cy="18" r="3" fill="currentColor" mask="url(#truck-filled-wheel-holes)" />
+</svg>
