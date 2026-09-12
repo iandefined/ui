@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs><mask id="columns-3-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="white" /><path d="M9 1v22" stroke="black" stroke-width="2" stroke-linecap="round" /><path d="M15 1v22" stroke="black" stroke-width="2" stroke-linecap="round" /></mask></defs>
+  <rect width="18" height="18" x="3" y="3" rx="2" fill="currentColor" stroke="currentColor" stroke-width="2" mask="url(#columns-3-filled-mask)" />
+</svg>
+
