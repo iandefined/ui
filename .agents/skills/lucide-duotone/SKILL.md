@@ -710,6 +710,31 @@ The modifier is usually the semantic focus and must remain crisp.
 
 ---
 
+# Related Icon Consistency
+
+When a related icon establishes an explicitly non-duotoned region, inspect that
+related icon before authoring or revising the current variant and preserve the same
+semantic treatment across the family.
+
+Treat intentional whitespace as a family rule, not an isolated visual choice. This
+applies especially to repeated structures such as document folds, file apertures,
+search lenses, save slots, and other shared enclosures. Reuse the related icon's
+cutout logic and optical proportions while keeping each icon's own canonical
+foreground geometry unchanged.
+
+The review order is:
+
+1. identify the closest related duotone icon;
+2. note which regions it leaves transparent and why;
+3. apply the same material-versus-void decision to the current icon;
+4. inspect the family together at 16–24px for consistent whitespace.
+
+Do not add tint to a shared region merely because the current icon has a different
+foreground detail. Only change the shared treatment when the current icon's
+semantics require a genuinely different material or void.
+
+---
+
 # Slash / Off Icons
 
 For icons containing a slash:

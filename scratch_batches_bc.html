@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Icon QA — B and C</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 32px;
+        color: #111827;
+        background: #f8fafc;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+      h2 {
+        margin: 36px 0 12px;
+        font-size: 18px;
+      }
+      p {
+        margin: 0 0 20px;
+        color: #64748b;
+      }
+      .legend {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 18px;
+        font-size: 13px;
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .swatch {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        background: #2563eb;
+      }
+      .swatch.filled {
+        background: #e11d48;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        max-width: 1200px;
+      }
+      .card {
+        padding: 14px 16px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+      }
+      .name {
+        margin-bottom: 10px;
+        font-weight: 650;
+        font-size: 14px;
+      }
+      .variants {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .variant {
+        padding: 10px;
+        border-radius: 8px;
+        background: #f8fafc;
+      }
+      .variant h3 {
+        margin: 0 0 8px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #64748b;
+      }
+      .sizes {
+        display: flex;
+        align-items: end;
+        gap: 12px;
+        min-height: 52px;
+      }
+      figure {
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        margin: 0;
+      }
+      img {
+        display: block;
+        color: #2563eb;
+      }
+      .filled img {
+        color: #e11d48;
+      }
+      figcaption {
+        font-size: 9px;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Icon QA — B and C</h1>
+    <p>
+      Compare Duotone and Filled at 16, 20, 24, and 32px. Labels are
+      intentionally visible for OCR/accessibility verification.
+    </p>
+    <div class="legend">
+      <span><i class="swatch"></i> Duotone</span
+      ><span><i class="swatch filled"></i> Filled</span>
+    </div>
+    <div id="app"></div>
+    <script>
+      const batches = {
+        "Batch B — Terminal & Coding": [
+          "terminal",
+          "square-terminal",
+          "command",
+          "code-xml",
+          "braces",
+          "brackets",
+          "binary",
+          "regex",
+          "variable",
+          "square-function",
+        ],
+        "Batch C — Code Inspection, Files & Debugging": [
+          "file-code",
+          "file-terminal",
+          "bug",
+          "bug-play",
+          "scan-search",
+          "search-code",
+          "file-search",
+          "list-tree",
+          "list-todo",
+          "save",
+        ],
+      };
+      const sizes = [16, 20, 24, 32];
+      const title = (name) =>
+        name
+          .split("-")
+          .map((part) => part[0].toUpperCase() + part.slice(1))
+          .join(" ");
+      const renderVariant = (name, variant) =>
+        `<div class="variant ${variant}"><h3>${variant}</h3><div class="sizes">${sizes.map((size) => `<figure><img src="src/icons/${variant}/${name}.svg" width="${size}" height="${size}" alt="${title(name)} ${variant} ${size}px" /><figcaption>${size}</figcaption></figure>`).join("")}</div></div>`;
+      document.querySelector("#app").innerHTML = Object.entries(batches)
+        .map(
+          ([batch, names]) =>
+            `<section><h2>${batch}</h2><div class="grid">${names.map((name) => `<article class="card"><div class="name">${title(name)}</div><div class="variants">${renderVariant(name, "duotone")}${renderVariant(name, "filled")}</div></article>`).join("")}</div></section>`
+        )
+        .join("");
+    </script>
+  </body>
+</html>

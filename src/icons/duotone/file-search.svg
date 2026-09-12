@@ -9,15 +9,9 @@
   stroke-linecap="round"
   stroke-linejoin="round"
 >
-  <path
-    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2zM14 2l6 6h-5a1 1 0 0 1-1-1z"
-    fill="currentColor"
-    fill-opacity="0.33"
-    stroke="none"
-  />
+  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2zM14 2l6 6h-5a1 1 0 0 1-1-1zM14 14.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0z" fill="currentColor" fill-opacity="0.33" fill-rule="evenodd" stroke="none" />
   <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
   <path d="M14 2v5a1 1 0 0 0 1 1h5" />
-  <path d="M10 9H8" />
-  <path d="M16 13H8" />
-  <path d="M16 17H8" />
+  <circle cx="11.5" cy="14.5" r="2.5" />
+  <path d="m13.3 16.3 1.7 1.7" />
 </svg>
