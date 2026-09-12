@@ -74,6 +74,7 @@ const columns: DataTableColumnDef<Payment>[] = [
       const status = row.getValue("status") as Payment["status"];
       return (
         <Badge
+          depth="surface"
           variant={
             status === "success"
               ? "success"

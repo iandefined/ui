@@ -188,7 +188,7 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Website</span>
             </div>
-            <Badge
+            <Badge depth="surface"
               variant="secondary"
               render={
                 <a href="https://claude.ai" target="_blank" rel="noreferrer">
@@ -209,7 +209,7 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Heat Score</span>
             </div>
-            <Badge variant="success" className="gap-1">
+            <Badge depth="surface" variant="success" className="gap-1">
               <span>89</span>
             </Badge>
           </div>
@@ -226,9 +226,9 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Categories</span>
             </div>
             <div className="flex items-center gap-1">
-              <Badge variant="info">AI</Badge>
-              <Badge variant="success">SaaS</Badge>
-              <Badge variant="warning">B2B</Badge>
+              <Badge depth="surface" variant="info">AI</Badge>
+              <Badge depth="surface" variant="success">SaaS</Badge>
+              <Badge depth="surface" variant="warning">B2B</Badge>
             </div>
           </div>
 
@@ -243,7 +243,7 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Estimated ARR</span>
             </div>
-            <Badge variant="success">$3-4B</Badge>
+            <Badge depth="surface" variant="success">$3-4B</Badge>
           </div>
 
           <div className="flex items-center justify-between gap-2">
@@ -251,7 +251,7 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Founders</span>
             </div>
             <div className="flex items-center gap-1">
-              <Badge variant="secondary">
+              <Badge depth="surface" variant="secondary">
                 <img
                   src="https://github.com/shadcn.png"
                   alt="Founder"
@@ -259,7 +259,7 @@ export default function CollapsibleCardDemo() {
                 />
                 <span className="text-xs font-medium">shadcn</span>
               </Badge>
-              <Badge variant="secondary">
+              <Badge depth="surface" variant="secondary">
                 <span className="text-xs font-medium">
                   <span className="sm:hidden">+5</span>
                   <span className="hidden sm:inline">+5 more</span>

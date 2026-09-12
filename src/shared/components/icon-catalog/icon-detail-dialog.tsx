@@ -126,21 +126,27 @@ export function IconDetailDialog({
     item && item.variants.includes(search.iconVariant)
       ? search.iconVariant
       : (item?.variant ?? availableVariants[0]?.value ?? "duotone");
-  const size = search.size;
+  const numericSize =
+    typeof search.size === "number"
+      ? search.size
+      : parseInt(String(search.size), 10) || 24;
+  const size = String(numericSize);
   const codeFormat = search.syntax;
 
   const updateDialogSearch = (
     key: "iconVariant" | "size" | "syntax",
-    value: IconVariant | string
+    value: IconVariant | string | number
   ) => {
     navigate({
       replace: true,
       resetScroll: false,
-      search: (previous) => ({ ...previous, [key]: value }),
+      search: (previous) => ({
+        ...previous,
+        [key]: key === "size" ? Number(value) : value,
+      }),
     });
   };
 
-  const numericSize = parseInt(size, 10) || 24;
   const svg = item ? getIconSvg(item.name, variant, numericSize) : "";
   const code = codeFormat === "react" ? toReactSvg(svg) : svg;
   const codeLanguage = codeFormat === "react" ? "tsx" : "html";
@@ -196,6 +202,7 @@ export function IconDetailDialog({
               {item.name}
             </DialogTitle>
             <Badge
+              depth="surface"
               variant="translucent"
               color={getCategoryBadgeColor(item.category)}
               size="compact"

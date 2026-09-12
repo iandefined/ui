@@ -2582,6 +2582,67 @@ export default function BadgeSizesDemo() {
 }
 ```
 
+### Depth
+
+Use `depth="surface"` to add an inset highlight shadow and subtle border. Badges default to `depth="flat"`.
+
+```tsx
+import { Badge, type BadgeVariant } from "@/registry/base/badge";
+
+const variants = [
+  ["Default", "default"],
+  ["Secondary", "secondary"],
+  ["Outline", "outline"],
+  ["Destructive", "destructive"],
+  ["Error", "error"],
+  ["Info", "info"],
+  ["Success", "success"],
+  ["Warning", "warning"],
+] as const satisfies ReadonlyArray<readonly [string, BadgeVariant]>;
+
+export default function BadgeDepthDemo() {
+  return (
+    <div className="flex flex-col items-start gap-4">
+      <div className="flex flex-col gap-2">
+        <span className="text-xs text-muted-foreground">
+          Flat
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {variants.map(([label, variant]) => (
+            <Badge depth="flat" key={`flat-${variant}`} variant={variant}>
+              {label}
+            </Badge>
+          ))}
+          <Badge color="blue" depth="flat" variant="translucent">
+            Translucent
+          </Badge>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <span className="text-xs text-muted-foreground">
+          Surface
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {variants.map(([label, variant]) => (
+            <Badge
+              depth="surface"
+              key={`surface-${variant}`}
+              variant={variant}
+            >
+              {label}
+            </Badge>
+          ))}
+          <Badge color="blue" depth="surface" variant="translucent">
+            Translucent
+          </Badge>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
 ### With Icon
 
 Add a small, meaningful icon.
@@ -2641,6 +2702,7 @@ export default function BadgeWithCountDemo() {
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `variant` | `"default" \| "secondary" \| "outline" \| "destructive" \| "error" \| "info" \| "success" \| "warning" \| "translucent"` | `default` | Sets the semantic or palette-driven appearance. |
+| `depth` | `"flat" \| "surface"` | `flat` | Sets the surface depth treatment. Use `"surface"` for an inset highlight shadow and subtle border. |
 | `color` | `BadgeColor` | `gray` | Sets a palette color when `variant` is `"translucent"`. |
 | `size` | `"default" \| "compact"` | `default` | Sets the badge height and spacing. |
 
@@ -4779,7 +4841,7 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Website</span>
             </div>
-            <Badge
+            <Badge depth="surface"
               variant="secondary"
               render={
                 <a href="https://claude.ai" target="_blank" rel="noreferrer">
@@ -4800,7 +4862,7 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Heat Score</span>
             </div>
-            <Badge variant="success" className="gap-1">
+            <Badge depth="surface" variant="success" className="gap-1">
               <span>89</span>
             </Badge>
           </div>
@@ -4817,9 +4879,9 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Categories</span>
             </div>
             <div className="flex items-center gap-1">
-              <Badge variant="info">AI</Badge>
-              <Badge variant="success">SaaS</Badge>
-              <Badge variant="warning">B2B</Badge>
+              <Badge depth="surface" variant="info">AI</Badge>
+              <Badge depth="surface" variant="success">SaaS</Badge>
+              <Badge depth="surface" variant="warning">B2B</Badge>
             </div>
           </div>
 
@@ -4834,7 +4896,7 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Estimated ARR</span>
             </div>
-            <Badge variant="success">$3-4B</Badge>
+            <Badge depth="surface" variant="success">$3-4B</Badge>
           </div>
 
           <div className="flex items-center justify-between gap-2">
@@ -4842,7 +4904,7 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Founders</span>
             </div>
             <div className="flex items-center gap-1">
-              <Badge variant="secondary">
+              <Badge depth="surface" variant="secondary">
                 <img
                   src="https://github.com/shadcn.png"
                   alt="Founder"
@@ -4850,7 +4912,7 @@ export default function CollapsibleCardDemo() {
                 />
                 <span className="text-xs font-medium">shadcn</span>
               </Badge>
-              <Badge variant="secondary">
+              <Badge depth="surface" variant="secondary">
                 <span className="text-xs font-medium">
                   <span className="sm:hidden">+5</span>
                   <span className="hidden sm:inline">+5 more</span>
@@ -5980,6 +6042,7 @@ const columns: DataTableColumnDef<Payment>[] = [
       const status = row.getValue("status") as Payment["status"];
       return (
         <Badge
+          depth="surface"
           variant={
             status === "success"
               ? "success"
@@ -19410,6 +19473,7 @@ export default function TableDemo() {
             </TableCell>
             <TableCell>
               <Badge
+                depth="surface"
                 variant={
                   invoice.status === "Paid"
                     ? "success"
@@ -19746,6 +19810,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
         <TableCell>{order.customer}</TableCell>
         <TableCell>
           <Badge
+            depth="surface"
             variant={
               order.status === "Delivered"
                 ? "success"
@@ -19974,6 +20039,7 @@ export default function TableResizableDemo() {
             </TableCell>
             <TableCell>
               <Badge
+                depth="surface"
                 variant={
                   invoice.status === "Paid"
                     ? "success"
@@ -23541,6 +23607,7 @@ export default function UseFuzzyFilterDefaultDemo() {
                 </span>
               </div>
               <Badge
+                depth="surface"
                 className="shrink-0"
                 color={item.color}
                 variant="translucent"

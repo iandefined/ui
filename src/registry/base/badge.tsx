@@ -101,14 +101,14 @@ const badgeVariants = cva(
         compact: "h-5 min-w-5 gap-1 text-[11px]",
       },
       depth: {
-        none: "",
-        subtle:
+        flat: "",
+        surface:
           "shadow-[inset_0_1px_0_var(--badge-highlight)] dark:shadow-[inset_0_1px_0_var(--badge-highlight-dark)]",
       },
     },
     compoundVariants: [
       {
-        depth: "none",
+        depth: "flat",
         variant: [
           "default",
           "secondary",
@@ -122,7 +122,7 @@ const badgeVariants = cva(
         className: "border-transparent",
       },
       {
-        depth: "subtle",
+        depth: "surface",
         variant: [
           "default",
           "secondary",
@@ -154,7 +154,7 @@ const badgeVariants = cva(
     defaultVariants: {
       variant: "default",
       size: "default",
-      depth: "subtle",
+      depth: "flat",
     },
   }
 );
@@ -173,9 +173,10 @@ type BadgeBaseProps = Omit<
   useRender.ComponentProps<"span">,
   "color" | "style"
 > & {
-  depth?: "none" | "subtle";
+  depth?: "flat" | "surface";
   size?: "default" | "compact";
   style?: BadgeStyle;
+  surface?: "flat" | "surface";
 };
 
 type SemanticBadgeProps = BadgeBaseProps & {
@@ -201,10 +202,12 @@ type BadgeColor = NonNullable<BadgeProps["color"]>;
 type BadgeVariant = NonNullable<BadgeProps["variant"]>;
 type BadgeSize = NonNullable<BadgeProps["size"]>;
 type BadgeDepth = NonNullable<BadgeProps["depth"]>;
+type BadgeSurface = BadgeDepth;
 
 function Badge({
   className,
-  depth = "subtle",
+  depth = "flat",
+  surface,
   variant = "default",
   size = "default",
   color,
@@ -213,6 +216,7 @@ function Badge({
   children,
   ...props
 }: BadgeProps): React.ReactElement {
+  const resolvedDepth = surface ?? depth;
   const isPaletteVariant = variant === "translucent";
   const resolvedColor = color ?? "gray";
   const badgeSurface =
@@ -236,7 +240,7 @@ function Badge({
           "--badge-color-foreground-dark":
             badgeColorForegrounds[resolvedColor].dark,
           backgroundColor: badgeSurface,
-          ...(depth === "subtle"
+          ...(resolvedDepth === "surface"
             ? {
                 borderColor: "transparent",
                 background: `linear-gradient(${badgeSurface}, ${badgeSurface}) padding-box, linear-gradient(to top, color-mix(in oklab, ${badgeColors[resolvedColor]} 18%, ${badgeSurface}), color-mix(in oklab, ${badgeColors[resolvedColor]} 8%, ${badgeSurface})) border-box`,
@@ -247,9 +251,9 @@ function Badge({
   };
 
   const defaultProps = {
-    className: cn(badgeVariants({ depth, variant, size }), className),
+    className: cn(badgeVariants({ depth: resolvedDepth, variant, size }), className),
     "data-color": isPaletteVariant ? resolvedColor : undefined,
-    "data-depth": depth,
+    "data-depth": resolvedDepth,
     "data-size": size,
     "data-slot": "badge",
     "data-variant": variant,
@@ -265,4 +269,11 @@ function Badge({
 }
 
 export { Badge, badgeColors, badgeVariants };
-export type { BadgeColor, BadgeDepth, BadgeProps, BadgeSize, BadgeVariant };
+export type {
+  BadgeColor,
+  BadgeDepth,
+  BadgeProps,
+  BadgeSize,
+  BadgeSurface,
+  BadgeVariant,
+};

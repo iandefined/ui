@@ -75,6 +75,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
         <TableCell>{order.customer}</TableCell>
         <TableCell>
           <Badge
+            depth="surface"
             variant={
               order.status === "Delivered"
                 ? "success"

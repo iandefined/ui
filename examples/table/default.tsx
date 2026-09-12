@@ -62,6 +62,7 @@ export default function TableDemo() {
             </TableCell>
             <TableCell>
               <Badge
+                depth="surface"
                 variant={
                   invoice.status === "Paid"
                     ? "success"

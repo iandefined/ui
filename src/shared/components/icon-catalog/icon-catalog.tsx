@@ -108,7 +108,6 @@ export function IconCatalog() {
         ...previous,
         icon: item.name,
         iconVariant: variant,
-        size: "24",
       }),
     });
   };

@@ -62,6 +62,7 @@ export default function TableResizableDemo() {
             </TableCell>
             <TableCell>
               <Badge
+                depth="surface"
                 variant={
                   invoice.status === "Paid"
                     ? "success"

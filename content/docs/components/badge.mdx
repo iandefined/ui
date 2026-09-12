@@ -45,6 +45,12 @@ Use compact badges in dense layouts.
 
 <ComponentPreview name="badge/sizes" />
 
+### Depth
+
+Use `depth="surface"` to add an inset highlight shadow and subtle border. Badges default to `depth="flat"`.
+
+<ComponentPreview name="badge/depth" />
+
 ### With Icon
 
 Add a small, meaningful icon.
@@ -77,6 +83,14 @@ Communicate a compact count.
     defaultValue='"default"'
   >
     Sets the semantic or palette-driven appearance.
+  </ApiProp>
+  <ApiProp
+    name="depth"
+    fullType='"flat" | "surface"'
+    simpleType="string"
+    defaultValue='"flat"'
+  >
+    Sets the surface depth treatment. Use `"surface"` for an inset highlight shadow and subtle border.
   </ApiProp>
   <ApiProp
     name="color"

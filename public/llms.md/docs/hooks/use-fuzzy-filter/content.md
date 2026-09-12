@@ -106,6 +106,7 @@ export default function UseFuzzyFilterDefaultDemo() {
                 </span>
               </div>
               <Badge
+                depth="surface"
                 className="shrink-0"
                 color={item.color}
                 variant="translucent"

@@ -73,6 +73,7 @@ export default function TableDemo() {
             </TableCell>
             <TableCell>
               <Badge
+                depth="surface"
                 variant={
                   invoice.status === "Paid"
                     ? "success"
@@ -409,6 +410,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
         <TableCell>{order.customer}</TableCell>
         <TableCell>
           <Badge
+            depth="surface"
             variant={
               order.status === "Delivered"
                 ? "success"
@@ -637,6 +639,7 @@ export default function TableResizableDemo() {
             </TableCell>
             <TableCell>
               <Badge
+                depth="surface"
                 variant={
                   invoice.status === "Paid"
                     ? "success"

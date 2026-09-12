@@ -15,6 +15,9 @@ import { createPageHead } from "@/shared/lib/seo/metadata";
 const ICONS_TITLE = "Icons";
 const ICONS_DESCRIPTION = `Explore ${ICON_CATALOG.length} alternative visual styles for Lucide icons.`;
 
+export const ICON_SIZES = [16, 20, 24, 32, 40, 48, 64, 80] as const;
+export type IconSize = (typeof ICON_SIZES)[number];
+
 export const Route = createFileRoute("/icons")({
   component: IconsRoute,
   validateSearch: z.object({
@@ -30,14 +33,39 @@ export const Route = createFileRoute("/icons")({
       .default("duotone")
       .catch("duotone"),
     size: z
-      .enum(["16", "20", "24", "32", "40", "48", "64", "80"])
-      .default("24")
-      .catch("24"),
+      .preprocess(
+        (val) => {
+          if (typeof val === "string") {
+            const parsed = parseInt(val, 10);
+            return Number.isNaN(parsed) ? val : parsed;
+          }
+          return val;
+        },
+        z.union([
+          z.literal(16),
+          z.literal(20),
+          z.literal(24),
+          z.literal(32),
+          z.literal(40),
+          z.literal(48),
+          z.literal(64),
+          z.literal(80),
+        ])
+      )
+      .default(24)
+      .catch(24),
     syntax: z.enum(["svg", "react"]).default("svg").catch("svg"),
   }),
   search: {
     middlewares: [
-      stripSearchParams({ q: "", category: "all", variant: "all" }),
+      stripSearchParams({
+        q: "",
+        category: "all",
+        variant: "all",
+        iconVariant: "duotone",
+        size: 24,
+        syntax: "svg",
+      }),
     ],
   },
   head: () =>
