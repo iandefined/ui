@@ -45,3 +45,4 @@ Do not manually edit generated output: `src/routeTree.gen.ts`, `public/r/*`, `pu
 - TanStack-specific API or framework lookup: [.agents/project/tanstack-docs.md](.agents/project/tanstack-docs.md)
 - Registry launch submissions or announcements: [.agents/skills/launch-shadcn-registry/SKILL.md](.agents/skills/launch-shadcn-registry/SKILL.md)
 - Lucide duotone icon authoring and SVG standards: [.agents/skills/lucide-duotone/SKILL.md](.agents/skills/lucide-duotone/SKILL.md)
+- Lucide filled icon authoring and SVG standards: [.agents/skills/lucide-filled/SKILL.md](.agents/skills/lucide-filled/SKILL.md)

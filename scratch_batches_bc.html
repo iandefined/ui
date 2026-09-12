@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Icon QA — B and C</title>
+    <title>Icon QA — B, C, D, E, F, and G</title>
     <style>
       :root {
         color-scheme: light;
@@ -106,7 +106,7 @@
     </style>
   </head>
   <body>
-    <h1>Icon QA — B, C, D, and E</h1>
+    <h1>Icon QA — B, C, D, E, F, and G</h1>
     <p>
       Compare Duotone and Filled at 16, 20, 24, and 32px. Labels are
       intentionally visible for OCR/accessibility verification.
@@ -165,6 +165,27 @@
           "message-square-text",
           "circle-stop",
         ],
+        "Batch F — Compute, Runtime & Agent Infrastructure": [
+          "cpu",
+          "circuit-board",
+          "memory-stick",
+          "hard-drive",
+          "server",
+          "database",
+          "container",
+        ],
+        "Batch G — Tools, Integrations & Computer Use": [
+          "plug",
+          "cable",
+          "mouse-pointer-click",
+          "app-window",
+          "laptop",
+          "smartphone",
+          "sliders-horizontal",
+          "toggle-left",
+          "toggle-right",
+        ],
+        "Related — Shield Status": ["shield-check", "shield-x"],
       };
       const sizes = [16, 20, 24, 32];
       const title = (name) =>
@@ -173,7 +194,19 @@
           .map((part) => part[0].toUpperCase() + part.slice(1))
           .join(" ");
       const renderVariant = (name, variant) => {
-        if (name === "messages-square" && variant === "filled") return "";
+        if (
+          variant === "filled" &&
+          [
+            "messages-square",
+            "circuit-board",
+            "memory-stick",
+            "container",
+            "app-window",
+            "laptop",
+            "smartphone",
+          ].includes(name)
+        )
+          return "";
         return `<div class="variant ${variant}"><h3>${variant}</h3><div class="sizes">${sizes.map((size) => `<figure><img src="src/icons/${variant}/${name}.svg" width="${size}" height="${size}" alt="${title(name)} ${variant} ${size}px" /><figcaption>${size}</figcaption></figure>`).join("")}</div></div>`;
       };
       document.querySelector("#app").innerHTML = Object.entries(batches)

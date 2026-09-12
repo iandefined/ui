@@ -750,6 +750,23 @@ Do not add tint to a shared region merely because the current icon has a differe
 foreground detail. Only change the shared treatment when the current icon's
 semantics require a genuinely different material or void.
 
+## Explicit Outline-Only Regions
+
+Not every closed region in a device or control icon is secondary material. Preserve
+canonical outline-only treatment when the region is a structural face, aperture, node,
+or control detail rather than a meaningful surface. In particular:
+
+- keep mechanical centers or chip cores transparent when they read as apertures;
+- keep circuit-board node circles transparent when their outline is the semantic marker;
+- keep toggle knobs transparent when the track is the material and the knob is the control;
+- leave large utility-device faces such as app-window and laptop bodies unfilled when
+  the canonical outline itself is the intended visual surface; if a meaningful
+  sub-surface exists, tint only that region (for example, an app-window title bar or
+  laptop base) while preserving the larger face as whitespace.
+
+Use the closest related icon and the rendered 16–24px result to decide. A closed path
+is not sufficient evidence that its interior should receive duotone tint.
+
 ## Open Contours With Local Material
 
 Some icons combine open linework with a locally enclosed body. Tint only the

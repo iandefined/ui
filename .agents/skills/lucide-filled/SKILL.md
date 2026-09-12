@@ -700,6 +700,18 @@ For Filled `folder`:
 - do not shrink body inward
 - do not enlarge tab
 
+# Pointer Click Footprint Rule
+
+For Filled `mouse-pointer-click`:
+
+- preserve the canonical pointer body path and ray coordinates exactly;
+- keep the pointer tip, angle, proportions, and rendered bounds unchanged;
+- converting the closed pointer body to `fill="currentColor"` plus its canonical
+  `2px` outline is sufficient—do not expand, dilate, or enlarge the cursor;
+- keep the detached click rays as canonical `2px` rounded strokes.
+
+The Filled variant must not make the cursor visually larger than Outline at 16–32px.
+
 # Container Enclosure Icons: Enclosed vs. Escaping Features
 
 A crucial distinction exists for icons featuring a geometric container (`square-*`, `circle-*`) with directional arrows:
