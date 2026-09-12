@@ -135,6 +135,7 @@ export function IconDetailDialog({
   ) => {
     navigate({
       replace: true,
+      resetScroll: false,
       search: (previous) => ({ ...previous, [key]: value }),
     });
   };

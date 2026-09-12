@@ -386,6 +386,30 @@ Typical use cases:
 
 ---
 
+## Even-Odd Cutouts Must Stay Inside the Outer Silhouette
+
+With `fill-rule="evenodd"`, every subtractive subpath must remain within the outer
+material geometry. If a cutout extends beyond the outer silhouette, the portion outside
+the outer path becomes a new filled island rather than a hole. This can create:
+
+- fill leaking beyond the base object
+- a darker third tone where an overlapping foreground object sits
+- unexpected tinted edges below or beside the object
+
+When a front object extends beyond a base object, such as paper extending below a
+printer body:
+
+- cut out only the portion that overlaps the base material
+- let the front object's tint cover its own full material area
+- do not extend the even-odd cutout beyond the base silhouette
+- inspect both the overlap and the area immediately outside the base at 16–24px
+
+If the cutout needs to extend beyond the base to describe the foreground object, use
+separate, non-overlapping tint geometry or a deliberate clip instead of an even-odd
+subpath that escapes the outer boundary.
+
+---
+
 ## Cutout Boundary Placement
 
 Remember that Lucide strokes are centered on their paths.

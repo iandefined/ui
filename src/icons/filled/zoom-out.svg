@@ -1,0 +1,16 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+  <defs>
+    <mask id="zoom-out-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="white" />
+      <line x1="8" x2="14" y1="11" y2="11" stroke="black" stroke-width="2" stroke-linecap="round" />
+    </mask>
+  </defs>
+  <circle cx="11" cy="11" r="8" fill="currentColor" stroke="currentColor" stroke-width="2" mask="url(#zoom-out-filled-mask)" />
+  <line x1="21" x2="16.65" y1="21" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

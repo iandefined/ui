@@ -409,6 +409,10 @@ or enough to guarantee the cut is fully open at all target sizes.
 
 This is allowed because subtractive geometry adds no visible content.
 
+Keep the inverse stroke's canonical round caps and joins, but place every endpoint that opens onto the silhouette outside the material. The rounded cap must be fully beyond the boundary; it must never remain visible as a rounded connection, filled bridge, hairline, or chipped notch at the edge.
+
+Apply this explicitly to edge-connected dividers and fold lines, including life-buoy spokes, panel separators, pencil eraser boundaries, book center seams, credit-card dividers, file folds, cloud cutouts, send diagonals, inbox rims, and globe longitude/equator seams. Extend along the source line or curve by at least 1.25 SVG units beyond the relevant edge, then inspect the result at 16px and 24px.
+
 # House Rule
 
 The house is the reference icon for open seams.

@@ -103,6 +103,7 @@ export function IconCatalog() {
   const openIcon = (item: IconCatalogItem, variant: IconVariant) => {
     setDialogItem(item);
     navigate({
+      resetScroll: false,
       search: (previous) => ({
         ...previous,
         icon: item.name,
@@ -115,6 +116,7 @@ export function IconCatalog() {
   const closeIcon = () => {
     navigate({
       replace: true,
+      resetScroll: false,
       search: (previous) => ({ ...previous, icon: undefined }),
     });
   };

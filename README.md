@@ -14,7 +14,9 @@
   ·
   <a href="https://ui.iandefined.com/llms.txt">LLMS.txt</a>
   ·
-  <a href="https://ui.iandefined.com/blocks">Blocks Catalog</a>
+  <a href="https://ui.iandefined.com/blocks">Blocks</a>
+  ·
+  <a href="https://ui.iandefined.com/icons">Icons</a>
 </p>
 
 ## Quick Start
@@ -63,7 +65,7 @@ pnpm static:build
 Run tests and verification:
 
 ```bash
-pnpm typecheck   # Type checking with TypeScript
+pnpm typecheck    # Type checking with TypeScript
 pnpm docs:check   # Validate all 42 MDX pages and registry mappings
 pnpm check        # Format checking and Biome/Vite+ linter
 pnpm fix          # Auto-format and auto-fix linter issues

@@ -1,0 +1,16 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+  <defs>
+    <mask id="globe-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="white" />
+      <path d="M12 0.5V2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20V0.5" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M0.5 12h23" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </mask>
+  </defs>
+  <circle cx="12" cy="12" r="10" fill="currentColor" stroke="currentColor" stroke-width="2" mask="url(#globe-filled-mask)" />
+</svg>
