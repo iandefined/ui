@@ -746,18 +746,23 @@ When using an SVG mask on the background layer:
 For icons with mechanical apertures, axle holes, or center openings (e.g. `settings` center hole `r=3`):
 - The center hole is a **True Void**, not material.
 - It must remain completely transparent in the Filled variant.
-- Use `fill-rule="evenodd"` on the filled path to carve out the aperture, preserving the canonical outline hole with its 2px stroke border:
+- Use a `<mask id="settings-filled-mask">` with `<circle cx="12" cy="12" r="3" fill="black" stroke="black" stroke-width="2" />` to cleanly cut out the central aperture matching canonical Lucide stroke envelope weight (e.g. `camera.svg`):
   ```xml
+  <defs>
+    <mask id="settings-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="white" />
+      <circle cx="12" cy="12" r="3" fill="black" stroke="black" stroke-width="2" />
+    </mask>
+  </defs>
   <path
-    d="M9.671 4.136... M 15 12 a 3 3 0 1 0 -6 0 a 3 3 0 1 0 6 0 Z"
+    d="M9.671 4.136...z"
     fill="currentColor"
     stroke="currentColor"
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
-    fill-rule="evenodd"
+    mask="url(#settings-filled-mask)"
   />
-  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none" />
   ```
 
 # Catalog Metadata Standards: Categories & Aliases (Non-Negotiable)

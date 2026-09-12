@@ -565,9 +565,4 @@ export {
   DialogViewport,
   createDialogHandle,
 };
-export type {
-  DialogBodyProps,
-  DialogFadeEdge,
-  DialogFadeEdges,
-  DialogScroll,
-};
+export type { DialogBodyProps, DialogFadeEdge, DialogFadeEdges, DialogScroll };

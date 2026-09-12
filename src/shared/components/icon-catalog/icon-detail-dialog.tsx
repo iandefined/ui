@@ -1,5 +1,11 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { CheckIcon, ChevronsUpDownIcon, CodeXml, Tag } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronsUpDownIcon,
+  CodeXml,
+  Download,
+  Tag,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 import type { IconCatalogItem, IconVariant } from "@/icons/catalog";
@@ -141,6 +147,22 @@ export function IconDetailDialog({
   const sourceUrl = item
     ? `${LINK.GITHUB}/blob/${GITHUB.branch}/src/icons/${sourceVariant}/${item.name}.svg`
     : "";
+
+  const handleDownload = () => {
+    if (!item || !svg) return;
+
+    const blob = new Blob([svg], {
+      type: "image/svg+xml;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${item.name}.svg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     if (!code) {
@@ -321,7 +343,7 @@ export function IconDetailDialog({
           </div>
 
           {/* Section 3: Preview Area */}
-          <div className="flex h-36 w-full min-w-0 max-w-full items-center justify-center overflow-hidden rounded-xl border border-input/70 bg-code">
+          <div className="flex h-36 w-full min-w-0 max-w-full items-center justify-center shadow-xs overflow-hidden rounded-xl border border-input/70 bg-code">
             <div
               style={{
                 width: `${Math.min(Math.max(numericSize, 16), 112)}px`,
@@ -334,13 +356,13 @@ export function IconDetailDialog({
           </div>
 
           {/* Section 4: Code Section */}
-          <div className="flex min-w-0 w-full max-w-full flex-col gap-1.5 overflow-hidden">
+          <div className="flex min-w-0 w-full max-w-full flex-col gap-1.5">
             <span className="text-xs font-medium text-muted-foreground">
               Code
             </span>
             <figure
               data-rehype-pretty-code-figure=""
-              className="relative m-0! w-full min-w-0 max-w-full overflow-hidden rounded-xl border! border-border! bg-code"
+              className="relative m-0! w-full min-w-0 max-w-full shadow-xs rounded-xl border! border-input/70! bg-code"
             >
               <CopyButton
                 value={code}
@@ -362,17 +384,23 @@ export function IconDetailDialog({
 
         <DialogFooter className="flex-row justify-end">
           <Button
+            variant="secondary"
             render={
               <a
                 href={sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="View source on GitHub"
               />
             }
             nativeButton={false}
           >
             <CodeXml />
             View Source
+          </Button>
+          <Button variant="default" onClick={handleDownload}>
+            <Download />
+            Download
           </Button>
         </DialogFooter>
       </DialogContent>

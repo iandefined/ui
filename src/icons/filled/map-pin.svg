@@ -8,7 +8,7 @@
   <defs>
     <mask id="map-pin-filled-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
       <rect width="24" height="24" fill="white" />
-      <circle cx="12" cy="10" r="2.25" fill="black" />
+      <circle cx="12" cy="10" r="3" fill="black" stroke="black" stroke-width="2" />
     </mask>
   </defs>
   <g mask="url(#map-pin-filled-mask)">

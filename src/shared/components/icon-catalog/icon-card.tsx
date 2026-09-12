@@ -38,7 +38,7 @@ export function IconCard({
           onClick={onClick}
           aria-label={`View ${item.title} ${variantLabel} icon details`}
           className={cn(
-            "group relative flex aspect-square items-center justify-center rounded-xl border border-border/70 bg-card p-2 sm:p-2.5",
+            "group relative flex aspect-square items-center justify-center rounded-xl shadow-xs border border-border/70 bg-card p-2 sm:p-2.5",
             "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-hidden",
             "cursor-pointer select-none",
             className
