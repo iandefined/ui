@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "pnpm registry:build && pnpm static:build && vp build",
+    "build": "vp run build:site",
     "preview": "vp preview",
     "deploy": "pnpm build && wrangler deploy",
     "cf-typegen": "wrangler types",
@@ -30,6 +30,7 @@
     "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/geist-mono": "catalog:",
     "@internationalized/date": "catalog:",
+    "@t3-oss/env-core": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-router": "catalog:",

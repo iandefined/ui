@@ -25,6 +25,7 @@ catalog:
   "@fontsource-variable/geist-mono": 5.3.0
   "@internationalized/date": 3.12.4
   "@tailwindcss/postcss": 4.3.3
+  "@t3-oss/env-core": 0.13.11
   "@tanstack/react-router": 1.170.34
   "@tanstack/react-table": 9.2.4
   "@tanstack/react-form": 1.33.5
