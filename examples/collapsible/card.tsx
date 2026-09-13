@@ -34,7 +34,8 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Website</span>
             </div>
-            <Badge depth="surface"
+            <Badge
+              depth="surface"
               variant="secondary"
               render={
                 <a href="https://claude.ai" target="_blank" rel="noreferrer">
@@ -72,9 +73,15 @@ export default function CollapsibleCardDemo() {
               <span className="text-sm font-medium">Categories</span>
             </div>
             <div className="flex items-center gap-1">
-              <Badge depth="surface" variant="info">AI</Badge>
-              <Badge depth="surface" variant="success">SaaS</Badge>
-              <Badge depth="surface" variant="warning">B2B</Badge>
+              <Badge depth="surface" variant="info">
+                AI
+              </Badge>
+              <Badge depth="surface" variant="success">
+                SaaS
+              </Badge>
+              <Badge depth="surface" variant="warning">
+                B2B
+              </Badge>
             </div>
           </div>
 
@@ -89,7 +96,9 @@ export default function CollapsibleCardDemo() {
             <div className="text-muted-foreground">
               <span className="text-sm font-medium">Estimated ARR</span>
             </div>
-            <Badge depth="surface" variant="success">$3-4B</Badge>
+            <Badge depth="surface" variant="success">
+              $3-4B
+            </Badge>
           </div>
 
           <div className="flex items-center justify-between gap-2">

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import { Home, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -7,15 +8,11 @@ import { Button } from "@/shared/components/ui/button";
 
 const loggedErrorKeys = new Set<string>();
 
-export const DefaultErrorPage = ({
-  error,
-  reset,
-}: {
-  error: Error;
-  reset: () => void;
-}) => {
+export const DefaultErrorPage = ({ error, reset }: ErrorComponentProps) => {
   useEffect(() => {
-    const errorKey = `${error.name}:${error.message}:${error.stack ?? ""}`;
+    const errorObject =
+      error instanceof Error ? error : new Error(String(error));
+    const errorKey = `${errorObject.name}:${errorObject.message}:${errorObject.stack ?? ""}`;
 
     if (loggedErrorKeys.has(errorKey)) {
       return;

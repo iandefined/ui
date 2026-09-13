@@ -251,7 +251,10 @@ function Badge({
   };
 
   const defaultProps = {
-    className: cn(badgeVariants({ depth: resolvedDepth, variant, size }), className),
+    className: cn(
+      badgeVariants({ depth: resolvedDepth, variant, size }),
+      className
+    ),
     "data-color": isPaletteVariant ? resolvedColor : undefined,
     "data-depth": resolvedDepth,
     "data-size": size,
