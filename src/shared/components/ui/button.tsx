@@ -27,10 +27,10 @@ const buttonVariants = tv({
       secondary:
         "[--button-bg:var(--secondary)] border-secondary text-secondary-foreground",
       outline:
-        "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        "border bg-background shadow-xs hover:bg-accent active:bg-accent/80 hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 dark:active:bg-input/40",
       ghost:
-        "text-primary hover:bg-primary/10 focus-vislbe:bg-primary/10 focus-visible:border-primary/25",
-      link: "text-primary hover:underline hover:underline-offset-4 hover:decoration-1 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-1",
+        "text-primary hover:bg-primary/10 active:bg-primary/5 focus-vislbe:bg-primary/10 focus-visible:border-primary/25",
+      link: "text-primary hover:underline hover:underline-offset-4 hover:decoration-1 active:underline active:underline-offset-4 active:decoration-1 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-1",
       destructive:
         "[--button-bg:var(--destructive)] text-destructive-foreground focus-visible:border-destructive focus-visible:ring-destructive",
     },
