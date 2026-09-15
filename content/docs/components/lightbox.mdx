@@ -1,0 +1,314 @@
+---
+title: Lightbox
+description: Browse images and rich media in an accessible, gesture-friendly gallery.
+---
+
+Use `Lightbox` when an image or media collection should open above the page without losing the context of the original content. It discovers standalone images automatically, or accepts an explicit item list when the trigger and gallery content need to be separated.
+
+## Preview
+
+<ComponentPreview name="lightbox/default" />
+
+## Installation
+
+<ComponentInstall name="lightbox" />
+
+## Usage
+
+The simplest form wraps standalone images. The lightbox reads each image's `src`, responsive source attributes, dimensions, `alt`, and optional `data-lightbox-caption`.
+
+```tsx
+import { Lightbox } from "@/components/ui/lightbox";
+
+<Lightbox>
+  <img
+    src="/images/forest.jpg"
+    alt="A forest path"
+    data-lightbox-caption="A walk through the forest"
+  />
+  <img src="/images/lake.jpg" alt="A lake at sunrise" />
+</Lightbox>;
+```
+
+Use `items` when the gallery includes video or when the trigger and gallery content need to be separated. Supplying `items` disables automatic child scanning.
+
+```tsx
+import { Button } from "@/components/ui/button";
+import {
+  Lightbox,
+  LightboxTrigger,
+  type LightboxItem,
+} from "@/components/ui/lightbox";
+
+const items = [
+  {
+    type: "image",
+    src: "/images/mountain.jpg",
+    alt: "A mountain ridge",
+    caption: "Morning above the clouds",
+  },
+] satisfies LightboxItem[];
+
+<Lightbox items={items}>
+  <LightboxTrigger index={0} render={<Button />}>
+    Open lightbox
+  </LightboxTrigger>
+</Lightbox>;
+```
+
+## Composition
+
+`Lightbox` renders the standard toolbar, navigation, captions, and thumbnail rail. Pass an explicit `LightboxContent` to own that interface with the composable parts.
+
+```tsx
+import {
+  Lightbox,
+  LightboxCaptions,
+  LightboxClose,
+  LightboxContent,
+  LightboxCounter,
+  LightboxDownload,
+  LightboxMore,
+  LightboxNext,
+  LightboxPrevious,
+  LightboxSlides,
+  LightboxThumbnails,
+  LightboxToolbar,
+  LightboxTrigger,
+  LightboxZoomButton,
+} from "@/components/ui/lightbox";
+
+<Lightbox items={items}>
+  <LightboxTrigger index={0} />
+  <LightboxContent>
+    <LightboxCounter />
+    <LightboxToolbar>
+      <LightboxDownload />
+      <LightboxZoomButton />
+      <LightboxMore />
+      <LightboxClose />
+    </LightboxToolbar>
+    <LightboxPrevious />
+    <LightboxSlides />
+    <LightboxNext />
+    <LightboxCaptions />
+    <LightboxThumbnails />
+  </LightboxContent>
+</Lightbox>;
+```
+
+Every part exposes a stable `data-slot` attribute and supports the standard props for its underlying element. `LightboxZoom` is available when a composed slide needs to opt into the lightbox transform layer.
+
+## Examples
+
+### Explicit Items and Custom Trigger
+
+Use multiple `LightboxTrigger` instances to open the same collection at different indexes.
+
+<ComponentPreview name="lightbox/items" />
+
+### Image and Video Media
+
+Use a first-class video item alongside images. When both `thumbnail` and `poster` are omitted, the lightbox derives the thumbnail from the video automatically. Native video props are passed through with `videoProps`.
+
+<ComponentPreview name="lightbox/media" />
+
+### Isolated Images
+
+Set `navigation={false}` when each image should open independently instead of as a collection. The lightbox hides the counter, carousel, and previous and next controls, and mounts only the selected item. This is useful for image-heavy wikis and long-form documentation because unopened images are not mounted as lightbox slides.
+
+<ComponentPreview name="lightbox/isolated-gallery" />
+
+### Custom Controls and Events
+
+Add actions to the More menu with `controls`, and use the lifecycle callbacks to synchronize application state.
+
+<ComponentPreview name="lightbox/controls" />
+
+### Custom Composition
+
+Replace the default interface with `LightboxContent` and compose only the parts the experience needs.
+
+<ComponentPreview name="lightbox/composition" />
+
+### Peek, Responsive Sources, and RTL
+
+Set `peek` to reveal adjacent slides, use `srcSet` and `sizes` for responsive loading, and pass `dir="rtl"` to mirror navigation and thumbnail order.
+
+<ComponentPreview name="lightbox/options" />
+
+## Features
+
+- On desktop, click the zoom button once to toggle between fit and 2× zoom. Scroll-wheel zoom is continuous, smoothly interpolated, and centered on the pointer; Ctrl plus scroll also zooms at the cursor.
+- On touch devices, double-tap toggles zoom and pinch zooms directly around the gesture center. Zoom transitions are animated and interruptible.
+- Pan zoomed slides with a finger, mouse, trackpad, or arrow keys.
+- Swipe horizontally to change slides and drag down on touch to dismiss. Gestures are interruptible and respect the current zoom level.
+- Pull up or down at fit scale to dismiss. The backdrop fades progressively with the pull distance.
+- Opening uses Glare-style measured shared-element motion when a source is available. Closing uses the ordinary dialog transition, and reduced motion falls back to opacity.
+- Only the active slide and the configured preload window are rendered. Adjacent images load lazily and preserve `srcSet` and `sizes`.
+- `prefers-reduced-motion` switches to opacity-only transitions.
+- Controls that are unavailable for the active item, such as Download for a video without a download target, are omitted from the toolbar rather than shown disabled.
+
+## Accessibility
+
+The lightbox is a modal dialog with a focus trap, focus restoration, Escape dismissal, and full keyboard navigation. It provides a stable accessible name, a numbered slide group, caption descriptions, a polite image-change announcement, and roving focus for thumbnails.
+
+At fit scale, Left and Right move between slides. When zoomed, the arrow keys pan the image; hold Shift with an arrow to change slides. On desktop, use the zoom button once to toggle between fit and 2×; `+` or `=` zooms in, `-` zooms out, and `0` resets zoom. On touch devices, double-tap toggles between fit and 2×, while pinch zoom remains continuous. Navigation and these key bindings mirror when `dir="rtl"` is set.
+
+Give every explicit image item a meaningful `alt`. Label video items with `label`, and provide a keyboard-accessible `LightboxTrigger` when the source is not a standalone image.
+
+## API Reference
+
+### `Lightbox` props
+
+<ApiPropsList>
+  <ApiProp name="items" fullType="LightboxItem[]">
+    Explicit gallery items. When supplied, descendant images are not scanned.
+  </ApiProp>
+  <ApiProp name="open" fullType="boolean">
+    Controls whether the lightbox is open.
+  </ApiProp>
+  <ApiProp name="defaultOpen" fullType="boolean" defaultValue="false">
+    Sets the initial open state for an uncontrolled lightbox.
+  </ApiProp>
+  <ApiProp name="index" fullType="number">
+    Controls the active item index.
+  </ApiProp>
+  <ApiProp name="defaultIndex" fullType="number" defaultValue="0">
+    Sets the initial item index for an uncontrolled lightbox.
+  </ApiProp>
+  <ApiProp
+    name="onOpenChange"
+    fullType="(open: boolean, details: BaseUIChangeEventDetails) => void"
+  >
+    Runs when the open state changes. The details object includes the Base UI
+    event reason and supports cancellation.
+  </ApiProp>
+  <ApiProp name="onOpen" fullType="(details: LightboxOpenEventDetails) => void">
+    Runs when an open request is accepted.
+  </ApiProp>
+  <ApiProp
+    name="onClose"
+    fullType="(details: LightboxOpenEventDetails) => void"
+  >
+    Runs when a close request is accepted.
+  </ApiProp>
+  <ApiProp name="onOpenChangeComplete" fullType="(open: boolean) => void">
+    Runs after the open or close transition completes.
+  </ApiProp>
+  <ApiProp
+    name="onChangeImage"
+    fullType="(index: number, item: LightboxItem, details: LightboxImageChangeEventDetails) => void"
+  >
+    Runs after the active item changes.
+  </ApiProp>
+  <ApiProp
+    name="overlay"
+    fullType='"blur" | "brightness"'
+    simpleType="string"
+    defaultValue='"blur"'
+  >
+    Selects the backdrop treatment. `blur` combines a dark surface with backdrop
+    blur. `brightness` uses a plain dark dimmer.
+  </ApiProp>
+  <ApiProp name="peek" fullType="boolean" defaultValue="false">
+    Shows part of the previous and next slides beside the active slide.
+  </ApiProp>
+  <ApiProp name="navigation" fullType="boolean" defaultValue="true">
+    Groups discovered images into a navigable collection. Set it to `false` to
+    hide the counter, carousel, and previous and next controls, and mount only
+    the selected item.
+  </ApiProp>
+  <ApiProp name="loop" fullType="boolean" defaultValue="true">
+    Wraps navigation from the last item to the first item and back.
+  </ApiProp>
+  <ApiProp name="preload" fullType="number" defaultValue="1">
+    Number of adjacent items to render and preload on each side.
+  </ApiProp>
+  <ApiProp name="maxZoom" fullType="number" defaultValue="4">
+    Maximum zoom multiplier for lightbox-managed media transforms.
+  </ApiProp>
+  <ApiProp name="controls" fullType="LightboxControl[]">
+    Adds labeled actions to the More menu. Each control supplies an `id`, an
+    `icon`, a `label`, and an `onClick` callback. Controls marked unavailable
+    for the active item are omitted.
+  </ApiProp>
+  <ApiProp name="dir" fullType='"ltr" | "rtl"' simpleType="string">
+    Controls slide order, arrow meaning, thumbnail order, and transition
+    direction. It inherits the document direction when omitted.
+  </ApiProp>
+</ApiPropsList>
+
+### `LightboxItem`
+
+```tsx
+type LightboxImageItem = {
+  id?: string;
+  type: "image";
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  srcSet?: string;
+  sizes?: string;
+  thumbnailSrc?: string;
+  thumbnail?: React.ReactNode;
+  caption?: React.ReactNode;
+  className?: string;
+  download?: boolean | { src?: string; filename?: string };
+  zoomable?: boolean;
+};
+
+type LightboxVideoItem = {
+  id?: string;
+  type: "video";
+  src: string;
+  label: string;
+  thumbnail?: React.ReactNode;
+  poster?: string;
+  width?: number;
+  height?: number;
+  sources?: React.SourceHTMLAttributes<HTMLSourceElement>[];
+  tracks?: React.TrackHTMLAttributes<HTMLTrackElement>[];
+  videoProps?: Omit<
+    React.VideoHTMLAttributes<HTMLVideoElement>,
+    "children" | "className" | "height" | "poster" | "src" | "width"
+  >;
+  caption?: React.ReactNode;
+  className?: string;
+  download?: boolean | { src?: string; filename?: string };
+  zoomable?: boolean;
+};
+
+type LightboxItem = LightboxImageItem | LightboxVideoItem;
+```
+
+Use `thumbnail` to render any React node in the thumbnail slot; plain strings
+work too. Image items can use `thumbnailSrc` as a URL shorthand. A video item
+can omit both `thumbnail` and `poster` to derive a thumbnail automatically.
+
+### Composable parts
+
+`LightboxTrigger`, `LightboxContent`, `LightboxBackdrop`, `LightboxViewport`, `LightboxSlides`, `LightboxSlide`, `LightboxZoom`, `LightboxToolbar`, `LightboxCounter`, `LightboxCaptions`, `LightboxThumbnails`, `LightboxThumbnail`, `LightboxPrevious`, `LightboxNext`, `LightboxZoomButton`, `LightboxDownload`, `LightboxMore`, and `LightboxClose` are exported primitives. Use `useLightbox` inside a descendant to access the current item, index, open state, zoom state, navigation actions, and close action.
+
+<ApiPropsList>
+  <ApiProp name="LightboxTrigger.index" fullType="number" defaultValue="0">
+    Selects the item that opens when this trigger is pressed.
+  </ApiProp>
+  <ApiProp name="LightboxTrigger.morph" fullType="boolean">
+    Enables or disables measured shared-element opening motion for this trigger.
+    It is inferred for image-like elements when omitted.
+  </ApiProp>
+  <ApiProp name="LightboxSlide.index" fullType="number" required>
+    Selects the item rendered by the slide.
+  </ApiProp>
+  <ApiProp name="LightboxSlide.active" fullType="boolean" defaultValue="false">
+    Marks the slide as the active item.
+  </ApiProp>
+  <ApiProp name="LightboxZoom.active" fullType="boolean" defaultValue="true">
+    Registers this zoom surface as the active gesture target.
+  </ApiProp>
+  <ApiProp name="LightboxThumbnail.index" fullType="number" required>
+    Selects the item represented by the thumbnail.
+  </ApiProp>
+</ApiPropsList>

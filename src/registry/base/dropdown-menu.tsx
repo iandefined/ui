@@ -171,6 +171,7 @@ function DropdownMenuContent({
   arrowPadding,
   disableAnchorTracking,
   collisionAvoidance,
+  positionerClassName,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Popup> &
   DropdownMenuPositionerProps & {
@@ -193,6 +194,7 @@ function DropdownMenuContent({
       | "snappyOut";
     reduceMotion?: boolean;
     showArrow?: boolean;
+    positionerClassName?: string;
   }) {
   const animation = useMemo(
     () =>
@@ -220,7 +222,10 @@ function DropdownMenuContent({
         alignOffset={alignOffset}
         anchor={anchor}
         arrowPadding={arrowPadding}
-        className="z-50 [--item-block-padding:6px] [--item-inline-padding:8px]"
+        className={cn(
+          "z-50 [--item-block-padding:6px] [--item-inline-padding:8px]",
+          positionerClassName
+        )}
         collisionAvoidance={collisionAvoidance}
         collisionBoundary={collisionBoundary}
         collisionPadding={collisionPadding}

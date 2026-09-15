@@ -53,8 +53,10 @@ const DropdownMenuContent = ({
   disableAnchorTracking,
   collisionAvoidance,
   finalFocus,
+  positionerClassName,
   ...props
-}: DropdownMenuPrimitive.Popup.Props & DropdownMenuPositionerProps) => (
+}: DropdownMenuPrimitive.Popup.Props &
+  DropdownMenuPositionerProps & { positionerClassName?: string }) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Positioner
       align={align}
@@ -69,7 +71,7 @@ const DropdownMenuContent = ({
       arrowPadding={arrowPadding}
       disableAnchorTracking={disableAnchorTracking}
       collisionAvoidance={collisionAvoidance}
-      className="isolate z-50 outline-hidden"
+      className={cn("isolate z-50 outline-hidden", positionerClassName)}
     >
       <DropdownMenuPrimitive.Popup
         data-slot="dropdown-menu-content"

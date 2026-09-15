@@ -605,6 +605,25 @@
       ]
     },
     {
+      "name": "lightbox",
+      "type": "registry:ui",
+      "title": "Lightbox",
+      "description": "A composable, accessible media lightbox with shared-element transitions, gestures, zoom, captions, and thumbnails.",
+      "dependencies": ["@base-ui/react", "motion", "lucide-react", "cn"],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/button.json",
+        "https://ui.iandefined.com/r/dropdown-menu.json",
+        "https://ui.iandefined.com/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/lightbox.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/lightbox.tsx"
+        }
+      ]
+    },
+    {
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
