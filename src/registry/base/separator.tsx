@@ -28,22 +28,26 @@ const separatorVariants = cva(
       {
         variant: "solid",
         lightSource: "above",
-        className: "[box-shadow:0_-1px_0_0_var(--background)]",
+        className:
+          "[box-shadow:0_1px_0_0_var(--background)] dark:[box-shadow:0_-1px_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "below",
-        className: "[box-shadow:0_1px_0_0_var(--background)]",
+        className:
+          "[box-shadow:0_-1px_0_0_var(--background)] dark:[box-shadow:0_1px_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "right",
-        className: "[box-shadow:1px_0_0_0_var(--background)]",
+        className:
+          "[box-shadow:-1px_0_0_0_var(--background)] dark:[box-shadow:1px_0_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "left",
-        className: "[box-shadow:-1px_0_0_0_var(--background)]",
+        className:
+          "[box-shadow:1px_0_0_0_var(--background)] dark:[box-shadow:-1px_0_0_0_var(--background)]",
       },
     ],
     defaultVariants: {
@@ -82,25 +86,25 @@ const separatorContentVariants = cva(
         variant: "solid",
         lightSource: "above",
         className:
-          "before:[box-shadow:0_1px_0_0_var(--background)] after:[box-shadow:0_1px_0_0_var(--background)]",
+          "before:[box-shadow:0_-1px_0_0_var(--background)] after:[box-shadow:0_-1px_0_0_var(--background)] dark:before:[box-shadow:0_1px_0_0_var(--background)] dark:after:[box-shadow:0_1px_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "below",
         className:
-          "before:[box-shadow:0_-1px_0_0_var(--background)] after:[box-shadow:0_-1px_0_0_var(--background)]",
+          "before:[box-shadow:0_1px_0_0_var(--background)] after:[box-shadow:0_1px_0_0_var(--background)] dark:before:[box-shadow:0_-1px_0_0_var(--background)] dark:after:[box-shadow:0_-1px_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "right",
         className:
-          "before:[box-shadow:-1px_0_0_0_var(--background)] after:[box-shadow:-1px_0_0_0_var(--background)]",
+          "before:[box-shadow:1px_0_0_0_var(--background)] after:[box-shadow:1px_0_0_0_var(--background)] dark:before:[box-shadow:-1px_0_0_0_var(--background)] dark:after:[box-shadow:-1px_0_0_0_var(--background)]",
       },
       {
         variant: "solid",
         lightSource: "left",
         className:
-          "before:[box-shadow:1px_0_0_0_var(--background)] after:[box-shadow:1px_0_0_0_var(--background)]",
+          "before:[box-shadow:-1px_0_0_0_var(--background)] after:[box-shadow:-1px_0_0_0_var(--background)] dark:before:[box-shadow:1px_0_0_0_var(--background)] dark:after:[box-shadow:1px_0_0_0_var(--background)]",
       },
     ],
   }
