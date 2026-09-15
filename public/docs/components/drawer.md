@@ -567,19 +567,23 @@ export default function DrawerStickyFooterDemo() {
                   </div>
                   <p className="mt-1 text-sm">{comment.text}</p>
                   <div className="mt-2 flex items-center gap-4">
-                    <button
+                    <Button
                       type="button"
-                      className="text-muted-foreground flex items-center gap-1 text-xs hover:text-red-500"
+                      variant="ghost"
+                      size="xs"
+                      className="h-auto p-0 text-muted-foreground hover:text-red-500"
                     >
                       <HeartIcon className="size-3.5" />
                       <span className="tabular-nums">{comment.likes}</span>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
-                      className="text-muted-foreground text-xs hover:underline"
+                      variant="link"
+                      size="xs"
+                      className="h-auto p-0 text-muted-foreground hover:text-foreground"
                     >
                       Reply
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

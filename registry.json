@@ -93,7 +93,7 @@
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
-      "description": "A Base UI button with glossy default and custom-color treatments, variants, sections, and sizes.",
+      "description": "A Base UI button with oklch-tinted hover and active states, custom colors, variants, sections, and sizes.",
       "dependencies": ["@base-ui/react", "tailwind-variants", "cn"],
       "files": [
         {

@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/registry/base/table";
+import { Button } from "@/shared/components/ui/button";
 
 export type ApiPropProps = {
   name: string;
@@ -59,9 +60,11 @@ export function ApiProp({
           <code className="text-xs">{displayedDefault}</code>
         </TableCell>
         <TableCell className="w-8 text-right">
-          <button
+          <Button
             type="button"
-            className="text-muted-foreground hover:text-foreground inline-flex items-center justify-center p-1 rounded cursor-pointer transition-colors"
+            variant="ghost"
+            size="icon-xs"
+            className="hitbox-4 rounded p-0 text-muted-foreground hover:text-foreground"
             aria-label="Toggle details"
             onClick={(e) => {
               e.stopPropagation();
@@ -75,7 +78,7 @@ export function ApiProp({
                 open && "rotate-90"
               )}
             />
-          </button>
+          </Button>
         </TableCell>
       </TableRow>
       <TableRow className="[&:not(:has([data-slot=collapsible-content]:not([hidden]))):not(:has([data-slot=collapsible-content][data-ending-style]))]:hidden">

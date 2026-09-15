@@ -1,6 +1,6 @@
 ---
 title: Button
-description: A button with a glossy default treatment, custom colors, variants, sections, and sizes.
+description: A button with oklch-tinted hover and active states, custom colors, variants, sections, and sizes.
 ---
 
 Use `Button` for actions that submit, confirm, navigate, or change application state.
@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 <Button>Get started</Button>;
 ```
 
-The default variant uses the glossy treatment. Pass a CSS color to `color` to generate its gradient and ring.
+The default variant uses the oklch tint treatment. Pass a CSS color to `color` to set its background color; hover and active states mix the current foreground color into that base.
 
 ```tsx
 <Button className="text-white" color="#2563eb">
@@ -94,7 +94,7 @@ Give icon-only buttons an `aria-label`. Use `nativeButton={false}` only when `re
     `"default"` or omitted.
   </ApiProp>
   <ApiProp name="color" fullType="string">
-    Generates the glossy gradient and ring for the default variant.
+    Sets the default background color used for the oklch hover and active tint.
   </ApiProp>
   <ApiProp
     name="size"

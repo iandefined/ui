@@ -39,24 +39,25 @@ export function IconCategorySidebar({
       {categories.map((category) => {
         const isSelected = selectedCategory === category.id;
         return (
-          <button
+          <Button
             key={category.id}
             type="button"
+            variant={isSelected ? "default" : "ghost"}
             onClick={() => onSelectCategory(category.id)}
             aria-current={isSelected ? "true" : undefined}
             className={cn(
-              "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+              "h-9 w-full justify-between rounded-lg px-3 py-2 text-sm font-medium",
               "focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-hidden",
               isSelected
-                ? "bg-accent text-accent-foreground"
-                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                ? "[--button-bg:var(--accent)] text-accent-foreground shadow-none ring-0"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             <span>{category.label}</span>
             <span className="tabular-nums text-sm text-muted-foreground">
               {category.count}
             </span>
-          </button>
+          </Button>
         );
       })}
     </nav>

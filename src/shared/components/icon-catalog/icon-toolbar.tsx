@@ -4,6 +4,7 @@ import { SearchIcon, XIcon } from "lucide-react";
 import type { CategoryInfo, IconCategory } from "@/icons/catalog";
 import { Input } from "@/registry/base/input";
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
+import { Button } from "@/shared/components/ui/button";
 
 import { IconCategoryMobileSelect } from "./icon-category-filter";
 
@@ -47,14 +48,16 @@ export function IconToolbar({
           className="h-9 pr-8 pl-9 text-sm"
         />
         {searchQuery && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-xs"
             onClick={() => onSearchChange("")}
             aria-label="Clear search"
-            className="text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-2.5 z-10 -translate-y-1/2 rounded-xs p-0.5 focus-visible:ring-2 focus-visible:outline-hidden"
+            className="hitbox-2 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-2.5 z-10 -translate-y-1/2 rounded-xs p-0 focus-visible:ring-2 focus-visible:outline-hidden"
           >
             <XIcon className="size-3.5" />
-          </button>
+          </Button>
         )}
       </div>
 

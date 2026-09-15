@@ -8,27 +8,31 @@ import { cn } from "cn";
 import type { CSSProperties, ReactNode } from "react";
 import { tv } from "tailwind-variants";
 
+const buttonMix =
+  "[--button-fg:currentColor] [--button-mix-amount:0%] [background-color:color-mix(in_oklch,var(--button-bg),var(--button-fg)_var(--button-mix-amount))] hover:[--button-mix-amount:10%] active:[--button-mix-amount:20%] data-pressed:[--button-mix-amount:20%]";
+
 const buttonVariants = tv({
   base: [
     "group relative isolate inline-flex w-fit shrink-0 touch-manipulation cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap text-sm outline-hidden transform-gpu motion-reduce:transform-none",
     "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-secondary-foreground forced-colors:focus-visible:outline-[Highlight]",
     "disabled:pointer-events-none disabled:scale-100 disabled:cursor-not-allowed disabled:opacity-60",
-    "[transition:scale_100ms,box-shadow_200ms,background_200ms,opacity_200ms,--tw-gradient-from_200ms,--tw-gradient-to_200ms,width_200ms] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] will-change-transform",
+    "[transition:scale_100ms,box-shadow_200ms,background-color_200ms,opacity_200ms,--button-mix-amount_200ms,width_200ms] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] will-change-transform motion-reduce:transition-none",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 active:scale-98",
     "[&_[data-slot=button-section]]:flex [&_[data-slot=button-section]]:shrink-0 [&_[data-slot=button-section]]:items-center [&_[data-slot=button-section]]:justify-center",
   ],
   variants: {
     variant: {
-      default: "bg-primary font-medium text-primary-foreground",
+      default:
+        "[--button-bg:var(--primary)] font-medium text-primary-foreground",
       secondary:
-        "border-secondary bg-secondary text-secondary-foreground hover:bg-secondary/90 data-pressed:bg-secondary/90",
+        "[--button-bg:var(--secondary)] border-secondary text-secondary-foreground",
       outline:
         "border border-border bg-background shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.02),0_3px_3px_-1.5px_rgb(0_0_0/0.04)] hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.44),0_3px_3px_-2px_rgb(0_0_0/0.40)] dark:hover:bg-input/50",
       ghost:
         "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 focus-visible:bg-muted dark:focus-visible:bg-muted/50 focus-visible:border-primary/25",
       link: "text-primary hover:underline hover:underline-offset-4 hover:decoration-1 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-1",
       destructive:
-        "bg-destructive bg-linear-to-b from-[color-mix(in_oklch,var(--destructive),white_15%)] to-[var(--destructive)] font-medium text-destructive-foreground ring-1 ring-[color-mix(in_oklch,var(--destructive),black_18%)] shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--destructive),white_30%),0_1px_2px_oklch(0.1_0_0_/_0.1)] hover:from-[color-mix(in_oklch,var(--destructive),white_24%)] hover:to-[var(--destructive)] focus-visible:border-destructive focus-visible:bg-destructive/90 focus-visible:ring-destructive",
+        "[--button-bg:var(--destructive)] font-medium text-destructive-foreground ring-1 ring-[color-mix(in_oklch,var(--destructive),black_18%)] shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--destructive),white_30%),0_1px_2px_oklch(0.1_0_0_/_0.1)] focus-visible:border-destructive focus-visible:ring-destructive",
     },
     size: {
       default:
@@ -57,20 +61,22 @@ const buttonVariants = tv({
     },
   },
   compoundVariants: [
+    { variant: "default", class: buttonMix },
+    { variant: "secondary", class: buttonMix },
+    { variant: "destructive", class: buttonMix },
     {
       variant: "default",
       customColor: false,
       class: [
-        "bg-linear-to-b from-[color-mix(in_oklch,var(--primary),white_15%)] to-[var(--primary)] ring-1 ring-[oklch(0.15_0_0)]",
+        "ring-1 ring-[oklch(0.15_0_0)]",
         "shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--primary),white_30%),0_1px_2px_oklch(0.1_0_0_/_0.1)]",
-        "hover:from-[color-mix(in_oklch,var(--primary),white_24%)] hover:to-[var(--primary)]",
       ],
     },
     {
       variant: "default",
       customColor: true,
       class: [
-        "bg-linear-to-b from-[var(--button-from)] to-[var(--button-to)] ring-1 ring-[var(--button-ring)] hover:from-[var(--button-hover-from)] hover:to-[var(--button-to)]",
+        "ring-1 ring-[var(--button-ring)]",
         "shadow-[inset_0_1px_0_0_var(--button-emphasis-bg),0_1px_2px_oklch(0.1_0_0_/_0.1)]",
       ],
     },
@@ -84,11 +90,11 @@ const buttonVariants = tv({
 });
 
 type ButtonStyle = CSSProperties & {
+  "--button-bg"?: string;
+  "--button-fg"?: string;
+  "--button-mix-amount"?: string;
   "--button-emphasis-bg"?: string;
-  "--button-from"?: string;
-  "--button-hover-from"?: string;
   "--button-ring"?: string;
-  "--button-to"?: string;
 };
 
 type SharedButtonProps = Omit<BaseButtonProps, "color" | "style"> & {
@@ -112,7 +118,7 @@ type SharedButtonProps = Omit<BaseButtonProps, "color" | "style"> & {
 type ButtonProps = SharedButtonProps &
   (
     | {
-        /** CSS color used to generate the default variant's glossy gradient. */
+        /** CSS color used as the default variant's background color. */
         color: string;
         variant?: "default";
       }
@@ -148,10 +154,8 @@ function Button({
   const colorStyle: ButtonStyle | undefined = hasCustomColor
     ? {
         "--button-emphasis-bg": `color-mix(in oklch, ${color}, white 30%)`,
-        "--button-from": `color-mix(in oklch, ${color}, white 15%)`,
-        "--button-hover-from": `color-mix(in oklch, ${color}, white 24%)`,
+        "--button-bg": color,
         "--button-ring": `color-mix(in oklch, ${color}, black 18%)`,
-        "--button-to": color,
       }
     : undefined;
 

@@ -61,11 +61,6 @@
       @apply min-[1800px]:border-t;
     }
   }
-
-  a:active,
-  button:active {
-    @apply opacity-60 md:opacity-100;
-  }
 }
 
 @layer components {

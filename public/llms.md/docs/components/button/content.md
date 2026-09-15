@@ -1,6 +1,6 @@
 # Button
 
-A button with a glossy default treatment, custom colors, variants, sections, and sizes.
+A button with oklch-tinted hover and active states, custom colors, variants, sections, and sizes.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
@@ -30,7 +30,7 @@ import { Button } from "@/components/ui/button";
 <Button>Get started</Button>;
 ```
 
-The default variant uses the glossy treatment. Pass a CSS color to `color` to generate its gradient and ring.
+The default variant uses the oklch tint treatment. Pass a CSS color to `color` to set its background color; hover and active states mix the current foreground color into that base.
 
 ```tsx
 <Button className="text-white" color="#2563eb">
@@ -249,7 +249,7 @@ Give icon-only buttons an `aria-label`. Use `nativeButton={false}` only when `re
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `variant` | `"default" \| "secondary" \| "outline" \| "ghost" \| "link" \| "destructive"` | `default` | Sets the visual treatment. `color` is available only when this is `"default"` or omitted. |
-| `color` | `string` | `-` | Generates the glossy gradient and ring for the default variant. |
+| `color` | `string` | `-` | Sets the default background color used for the oklch hover and active tint. |
 | `size` | `"xs" \| "sm" \| "default" \| "lg" \| "xl" \| "icon-xs" \| "icon-sm" \| "icon" \| "icon-lg" \| "icon-xl"` | `default` | Sets the button dimensions. |
 | `radius` | `"none" \| "sm" \| "default" \| "lg" \| "xl" \| "full"` | `default` | Sets the corner radius. |
 | `leftSection` | `ReactNode` | `-` | Renders content before the label. |

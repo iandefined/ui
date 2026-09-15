@@ -58,6 +58,7 @@ npx shadcn@latest add https://ui.iandefined.com/r/toast.json
 Wrap the part of your app that can create notifications with `ToastProvider`, then call `toast()` from an event handler or another client-side function.
 
 ```tsx
+import { Button } from "@/components/ui/button";
 import { ToastProvider, toast } from "@/components/ui/toast";
 
 function App() {
@@ -70,9 +71,9 @@ function App() {
 
 function SaveButton() {
   return (
-    <button type="button" onClick={() => toast({ title: "Changes saved" })}>
+    <Button type="button" onClick={() => toast({ title: "Changes saved" })}>
       Save
-    </button>
+    </Button>
   );
 }
 ```
