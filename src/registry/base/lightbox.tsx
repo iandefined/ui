@@ -1181,6 +1181,7 @@ function LightboxContent({
   children,
   initialFocus,
   onKeyDown,
+  style,
   ...props
 }: LightboxContentProps) {
   const {
@@ -1313,6 +1314,13 @@ function LightboxContent({
             "motion-reduce:transition-opacity motion-reduce:transform-none",
             className
           )}
+          style={
+            {
+              "--lightbox-header-inset":
+                "max(5rem, calc(env(safe-area-inset-top) + 4rem))",
+              ...style,
+            } as React.CSSProperties
+          }
           onKeyDown={handleKeyDown}
           {...props}
         >
@@ -1465,7 +1473,7 @@ function LightboxSlide({
         onLoad={() => markAssetLoaded(loadKey)}
         className={cn(
           "block h-auto w-auto max-w-[calc(100vw-2rem)] select-none rounded-lg object-contain",
-          "max-h-[calc(100dvh-11rem)] sm:max-h-[calc(100dvh-12rem)]",
+          "max-h-full",
           "transition-opacity duration-200",
           !mediaLoaded && "opacity-0",
           item.className
@@ -1481,14 +1489,22 @@ function LightboxSlide({
         aria-label={item.label}
         controls={item.videoProps?.controls ?? true}
         muted={item.videoProps?.muted ?? false}
+        onCanPlay={(event) => {
+          item.videoProps?.onCanPlay?.(event);
+          markAssetLoaded(loadKey);
+        }}
         onLoadedData={(event) => {
           item.videoProps?.onLoadedData?.(event);
+          markAssetLoaded(loadKey);
+        }}
+        onLoadedMetadata={(event) => {
+          item.videoProps?.onLoadedMetadata?.(event);
           markAssetLoaded(loadKey);
         }}
         playsInline={item.videoProps?.playsInline ?? true}
         preload={item.videoProps?.preload ?? (active ? "auto" : "metadata")}
         className={cn(
-          "block h-auto w-auto max-h-[calc(100dvh-11rem)] max-w-[calc(100vw-2rem)] rounded-lg bg-black object-contain sm:max-h-[calc(100dvh-12rem)]",
+          "block h-auto w-auto max-h-full max-w-[calc(100vw-2rem)] rounded-lg bg-black object-contain",
           "transition-opacity duration-200",
           !mediaLoaded && "opacity-0",
           item.className
@@ -1516,7 +1532,7 @@ function LightboxSlide({
     );
 
   const content = (
-    <div className="relative flex min-h-10 min-w-10 items-center justify-center">
+    <div className="relative flex min-h-10 min-w-10 max-h-full max-w-full items-center justify-center">
       {!mediaLoaded && (
         <span className="absolute inset-0 flex items-center justify-center">
           <Spinner size="xl" className="text-white" />
@@ -1544,9 +1560,9 @@ function LightboxSlide({
         "pointer-events-none absolute inset-0 flex items-center justify-center px-4",
         noCarousel
           ? hasTopChrome || hasBottomChrome
-            ? "py-16"
+            ? "pt-[var(--lightbox-header-inset,5rem)] pb-20"
             : "py-4"
-          : "pt-16 pb-36",
+          : "pt-[var(--lightbox-header-inset,5rem)] pb-36",
         active && "pointer-events-auto",
         className
       )}
@@ -1562,12 +1578,16 @@ function relativeSlideOffset(
   index: number,
   activeIndex: number,
   length: number,
-  loop: boolean
+  loop: boolean,
+  preferredOffset = 0
 ) {
   let offset = index - activeIndex;
   if (!loop || length < 2) return offset;
   if (offset > length / 2) offset -= length;
   if (offset < -length / 2) offset += length;
+  if (length === 2 && Math.abs(offset) === 1 && preferredOffset !== 0) {
+    return preferredOffset;
+  }
   return offset;
 }
 
@@ -1639,6 +1659,7 @@ function LightboxSlides({
   const wheelRef = React.useRef({ x: 0, y: 0, timer: 0 });
   const lastTapRef = React.useRef({ time: 0, x: 0, y: 0 });
   const suppressClickRef = React.useRef(false);
+  const suppressClickTimerRef = React.useRef(0);
   const transformRef = React.useRef(transform);
   React.useLayoutEffect(() => {
     transformRef.current = transform;
@@ -1657,6 +1678,7 @@ function LightboxSlides({
     return () => {
       animation.current?.stop();
       window.clearTimeout(wheel.current.timer);
+      window.clearTimeout(suppressClickTimerRef.current);
       wheel.current = { x: 0, y: 0, timer: 0 };
       pointers.current.clear();
       session.current = null;
@@ -2024,6 +2046,13 @@ function LightboxSlides({
     else onPointerUp?.(event);
     const session = sessionRef.current;
     pointersRef.current.delete(event.pointerId);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    if (!session) {
+      suppressClickRef.current = false;
+      return;
+    }
     if (pointersRef.current.size > 0) {
       if (session?.mode === "pinch") {
         const [remaining] = pointersRef.current.values();
@@ -2083,6 +2112,12 @@ function LightboxSlides({
       event.pointerType === "touch" ||
       session?.mode !== "pending" ||
       shouldToggleZoomOnDesktop;
+    window.clearTimeout(suppressClickTimerRef.current);
+    if (suppressClickRef.current) {
+      suppressClickTimerRef.current = window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 0);
+    }
     releaseGesture(event.nativeEvent);
     if (shouldToggleTouchZoom) toggleZoomAt(event.clientX, event.clientY);
     else if (shouldToggleZoomOnDesktop)
@@ -2243,11 +2278,16 @@ function LightboxSlides({
           !isIndexMounted(itemIndex, activeIndex, items.length, preload, loop)
         )
           return null;
+        const physicalDirection =
+          transform.swipeX === 0 ? 0 : -Math.sign(transform.swipeX);
+        const preferredOffset =
+          physicalDirection * (direction === "rtl" ? -1 : 1);
         const offset = relativeSlideOffset(
           itemIndex,
           activeIndex,
           items.length,
-          loop
+          loop,
+          preferredOffset
         );
         return (
           <LightboxSlide
@@ -2579,6 +2619,7 @@ function LightboxPrevious({
   className,
   disabled: disabledProp,
   onClick,
+  style,
   ...props
 }: LightboxActionButtonProps) {
   const { activeIndex, changeIndex, direction, items, loop } = useLightbox();
@@ -2592,9 +2633,13 @@ function LightboxPrevious({
       size="icon-xl"
       aria-label="Previous item"
       className={cn(
-        "absolute start-2 top-[calc(50%-2.5rem)] z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:start-4",
+        "absolute start-2 z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:start-4",
         className
       )}
+      style={{
+        top: "calc(50% + (var(--lightbox-header-inset, 5rem) - 9rem) / 2)",
+        ...style,
+      }}
       onClick={(event) => {
         onClick?.(event);
         if (!event.defaultPrevented)
@@ -2615,6 +2660,7 @@ function LightboxNext({
   className,
   disabled: disabledProp,
   onClick,
+  style,
   ...props
 }: LightboxActionButtonProps) {
   const { activeIndex, changeIndex, direction, items, loop } = useLightbox();
@@ -2630,9 +2676,13 @@ function LightboxNext({
       size="icon-xl"
       aria-label="Next item"
       className={cn(
-        "absolute end-2 top-[calc(50%-2.5rem)] z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:end-4",
+        "absolute end-2 z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:end-4",
         className
       )}
+      style={{
+        top: "calc(50% + (var(--lightbox-header-inset, 5rem) - 9rem) / 2)",
+        ...style,
+      }}
       onClick={(event) => {
         onClick?.(event);
         if (!event.defaultPrevented)
