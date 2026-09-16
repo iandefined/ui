@@ -54,7 +54,7 @@ export function IconToolbar({
             size="icon-xs"
             onClick={() => onSearchChange("")}
             aria-label="Clear search"
-            className="hitbox-2 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-2.5 z-10 -translate-y-1/2 rounded-xs p-0 focus-visible:ring-2 focus-visible:outline-hidden"
+            className="hitbox-2 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-2.5 z-10 -translate-y-1/2 rounded-full p-0 focus-visible:ring-2 focus-visible:outline-hidden"
           >
             <XIcon className="size-3.5" />
           </Button>
