@@ -79,6 +79,29 @@ interface DialogProps<Payload> extends BaseDialog.Root.Props<Payload> {
   overlay?: DialogOverlay;
 }
 
+type DialogPopupStyle = BaseDialog.Popup.Props["style"];
+
+function mergeDialogPopupStyle(
+  style: DialogPopupStyle,
+  marginTop: number | undefined
+): DialogPopupStyle {
+  if (marginTop === undefined) {
+    return style;
+  }
+
+  if (typeof style === "function") {
+    return (state: BaseDialog.Popup.State) => ({
+      ...style(state),
+      marginTop,
+    });
+  }
+
+  return {
+    ...style,
+    marginTop,
+  };
+}
+
 function Dialog<Payload>({
   dismissible = true,
   modal = true,
@@ -342,11 +365,7 @@ function DialogContent({
       data-slot="dialog-content"
       data-variant={variant}
       data-scroll={scroll}
-      style={
-        dialogStack?.offset == null
-          ? style
-          : { ...style, marginTop: dialogStack.offset }
-      }
+      style={mergeDialogPopupStyle(style, dialogStack?.offset ?? undefined)}
       className={cn(
         "relative z-50 flex w-full max-w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg",
         "sm:max-w-lg",

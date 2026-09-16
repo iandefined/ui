@@ -329,6 +329,24 @@ interface SheetContentProps extends DialogPrimitive.Popup.Props {
   shadowLevel?: SheetShadowLevel;
 }
 
+type SheetContentStyle = DialogPrimitive.Popup.Props["style"];
+type SheetContentStyleObject = React.CSSProperties &
+  Record<"--sheet-generated-shadow", string | undefined>;
+
+function mergeSheetContentStyle(
+  baseStyle: SheetContentStyleObject,
+  style: SheetContentStyle
+): SheetContentStyle {
+  if (typeof style === "function") {
+    return (state: DialogPrimitive.Popup.State) => ({
+      ...baseStyle,
+      ...style(state),
+    });
+  }
+
+  return { ...baseStyle, ...style };
+}
+
 function SheetContent({
   className,
   children,
@@ -385,13 +403,10 @@ function SheetContent({
           data-side={side}
           data-slot="sheet-content"
           data-variant={variant}
-          style={
-            {
-              "--sheet-generated-shadow": generatedShadow,
-              ...style,
-            } as React.CSSProperties &
-              Record<"--sheet-generated-shadow", string | undefined>
-          }
+          style={mergeSheetContentStyle(
+            { "--sheet-generated-shadow": generatedShadow },
+            style
+          )}
           {...props}
         >
           <SheetConfigContext.Provider value={contentConfig}>

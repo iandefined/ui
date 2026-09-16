@@ -229,6 +229,44 @@ interface LightboxProps extends Omit<
   actionsRef?: React.Ref<LightboxActions>;
 }
 
+type LightboxBackdropStyle = DialogPrimitive.Backdrop.Props["style"];
+type LightboxBackdropStyleObject = React.CSSProperties & {
+  "--lightbox-backdrop-opacity": number;
+};
+
+function mergeLightboxBackdropStyle(
+  baseStyle: LightboxBackdropStyleObject,
+  style: LightboxBackdropStyle
+): LightboxBackdropStyle {
+  if (typeof style === "function") {
+    return (state: DialogPrimitive.Backdrop.State) => ({
+      ...baseStyle,
+      ...style(state),
+    });
+  }
+
+  return { ...baseStyle, ...style };
+}
+
+type LightboxContentStyle = DialogPrimitive.Popup.Props["style"];
+type LightboxContentStyleObject = React.CSSProperties & {
+  "--lightbox-header-inset": string;
+};
+
+function mergeLightboxContentStyle(
+  baseStyle: LightboxContentStyleObject,
+  style: LightboxContentStyle
+): LightboxContentStyle {
+  if (typeof style === "function") {
+    return (state: DialogPrimitive.Popup.State) => ({
+      ...baseStyle,
+      ...style(state),
+    });
+  }
+
+  return { ...baseStyle, ...style };
+}
+
 interface TransformState {
   scale: number;
   panX: number;
@@ -440,6 +478,9 @@ function Lightbox({
   const [uncontrolledIndex, setUncontrolledIndex] =
     React.useState(defaultIndex);
   const [transform, setTransform] = React.useState(initialTransform);
+  React.useLayoutEffect(() => {
+    transformRef.current = transform;
+  }, [transform]);
   const [inheritedDirection, setInheritedDirection] =
     React.useState<LightboxDirection>(() =>
       typeof document !== "undefined" && document.documentElement.dir === "rtl"
@@ -859,7 +900,7 @@ function Lightbox({
     NonNullable<DialogPrimitive.Root.Props["onOpenChangeComplete"]>
   >(
     (nextOpen) => {
-      if (!nextOpen) {
+      if (!nextOpen && transformRef.current.dismissY === 0) {
         stopZoomAnimation();
         setTransform(initialTransform);
       }
@@ -1137,10 +1178,10 @@ function LightboxBackdrop({
     0,
     1
   );
-  const backdropStyle = {
-    "--lightbox-backdrop-opacity": opacity,
-    ...style,
-  } as React.CSSProperties & { "--lightbox-backdrop-opacity": number };
+  const backdropStyle = mergeLightboxBackdropStyle(
+    { "--lightbox-backdrop-opacity": opacity },
+    style
+  );
 
   return (
     <DialogPrimitive.Backdrop
@@ -1149,7 +1190,7 @@ function LightboxBackdrop({
         "fixed inset-0 z-60 min-h-dvh opacity-[var(--lightbox-backdrop-opacity)] transition-[opacity,backdrop-filter] duration-200",
         overlay === "blur" && "bg-black/80 backdrop-blur-md",
         overlay === "brightness" && "bg-black/90",
-        "data-starting-style:opacity-0 data-ending-style:opacity-0 motion-reduce:transition-opacity",
+        "data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:pointer-events-none motion-reduce:transition-opacity",
         className
       )}
       style={backdropStyle}
@@ -1166,7 +1207,7 @@ function LightboxViewport({
     <DialogPrimitive.Viewport
       data-slot="lightbox-viewport"
       className={cn(
-        "fixed inset-0 z-70 flex min-h-dvh items-stretch overflow-hidden overscroll-contain",
+        "fixed inset-0 z-70 flex min-h-dvh items-stretch overflow-hidden overscroll-contain data-ending-style:pointer-events-none",
         className
       )}
       {...props}
@@ -1310,17 +1351,17 @@ function LightboxContent({
           }
           className={cn(
             "relative flex size-full min-h-0 min-w-0 flex-col overflow-hidden bg-transparent text-white outline-none",
-            "transition-[opacity,scale] duration-200 ease-out data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:opacity-0",
+            "transition-[opacity,scale] duration-200 ease-out data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-ending-style:pointer-events-none",
             "motion-reduce:transition-opacity motion-reduce:transform-none",
             className
           )}
-          style={
+          style={mergeLightboxContentStyle(
             {
               "--lightbox-header-inset":
                 "max(5rem, calc(env(safe-area-inset-top) + 4rem))",
-              ...style,
-            } as React.CSSProperties
-          }
+            },
+            style
+          )}
           onKeyDown={handleKeyDown}
           {...props}
         >
@@ -1884,9 +1925,8 @@ function LightboxSlides({
         ) {
           const target =
             Math.sign(current.dismissY || session.velocityY) * height;
-          animateTransformValue("dismissY", target, () =>
-            closeWithDetails(getEventDetails("imperative-action", event, null))
-          );
+          animateTransformValue("dismissY", target);
+          closeWithDetails(getEventDetails("imperative-action", event, null));
         } else {
           animateTransformValue("dismissY", 0);
         }
@@ -2177,9 +2217,8 @@ function LightboxSlides({
       ) {
         const target =
           Math.sign(current.y || transformRef.current.dismissY) * height;
-        animateTransformValue("dismissY", target, () =>
-          closeWithDetails(getEventDetails("imperative-action", event, null))
-        );
+        animateTransformValue("dismissY", target);
+        closeWithDetails(getEventDetails("imperative-action", event, null));
       } else {
         animateTransformValue("swipeX", 0);
         animateTransformValue("dismissY", 0);

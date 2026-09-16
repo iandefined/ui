@@ -32,6 +32,7 @@ interface DrawerContextValue {
   overlay: DrawerOverlay;
   snapPoints?: DrawerSnapPoint[];
   currentSnapPoint?: DrawerSnapPoint | null;
+  lastVisibleSnapPoint?: DrawerSnapPoint | null;
   expandToNextSnapPoint?: () => void;
   collapseToPrevSnapPoint?: () => void;
   closeDrawer?: () => void;
@@ -199,6 +200,23 @@ interface DrawerProps extends DrawerPrimitive.Root.Props {
   position?: DrawerPosition;
 }
 
+type DrawerOnSnapPointChange = NonNullable<
+  DrawerPrimitive.Root.Props["onSnapPointChange"]
+>;
+type DrawerSnapPointChangeEventDetails = Parameters<DrawerOnSnapPointChange>[1];
+
+function createImperativeSnapPointChangeDetails(): DrawerSnapPointChangeEventDetails {
+  return {
+    reason: "imperative-action",
+    event: new Event("drawer-snap-point-change"),
+    cancel: () => undefined,
+    allowPropagation: () => undefined,
+    isCanceled: false,
+    isPropagationAllowed: true,
+    trigger: undefined,
+  };
+}
+
 function findSnapIndex(
   points: DrawerSnapPoint[],
   current: DrawerSnapPoint | null | undefined
@@ -299,15 +317,29 @@ function Drawer({
 
   const isControlled = snapPoint !== undefined;
   const currentSnapPoint = isControlled ? snapPoint : uncontrolledSnapPoint;
+  const [lastVisibleSnapPoint, setLastVisibleSnapPoint] =
+    React.useState<DrawerSnapPoint | null>(
+      () => snapPoint ?? defaultSnapPoint ?? snapPoints?.[0] ?? null
+    );
 
-  const handleSnapPointChange = React.useCallback(
-    (nextPoint: DrawerSnapPoint | null, details: any) => {
+  const updateSnapPoint = React.useCallback(
+    (nextPoint: DrawerSnapPoint | null) => {
       if (!isControlled) {
         setUncontrolledSnapPoint(nextPoint);
       }
+      if (nextPoint != null) {
+        setLastVisibleSnapPoint(nextPoint);
+      }
+    },
+    [isControlled]
+  );
+
+  const handleSnapPointChange = React.useCallback<DrawerOnSnapPointChange>(
+    (nextPoint, details) => {
+      updateSnapPoint(nextPoint);
       onSnapPointChange?.(nextPoint, details);
     },
-    [isControlled, onSnapPointChange]
+    [onSnapPointChange, updateSnapPoint]
   );
 
   const expandToNextSnapPoint = React.useCallback(() => {
@@ -315,24 +347,26 @@ function Drawer({
     const currentIndex = findSnapIndex(snapPoints, currentSnapPoint);
     if (currentIndex < snapPoints.length - 1) {
       const nextPoint = snapPoints[currentIndex + 1];
-      if (!isControlled) {
-        setUncontrolledSnapPoint(nextPoint);
-      }
-      onSnapPointChange?.(nextPoint, undefined as any);
+      updateSnapPoint(nextPoint);
+      onSnapPointChange?.(
+        nextPoint,
+        createImperativeSnapPointChangeDetails()
+      );
     }
-  }, [snapPoints, currentSnapPoint, isControlled, onSnapPointChange]);
+  }, [snapPoints, currentSnapPoint, onSnapPointChange, updateSnapPoint]);
 
   const collapseToPrevSnapPoint = React.useCallback(() => {
     if (!snapPoints || snapPoints.length === 0) return;
     const currentIndex = findSnapIndex(snapPoints, currentSnapPoint);
     if (currentIndex > 0) {
       const prevPoint = snapPoints[currentIndex - 1];
-      if (!isControlled) {
-        setUncontrolledSnapPoint(prevPoint);
-      }
-      onSnapPointChange?.(prevPoint, undefined as any);
+      updateSnapPoint(prevPoint);
+      onSnapPointChange?.(
+        prevPoint,
+        createImperativeSnapPointChangeDetails()
+      );
     }
-  }, [snapPoints, currentSnapPoint, isControlled, onSnapPointChange]);
+  }, [snapPoints, currentSnapPoint, onSnapPointChange, updateSnapPoint]);
 
   const isAtFullSnap = Boolean(
     !snapPoints ||
@@ -348,12 +382,12 @@ function Drawer({
       }
 
       if (nextOpen && !isControlled && defaultSnapPoint !== undefined) {
-        setUncontrolledSnapPoint(defaultSnapPoint);
+        updateSnapPoint(defaultSnapPoint);
       }
 
       onOpenChange?.(nextOpen, eventDetails);
     },
-    [dismissible, isControlled, defaultSnapPoint, onOpenChange]
+    [dismissible, isControlled, defaultSnapPoint, onOpenChange, updateSnapPoint]
   );
 
   const handleOpenChangeComplete =
@@ -376,6 +410,7 @@ function Drawer({
       position,
       snapPoints,
       currentSnapPoint,
+      lastVisibleSnapPoint,
       expandToNextSnapPoint,
       collapseToPrevSnapPoint,
       closeDrawer,
@@ -390,6 +425,7 @@ function Drawer({
       position,
       snapPoints,
       currentSnapPoint,
+      lastVisibleSnapPoint,
       expandToNextSnapPoint,
       collapseToPrevSnapPoint,
       closeDrawer,
@@ -683,6 +719,30 @@ interface DrawerPopupProps extends DrawerPrimitive.Popup.Props {
   shadowLevel?: DrawerShadowLevel;
 }
 
+type DrawerPopupStyle = DrawerPrimitive.Popup.Props["style"];
+type DrawerPopupStyleObject = React.CSSProperties &
+  Record<
+    | "--drawer-generated-shadow"
+    | "--drawer-floating-snap-offset"
+    | "--drawer-snap-offset"
+    | "--drawer-swipe-offset-y",
+    string
+  >;
+
+function mergeDrawerPopupStyle(
+  baseStyle: DrawerPopupStyleObject,
+  style: DrawerPopupStyle
+): DrawerPopupStyle {
+  if (typeof style === "function") {
+    return (state: DrawerPrimitive.Popup.State) => ({
+      ...baseStyle,
+      ...style(state),
+    });
+  }
+
+  return { ...baseStyle, ...style };
+}
+
 function DrawerPopup({
   className,
   children,
@@ -700,6 +760,7 @@ function DrawerPopup({
     drawerId,
     snapPoints,
     currentSnapPoint,
+    lastVisibleSnapPoint,
     keepMounted,
   } = React.useContext(DrawerContext);
   const position = positionProp ?? contextPosition;
@@ -711,16 +772,28 @@ function DrawerPopup({
     () => ({ position, variant }),
     [position, variant]
   );
-  const [lastVisibleSnapPoint, setLastVisibleSnapPoint] =
-    React.useState<DrawerSnapPoint | null>(
-      currentSnapPoint ?? snapPoints?.[0] ?? null
-    );
-  if (currentSnapPoint != null && currentSnapPoint !== lastVisibleSnapPoint) {
-    setLastVisibleSnapPoint(currentSnapPoint);
-  }
   const floatingSnapOffset = usesFloatingSnapPoints
     ? getFloatingDrawerSnapOffset(currentSnapPoint ?? lastVisibleSnapPoint)
     : "0px";
+  const popupStyle = mergeDrawerPopupStyle(
+    {
+      "--drawer-generated-shadow":
+        variant === "floating"
+          ? createFloatingShadow(shadowLevel)
+          : createDirectionalShadow(position, shadowLevel),
+      "--drawer-floating-snap-offset": floatingSnapOffset,
+      paddingTop: usesFloatingSnapPoints
+        ? "var(--drawer-floating-snap-offset, 0px)"
+        : undefined,
+      ...(usesFloatingSnapPoints
+        ? {}
+        : {
+            "--drawer-snap-offset": "var(--drawer-snap-point-offset, 0px)",
+            "--drawer-swipe-offset-y": "var(--drawer-swipe-movement-y, 0px)",
+          }),
+    } as DrawerPopupStyleObject,
+    style
+  );
   const popupChildren = (
     <>
       <DrawerPopupContext.Provider value={popupContextValue}>
@@ -855,34 +928,7 @@ function DrawerPopup({
           data-slot="drawer-popup"
           data-drawer-id={drawerId}
           data-base-ui-swipe-ignore={!dismissible ? "" : undefined}
-          style={
-            {
-              "--drawer-generated-shadow":
-                variant === "floating"
-                  ? createFloatingShadow(shadowLevel)
-                  : createDirectionalShadow(position, shadowLevel),
-              "--drawer-floating-snap-offset": floatingSnapOffset,
-              paddingTop: usesFloatingSnapPoints
-                ? "var(--drawer-floating-snap-offset, 0px)"
-                : undefined,
-              ...(usesFloatingSnapPoints
-                ? {}
-                : {
-                    "--drawer-snap-offset":
-                      "var(--drawer-snap-point-offset, 0px)",
-                    "--drawer-swipe-offset-y":
-                      "var(--drawer-swipe-movement-y, 0px)",
-                  }),
-              ...style,
-            } as React.CSSProperties &
-              Record<
-                | "--drawer-generated-shadow"
-                | "--drawer-floating-snap-offset"
-                | "--drawer-snap-offset"
-                | "--drawer-swipe-offset-y",
-                string
-              >
-          }
+          style={popupStyle}
           {...props}
         >
           {usesFloatingSnapPoints ? (
