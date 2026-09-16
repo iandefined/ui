@@ -1520,7 +1520,7 @@ function LightboxSlide({
         onLoad={() => markAssetLoaded(loadKey)}
         className={cn(
           "block h-auto w-auto max-w-[calc(100vw-2rem)] select-none rounded-lg object-contain",
-          "max-h-full",
+          "max-h-[calc(100dvh-11rem)] sm:max-h-[calc(100dvh-12rem)]",
           "transition-opacity duration-200",
           !mediaLoaded && "opacity-0",
           item.className
