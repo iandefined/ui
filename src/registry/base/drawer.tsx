@@ -653,6 +653,7 @@ function DrawerBackdrop({
       )}
       data-slot="drawer-backdrop"
       data-drawer-id={drawerId}
+      data-overlay={resolvedOverlay}
       forceRender={forceRender === true || isNested}
       onWheel={handleWheel}
       {...props}

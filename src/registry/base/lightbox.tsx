@@ -1189,6 +1189,7 @@ function LightboxBackdrop({
   return (
     <DialogPrimitive.Backdrop
       data-slot="lightbox-backdrop"
+      data-overlay={overlay}
       className={cn(
         "fixed inset-0 z-60 min-h-dvh opacity-[var(--lightbox-backdrop-opacity)] transition-[opacity,backdrop-filter] duration-200",
         overlay === "blur" && "bg-black/80 backdrop-blur-md",

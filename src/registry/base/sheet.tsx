@@ -296,6 +296,7 @@ function SheetBackdrop({
         className
       )}
       data-slot="sheet-backdrop"
+      data-overlay={overlay}
       {...props}
     />
   );

@@ -178,7 +178,9 @@ compose it around the button content with `render`.
     defaultValue='"blur"'
   >
     Controls the backdrop treatment. Use `"brightness"` for a plain dark dimmer
-    or `"transparent"` to retain modal interaction without visual dimming.
+    or `"transparent"` to retain modal interaction without visual dimming. See
+    Notes for Chromium compositor seam workarounds when using `"blur"` in
+    nested scrolling layouts.
   </ApiProp>
   <ApiProp
     name="modal"
@@ -280,4 +282,44 @@ const handle = createDialogHandle<User>();
     {({ payload }) => <DialogTitle>Edit {payload?.name}</DialogTitle>}
   </DialogContent>
 </Dialog>;
+```
+
+### Notes
+
+#### Chromium Backdrop Blur Seams
+
+In Chromium-based browsers, a fixed backdrop using `backdrop-filter: blur(...)` can produce horizontal or vertical colorless seams when sampling nested scroll containers under high device-pixel ratios. This is a browser compositor tile-rendering artifact rather than a CSS box shadow.
+
+When an application layout triggers this artifact, use the `data-overlay="blur"` attribute on `[data-slot="dialog-backdrop"]` to disable the backdrop filter and apply an ordinary `filter: blur(...)` directly to the children of the application scroll container. Keep the dialog portal mounted outside the blurred container.
+
+```css title="app.css"
+@property --app-dialog-blur {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+[data-slot="dialog-backdrop"][data-overlay="blur"]:not([hidden]) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+:root {
+  --app-dialog-blur: 0px;
+  transition: --app-dialog-blur 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+:root:has([data-slot="dialog-backdrop"][data-overlay="blur"]:not([hidden]):not([data-ending-style])) {
+  --app-dialog-blur: 8px;
+}
+
+.app-scroll-container > * {
+  filter: blur(var(--app-dialog-blur));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
 ```

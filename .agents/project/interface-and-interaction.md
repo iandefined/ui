@@ -175,6 +175,20 @@ When animating container width or height due to dynamic content:
   - When nesting inside flex popups, pass `min-h-0 flex-1 overflow-hidden` to `ScrollArea`.
   - `ScrollArea.Viewport` must be styled with `size-full min-h-0 flex-1` so that as a child of the flex container `Root`, Firefox bounds `Viewport` to the available popup height and creates an active scroll container.
 
+### [SITUATIONAL GUIDANCE] Chromium Backdrop Blur Seams in Nested Scrollers
+- **The Pitfall**: In Chromium-based browsers, a fixed backdrop using `backdrop-filter: blur(...)` can produce colorless horizontal or vertical seams across the viewport. This is a browser compositor tile-rendering artifact, not a CSS box shadow. Changing box-shadow colors or blur radiuses on the surface has no effect.
+- **Trigger Conditions**:
+  - The application scrolls inside a nested container instead of document-level scrolling (`body`/`html`).
+  - Ancestor elements or page layers use transforms, filters, clipping, or compositor promotion.
+  - The display operates at a high device-pixel ratio (e.g. DPR 2 / Retina).
+- **Mandatory Registry Contract**:
+  - All overlay backdrops (`Drawer`, `Dialog`, `Sheet`, `Lightbox`) must expose semantic `data-overlay` attributes (`data-overlay="blur" | "brightness" | "transparent"`).
+  - Do not remove `backdrop-filter` by default from registry components, as document-scrolling layouts do not trigger the bug.
+- **Consumer Layout Workaround Pattern**:
+  - Disable `backdrop-filter` on `[data-slot="...-backdrop"][data-overlay="blur"]:not([hidden])`.
+  - Apply an ordinary `filter: blur(...)` directly to the children of the application's scroll container while keeping the modal portal mounted outside that container.
+  - Smooth the exit animation by interpolating the blur radius with a CSS custom property matching the backdrop's 200ms exit duration, while disabling transitions under `prefers-reduced-motion`.
+
 ---
 
 ## 6. Accessibility (a11y)

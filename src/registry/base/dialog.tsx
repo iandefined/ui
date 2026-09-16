@@ -166,6 +166,7 @@ function DialogBackdrop({ className, ...props }: BaseDialog.Backdrop.Props) {
   return (
     <BaseDialog.Backdrop
       data-slot="dialog-backdrop"
+      data-overlay={overlay}
       className={cn(
         "fixed inset-0 z-40 min-h-dvh transition-opacity duration-200",
         overlay === "blur" && "bg-black/40 backdrop-blur-sm",
