@@ -25,6 +25,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea, ScrollAreaContent } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 
 const LIGHTBOX_STYLES = String.raw`
   :where([data-slot="lightbox-viewport"]) {
@@ -214,9 +216,11 @@ interface LightboxProps extends Omit<
     details: LightboxImageChangeEventDetails
   ) => void;
   overlay?: "blur" | "brightness";
-  peek?: boolean;
   loop?: boolean;
-  navigation?: boolean;
+  noCounter?: boolean;
+  noCarousel?: boolean;
+  noControls?: boolean;
+  loading?: "lazy" | "eager";
   preload?: number;
   maxZoom?: number;
   controls?: LightboxControl[];
@@ -265,12 +269,16 @@ interface LightboxContextValue {
   direction: LightboxDirection;
   getSource: (index: number) => RegisteredSource | undefined;
   items: LightboxItem[];
+  loadedAssets: ReadonlySet<string>;
+  loading: "lazy" | "eager";
   loop: boolean;
+  markAssetLoaded: (key: string) => void;
   maxZoom: number;
-  navigation: boolean;
+  noCarousel: boolean;
+  noControls: boolean;
+  noCounter: boolean;
   open: boolean;
   overlay: LightboxOverlay;
-  peek: boolean;
   preload: number;
   registerMedia: (element: HTMLElement | null) => void;
   registerSource: (index: number, source: RegisteredSource | null) => void;
@@ -293,6 +301,18 @@ function useLightbox() {
     throw new Error("Lightbox parts must be rendered inside <Lightbox>.");
   }
   return context;
+}
+
+function getMediaLoadKey(item: LightboxItem) {
+  return `media:${item.type}:${item.src}`;
+}
+
+function getThumbnailLoadKey(item: LightboxItem) {
+  const source =
+    item.type === "image"
+      ? (item.thumbnailSrc ?? item.src)
+      : (item.poster ?? item.src);
+  return `thumbnail:${item.type}:${source}`;
 }
 
 function clamp(value: number, min: number, max: number) {
@@ -388,9 +408,11 @@ function Lightbox({
   defaultIndex = 0,
   onChangeImage,
   overlay = "blur",
-  peek = false,
   loop = true,
-  navigation = true,
+  noCounter = false,
+  noCarousel = false,
+  noControls = false,
+  loading = "eager",
   preload = 1,
   maxZoom = 4,
   controls = [],
@@ -411,6 +433,9 @@ function Lightbox({
   );
   const transformRef = React.useRef(initialTransform);
   const [autoItems, setAutoItems] = React.useState<LightboxItem[]>([]);
+  const [loadedAssets, setLoadedAssets] = React.useState<ReadonlySet<string>>(
+    () => new Set()
+  );
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
   const [uncontrolledIndex, setUncontrolledIndex] =
     React.useState(defaultIndex);
@@ -433,6 +458,15 @@ function Lightbox({
   );
   const activeItem = items[activeIndex];
   const direction = dir ?? inheritedDirection;
+
+  const markAssetLoaded = React.useCallback((key: string) => {
+    setLoadedAssets((current) => {
+      if (current.has(key)) return current;
+      const next = new Set(current);
+      next.add(key);
+      return next;
+    });
+  }, []);
 
   React.useLayoutEffect(() => {
     transformRef.current = transform;
@@ -584,7 +618,7 @@ function Lightbox({
 
   const changeIndex = React.useCallback(
     (nextIndex: number, reason: LightboxChangeReason, event?: Event) => {
-      if (!navigation || items.length === 0) return;
+      if (noCarousel || items.length === 0) return;
       const normalized = normalizeIndex(nextIndex, items.length, loop);
       if (normalized === activeIndex) return;
       stopZoomAnimation();
@@ -601,7 +635,7 @@ function Lightbox({
       isIndexControlled,
       items,
       loop,
-      navigation,
+      noCarousel,
       onChangeImage,
       stopZoomAnimation,
     ]
@@ -906,13 +940,17 @@ function Lightbox({
       direction,
       getSource: (sourceIndex) => sourceMapRef.current.get(sourceIndex),
       items,
+      loadedAssets,
+      loading,
       loop,
+      markAssetLoaded,
       maxZoom,
-      navigation,
+      noCarousel,
+      noControls,
+      noCounter,
       open,
       overlay,
-      peek,
-      preload: navigation ? Math.max(0, Math.floor(preload)) : 0,
+      preload: noCarousel ? 0 : Math.max(0, Math.floor(preload)),
       registerMedia,
       registerSource,
       requestOpen,
@@ -931,12 +969,16 @@ function Lightbox({
       controls,
       direction,
       items,
+      loadedAssets,
+      loading,
       loop,
+      markAssetLoaded,
       maxZoom,
-      navigation,
+      noCarousel,
+      noControls,
+      noCounter,
       open,
       overlay,
-      peek,
       preload,
       registerMedia,
       registerSource,
@@ -1148,7 +1190,9 @@ function LightboxContent({
     changeIndex,
     direction,
     items,
-    navigation,
+    noCarousel,
+    noControls,
+    noCounter,
     setTransform,
     shouldReduceMotion,
     transform,
@@ -1167,7 +1211,7 @@ function LightboxContent({
 
     const rtlMultiplier = direction === "rtl" ? -1 : 1;
     if (
-      navigation &&
+      !noCarousel &&
       (event.key === "ArrowLeft" || event.key === "ArrowRight") &&
       event.shiftKey
     ) {
@@ -1195,7 +1239,7 @@ function LightboxContent({
       return;
     }
     if (
-      navigation &&
+      !noCarousel &&
       transform.scale === 1 &&
       (event.key === "ArrowLeft" || event.key === "ArrowRight")
     ) {
@@ -1277,21 +1321,27 @@ function LightboxContent({
           </DialogPrimitive.Title>
           {children ?? (
             <>
-              <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between gap-4 p-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:p-4">
-                {navigation && <LightboxCounter />}
-                <LightboxToolbar className={cn(!navigation && "ms-auto")} />
-              </div>
+              {(!noCounter || !noControls) && (
+                <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between gap-4 p-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:p-4">
+                  {!noCounter && <LightboxCounter />}
+                  {!noControls && (
+                    <LightboxToolbar className={cn(noCounter && "ms-auto")} />
+                  )}
+                </div>
+              )}
               <LightboxSlides />
-              {navigation && items.length > 1 && (
+              {!noCarousel && items.length > 1 && (
                 <>
                   <LightboxPrevious />
                   <LightboxNext />
                 </>
               )}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col items-center gap-3 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4">
-                <LightboxCaptions />
-                {navigation && items.length > 1 && <LightboxThumbnails />}
-              </div>
+              {(activeItem?.caption || (!noCarousel && items.length > 1)) && (
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col items-center gap-3 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4">
+                  <LightboxCaptions />
+                  {!noCarousel && items.length > 1 && <LightboxThumbnails />}
+                </div>
+              )}
             </>
           )}
           <span
@@ -1378,15 +1428,29 @@ function LightboxSlide({
   style,
   ...props
 }: LightboxSlideProps) {
-  const { items } = useLightbox();
+  const {
+    activeItem,
+    items,
+    loadedAssets,
+    loading,
+    markAssetLoaded,
+    noCarousel,
+    noControls,
+    noCounter,
+  } = useLightbox();
   const item = items[index];
   if (!item) return null;
+  const loadKey = getMediaLoadKey(item);
+  const mediaLoaded = loadedAssets.has(loadKey);
+  const shouldMountMedia = loading === "eager" || active || mediaLoaded;
+  const hasTopChrome = !noCounter || !noControls;
+  const hasBottomChrome = Boolean(activeItem?.caption);
   const captionTrack =
     item.type === "video"
       ? item.tracks?.find((track) => track.kind === "captions")
       : undefined;
 
-  const content =
+  const media =
     item.type === "image" ? (
       <img
         src={item.src}
@@ -1398,9 +1462,12 @@ function LightboxSlide({
         draggable={false}
         decoding="async"
         loading={active ? "eager" : "lazy"}
+        onLoad={() => markAssetLoaded(loadKey)}
         className={cn(
           "block h-auto w-auto max-w-[calc(100vw-2rem)] select-none rounded-lg object-contain",
           "max-h-[calc(100dvh-11rem)] sm:max-h-[calc(100dvh-12rem)]",
+          "transition-opacity duration-200",
+          !mediaLoaded && "opacity-0",
           item.className
         )}
       />
@@ -1414,10 +1481,16 @@ function LightboxSlide({
         aria-label={item.label}
         controls={item.videoProps?.controls ?? true}
         muted={item.videoProps?.muted ?? false}
+        onLoadedData={(event) => {
+          item.videoProps?.onLoadedData?.(event);
+          markAssetLoaded(loadKey);
+        }}
         playsInline={item.videoProps?.playsInline ?? true}
         preload={item.videoProps?.preload ?? (active ? "auto" : "metadata")}
         className={cn(
           "block h-auto w-auto max-h-[calc(100dvh-11rem)] max-w-[calc(100vw-2rem)] rounded-lg bg-black object-contain sm:max-h-[calc(100dvh-12rem)]",
+          "transition-opacity duration-200",
+          !mediaLoaded && "opacity-0",
           item.className
         )}
       >
@@ -1442,6 +1515,21 @@ function LightboxSlide({
       </video>
     );
 
+  const content = (
+    <div className="relative flex min-h-10 min-w-10 items-center justify-center">
+      {!mediaLoaded && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <Spinner size="xl" className="text-white" />
+        </span>
+      )}
+      {shouldMountMedia && (
+        <div className="flex max-h-full max-w-full items-center justify-center">
+          {media}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div
       data-slot="lightbox-slide"
@@ -1453,7 +1541,12 @@ function LightboxSlide({
       aria-hidden={active ? undefined : true}
       inert={active ? undefined : true}
       className={cn(
-        "pointer-events-none absolute inset-0 flex items-center justify-center px-4 pt-16 pb-36",
+        "pointer-events-none absolute inset-0 flex items-center justify-center px-4",
+        noCarousel
+          ? hasTopChrome || hasBottomChrome
+            ? "py-16"
+            : "py-4"
+          : "pt-16 pb-36",
         active && "pointer-events-auto",
         className
       )}
@@ -1529,10 +1622,10 @@ function LightboxSlides({
     closeWithDetails,
     direction,
     items,
+    loading,
     loop,
     maxZoom,
-    navigation,
-    peek,
+    noCarousel,
     preload,
     setTransform,
     shouldReduceMotion,
@@ -1571,6 +1664,7 @@ function LightboxSlides({
   }, []);
 
   React.useEffect(() => {
+    if (loading === "lazy") return;
     for (let distance = 1; distance <= preload; distance += 1) {
       for (const candidate of [
         activeIndex - distance,
@@ -1586,7 +1680,7 @@ function LightboxSlides({
         void image.decode?.().catch(() => undefined);
       }
     }
-  }, [activeIndex, items, loop, preload]);
+  }, [activeIndex, items, loading, loop, preload]);
 
   const getPanBounds = React.useCallback((scale: number) => {
     const media = viewportRef.current?.querySelector<HTMLElement>(
@@ -1673,7 +1767,10 @@ function LightboxSlides({
   const zoomAt = React.useCallback(
     (nextScale: number, clientX: number, clientY: number) => {
       const target = getZoomTarget(nextScale, clientX, clientY);
-      if (target) setTransform(target);
+      if (target) {
+        transformRef.current = target;
+        setTransform(target);
+      }
     },
     [getZoomTarget, setTransform]
   );
@@ -1715,7 +1812,7 @@ function LightboxSlides({
       const viewportWidth =
         viewportRef.current?.clientWidth ?? window.innerWidth;
       const rtl = direction === "rtl" ? -1 : 1;
-      const target = -logicalDelta * rtl * viewportWidth * (peek ? 0.86 : 1);
+      const target = -logicalDelta * rtl * viewportWidth;
       animateTransformValue("swipeX", target, () => {
         changeIndex(nextIndex, reason, event);
         setTransform(initialTransform);
@@ -1728,7 +1825,6 @@ function LightboxSlides({
       direction,
       items.length,
       loop,
-      peek,
       setTransform,
     ]
   );
@@ -1744,7 +1840,7 @@ function LightboxSlides({
       setTransform((value) => ({ ...value, dragging: false }));
 
       if (session.mode === "swipe") {
-        if (!navigation) {
+        if (noCarousel) {
           animateTransformValue("swipeX", 0);
           sessionRef.current = null;
           return;
@@ -1795,7 +1891,7 @@ function LightboxSlides({
       direction,
       getPanBounds,
       maxZoom,
-      navigation,
+      noCarousel,
       setTransform,
     ]
   );
@@ -1894,9 +1990,9 @@ function LightboxSlides({
     else if (session.mode === "pending" && Math.hypot(dx, dy) > 8) {
       session.mode =
         Math.abs(dx) > Math.abs(dy)
-          ? navigation
-            ? "swipe"
-            : "pending"
+          ? noCarousel
+            ? "pending"
+            : "swipe"
           : "dismiss";
     }
 
@@ -1926,10 +2022,38 @@ function LightboxSlides({
   const handlePointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.type === "pointercancel") onPointerCancel?.(event);
     else onPointerUp?.(event);
-    pointersRef.current.delete(event.pointerId);
-    if (pointersRef.current.size > 0) return;
-
     const session = sessionRef.current;
+    pointersRef.current.delete(event.pointerId);
+    if (pointersRef.current.size > 0) {
+      if (session?.mode === "pinch") {
+        const [remaining] = pointersRef.current.values();
+        if (remaining) {
+          const current = transformRef.current;
+          const now = performance.now();
+          sessionRef.current = {
+            ...session,
+            mode: "pan",
+            startX: remaining.x,
+            startY: remaining.y,
+            startPanX: current.panX,
+            startPanY: current.panY,
+            startSwipeX: current.swipeX,
+            startDismissY: current.dismissY,
+            startScale: current.scale,
+            pinchDistance: 0,
+            pinchCenterX: remaining.x,
+            pinchCenterY: remaining.y,
+            lastX: remaining.x,
+            lastY: remaining.y,
+            lastTime: now,
+            velocityX: 0,
+            velocityY: 0,
+          };
+        }
+      }
+      return;
+    }
+
     let shouldToggleTouchZoom = false;
     if (
       event.type !== "pointercancel" &&
@@ -2006,7 +2130,7 @@ function LightboxSlides({
       const width = viewportRef.current?.clientWidth ?? window.innerWidth;
       const height = viewportRef.current?.clientHeight ?? window.innerHeight;
       if (
-        navigation &&
+        !noCarousel &&
         (Math.abs(current.x) > 100 ||
           Math.abs(transformRef.current.swipeX) > width * 0.25)
       ) {
@@ -2033,7 +2157,7 @@ function LightboxSlides({
       animateTransformValue,
       closeWithDetails,
       direction,
-      navigation,
+      noCarousel,
     ]
   );
 
@@ -2068,7 +2192,7 @@ function LightboxSlides({
     wheelRef.current.x += event.deltaX;
     wheelRef.current.y += event.deltaY;
     if (
-      navigation &&
+      !noCarousel &&
       Math.abs(wheelRef.current.x) > Math.abs(wheelRef.current.y)
     ) {
       setTransform((value) => ({ ...value, swipeX: -wheelRef.current.x }));
@@ -2083,14 +2207,11 @@ function LightboxSlides({
     );
   };
 
-  const step = peek ? 86 : 100;
-
   return (
     <div
       ref={viewportRef}
       data-slot="lightbox-slides"
       data-dragging={transform.dragging ? "true" : "false"}
-      data-peek={peek ? "true" : "false"}
       data-zoomed={transform.scale > 1 ? "true" : "false"}
       role={clickZoomable ? "button" : undefined}
       aria-label={
@@ -2134,7 +2255,7 @@ function LightboxSlides({
             index={itemIndex}
             active={itemIndex === activeIndex}
             style={{
-              transform: `translate3d(calc(${offset * step * (direction === "rtl" ? -1 : 1)}% + ${transform.swipeX}px), ${transform.dismissY}px, 0)`,
+              transform: `translate3d(calc(${offset * 100 * (direction === "rtl" ? -1 : 1)}% + ${transform.swipeX}px), ${transform.dismissY}px, 0)`,
             }}
           />
         );
@@ -2225,9 +2346,11 @@ interface LightboxThumbnailProps extends Omit<
 
 function LightboxVideoThumbnail({
   crossOrigin,
+  onLoad,
   src,
 }: {
   crossOrigin?: React.VideoHTMLAttributes<HTMLVideoElement>["crossOrigin"];
+  onLoad?: () => void;
   src: string;
 }) {
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
@@ -2250,6 +2373,7 @@ function LightboxVideoThumbnail({
       aria-hidden="true"
       crossOrigin={crossOrigin}
       muted
+      onLoadedData={onLoad}
       playsInline
       preload="metadata"
       src={src}
@@ -2265,10 +2389,44 @@ function LightboxThumbnail({
   onClick,
   ...props
 }: LightboxThumbnailProps) {
-  const { activeIndex, changeIndex, items } = useLightbox();
+  const {
+    activeIndex,
+    changeIndex,
+    items,
+    loadedAssets,
+    loading,
+    markAssetLoaded,
+  } = useLightbox();
   const item = items[index];
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
   const active = index === activeIndex;
+  const [intersected, setIntersected] = React.useState(false);
+  const thumbnailLoadKey = item ? getThumbnailLoadKey(item) : "";
+  const thumbnailCached = item ? loadedAssets.has(thumbnailLoadKey) : false;
+
+  React.useEffect(() => {
+    if (loading === "eager" || active || intersected || thumbnailCached) return;
+    const button = buttonRef.current;
+    if (!button) return;
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = requestAnimationFrame(() => setIntersected(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const root = button.closest<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]'
+    );
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setIntersected(true);
+        observer.disconnect();
+      },
+      { root, threshold: 0.01 }
+    );
+    observer.observe(button);
+    return () => observer.disconnect();
+  }, [active, intersected, loading, thumbnailCached]);
 
   React.useEffect(() => {
     if (active)
@@ -2276,30 +2434,40 @@ function LightboxThumbnail({
   }, [active]);
 
   if (!item) return null;
-  const thumbnail =
-    item.thumbnail ??
-    (item.type === "image" ? (
-      <img
-        src={item.thumbnailSrc ?? item.src}
-        alt=""
-        draggable={false}
-        loading="lazy"
-        className="size-full object-cover"
-      />
-    ) : item.poster ? (
-      <img
-        src={item.poster}
-        alt=""
-        draggable={false}
-        loading="lazy"
-        className="size-full object-cover"
-      />
-    ) : (
-      <LightboxVideoThumbnail
-        crossOrigin={item.videoProps?.crossOrigin}
-        src={item.src}
-      />
-    ));
+  const shouldLoad =
+    loading === "eager" || active || intersected || thumbnailCached;
+  const thumbnailSource =
+    item.type === "image" ? (item.thumbnailSrc ?? item.src) : item.poster;
+  const thumbnail = shouldLoad
+    ? (item.thumbnail ??
+      (item.type === "image" ? (
+        <img
+          src={thumbnailSource}
+          alt=""
+          draggable={false}
+          loading="lazy"
+          className="size-full object-cover transition-opacity duration-200"
+          onLoad={() => markAssetLoaded(thumbnailLoadKey)}
+        />
+      ) : item.poster ? (
+        <img
+          src={item.poster}
+          alt=""
+          draggable={false}
+          loading="lazy"
+          className="size-full object-cover transition-opacity duration-200"
+          onLoad={() => markAssetLoaded(thumbnailLoadKey)}
+        />
+      ) : (
+        <LightboxVideoThumbnail
+          crossOrigin={item.videoProps?.crossOrigin}
+          onLoad={() => markAssetLoaded(thumbnailLoadKey)}
+          src={item.src}
+        />
+      )))
+    : null;
+  const mediaLoaded =
+    item.thumbnail !== undefined ? shouldLoad : thumbnailCached;
 
   return (
     <Button
@@ -2326,9 +2494,26 @@ function LightboxThumbnail({
       <span
         aria-hidden="true"
         data-slot="lightbox-thumbnail-content"
-        className="pointer-events-none flex size-full items-center justify-center overflow-hidden rounded-[inherit] [&>*]:size-full [&>img]:object-cover [&>video]:object-cover"
+        className="pointer-events-none relative flex size-full items-center justify-center overflow-hidden rounded-[inherit]"
       >
-        {thumbnail}
+        <Skeleton
+          aria-hidden="true"
+          rounded="lg"
+          className={cn(
+            "absolute inset-0 size-full transition-opacity duration-200",
+            mediaLoaded && "opacity-0"
+          )}
+        />
+        {thumbnail && (
+          <span
+            className={cn(
+              "relative size-full overflow-hidden rounded-[inherit] [&>*]:size-full [&>img]:object-cover [&>video]:object-cover",
+              !mediaLoaded && "opacity-0"
+            )}
+          >
+            {thumbnail}
+          </span>
+        )}
       </span>
     </Button>
   );
@@ -2407,7 +2592,7 @@ function LightboxPrevious({
       size="icon-xl"
       aria-label="Previous item"
       className={cn(
-        "absolute start-2 top-1/2 z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:start-4",
+        "absolute start-2 top-[calc(50%-2.5rem)] z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:start-4",
         className
       )}
       onClick={(event) => {
@@ -2445,7 +2630,7 @@ function LightboxNext({
       size="icon-xl"
       aria-label="Next item"
       className={cn(
-        "absolute end-2 top-1/2 z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:end-4",
+        "absolute end-2 top-[calc(50%-2.5rem)] z-20 -translate-y-1/2 rounded-lg bg-transparent text-white hover:bg-white/15 hover:text-white focus-visible:bg-white/15 sm:end-4",
         className
       )}
       onClick={(event) => {
@@ -2514,39 +2699,138 @@ function getDownload(item: LightboxItem | undefined) {
   return { src: item.src, filename: undefined };
 }
 
+function getDownloadFilename(response: Response, configured?: string) {
+  if (configured) return configured;
+
+  const disposition = response.headers.get("content-disposition");
+  const encodedFilename = disposition?.match(/filename\*=UTF-8''([^;]+)/i)?.[1];
+  const plainFilename = disposition?.match(/filename="?([^";]+)"?/i)?.[1];
+  const candidate = encodedFilename ?? plainFilename;
+  if (candidate) {
+    try {
+      return decodeURIComponent(candidate).replace(/[\\/:*?"<>|]/g, "-");
+    } catch {
+      return candidate.replace(/[\\/:*?"<>|]/g, "-");
+    }
+  }
+
+  try {
+    const pathname = new URL(response.url).pathname;
+    const segment = pathname.split("/").filter(Boolean).at(-1);
+    return segment ? decodeURIComponent(segment) : "download";
+  } catch {
+    return "download";
+  }
+}
+
+async function downloadFile(
+  source: string,
+  filename: string | undefined,
+  signal: AbortSignal
+) {
+  const response = await fetch(source, { signal });
+  if (!response.ok) {
+    throw new Error(`Download failed with status ${response.status}`);
+  }
+
+  const blobUrl = URL.createObjectURL(await response.blob());
+  const anchor = document.createElement("a");
+  anchor.href = blobUrl;
+  anchor.download = getDownloadFilename(response, filename);
+  anchor.hidden = true;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+}
+
 function LightboxDownload({
   className,
   disabled,
+  onClick,
   ...props
 }: Omit<LightboxActionButtonProps, "render">) {
   const { activeItem } = useLightbox();
   const download = getDownload(activeItem);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
+  const resetTimerRef = React.useRef(0);
+  const [status, setStatus] = React.useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+
+  React.useEffect(() => {
+    return () => {
+      const controller = abortControllerRef.current;
+      abortControllerRef.current = null;
+      controller?.abort();
+      window.clearTimeout(resetTimerRef.current);
+    };
+  }, [download?.src]);
+
   if (!download || disabled) return null;
-  const sharedProps = {
-    "aria-label": "Download current item",
-    className: cn("text-white hover:bg-white/15 hover:text-white", className),
-    "data-slot": "lightbox-download",
-    size: "icon-lg" as const,
-    variant: "ghost" as const,
-  };
+
+  const statusMessage = {
+    idle: "",
+    loading: "Preparing download",
+    success: "Download started",
+    error: "Download failed",
+  }[status];
 
   return (
-    <Button
-      {...sharedProps}
-      nativeButton={false}
-      render={
-        <a
-          href={download.src}
-          download={download.filename ?? ""}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Download current item"
-        />
-      }
-      {...props}
-    >
-      <DownloadIcon aria-hidden="true" />
-    </Button>
+    <>
+      <Button
+        data-slot="lightbox-download"
+        type="button"
+        variant="ghost"
+        size="icon-lg"
+        aria-label={
+          status === "loading"
+            ? "Preparing current item download"
+            : "Download current item"
+        }
+        aria-busy={status === "loading" || undefined}
+        className={cn(
+          "text-white hover:bg-white/15 hover:text-white",
+          className
+        )}
+        onClick={(event) => {
+          onClick?.(event);
+          if (event.defaultPrevented || status === "loading") return;
+
+          abortControllerRef.current?.abort();
+          window.clearTimeout(resetTimerRef.current);
+          const controller = new AbortController();
+          abortControllerRef.current = controller;
+          setStatus("loading");
+          void downloadFile(download.src, download.filename, controller.signal)
+            .then(() => setStatus("success"))
+            .catch((error: unknown) => {
+              if (
+                error instanceof DOMException &&
+                error.name === "AbortError"
+              ) {
+                return;
+              }
+              setStatus("error");
+            })
+            .finally(() => {
+              if (abortControllerRef.current === controller) {
+                abortControllerRef.current = null;
+                resetTimerRef.current = window.setTimeout(
+                  () => setStatus("idle"),
+                  2000
+                );
+              }
+            });
+        }}
+        {...props}
+      >
+        <DownloadIcon aria-hidden="true" />
+      </Button>
+      <span className="sr-only" role="status" aria-live="polite">
+        {statusMessage}
+      </span>
+    </>
   );
 }
 

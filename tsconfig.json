@@ -27,6 +27,8 @@
       "@/components/ui/input-group": ["./src/registry/base/input-group.tsx"],
       "@/components/ui/pagination": ["./src/registry/base/pagination.tsx"],
       "@/components/ui/select": ["./src/registry/base/select.tsx"],
+      "@/components/ui/skeleton": ["./src/registry/base/skeleton.tsx"],
+      "@/components/ui/spinner": ["./src/registry/base/spinner.tsx"],
       "@/components/ui/table": ["./src/registry/base/table.tsx"],
       "@/lib/date": ["./src/shared/lib/date.ts"],
       "@/components/*": ["./src/shared/components/*"],

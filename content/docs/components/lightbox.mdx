@@ -113,9 +113,15 @@ Use a first-class video item alongside images. When both `thumbnail` and `poster
 
 <ComponentPreview name="lightbox/media" />
 
+### Loading Strategy
+
+Use `loading="lazy"` to defer inactive slide media and offscreen thumbnails, or `loading="eager"` to preload the configured adjacent slides and carousel media. Lazy slides use a loading spinner while thumbnail slots retain shimmer Skeleton placeholders.
+
+<ComponentPreview name="lightbox/loading" />
+
 ### Isolated Images
 
-Set `navigation={false}` when each image should open independently instead of as a collection. The lightbox hides the counter, carousel, and previous and next controls, and mounts only the selected item. This is useful for image-heavy wikis and long-form documentation because unopened images are not mounted as lightbox slides.
+Set `noCarousel` when each image should open independently instead of as a collection, and add `noCounter` when the collection count is not useful. The lightbox hides the carousel, previous and next controls, and mounts only the selected item. This is useful for image-heavy wikis and long-form documentation because unopened images are not mounted as lightbox slides. Use `noControls` separately when the toolbar should also be hidden.
 
 <ComponentPreview name="lightbox/isolated-gallery" />
 
@@ -131,9 +137,9 @@ Replace the default interface with `LightboxContent` and compose only the parts 
 
 <ComponentPreview name="lightbox/composition" />
 
-### Peek, Responsive Sources, and RTL
+### Responsive Sources and RTL
 
-Set `peek` to reveal adjacent slides, use `srcSet` and `sizes` for responsive loading, and pass `dir="rtl"` to mirror navigation and thumbnail order.
+Use `srcSet` and `sizes` for responsive loading, and pass `dir="rtl"` to mirror navigation and thumbnail order.
 
 <ComponentPreview name="lightbox/options" />
 
@@ -145,9 +151,10 @@ Set `peek` to reveal adjacent slides, use `srcSet` and `sizes` for responsive lo
 - Swipe horizontally to change slides and drag down on touch to dismiss. Gestures are interruptible and respect the current zoom level.
 - Pull up or down at fit scale to dismiss. The backdrop fades progressively with the pull distance.
 - Opening uses Glare-style measured shared-element motion when a source is available. Closing uses the ordinary dialog transition, and reduced motion falls back to opacity.
-- Only the active slide and the configured preload window are rendered. Adjacent images load lazily and preserve `srcSet` and `sizes`.
+- Only the active slide and the configured preload window are rendered. Use `loading="lazy"` to show a spinner for unloaded slides and defer thumbnail media until its shimmer-backed slot enters the carousel viewport. Loaded media is cached for the lifetime of the lightbox, and responsive images preserve `srcSet` and `sizes`.
 - `prefers-reduced-motion` switches to opacity-only transitions.
 - Controls that are unavailable for the active item, such as Download for a video without a download target, are omitted from the toolbar rather than shown disabled.
+- Download fetches the active asset and saves it without opening a new tab. Cross-origin assets must permit CORS; failures are announced without navigating away.
 
 ## Accessibility
 
@@ -211,19 +218,33 @@ Give every explicit image item a meaningful `alt`. Label video items with `label
     Selects the backdrop treatment. `blur` combines a dark surface with backdrop
     blur. `brightness` uses a plain dark dimmer.
   </ApiProp>
-  <ApiProp name="peek" fullType="boolean" defaultValue="false">
-    Shows part of the previous and next slides beside the active slide.
+  <ApiProp name="noCounter" fullType="boolean" defaultValue="false">
+    Hides the current item counter without changing gallery navigation.
   </ApiProp>
-  <ApiProp name="navigation" fullType="boolean" defaultValue="true">
-    Groups discovered images into a navigable collection. Set it to `false` to
-    hide the counter, carousel, and previous and next controls, and mount only
-    the selected item.
+  <ApiProp name="noCarousel" fullType="boolean" defaultValue="false">
+    Disables slide navigation, hides the thumbnail rail and previous and next
+    controls, and mounts only the selected item.
+  </ApiProp>
+  <ApiProp name="noControls" fullType="boolean" defaultValue="false">
+    Hides the top-end toolbar, including download, zoom, More, and Close.
+  </ApiProp>
+  <ApiProp
+    name="loading"
+    fullType='"lazy" | "eager"'
+    simpleType="string"
+    defaultValue='"eager"'
+  >
+    When set to `lazy`, prevents inactive slide media from loading and only
+    mounts thumbnail media after its carousel slot becomes visible. The active
+    item always loads. Images rendered as auto-discovered children may already
+    have been requested by the page before the lightbox opens.
   </ApiProp>
   <ApiProp name="loop" fullType="boolean" defaultValue="true">
     Wraps navigation from the last item to the first item and back.
   </ApiProp>
   <ApiProp name="preload" fullType="number" defaultValue="1">
-    Number of adjacent items to render and preload on each side.
+    Number of adjacent slide shells to render on each side. Their media is
+    preloaded when `loading="eager"` is used.
   </ApiProp>
   <ApiProp name="maxZoom" fullType="number" defaultValue="4">
     Maximum zoom multiplier for lightbox-managed media transforms.

@@ -613,7 +613,9 @@
       "registryDependencies": [
         "https://ui.iandefined.com/r/button.json",
         "https://ui.iandefined.com/r/dropdown-menu.json",
-        "https://ui.iandefined.com/r/scroll-area.json"
+        "https://ui.iandefined.com/r/scroll-area.json",
+        "https://ui.iandefined.com/r/skeleton.json",
+        "https://ui.iandefined.com/r/spinner.json"
       ],
       "files": [
         {

@@ -29,7 +29,7 @@ const photos = [
 
 export default function LightboxIsolatedGalleryDemo() {
   return (
-    <Lightbox navigation={false}>
+    <Lightbox noCarousel noCounter>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {photos.map((photo) => (
           <img

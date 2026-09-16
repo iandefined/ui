@@ -22,7 +22,7 @@ const items = [
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80 800w, https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85 1600w",
     sizes: "(max-width: 640px) 100vw, 80vw",
     alt: "Snowy mountain peaks above a green valley",
-    caption: "Adjacent slides preload lazily",
+    caption: "Responsive sources preserve browser selection",
   },
   {
     type: "image",
@@ -37,7 +37,7 @@ const items = [
 
 export default function LightboxOptionsDemo() {
   return (
-    <Lightbox items={items} dir="rtl" peek preload={2}>
+    <Lightbox items={items} dir="rtl" preload={2}>
       <LightboxTrigger index={0} render={<Button variant="outline" />}>
         Open RTL gallery
       </LightboxTrigger>

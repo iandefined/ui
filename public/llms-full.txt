@@ -14098,9 +14098,75 @@ export default function LightboxMediaDemo() {
 }
 ```
 
+### Loading Strategy
+
+Use `loading="lazy"` to defer inactive slide media and offscreen thumbnails, or `loading="eager"` to preload the configured adjacent slides and carousel media. Lazy slides use a loading spinner while thumbnail slots retain shimmer Skeleton placeholders.
+
+```tsx
+import { Button } from "@/registry/base/button";
+import {
+  Lightbox,
+  LightboxTrigger,
+  type LightboxItem,
+} from "@/registry/base/lightbox";
+
+const items = [
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1600&q=85",
+    thumbnailSrc:
+      "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=160&q=70",
+    alt: "A winding road through a mountain valley",
+    caption: "Mountain road",
+  },
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85",
+    thumbnailSrc:
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=160&q=70",
+    alt: "Snow-covered mountain peaks beneath a clear sky",
+    caption: "High country",
+  },
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1600&q=85",
+    thumbnailSrc:
+      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=160&q=70",
+    alt: "A cabin beside a reflective alpine lake",
+    caption: "Lakeside cabin",
+  },
+  {
+    type: "image",
+    src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=85",
+    thumbnailSrc:
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=160&q=70",
+    alt: "A river crossing a broad mountain landscape",
+    caption: "Open valley",
+  },
+] satisfies LightboxItem[];
+
+export default function LightboxLoadingDemo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <Lightbox items={items} loading="lazy">
+        <LightboxTrigger render={<Button variant="outline" />}>
+          Lazy loading
+        </LightboxTrigger>
+      </Lightbox>
+
+      <Lightbox items={items} loading="eager">
+        <LightboxTrigger render={<Button variant="outline" />}>
+          Eager loading
+        </LightboxTrigger>
+      </Lightbox>
+    </div>
+  );
+}
+```
+
 ### Isolated Images
 
-Set `navigation={false}` when each image should open independently instead of as a collection. The lightbox hides the counter, carousel, and previous and next controls, and mounts only the selected item. This is useful for image-heavy wikis and long-form documentation because unopened images are not mounted as lightbox slides.
+Set `noCarousel` when each image should open independently instead of as a collection, and add `noCounter` when the collection count is not useful. The lightbox hides the carousel, previous and next controls, and mounts only the selected item. This is useful for image-heavy wikis and long-form documentation because unopened images are not mounted as lightbox slides. Use `noControls` separately when the toolbar should also be hidden.
 
 ```tsx
 import { Lightbox } from "@/registry/base/lightbox";
@@ -14134,7 +14200,7 @@ const photos = [
 
 export default function LightboxIsolatedGalleryDemo() {
   return (
-    <Lightbox navigation={false}>
+    <Lightbox noCarousel noCounter>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {photos.map((photo) => (
           <img
@@ -14352,9 +14418,9 @@ export default function LightboxCompositionDemo() {
 }
 ```
 
-### Peek, Responsive Sources, and RTL
+### Responsive Sources and RTL
 
-Set `peek` to reveal adjacent slides, use `srcSet` and `sizes` for responsive loading, and pass `dir="rtl"` to mirror navigation and thumbnail order.
+Use `srcSet` and `sizes` for responsive loading, and pass `dir="rtl"` to mirror navigation and thumbnail order.
 
 ```tsx
 import { Button } from "@/registry/base/button";
@@ -14381,7 +14447,7 @@ const items = [
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80 800w, https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85 1600w",
     sizes: "(max-width: 640px) 100vw, 80vw",
     alt: "Snowy mountain peaks above a green valley",
-    caption: "Adjacent slides preload lazily",
+    caption: "Responsive sources preserve browser selection",
   },
   {
     type: "image",
@@ -14396,7 +14462,7 @@ const items = [
 
 export default function LightboxOptionsDemo() {
   return (
-    <Lightbox items={items} dir="rtl" peek preload={2}>
+    <Lightbox items={items} dir="rtl" preload={2}>
       <LightboxTrigger index={0} render={<Button variant="outline" />}>
         Open RTL gallery
       </LightboxTrigger>
@@ -14413,9 +14479,10 @@ export default function LightboxOptionsDemo() {
 - Swipe horizontally to change slides and drag down on touch to dismiss. Gestures are interruptible and respect the current zoom level.
 - Pull up or down at fit scale to dismiss. The backdrop fades progressively with the pull distance.
 - Opening uses Glare-style measured shared-element motion when a source is available. Closing uses the ordinary dialog transition, and reduced motion falls back to opacity.
-- Only the active slide and the configured preload window are rendered. Adjacent images load lazily and preserve `srcSet` and `sizes`.
+- Only the active slide and the configured preload window are rendered. Use `loading="lazy"` to show a spinner for unloaded slides and defer thumbnail media until its shimmer-backed slot enters the carousel viewport. Loaded media is cached for the lifetime of the lightbox, and responsive images preserve `srcSet` and `sizes`.
 - `prefers-reduced-motion` switches to opacity-only transitions.
 - Controls that are unavailable for the active item, such as Download for a video without a download target, are omitted from the toolbar rather than shown disabled.
+- Download fetches the active asset and saves it without opening a new tab. Cross-origin assets must permit CORS; failures are announced without navigating away.
 
 ## Accessibility
 
@@ -14442,10 +14509,12 @@ Give every explicit image item a meaningful `alt`. Label video items with `label
 | `onOpenChangeComplete` | `(open: boolean) => void` | `-` | Runs after the open or close transition completes. |
 | `onChangeImage` | `(index: number, item: LightboxItem, details: LightboxImageChangeEventDetails) => void` | `-` | Runs after the active item changes. |
 | `overlay` | `"blur" \| "brightness"` | `blur` | Selects the backdrop treatment. `blur` combines a dark surface with backdrop blur. `brightness` uses a plain dark dimmer. |
-| `peek` | `boolean` | `false` | Shows part of the previous and next slides beside the active slide. |
-| `navigation` | `boolean` | `true` | Groups discovered images into a navigable collection. Set it to `false` to hide the counter, carousel, and previous and next controls, and mount only the selected item. |
+| `noCounter` | `boolean` | `false` | Hides the current item counter without changing gallery navigation. |
+| `noCarousel` | `boolean` | `false` | Disables slide navigation, hides the thumbnail rail and previous and next controls, and mounts only the selected item. |
+| `noControls` | `boolean` | `false` | Hides the top-end toolbar, including download, zoom, More, and Close. |
+| `loading` | `"lazy" \| "eager"` | `eager` | When set to `lazy`, prevents inactive slide media from loading and only mounts thumbnail media after its carousel slot becomes visible. The active item always loads. Images rendered as auto-discovered children may already have been requested by the page before the lightbox opens. |
 | `loop` | `boolean` | `true` | Wraps navigation from the last item to the first item and back. |
-| `preload` | `number` | `1` | Number of adjacent items to render and preload on each side. |
+| `preload` | `number` | `1` | Number of adjacent slide shells to render on each side. Their media is preloaded when `loading="eager"` is used. |
 | `maxZoom` | `number` | `4` | Maximum zoom multiplier for lightbox-managed media transforms. |
 | `controls` | `LightboxControl[]` | `-` | Adds labeled actions to the More menu. Each control supplies an `id`, an `icon`, a `label`, and an `onClick` callback. Controls marked unavailable for the active item are omitted. |
 | `dir` | `"ltr" \| "rtl"` | `-` | Controls slide order, arrow meaning, thumbnail order, and transition direction. It inherits the document direction when omitted. |
