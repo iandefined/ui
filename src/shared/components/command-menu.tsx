@@ -405,7 +405,8 @@ export const CommandMenu = ({
       />
       <DialogContent
         showCloseButton={false}
-        className="rounded-xl border-none bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-neutral-200/80 dark:bg-neutral-900 dark:ring-neutral-800"
+        overlayClassName="data-closed:animate-none data-closed:opacity-0"
+        className="data-closed:animate-none rounded-xl border-none bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-neutral-200/80 dark:bg-neutral-900 dark:ring-neutral-800"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Search documentation...</DialogTitle>

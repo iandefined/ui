@@ -45,13 +45,15 @@ const DialogOverlay = ({
 const DialogContent = ({
   className,
   children,
+  overlayClassName,
   showCloseButton = true,
   ...props
 }: DialogPrimitive.Popup.Props & {
+  overlayClassName?: string;
   showCloseButton?: boolean;
 }) => (
   <DialogPortal data-slot="dialog-portal">
-    <DialogOverlay />
+    <DialogOverlay className={overlayClassName} />
     <DialogPrimitive.Popup
       data-slot="dialog-content"
       className={cn(

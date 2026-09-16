@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { ChevronDownIcon } from "lucide-react";
 import { useCallback } from "react";
 
@@ -24,6 +25,8 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import { Separator } from "@/shared/components/ui/separator";
 import { SITE } from "@/shared/constants/site";
+
+const NO_HOVER_BUTTON_CLASS = "hover:[--button-mix-amount:0%]";
 
 const getPromptUrl = (baseURL: string, url: string, param = "q") =>
   `${baseURL}?${param}=${encodeURIComponent(
@@ -165,7 +168,10 @@ export const DocsCopyPage = ({
     <Button
       variant="secondary"
       size="sm"
-      className="peer -ml-0.5 size-9 px-2 sm:size-8 md:size-7 md:text-[0.8rem]"
+      className={cn(
+        "peer -ml-0.5 size-9 px-2 sm:size-8 md:size-7 md:text-[0.8rem]",
+        NO_HOVER_BUTTON_CLASS
+      )}
       aria-label="Open markdown actions"
     >
       <ChevronDownIcon />
@@ -178,7 +184,10 @@ export const DocsCopyPage = ({
         value={copyValue}
         showTooltip={false}
         variant="secondary"
-        className="h-9 sm:h-8 md:h-7 md:text-[0.8rem]"
+        className={cn(
+          "h-9 sm:h-8 md:h-7 md:text-[0.8rem]",
+          NO_HOVER_BUTTON_CLASS
+        )}
       >
         Copy Markdown
       </CopyButton>
