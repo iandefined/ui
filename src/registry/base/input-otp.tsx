@@ -73,12 +73,12 @@ const invalidShakeStyles = `
 type InputOTPSize = NonNullable<InputOTPProps["size"]>;
 type InputOTPVariant = NonNullable<InputOTPProps["variant"]>;
 
-interface InputOTPContextValue {
+type InputOTPContextValue = {
   invalid: boolean;
   mask: boolean;
   size: InputOTPSize;
   variant: InputOTPVariant;
-}
+};
 
 const InputOTPContext = createContext<InputOTPContextValue>({
   invalid: false,
@@ -318,7 +318,7 @@ function AnimatedCharacter({ value }: { value: ReactNode }) {
             data-slot="input-otp-character"
             exit={characterMotion.exit}
             initial={characterMotion.initial}
-            key={String(value)}
+            key={typeof value === "string" ? value : "character"}
           >
             {value}
           </motion.span>

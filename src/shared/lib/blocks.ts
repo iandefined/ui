@@ -1,6 +1,5 @@
+import registryManifest from "@/registry.json";
 import { SITE } from "@/shared/constants/site";
-
-import registryManifest from "../../../registry.json";
 
 type RegistryFile = {
   path: string;
@@ -50,7 +49,7 @@ const toTitle = (value: string) =>
 export const normalizeBlockCategorySearch = (category?: string) => {
   const normalized = category?.trim().replace(/^\/+|\/+$/g, "");
 
-  return normalized || undefined;
+  return normalized?.length === 0 ? undefined : normalized;
 };
 
 const normalizeBlock = (item: RegistryItem): RegistryBlock | null => {
@@ -86,12 +85,14 @@ export const categorizedBlocks = registryBlocks.reduce<
 export const blockCategories: BlockCategory[] = Object.entries(
   categorizedBlocks
 )
-  .map(([name, blocks]) => ({
-    name,
-    title: categoryTitles[name] ?? toTitle(name),
-    totalBlocks: blocks.length,
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name));
+  .map(([name, blocks]) => {
+    return {
+      name,
+      title: categoryTitles[name] ?? toTitle(name),
+      totalBlocks: blocks.length,
+    };
+  })
+  .toSorted((a, b) => a.name.localeCompare(b.name));
 
 export const allBlockCategory: BlockCategory = {
   name: "all",

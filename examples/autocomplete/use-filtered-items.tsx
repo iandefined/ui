@@ -12,12 +12,12 @@ import {
 import { Kbd } from "@/registry/base/kbd";
 import { Label } from "@/registry/base/label";
 
-interface Command {
+type Command = {
   id: string;
   name: string;
   shortcut?: string;
   section: string;
-}
+};
 
 const commands: Command[] = [
   { id: "c1", name: "Create new file", shortcut: "Ctrl+N", section: "File" },

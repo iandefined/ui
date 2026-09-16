@@ -1,6 +1,6 @@
-import type {
-  Node as PageTreeNode,
-  Root as PageTreeRoot,
+import {
+  type Node as PageTreeNode,
+  type Root as PageTreeRoot,
 } from "fumadocs-core/page-tree";
 
 export type { PageTreeRoot };

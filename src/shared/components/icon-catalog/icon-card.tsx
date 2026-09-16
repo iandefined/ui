@@ -1,20 +1,20 @@
 import { cn } from "cn";
 
-import type { IconCatalogItem, IconVariant } from "@/icons/catalog";
+import { type IconCatalogItem, type IconVariant } from "@/icons/catalog";
 import { type Tooltip, TooltipTrigger } from "@/registry/base/tooltip";
 
 import { IconPreview } from "./icon-preview";
 
 export type IconTooltipHandle = ReturnType<typeof Tooltip.createHandle<string>>;
 
-export interface IconCardProps {
+export type IconCardProps = {
   item: IconCatalogItem;
   variant: IconVariant;
   svg: string;
   tooltipHandle?: IconTooltipHandle;
   onClick: () => void;
   className?: string;
-}
+};
 
 export function IconCard({
   item,

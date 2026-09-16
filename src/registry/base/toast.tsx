@@ -41,16 +41,13 @@ export type ToastPosition =
   | "bottom-center"
   | "bottom-right";
 
-export interface ToastAction extends Omit<
-  React.ComponentPropsWithoutRef<"button">,
-  "children"
-> {
+export type ToastAction = {
   label: React.ReactNode;
   render?: ToastPrimitive.Action.Props["render"];
   nativeButton?: ToastPrimitive.Action.Props["nativeButton"];
-}
+} & Omit<React.ComponentPropsWithoutRef<"button">, "children">;
 
-export interface ToastOptions<TData extends object = object> {
+export type ToastOptions<TData extends object = object> = {
   /** Fixed ID for deduplication. Reusing it updates the existing toast. */
   id?: string;
   title?: React.ReactNode;
@@ -64,18 +61,16 @@ export interface ToastOptions<TData extends object = object> {
   onClose?: () => void;
   onRemove?: () => void;
   showCloseButton?: boolean;
-}
+};
 
-export interface AnchoredToastOptions<
-  TData extends object = object,
-> extends Omit<ToastOptions<TData>, "type"> {
+export type AnchoredToastOptions<TData extends object = object> = {
   anchor: Element | React.RefObject<Element | null> | null;
   side?: "top" | "bottom" | "left" | "right";
   sideOffset?: number;
   align?: "start" | "center" | "end";
   alignOffset?: number;
   arrow?: boolean;
-}
+} & Omit<ToastOptions<TData>, "type">;
 
 type ToastType =
   | "default"
@@ -93,29 +88,29 @@ type PromiseMessage =
     };
 type PromiseMessageOrFn<T> = PromiseMessage | ((value: T) => PromiseMessage);
 
-export interface ToastProviderProps {
+export type ToastProviderProps = {
   children: React.ReactNode;
   position?: ToastPosition;
   limit?: number;
   timeout?: number;
   container?: ToastPrimitive.Portal.Props["container"];
-}
+};
 
-export interface AnchoredToastProviderProps {
+export type AnchoredToastProviderProps = {
   children: React.ReactNode;
   limit?: number;
   timeout?: number;
   container?: ToastPrimitive.Portal.Props["container"];
-}
+};
 
-interface ToastDataPayload {
+type ToastDataPayload = {
   actionNativeButton?: ToastPrimitive.Action.Props["nativeButton"];
   actionRender?: ToastPrimitive.Action.Props["render"];
   customJSX?: React.ReactElement;
   showCloseButton?: boolean;
   arrow?: boolean;
   [key: string]: unknown;
-}
+};
 
 type ToastData = BaseToastObject<ToastDataPayload>;
 
@@ -193,21 +188,25 @@ function addTrackedToast(
 ) {
   const requestedId = typeof options.id === "string" ? options.id : undefined;
   const knownId = requestedId !== undefined && managerById.has(requestedId);
-  let toastId: string | undefined;
+  const toastIdRef: { current: string | undefined } = { current: undefined };
   const originalOnRemove = options.onRemove as (() => void) | undefined;
   const trackedOptions = knownId
     ? options
     : {
         ...options,
         onRemove: () => {
-          if (toastId && managerById.get(toastId) === manager) {
-            managerById.delete(toastId);
+          if (
+            toastIdRef.current &&
+            managerById.get(toastIdRef.current) === manager
+          ) {
+            managerById.delete(toastIdRef.current);
           }
           originalOnRemove?.();
         },
       };
 
-  toastId = manager.add(trackedOptions);
+  const toastId = manager.add(trackedOptions);
+  toastIdRef.current = toastId;
   managerById.set(toastId, manager);
   return toastId;
 }
@@ -230,9 +229,9 @@ function baseToast<TData extends object = object>(
       ...(jsxOptions?.id && { id: jsxOptions.id }),
       title: "",
       description: "",
-      type: jsxOptions?.type || "default",
+      type: jsxOptions?.type ?? "default",
       timeout: jsxOptions?.duration ?? undefined,
-      priority: jsxOptions?.priority || "low",
+      priority: jsxOptions?.priority ?? "low",
       ...(action && { actionProps: action.props }),
       data: {
         customJSX: optionsOrJSX,
@@ -253,10 +252,10 @@ function baseToast<TData extends object = object>(
   return addTrackedToast(toastManager, {
     ...(options.id && { id: options.id }),
     title: options.title,
-    description: options.description || "",
-    type: options.type || "default",
+    description: options.description ?? "",
+    type: options.type ?? "default",
     timeout: options.duration ?? undefined,
-    priority: options.priority || "low",
+    priority: options.priority ?? "low",
     ...(action && { actionProps: action.props }),
     data: {
       ...options.data,
@@ -323,10 +322,12 @@ export const toast = Object.assign(baseToast, {
       updateOptions.description = options.description;
     }
     if (options.type !== undefined) updateOptions.type = options.type;
-    if (options.duration !== undefined)
+    if (options.duration !== undefined) {
       updateOptions.timeout = options.duration;
-    if (options.priority !== undefined)
+    }
+    if (options.priority !== undefined) {
       updateOptions.priority = options.priority;
+    }
     if (options.action !== undefined) {
       const action = resolveAction(options.action);
       updateOptions.actionProps = action?.props;
@@ -360,9 +361,9 @@ export const toast = Object.assign(baseToast, {
     return addTrackedToast(anchoredToastManager, {
       ...(options.id && { id: options.id }),
       title: options.title,
-      description: options.description || "",
+      description: options.description ?? "",
       timeout: options.duration ?? undefined,
-      priority: options.priority || "low",
+      priority: options.priority ?? "low",
       ...(action && { actionProps: action.props }),
       data: {
         ...options.data,
@@ -413,7 +414,7 @@ function ToastIcon({ type }: { type: ToastType }) {
 }
 
 function useToastMicrointeraction(toast: ToastData) {
-  const type = (toast.type || "default") as ToastType;
+  const type = (toast.type ?? "default") as ToastType;
   const updateKey = toast.updateKey ?? 0;
   const previousToastRef = React.useRef({ type, updateKey });
   const [microinteractionRef, animate] = useAnimate<HTMLDivElement>();
@@ -459,7 +460,7 @@ function StackedToastItem({
   position: ToastPosition;
   swipeDirection: SwipeDirection[];
 }) {
-  const type = (toastItem.type || "default") as ToastType;
+  const type = (toastItem.type ?? "default") as ToastType;
   const microinteractionRef = useToastMicrointeraction(toastItem);
   const data = toastItem.data;
   const hasCustomJSX = Boolean(data && "customJSX" in data);

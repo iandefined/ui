@@ -10,7 +10,7 @@ type ToolExecute = (
   options: { signal: AbortSignal }
 ) => Promise<unknown>;
 
-interface ModelContextApi {
+type ModelContextApi = {
   registerTool?: (
     def: {
       description: string;
@@ -20,7 +20,7 @@ interface ModelContextApi {
     },
     options?: { signal: AbortSignal }
   ) => (() => void) | undefined;
-}
+};
 
 const getPath = (input: unknown, fallback: string): string => {
   if (

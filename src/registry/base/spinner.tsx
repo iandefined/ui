@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import type { ComponentProps, SVGProps } from "react";
+import { type ComponentProps, type SVGProps } from "react";
 import { tv } from "tailwind-variants";
 
 type SpinnerPrimitiveProps = SVGProps<SVGSVGElement>;
@@ -48,12 +48,9 @@ const spinnerVariants = tv({
   },
 });
 
-interface SpinnerProps extends Omit<
-  ComponentProps<"svg">,
-  "color" | "display" | "opacity"
-> {
+type SpinnerProps = {
   size?: "sm" | "md" | "lg" | "xl";
-}
+} & Omit<ComponentProps<"svg">, "color" | "display" | "opacity">;
 
 function Spinner({ className, size = "md", ...props }: SpinnerProps) {
   return (

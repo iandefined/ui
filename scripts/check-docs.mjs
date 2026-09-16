@@ -38,11 +38,13 @@ const exampleFiles = new Set(
   )
 );
 const docs = await Promise.all(
-  mdxFiles.map(async (file) => ({
-    content: await readFile(file, "utf8"),
-    file,
-    relative: normalize(path.relative(docsRoot, file)),
-  }))
+  mdxFiles.map(async (file) => {
+    return {
+      content: await readFile(file, "utf8"),
+      file,
+      relative: normalize(path.relative(docsRoot, file)),
+    };
+  })
 );
 
 const routeForDoc = (relative) => {
@@ -55,7 +57,7 @@ const routeForDoc = (relative) => {
     segments.pop();
   }
 
-  return `/docs${segments.length ? `/${segments.join("/")}` : ""}`;
+  return `/docs${segments.length > 0 ? `/${segments.join("/")}` : ""}`;
 };
 
 const routes = new Set(docs.map((doc) => routeForDoc(doc.relative)));

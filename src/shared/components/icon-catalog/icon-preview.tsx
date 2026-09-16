@@ -1,9 +1,9 @@
 import { cn } from "cn";
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
-export interface IconPreviewProps extends ComponentProps<"span"> {
+export type IconPreviewProps = {
   svg: string;
-}
+} & ComponentProps<"span">;
 
 export function IconPreview({ svg, className, ...props }: IconPreviewProps) {
   return (

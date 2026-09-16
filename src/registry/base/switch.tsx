@@ -48,16 +48,16 @@ const spring = {
   },
 };
 
-interface SwitchProps extends Omit<
-  React.ComponentProps<typeof SwitchPrimitive.Root>,
-  "checked" | "defaultChecked" | "onCheckedChange" | "children"
-> {
+type SwitchProps = {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   thumbTransition?: Transition;
   size?: "sm" | "default" | "lg";
-}
+} & Omit<
+  React.ComponentProps<typeof SwitchPrimitive.Root>,
+  "checked" | "defaultChecked" | "onCheckedChange" | "children"
+>;
 
 type SwitchSize = NonNullable<SwitchProps["size"]>;
 

@@ -106,13 +106,13 @@ function AccordionHeader({ className, ...props }: AccordionHeaderProps) {
   );
 }
 
-export interface AccordionTriggerProps extends BaseAccordion.Trigger.Props {
+export type AccordionTriggerProps = {
   showIndicator?: boolean;
   indicatorType?: "chevron" | "plus";
   indicatorPosition?: "start" | "end";
   icon?: React.ReactNode;
   subtitle?: React.ReactNode;
-}
+} & BaseAccordion.Trigger.Props;
 
 function AccordionTrigger({
   children,

@@ -480,12 +480,12 @@ import {
   SelectValue,
 } from "@/registry/base/select";
 
-interface ShippingMethod {
+type ShippingMethod = {
   id: string;
   name: string;
   duration: string;
   price: string;
-}
+};
 
 const shippingMethods: ShippingMethod[] = [
   {
@@ -968,7 +968,7 @@ Set `animationPreset` on `SelectPopup`. This gallery uses each preset's exact pr
 
 ```tsx
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import {
   Select,

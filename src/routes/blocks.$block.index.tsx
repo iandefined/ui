@@ -12,6 +12,15 @@ import { createPageHead } from "@/shared/lib/seo/metadata";
 
 export const Route = createFileRoute("/blocks/$block/")({
   component: BlockRoute,
+  loader: ({ params }) => {
+    const block = getRegistryBlock(params.block);
+
+    if (!block) {
+      throw notFound();
+    }
+
+    return block;
+  },
   head: ({ params }) => {
     const block = getRegistryBlock(params.block);
 
@@ -26,15 +35,6 @@ export const Route = createFileRoute("/blocks/$block/")({
       path: `/blocks/${params.block}`,
       title: block?.title ?? "Block",
     });
-  },
-  loader: ({ params }) => {
-    const block = getRegistryBlock(params.block);
-
-    if (!block) {
-      throw notFound();
-    }
-
-    return block;
   },
 });
 

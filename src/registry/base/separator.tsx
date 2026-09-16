@@ -1,7 +1,7 @@
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator";
 import { cva } from "class-variance-authority";
 import { cn } from "cn";
-import type { ComponentProps, ReactNode } from "react";
+import { type ComponentProps, type ReactNode } from "react";
 
 const separatorVariants = cva(
   "shrink-0 data-[orientation=horizontal]:w-full data-[orientation=vertical]:not-[[class^='h-']]:not-[[class*='_h-']]:self-stretch",

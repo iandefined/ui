@@ -1,7 +1,7 @@
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
 import { cn } from "cn";
 
-interface ScrollAreaProps extends ScrollAreaPrimitive.Root.Props {
+type ScrollAreaProps = {
   cornerStyle?: React.CSSProperties;
   fadeColor?: string;
   hideScrollbar?: boolean;
@@ -11,7 +11,7 @@ interface ScrollAreaProps extends ScrollAreaPrimitive.Root.Props {
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
   verticalScrollbarStyle?: React.CSSProperties;
   viewportClassName?: string;
-}
+} & ScrollAreaPrimitive.Root.Props;
 
 type ScrollAreaStyle = React.CSSProperties & Record<`--${string}`, string>;
 

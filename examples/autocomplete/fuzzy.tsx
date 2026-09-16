@@ -14,11 +14,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 
-interface Documentation {
+type Documentation = {
   title: string;
   description: string;
   category: string;
-}
+};
 
 const documentationItems: Documentation[] = [
   {

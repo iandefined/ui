@@ -28,10 +28,10 @@ function resolveThreshold(
   return thresholdMap[threshold];
 }
 
-export interface UseFuzzyFilterOptions {
+export type UseFuzzyFilterOptions = {
   keys: Array<string | { key: string; threshold?: FuzzyThreshold }>;
   threshold?: FuzzyThreshold;
-}
+};
 
 export function useFuzzyFilter<T>(options: UseFuzzyFilterOptions) {
   const resolvedThreshold = resolveThreshold(options.threshold);

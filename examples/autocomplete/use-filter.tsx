@@ -14,11 +14,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 
-interface Framework {
+type Framework = {
   id: string;
   name: string;
   category: string;
-}
+};
 
 const frameworks: Framework[] = [
   { id: "react", name: "React", category: "Frontend" },
@@ -41,9 +41,8 @@ export default function AutocompleteUseFilterDemo() {
   const [strategy, setStrategy] = useState<MatchStrategy>("startsWith");
   const filter = useAutocompleteFilter({ sensitivity: "base" });
 
-  const activeFilter = (item: Framework, query: string) => {
-    return filter[strategy](item.name, query);
-  };
+  const activeFilter = (item: Framework, query: string) =>
+    filter[strategy](item.name, query);
 
   return (
     <div className="flex w-full max-w-xs flex-col gap-4">

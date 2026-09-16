@@ -4,9 +4,9 @@ import { cn } from "cn";
 import { useCallback, useRef } from "react";
 
 import { ArrowRightIcon } from "@/shared/components/animated-icons/arrow-right";
-import type { ArrowRightIconHandle } from "@/shared/components/animated-icons/arrow-right";
+import { type ArrowRightIconHandle } from "@/shared/components/animated-icons/arrow-right";
 import { ComponentIcon } from "@/shared/components/animated-icons/component";
-import type { ComponentIconHandle } from "@/shared/components/animated-icons/component";
+import { type ComponentIconHandle } from "@/shared/components/animated-icons/component";
 import { Link } from "@/shared/components/link";
 import { Button } from "@/shared/components/ui/button";
 import { ROUTES } from "@/shared/constants/routes";

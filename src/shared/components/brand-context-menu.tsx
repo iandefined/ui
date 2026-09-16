@@ -27,7 +27,7 @@ export const BrandContextMenu = ({
   );
 
   const handleCopy = useCallback(() => {
-    copyToClipboard(logoMarkSvgString);
+    void copyToClipboard(logoMarkSvgString);
     toast.success("Icon as SVG copied");
   }, [logoMarkSvgString, copyToClipboard]);
 

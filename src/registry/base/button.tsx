@@ -5,7 +5,7 @@ import {
   type ButtonProps as BaseButtonProps,
 } from "@base-ui/react/button";
 import { cn } from "cn";
-import type { CSSProperties, ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { tv } from "tailwind-variants";
 
 const buttonMix =

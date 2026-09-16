@@ -29,6 +29,7 @@ Use this guide for repository-wide TypeScript, React, imports, naming, async wor
 ## Formatting and Maintainability
 
 - Match the repository formatter and lint configuration. Do not hand-format around tools or run `pnpm fix` unless rewriting files is intended and its scope is reviewed.
+- The Vite+ Oxlint configuration in `vite.config.ts` is the local baseline and mirrors the rules used by the sibling `../site` project. Keep type-aware linting enabled and run `pnpm fix` after repository-wide component changes.
 - Prefer readable control flow, early returns, and named intermediate values over dense nested expressions.
 - Keep comments for non-obvious intent, constraints, or tradeoffs; do not restate code.
 - Update the narrowest relevant agent guide when a durable convention changes. Avoid duplicating specialized rules in this guide.

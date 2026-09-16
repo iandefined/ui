@@ -79,15 +79,14 @@ export const RegistryAddButton = ({
   const registryName = typeof registry === "string" ? registry : registry.name;
   const registryTemplate = getRegistryTemplate(registryName);
 
-  const commands = useMemo(
-    () => ({
+  const commands = useMemo(() => {
+    return {
       bun: `bunx --bun shadcn@latest registry add ${registryTemplate}`,
       npm: `npx shadcn@latest registry add ${registryTemplate}`,
       pnpm: `pnpm dlx shadcn@latest registry add ${registryTemplate}`,
       yarn: `yarn shadcn@latest registry add ${registryTemplate}`,
-    }),
-    [registryTemplate]
-  );
+    };
+  }, [registryTemplate]);
 
   const handleTriggerClick: NonNullable<ButtonProps["onClick"]> = (event) => {
     trackEvent({

@@ -612,10 +612,10 @@ import {
   SelectValue,
 } from "@/registry/base/select";
 
-interface Currency {
+type Currency = {
   value: string;
   label: string;
-}
+};
 
 const currencies: Currency[] = [
   {

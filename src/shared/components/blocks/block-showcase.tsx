@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { PanelImperativeHandle } from "react-resizable-panels";
+import { type PanelImperativeHandle } from "react-resizable-panels";
 
 import { BlockCodeExplorer } from "@/shared/components/blocks/block-code-explorer";
 import { BlockInstallButton } from "@/shared/components/blocks/block-install-button";
@@ -33,7 +33,7 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
-import type { RegistryBlock } from "@/shared/lib/blocks";
+import { type RegistryBlock } from "@/shared/lib/blocks";
 
 type ScreenSize = "mobile" | "tablet" | "desktop";
 

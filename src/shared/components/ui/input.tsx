@@ -45,9 +45,9 @@ const inputVariants = tv({
   },
 });
 
-export interface InputProps extends Omit<InputPrimitive.Props, "size"> {
+export type InputProps = {
   size?: "sm" | "default" | "lg" | number;
-}
+} & Omit<InputPrimitive.Props, "size">;
 
 function Input({ className, size = "default", ...props }: InputProps) {
   return (

@@ -113,10 +113,10 @@ const radioIndicatorStyles = tv({
 
 type RadioSize = NonNullable<RadioRootProps["size"]>;
 
-interface RadioContextType {
+type RadioContextType = {
   reduceMotion?: boolean;
   size: RadioSize;
-}
+};
 
 const RadioContext = createContext<RadioContextType | undefined>(undefined);
 
@@ -130,11 +130,9 @@ const useRadio = () => {
   return context;
 };
 
-interface RadioGroupProps<
-  Value = string,
-> extends RadioGroupPrimitive.Props<Value> {
+type RadioGroupProps<Value = string> = {
   orientation?: "horizontal" | "vertical";
-}
+} & RadioGroupPrimitive.Props<Value>;
 
 function RadioGroup<Value = string>({
   className,
@@ -154,12 +152,10 @@ function RadioGroup<Value = string>({
   );
 }
 
-interface RadioRootProps<
-  Value = string,
-> extends RadioPrimitive.Root.Props<Value> {
+type RadioRootProps<Value = string> = {
   reduceMotion?: boolean;
   size?: "sm" | "default" | "lg";
-}
+} & RadioPrimitive.Root.Props<Value>;
 
 function RadioRoot<Value = string>({
   children,
@@ -195,9 +191,7 @@ function RadioRoot<Value = string>({
   );
 }
 
-interface RadioIndicatorProps extends ComponentProps<
-  typeof RadioPrimitive.Indicator
-> {}
+type RadioIndicatorProps = {} & ComponentProps<typeof RadioPrimitive.Indicator>;
 
 function RadioIndicator({
   children,
@@ -218,7 +212,7 @@ function RadioIndicator({
   );
 }
 
-interface RadioProps<Value = string> extends RadioRootProps<Value> {}
+type RadioProps<Value = string> = {} & RadioRootProps<Value>;
 
 function Radio<Value = string>({
   children,

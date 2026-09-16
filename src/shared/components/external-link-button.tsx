@@ -1,6 +1,6 @@
 "use client";
 
-import type { ButtonProps } from "@/shared/components/ui/button";
+import { type ButtonProps } from "@/shared/components/ui/button";
 import { Button } from "@/shared/components/ui/button";
 
 type ExternalLinkButtonProps = ButtonProps & {

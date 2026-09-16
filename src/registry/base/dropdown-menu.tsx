@@ -85,7 +85,9 @@ function DropdownMenu({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
   backdrop?: "dim" | "blur" | "transparent";
 }) {
-  const contextValue = useMemo(() => ({ backdrop }), [backdrop]);
+  const contextValue = useMemo(() => {
+    return { backdrop };
+  }, [backdrop]);
 
   return (
     <DropdownMenuContext.Provider value={contextValue}>
@@ -354,7 +356,9 @@ function DropdownMenuRadioGroup({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup> & {
   activeIcon?: ReactNode;
 }) {
-  const contextValue = useMemo(() => ({ activeIcon }), [activeIcon]);
+  const contextValue = useMemo(() => {
+    return { activeIcon };
+  }, [activeIcon]);
 
   return (
     <DropdownMenuRadioGroupContext.Provider value={contextValue}>

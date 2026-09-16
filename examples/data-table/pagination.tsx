@@ -19,12 +19,12 @@ import {
   PaginationPrevious,
 } from "@/registry/base/pagination";
 
-interface Project {
+type Project = {
   code: string;
   name: string;
   budget: string;
   status: string;
-}
+};
 
 const data: Project[] = [
   {

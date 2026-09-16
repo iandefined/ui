@@ -177,17 +177,23 @@ function DatePicker({
   }, []);
 
   const adaptedProps = adaptDatePickerProps(props);
-  const inputContextValue = useMemo(
-    () => ({
+  const inputContextValue = useMemo(() => {
+    return {
       locale: props.locale,
       timeZone: props.timeZone,
       min: props.min,
       max: props.max,
       format: props.format,
       invalid,
-    }),
-    [invalid, props.format, props.locale, props.max, props.min, props.timeZone]
-  );
+    };
+  }, [
+    invalid,
+    props.format,
+    props.locale,
+    props.max,
+    props.min,
+    props.timeZone,
+  ]);
   return (
     <>
       <style>{invalidShakeStyles}</style>
@@ -541,7 +547,7 @@ function DatePickerChip({
 }: DatePickerChipProps) {
   const picker = useDatePickerContext();
   const contextOnClick = useContext(DatePickerChipsClickContext);
-  const isDisabled = disabled || picker.disabled || picker.readOnly;
+  const isDisabled = disabled === true || picker.disabled || picker.readOnly;
   const label = typeof children === "string" ? children : undefined;
   const closedOnPointerDownRef = useRef(false);
   return (
@@ -925,7 +931,7 @@ function DatePickerInput({
       disabled={picker.disabled || props.disabled}
       readOnly={picker.readOnly || props.readOnly}
       invalid={picker.invalid || props.invalid}
-      required={inputProps.required || props.required}
+      required={inputProps.required ?? props.required}
       name={props.name ?? inputProps.name}
       selectionMode="single"
       value={selectedValue ? [fromDateValue(selectedValue)] : []}

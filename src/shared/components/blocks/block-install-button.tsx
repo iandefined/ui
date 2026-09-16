@@ -17,31 +17,29 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { SITE } from "@/shared/constants/site";
-import type { PackageManager } from "@/shared/hooks/use-package-manager";
+import { type PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
 
 export function BlockInstallButton({ name }: { name: string }) {
   const [packageManager, setPackageManager] = usePackageManager();
   const registryUrl = `${SITE.REGISTRY}/r/${name}.json`;
 
-  const commands = useMemo(
-    () => ({
+  const commands = useMemo(() => {
+    return {
       bun: `bunx --bun shadcn@latest add ${registryUrl}`,
       npm: `npx shadcn@latest add ${registryUrl}`,
       pnpm: `pnpm dlx shadcn@latest add ${registryUrl}`,
       yarn: `yarn shadcn@latest add ${registryUrl}`,
-    }),
-    [registryUrl]
-  );
-  const displayCommands = useMemo(
-    () => ({
+    };
+  }, [registryUrl]);
+  const displayCommands = useMemo(() => {
+    return {
       bun: `bunx --bun shadcn@latest add ${name}`,
       npm: `npx shadcn@latest add ${name}`,
       pnpm: `pnpm dlx shadcn@latest add ${name}`,
       yarn: `yarn shadcn@latest add ${name}`,
-    }),
-    [name]
-  );
+    };
+  }, [name]);
   const command = commands[packageManager];
   const displayCommand = displayCommands[packageManager];
 

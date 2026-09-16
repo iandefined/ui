@@ -1,7 +1,7 @@
 import { cn } from "cn";
 import { FileIcon, TerminalSquareIcon } from "lucide-react";
 
-import type { PackageManager } from "@/shared/hooks/use-package-manager";
+import { type PackageManager } from "@/shared/hooks/use-package-manager";
 
 export const ThemeIcon = ({
   className,
@@ -373,41 +373,39 @@ const CssIcon = ({ className, ...props }: React.ComponentProps<"svg">) => (
 
 export const getIconForLanguageExtension = (language: string) => {
   switch (language) {
-    case "json": {
+    case "json":
       return <JsonIcon />;
-    }
-    case "css": {
+
+    case "css":
       return <CssIcon />;
-    }
+
     case "js":
     case "jsx":
     case "ts":
     case "tsx":
-    case "typescript": {
+    case "typescript":
       return <TsIcon />;
-    }
-    default: {
+
+    default:
       return <FileIcon className="size-4" />;
-    }
   }
 };
 
 export const getIconForPackageManager = (manager: PackageManager) => {
   switch (manager) {
-    case "pnpm": {
+    case "pnpm":
       return <PnpmIcon />;
-    }
-    case "yarn": {
+
+    case "yarn":
       return <YarnIcon />;
-    }
-    case "npm": {
+
+    case "npm":
       return <NpmIcon />;
-    }
-    case "bun": {
+
+    case "bun":
       return <BunIcon />;
-    }
-    default: {
+
+    default:
       return <TerminalSquareIcon />;
-    }
   }
 };

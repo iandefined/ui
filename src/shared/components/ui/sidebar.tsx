@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import type { VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import { cn } from "cn";
 import { PanelLeftIcon } from "lucide-react";
@@ -41,7 +41,7 @@ const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
-interface SidebarContextProps {
+type SidebarContextProps = {
   state: "expanded" | "collapsed";
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -49,7 +49,7 @@ interface SidebarContextProps {
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
   toggleSidebar: () => void;
-}
+};
 
 const SidebarContext = createContext<SidebarContextProps | null>(null);
 
@@ -124,8 +124,8 @@ const SidebarProvider = ({
   // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed";
 
-  const contextValue = useMemo<SidebarContextProps>(
-    () => ({
+  const contextValue = useMemo<SidebarContextProps>(() => {
+    return {
       isMobile,
       open,
       openMobile,
@@ -133,9 +133,8 @@ const SidebarProvider = ({
       setOpenMobile,
       state,
       toggleSidebar,
-    }),
-    [state, open, setOpen, isMobile, openMobile, toggleSidebar]
-  );
+    };
+  }, [state, open, setOpen, isMobile, openMobile, toggleSidebar]);
 
   return (
     <SidebarContext.Provider value={contextValue}>
@@ -631,32 +630,30 @@ const SidebarMenuSkeleton = ({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
   width?: string;
-}) => {
-  return (
-    <div
-      data-slot="sidebar-menu-skeleton"
-      data-sidebar="menu-skeleton"
-      className={cn("flex h-8 items-center gap-2 rounded-md px-2", className)}
-      {...props}
-    >
-      {showIcon && (
-        <Skeleton
-          className="size-4 rounded-md"
-          data-sidebar="menu-skeleton-icon"
-        />
-      )}
+}) => (
+  <div
+    data-slot="sidebar-menu-skeleton"
+    data-sidebar="menu-skeleton"
+    className={cn("flex h-8 items-center gap-2 rounded-md px-2", className)}
+    {...props}
+  >
+    {showIcon && (
       <Skeleton
-        className="h-4 max-w-(--skeleton-width) flex-1"
-        data-sidebar="menu-skeleton-text"
-        style={
-          {
-            "--skeleton-width": width,
-          } as React.CSSProperties
-        }
+        className="size-4 rounded-md"
+        data-sidebar="menu-skeleton-icon"
       />
-    </div>
-  );
-};
+    )}
+    <Skeleton
+      className="h-4 max-w-(--skeleton-width) flex-1"
+      data-sidebar="menu-skeleton-text"
+      style={
+        {
+          "--skeleton-width": width,
+        } as React.CSSProperties
+      }
+    />
+  </div>
+);
 
 const SidebarMenuSub = ({
   className,

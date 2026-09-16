@@ -1,18 +1,18 @@
 "use client";
 
 import { cn } from "cn";
-import type { Variants } from "motion/react";
+import { type Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
-export interface ArrowRightIconHandle {
+export type ArrowRightIconHandle = {
   startAnimation: () => void;
   stopAnimation: () => void;
-}
+};
 
-interface ArrowRightIconProps extends React.HTMLAttributes<HTMLDivElement> {
+type ArrowRightIconProps = {
   size?: number;
-}
+} & React.HTMLAttributes<HTMLDivElement>;
 
 const shaftVariants: Variants = {
   animate: {

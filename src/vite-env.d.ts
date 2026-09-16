@@ -8,7 +8,7 @@ declare module "*.txt?raw" {
   export default content;
 }
 
-interface ImportMeta {
+type ImportMeta = {
   glob: <T = unknown>(
     pattern: string,
     options?: {
@@ -17,4 +17,4 @@ interface ImportMeta {
       query?: string;
     }
   ) => Record<string, T>;
-}
+};

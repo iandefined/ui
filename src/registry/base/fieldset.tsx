@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 function Fieldset({ className, ...props }: ComponentProps<"fieldset">) {
   return (

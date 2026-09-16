@@ -12,12 +12,12 @@ import {
   SelectValue,
 } from "@/registry/base/select";
 
-interface ShippingMethod {
+type ShippingMethod = {
   id: string;
   name: string;
   duration: string;
   price: string;
-}
+};
 
 const shippingMethods: ShippingMethod[] = [
   {

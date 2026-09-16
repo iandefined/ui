@@ -16,11 +16,11 @@ type DialogFadeEdge = "top" | "bottom" | "left" | "right" | "x" | "y";
 type DialogFadeEdges = boolean | DialogFadeEdge | DialogFadeEdge[];
 type DialogOnOpenChange = NonNullable<BaseDialog.Root.Props["onOpenChange"]>;
 
-interface DialogConfigContextValue {
+type DialogConfigContextValue = {
   dismissible: boolean;
   modal: boolean | "trap-focus";
   overlay: DialogOverlay;
-}
+};
 
 const DialogConfigContext = React.createContext<DialogConfigContextValue>({
   dismissible: true,
@@ -30,14 +30,14 @@ const DialogConfigContext = React.createContext<DialogConfigContextValue>({
 
 const DialogScrollContext = React.createContext<DialogScroll>("inside");
 
-interface DialogStackContextValue {
+type DialogStackContextValue = {
   /**
    * The shared, untransformed top offset for every popup in one nested stack.
    * `null` retains normal centering until the active popup is measured.
    */
   offset: number | null;
   setActivePopup: (popup: HTMLElement) => void;
-}
+};
 
 const DialogStackContext = React.createContext<DialogStackContextValue | null>(
   null
@@ -66,18 +66,17 @@ function useDialogStack() {
     );
   }, []);
 
-  const ownStack = React.useMemo(
-    () => ({ offset, setActivePopup }),
-    [offset, setActivePopup]
-  );
+  const ownStack = React.useMemo(() => {
+    return { offset, setActivePopup };
+  }, [offset, setActivePopup]);
 
   return parentStack ?? ownStack;
 }
 
-interface DialogProps<Payload> extends BaseDialog.Root.Props<Payload> {
+type DialogProps<Payload> = {
   dismissible?: boolean;
   overlay?: DialogOverlay;
-}
+} & BaseDialog.Root.Props<Payload>;
 
 type DialogPopupStyle = BaseDialog.Popup.Props["style"];
 
@@ -90,10 +89,12 @@ function mergeDialogPopupStyle(
   }
 
   if (typeof style === "function") {
-    return (state: BaseDialog.Popup.State) => ({
-      ...style(state),
-      marginTop,
-    });
+    return (state: BaseDialog.Popup.State) => {
+      return {
+        ...style(state),
+        marginTop,
+      };
+    };
   }
 
   return {
@@ -123,10 +124,9 @@ function Dialog<Payload>({
     [dismissible, onOpenChange]
   );
 
-  const configValue = React.useMemo(
-    () => ({ dismissible, modal, overlay }),
-    [dismissible, modal, overlay]
-  );
+  const configValue = React.useMemo(() => {
+    return { dismissible, modal, overlay };
+  }, [dismissible, modal, overlay]);
 
   return (
     <DialogStackContext.Provider value={dialogStack}>
@@ -445,14 +445,14 @@ function getScrollShadow(fadeEdges: DialogFadeEdges) {
   return "none" as const;
 }
 
-interface DialogBodyProps extends React.ComponentProps<"div"> {
+type DialogBodyProps = {
   nativeScroll?: boolean;
   fadeEdges?: DialogFadeEdges;
   scrollbarGutter?: boolean;
   persistScrollbar?: boolean;
   hideScrollbar?: boolean;
   viewportClassName?: string;
-}
+} & React.ComponentProps<"div">;
 
 function DialogBody({
   className,

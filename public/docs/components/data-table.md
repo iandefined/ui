@@ -24,12 +24,12 @@ import {
   DataTableToolbar,
 } from "@/registry/base/data-table";
 
-interface Payment {
+type Payment = {
   id: string;
   amount: number;
   status: "pending" | "processing" | "success" | "failed";
   email: string;
-}
+};
 
 const data: Payment[] = [
   { id: "m5gr84i9", amount: 316, status: "success", email: "ken99@yahoo.com" },
@@ -225,11 +225,11 @@ import {
   DataTableHeader,
 } from "@/registry/base/data-table";
 
-interface User {
+type User = {
   name: string;
   department: string;
   score: number;
-}
+};
 
 const data: User[] = [
   { name: "Sophia Martinez", department: "Engineering", score: 94 },
@@ -288,11 +288,11 @@ import {
   DataTablePagination,
 } from "@/registry/base/data-table";
 
-interface Employee {
+type Employee = {
   id: string;
   name: string;
   role: string;
-}
+};
 
 const data: Employee[] = [
   { id: "EMP-01", name: "Alexander Wright", role: "Software Architect" },
@@ -368,12 +368,12 @@ import {
   PaginationPrevious,
 } from "@/registry/base/pagination";
 
-interface Project {
+type Project = {
   code: string;
   name: string;
   budget: string;
   status: string;
-}
+};
 
 const data: Project[] = [
   {
@@ -545,12 +545,12 @@ import {
   DataTableHeader,
 } from "@/registry/base/data-table";
 
-interface Project {
+type Project = {
   title: string;
   lead: string;
   category: string;
   budget: string;
-}
+};
 
 const data: Project[] = [
   {

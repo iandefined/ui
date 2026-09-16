@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
+import { type Root as PageTreeRoot } from "fumadocs-core/page-tree";
 import { useState } from "react";
 
 import { Link, type LinkProps } from "@/shared/components/link";
@@ -24,18 +24,16 @@ const MobileLink = ({
   onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
   className?: string;
-}) => {
-  return (
-    <Link
-      href={href}
-      onClick={() => onOpenChange?.(false)}
-      className={cn("text-2xl font-medium", className)}
-      {...props}
-    >
-      {children}
-    </Link>
-  );
-};
+}) => (
+  <Link
+    href={href}
+    onClick={() => onOpenChange?.(false)}
+    className={cn("text-2xl font-medium", className)}
+    {...props}
+  >
+    {children}
+  </Link>
+);
 
 const MobileNavGroup = ({
   label,

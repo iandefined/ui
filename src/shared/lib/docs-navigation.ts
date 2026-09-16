@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { ROUTES } from "@/shared/constants/routes";
-import type { PageTreeFolder, PageTreePage } from "@/shared/lib/page-tree";
+import { type PageTreeFolder, type PageTreePage } from "@/shared/lib/page-tree";
 import {
   getAllPagesFromFolder,
   isFolderIndexPage,
@@ -14,7 +14,21 @@ export type DocsNavigationGroup = {
   pages: PageTreePage[];
 };
 
-const folderId = (folder: PageTreeFolder) => folder.$id ?? String(folder.name);
+const getNodeText = (value: ReactNode): string => {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    typeof value === "bigint"
+  ) {
+    return String(value);
+  }
+
+  return "";
+};
+
+const folderId = (folder: PageTreeFolder) =>
+  folder.$id ?? getNodeText(folder.name);
 
 const makeGroup = (
   id: string,
@@ -62,7 +76,7 @@ export const getDocsNavigationGroups = (
             currentPages = [];
           }
           currentGroupLabel = child.name;
-          currentGroupId = `${folderId(node)}-${String(child.name).toLowerCase().replace(/\s+/g, "-")}`;
+          currentGroupId = `${folderId(node)}-${getNodeText(child.name).toLowerCase().replace(/\s+/g, "-")}`;
         } else if (child.type === "page") {
           if (
             !isFolderIndexPage(node, child) &&

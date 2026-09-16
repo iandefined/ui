@@ -7,7 +7,7 @@ import * as React from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export interface TableProps extends React.ComponentProps<"table"> {
+export type TableProps = {
   bordered?: boolean;
   striped?: boolean;
   stripedRows?: boolean;
@@ -19,7 +19,7 @@ export interface TableProps extends React.ComponentProps<"table"> {
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
   fadeColor?: string;
   viewportClassName?: string;
-}
+} & React.ComponentProps<"table">;
 
 type TableInsetStyle = React.CSSProperties & Record<`--${string}`, string>;
 
@@ -63,9 +63,9 @@ const tableInsetCornerBackgrounds = {
     "radial-gradient(circle var(--table-inset-radius) at 0 100%, transparent calc(100% - 0.5px), var(--table-inset-mask) 100%)",
 } as const;
 
-interface TableContextValue {
+type TableContextValue = {
   resizable?: boolean;
-}
+};
 
 const TableContext = React.createContext<TableContextValue>({
   resizable: false,
@@ -334,10 +334,10 @@ function TableFooter({ className, render, ...props }: TableFooterProps) {
 
 export type TableRowSticky = "top" | "bottom";
 
-export interface TableRowProps extends useRender.ComponentProps<"tr"> {
+export type TableRowProps = {
   selected?: boolean;
   sticky?: TableRowSticky;
-}
+} & useRender.ComponentProps<"tr">;
 
 function TableRow({
   className,
@@ -367,10 +367,10 @@ function TableRow({
   });
 }
 
-export interface TableColumnResizerProps extends React.ComponentProps<"div"> {
+export type TableColumnResizerProps = {
   isResizing?: boolean;
   minWidth?: number;
-}
+} & React.ComponentProps<"div">;
 
 function TableColumnResizer({
   className,
@@ -539,11 +539,11 @@ function TableColumnResizer({
 
 export type TableColumnSticky = "left" | "right";
 
-export interface TableHeadProps extends useRender.ComponentProps<"th"> {
+export type TableHeadProps = {
   resizable?: boolean;
   resizer?: React.ReactNode;
   sticky?: TableColumnSticky;
-}
+} & useRender.ComponentProps<"th">;
 
 function TableHead({
   className,
@@ -594,9 +594,9 @@ function TableHead({
   });
 }
 
-export interface TableCellProps extends useRender.ComponentProps<"td"> {
+export type TableCellProps = {
   sticky?: TableColumnSticky;
-}
+} & useRender.ComponentProps<"td">;
 
 function TableCell({ className, render, sticky, ...props }: TableCellProps) {
   const defaultProps = {

@@ -13,16 +13,16 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   label: string;
   group: "Type" | "Component";
-}
+};
 
-interface TagGroup {
+type TagGroup = {
   value: string;
   items: Tag[];
-}
+};
 
 const tagsData: Tag[] = [
   { id: "t1", label: "feature", group: "Type" },
@@ -105,12 +105,14 @@ const tagsData: Tag[] = [
 ];
 
 function groupTags(tags: Tag[]): TagGroup[] {
-  const groups: { [key: string]: Tag[] } = {};
+  const groups: Record<string, Tag[]> = {};
   for (const t of tags) {
     (groups[t.group] ??= []).push(t);
   }
   const order = ["Type", "Component"];
-  return order.map((value) => ({ value, items: groups[value] ?? [] }));
+  return order.map((value) => {
+    return { value, items: groups[value] ?? [] };
+  });
 }
 
 const groupedTags: TagGroup[] = groupTags(tagsData);

@@ -21,10 +21,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -186,10 +186,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -287,10 +287,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -378,10 +378,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -457,16 +457,16 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   label: string;
   group: "Type" | "Component";
-}
+};
 
-interface TagGroup {
+type TagGroup = {
   value: string;
   items: Tag[];
-}
+};
 
 const tagsData: Tag[] = [
   { id: "t1", label: "feature", group: "Type" },
@@ -549,12 +549,14 @@ const tagsData: Tag[] = [
 ];
 
 function groupTags(tags: Tag[]): TagGroup[] {
-  const groups: { [key: string]: Tag[] } = {};
+  const groups: Record<string, Tag[]> = {};
   for (const t of tags) {
     (groups[t.group] ??= []).push(t);
   }
   const order = ["Type", "Component"];
-  return order.map((value) => ({ value, items: groups[value] ?? [] }));
+  return order.map((value) => {
+    return { value, items: groups[value] ?? [] };
+  });
 }
 
 const groupedTags: TagGroup[] = groupTags(tagsData);
@@ -609,10 +611,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -709,10 +711,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -847,11 +849,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { Spinner } from "@/registry/base/spinner";
 
-interface Movie {
+type Movie = {
   id: string;
   title: string;
   year: number;
-}
+};
 
 const top30Movies: Movie[] = [
   { id: "1", title: "The Shawshank Redemption", year: 1994 },
@@ -1034,11 +1036,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 
-interface Documentation {
+type Documentation = {
   title: string;
   description: string;
   category: string;
-}
+};
 
 const documentationItems: Documentation[] = [
   {
@@ -1225,11 +1227,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 
-interface Framework {
+type Framework = {
   id: string;
   name: string;
   category: string;
-}
+};
 
 const frameworks: Framework[] = [
   { id: "react", name: "React", category: "Frontend" },
@@ -1252,9 +1254,8 @@ export default function AutocompleteUseFilterDemo() {
   const [strategy, setStrategy] = useState<MatchStrategy>("startsWith");
   const filter = useAutocompleteFilter({ sensitivity: "base" });
 
-  const activeFilter = (item: Framework, query: string) => {
-    return filter[strategy](item.name, query);
-  };
+  const activeFilter = (item: Framework, query: string) =>
+    filter[strategy](item.name, query);
 
   return (
     <div className="flex w-full max-w-xs flex-col gap-4">
@@ -1452,12 +1453,12 @@ import {
 import { Kbd } from "@/registry/base/kbd";
 import { Label } from "@/registry/base/label";
 
-interface Command {
+type Command = {
   id: string;
   name: string;
   shortcut?: string;
   section: string;
-}
+};
 
 const commands: Command[] = [
   { id: "c1", name: "Create new file", shortcut: "Ctrl+N", section: "File" },

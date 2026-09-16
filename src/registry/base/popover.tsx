@@ -96,10 +96,10 @@ const transitionPresets: Record<PopoverTransitionPreset, string> = {
 
 type PopoverBackdropStyle = "dim" | "blur" | "transparent";
 
-interface PopoverContextType {
+type PopoverContextType = {
   backdrop?: PopoverBackdropStyle;
   modal: boolean | "trap-focus";
-}
+};
 
 const PopoverContext = createContext<PopoverContextType>({
   backdrop: "transparent",
@@ -144,10 +144,9 @@ const Popover = Object.assign(
       },
       [dismissible, onOpenChange]
     );
-    const contextValue = useMemo(
-      () => ({ backdrop, modal }),
-      [backdrop, modal]
-    );
+    const contextValue = useMemo(() => {
+      return { backdrop, modal };
+    }, [backdrop, modal]);
 
     return (
       <PopoverContext.Provider value={contextValue}>

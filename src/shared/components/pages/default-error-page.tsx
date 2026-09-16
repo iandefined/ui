@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { ErrorComponentProps } from "@tanstack/react-router";
+import { type ErrorComponentProps } from "@tanstack/react-router";
 import { Home, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -19,7 +19,7 @@ export const DefaultErrorPage = ({ error, reset }: ErrorComponentProps) => {
     }
 
     loggedErrorKeys.add(errorKey);
-    console.error(error);
+    console.debug(error);
   }, [error]);
 
   return (

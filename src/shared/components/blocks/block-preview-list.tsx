@@ -126,7 +126,7 @@ export function BlockPreviewList({
       />
 
       <div className="mt-6 grid grid-cols-1 gap-10">
-        {visibleBlocks.length ? (
+        {visibleBlocks.length > 0 ? (
           visibleBlocks.map((block) => (
             <BlockShowcase key={block.name} block={block} showTitle />
           ))
@@ -189,10 +189,12 @@ function CategoryFilter({
     () => [
       {
         value: "Categories",
-        items: options.map((option) => ({
-          value: option.name,
-          label: option.title,
-        })),
+        items: options.map((option) => {
+          return {
+            value: option.name,
+            label: option.title,
+          };
+        }),
       },
     ],
     [options]
@@ -202,7 +204,7 @@ function CategoryFilter({
     const nextQuery = query.trim();
 
     setOpen(false);
-    navigate({
+    void navigate({
       to: "/blocks",
       search: nextQuery
         ? { category: value, q: nextQuery }
@@ -294,7 +296,7 @@ function PreviewListSearch({
         return;
       }
 
-      navigate({
+      void navigate({
         to: "/blocks",
         search: nextQuery ? { category, q: nextQuery } : { category },
         replace: true,
@@ -321,7 +323,7 @@ function ResultsNotFound({ category }: { category: string }) {
   const navigate = useNavigate();
 
   const clearQuery = () => {
-    navigate({
+    void navigate({
       to: "/blocks",
       search: { category },
       replace: true,

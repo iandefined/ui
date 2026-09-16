@@ -2,7 +2,7 @@ import { cn } from "cn";
 import { CheckIcon, ChevronsUpDownIcon, TagIcon } from "lucide-react";
 import { useState } from "react";
 
-import type { CategoryInfo, IconCategory } from "@/icons/catalog";
+import { type CategoryInfo, type IconCategory } from "@/icons/catalog";
 import { Button } from "@/registry/base/button";
 import {
   Popover,
@@ -18,12 +18,12 @@ import {
   CommandList,
 } from "@/shared/components/ui/command";
 
-export interface CategoryFilterProps {
+export type CategoryFilterProps = {
   categories: CategoryInfo[];
   selectedCategory: "all" | IconCategory;
   onSelectCategory: (category: "all" | IconCategory) => void;
   className?: string;
-}
+};
 
 export function IconCategorySidebar({
   categories,
@@ -76,10 +76,12 @@ export function IconCategoryMobileSelect({
   const categoryGroup = [
     {
       value: "Categories",
-      items: categories.map((category) => ({
-        value: category.id,
-        label: category.label,
-      })),
+      items: categories.map((category) => {
+        return {
+          value: category.id,
+          label: category.label,
+        };
+      }),
     },
   ];
 

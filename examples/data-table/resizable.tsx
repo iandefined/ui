@@ -8,12 +8,12 @@ import {
   DataTableHeader,
 } from "@/registry/base/data-table";
 
-interface Project {
+type Project = {
   title: string;
   lead: string;
   category: string;
   budget: string;
-}
+};
 
 const data: Project[] = [
   {

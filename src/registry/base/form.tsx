@@ -1,12 +1,12 @@
 "use client";
 
-import type { AnyFormApi } from "@tanstack/react-form";
+import { type AnyFormApi } from "@tanstack/react-form";
 import { cn } from "cn";
-import type { ComponentProps, FormEventHandler } from "react";
+import { type ComponentProps, type FormEventHandler } from "react";
 
-interface FormProps extends Omit<ComponentProps<"form">, "onSubmit"> {
+type FormProps = {
   form: Pick<AnyFormApi, "handleSubmit">;
-}
+} & Omit<ComponentProps<"form">, "onSubmit">;
 
 const shakeCleanupTimers = new WeakMap<HTMLElement, number>();
 

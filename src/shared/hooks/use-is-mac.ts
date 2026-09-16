@@ -6,6 +6,5 @@ const getSnapshot = () =>
   navigator.platform.toUpperCase().includes("MAC");
 const getServerSnapshot = () => true;
 
-export const useIsMac = () => {
-  return useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
-};
+export const useIsMac = () =>
+  useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);

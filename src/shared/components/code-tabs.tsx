@@ -4,7 +4,7 @@ import { cn } from "cn";
 
 import { Tabs } from "@/shared/components/ui/tabs";
 import { useConfig } from "@/shared/hooks/use-config";
-import type { InstallationType } from "@/shared/hooks/use-config";
+import { type InstallationType } from "@/shared/hooks/use-config";
 
 export const CodeTabs = ({
   className,

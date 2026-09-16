@@ -1,28 +1,30 @@
 "use client";
 
 import { cn } from "cn";
-import type { Variants } from "motion/react";
+import { type Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
-import type { HTMLAttributes } from "react";
+import { type HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
-export interface ComponentIconHandle {
+export type ComponentIconHandle = {
   startAnimation: () => void;
   stopAnimation: () => void;
-}
+};
 
-interface ComponentIconProps extends HTMLAttributes<HTMLDivElement> {
+type ComponentIconProps = {
   size?: number;
-}
+} & HTMLAttributes<HTMLDivElement>;
 
-const makePathVariants = (x: number, y: number): Variants => ({
-  animate: {
-    transition: { duration: 0.8, ease: "easeInOut", times: [0, 0.4, 0.6, 1] },
-    translateX: [0, x, x, 0],
-    translateY: [0, y, y, 0],
-  },
-  normal: { translateX: 0, translateY: 0 },
-});
+const makePathVariants = (x: number, y: number): Variants => {
+  return {
+    animate: {
+      transition: { duration: 0.8, ease: "easeInOut", times: [0, 0.4, 0.6, 1] },
+      translateX: [0, x, x, 0],
+      translateY: [0, y, y, 0],
+    },
+    normal: { translateX: 0, translateY: 0 },
+  };
+};
 
 const TOP_VARIANTS = makePathVariants(6.6, 6.6);
 const RIGHT_VARIANTS = makePathVariants(-6.6, 6.6);
@@ -38,8 +40,12 @@ const ComponentIcon = forwardRef<ComponentIconHandle, ComponentIconProps>(
       isControlledRef.current = true;
 
       return {
-        startAnimation: () => controls.start("animate"),
-        stopAnimation: () => controls.start("normal"),
+        startAnimation: () => {
+          void controls.start("animate");
+        },
+        stopAnimation: () => {
+          void controls.start("normal");
+        },
       };
     });
 
@@ -48,7 +54,7 @@ const ComponentIcon = forwardRef<ComponentIconHandle, ComponentIconProps>(
         if (isControlledRef.current) {
           onMouseEnter?.(e);
         } else {
-          controls.start("animate");
+          void controls.start("animate");
         }
       },
       [controls, onMouseEnter]
@@ -59,7 +65,7 @@ const ComponentIcon = forwardRef<ComponentIconHandle, ComponentIconProps>(
         if (isControlledRef.current) {
           onMouseLeave?.(e);
         } else {
-          controls.start("normal");
+          void controls.start("normal");
         }
       },
       [controls, onMouseLeave]

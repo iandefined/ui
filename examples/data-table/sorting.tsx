@@ -8,11 +8,11 @@ import {
   DataTableHeader,
 } from "@/registry/base/data-table";
 
-interface User {
+type User = {
   name: string;
   department: string;
   score: number;
-}
+};
 
 const data: User[] = [
   { name: "Sophia Martinez", department: "Engineering", score: 94 },

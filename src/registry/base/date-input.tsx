@@ -13,31 +13,16 @@ import { Button } from "@/components/ui/button";
 import { InputGroup } from "@/components/ui/input-group";
 import { fromDateValue, toDateValue } from "@/lib/date";
 
-export interface DateInputValueChangeDetails {
+export type DateInputValueChangeDetails = {
   value: Date[];
   valueAsString: string[];
-}
+};
 
-export interface DateInputPlaceholderChangeDetails extends DateInputValueChangeDetails {
+export type DateInputPlaceholderChangeDetails = {
   placeholderValue: Date;
-}
+} & DateInputValueChangeDetails;
 
-export interface DateInputProps extends Omit<
-  React.ComponentProps<typeof DateInputPrimitive.Root>,
-  | "asChild"
-  | "children"
-  | "defaultPlaceholderValue"
-  | "defaultValue"
-  | "format"
-  | "granularity"
-  | "isDateUnavailable"
-  | "max"
-  | "min"
-  | "onPlaceholderChange"
-  | "onValueChange"
-  | "placeholderValue"
-  | "value"
-> {
+export type DateInputProps = {
   value?: Date[];
   defaultValue?: Date[];
   min?: Date;
@@ -63,7 +48,22 @@ export interface DateInputProps extends Omit<
   endLabel?: string;
   endAdornment?: React.ReactNode;
   shouldForceLeadingZeros?: boolean;
-}
+} & Omit<
+  React.ComponentProps<typeof DateInputPrimitive.Root>,
+  | "asChild"
+  | "children"
+  | "defaultPlaceholderValue"
+  | "defaultValue"
+  | "format"
+  | "granularity"
+  | "isDateUnavailable"
+  | "max"
+  | "min"
+  | "onPlaceholderChange"
+  | "onValueChange"
+  | "placeholderValue"
+  | "value"
+>;
 
 function DateInput({
   className,

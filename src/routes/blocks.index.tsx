@@ -26,9 +26,11 @@ export const Route = createFileRoute("/blocks/")({
   search: {
     middlewares: [stripSearchParams({ q: "" })],
   },
-  loaderDeps: ({ search }) => ({
-    category: normalizeBlockCategorySearch(search.category),
-  }),
+  loaderDeps: ({ search }) => {
+    return {
+      category: normalizeBlockCategorySearch(search.category),
+    };
+  },
   loader: ({ deps }) => {
     const category = deps.category;
 

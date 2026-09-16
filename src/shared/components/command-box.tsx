@@ -3,6 +3,7 @@
 import { cn } from "cn";
 import { useEffect, useRef, useState } from "react";
 
+import registry from "@/registry.json";
 import { TextMorph } from "@/registry/base/text-morph";
 import { CopyButton } from "@/shared/components/copy-button";
 import { getIconForPackageManager } from "@/shared/components/icons";
@@ -13,10 +14,8 @@ import {
   TabsTrigger,
 } from "@/shared/components/ui/tabs";
 import { SITE } from "@/shared/constants/site";
-import type { PackageManager } from "@/shared/hooks/use-package-manager";
+import { type PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
-
-import registry from "../../../registry.json";
 
 const pmCommands = {
   bun: "bunx --bun shadcn@latest",

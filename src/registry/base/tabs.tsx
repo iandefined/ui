@@ -20,10 +20,10 @@ function isValidVariant(variant: TabsVariant): variant is TabsVariant {
   );
 }
 
-interface TabsContextValue {
+type TabsContextValue = {
   size: TabsSize;
   variant: TabsVariant;
-}
+};
 
 const TabsContext = createContext<TabsContextValue>({
   size: "default",
@@ -38,10 +38,10 @@ function useTabs(): TabsContextValue {
   return context;
 }
 
-interface TabsProps extends TabsPrimitive.Root.Props {
+type TabsProps = {
   size?: "sm" | "default" | "lg";
   variant?: "segmented" | "underline" | "card";
-}
+} & TabsPrimitive.Root.Props;
 
 function Tabs({
   className,
@@ -66,10 +66,10 @@ function Tabs({
   );
 }
 
-interface TabsListProps extends TabsPrimitive.List.Props {
+type TabsListProps = {
   size?: "sm" | "default" | "lg";
   variant?: "segmented" | "underline" | "card";
-}
+} & TabsPrimitive.List.Props;
 
 function TabsList({
   className,
@@ -117,10 +117,10 @@ function TabsList({
   );
 }
 
-interface TabsTriggerProps extends TabsPrimitive.Tab.Props {
+type TabsTriggerProps = {
   size?: "sm" | "default" | "lg";
   variant?: "segmented" | "underline" | "card";
-}
+} & TabsPrimitive.Tab.Props;
 
 function TabsTrigger({
   className,
@@ -150,9 +150,9 @@ function TabsTrigger({
   );
 }
 
-interface TabsPanelsWrapperProps extends React.ComponentProps<"div"> {
+type TabsPanelsWrapperProps = {
   children?: React.ReactNode;
-}
+} & React.ComponentProps<"div">;
 
 function TabsPanelsWrapper({
   children,
@@ -196,7 +196,7 @@ function TabsPanelsWrapper({
   );
 }
 
-interface TabsPanelProps extends TabsPrimitive.Panel.Props {}
+type TabsPanelProps = {} & TabsPrimitive.Panel.Props;
 
 function TabsPanel({ className, ...props }: TabsPanelProps) {
   return (

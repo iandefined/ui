@@ -73,7 +73,7 @@ import {
 ### Segmented
 
 ```tsx
-import type { SVGProps } from "react";
+import { type SVGProps } from "react";
 
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 

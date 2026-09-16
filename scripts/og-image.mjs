@@ -21,10 +21,12 @@ const gridLineStyle = {
   position: "absolute",
 };
 
-const lineClampStyle = ({ fontSize, lineClamp, lineHeight }) => ({
-  maxHeight: fontSize * lineHeight * lineClamp,
-  overflow: "hidden",
-});
+const lineClampStyle = ({ fontSize, lineClamp, lineHeight }) => {
+  return {
+    maxHeight: fontSize * lineHeight * lineClamp,
+    overflow: "hidden",
+  };
+};
 
 const getTitleFontSize = (title) => (title.length > 20 ? 64 : 80);
 const h = createElement;

@@ -1,14 +1,14 @@
 import { cn } from "cn";
 import { SearchIcon, XIcon } from "lucide-react";
 
-import type { CategoryInfo, IconCategory } from "@/icons/catalog";
+import { type CategoryInfo, type IconCategory } from "@/icons/catalog";
 import { Input } from "@/registry/base/input";
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 import { Button } from "@/shared/components/ui/button";
 
 import { IconCategoryMobileSelect } from "./icon-category-filter";
 
-export interface IconToolbarProps {
+export type IconToolbarProps = {
   categories: CategoryInfo[];
   selectedCategory: "all" | IconCategory;
   onSelectCategory: (category: "all" | IconCategory) => void;
@@ -17,7 +17,7 @@ export interface IconToolbarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   className?: string;
-}
+};
 
 export function IconToolbar({
   categories,

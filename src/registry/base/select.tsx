@@ -149,9 +149,9 @@ type CSSTransitionPresets = keyof typeof cssTransitionPresets;
 
 type Backdrop = "dim" | "blur" | "transparent";
 
-interface SelectContextType {
+type SelectContextType = {
   backdrop?: Backdrop;
-}
+};
 
 const SelectContext = createContext<SelectContextType | undefined>(undefined);
 
@@ -163,14 +163,14 @@ function useSelect() {
   return context;
 }
 
-interface SelectRootProps extends React.ComponentProps<
-  typeof SelectPrimitive.Root
-> {
+type SelectRootProps = {
   backdrop?: "dim" | "blur" | "transparent";
-}
+} & React.ComponentProps<typeof SelectPrimitive.Root>;
 
 function Select({ backdrop = "transparent", ...props }: SelectRootProps) {
-  const contextValue = useMemo(() => ({ backdrop }), [backdrop]);
+  const contextValue = useMemo(() => {
+    return { backdrop };
+  }, [backdrop]);
 
   return (
     <SelectContext.Provider value={contextValue}>
@@ -179,9 +179,9 @@ function Select({ backdrop = "transparent", ...props }: SelectRootProps) {
   );
 }
 
-interface SelectTriggerProps extends React.ComponentProps<
+type SelectTriggerProps = {} & React.ComponentProps<
   typeof SelectPrimitive.Trigger
-> {}
+>;
 
 function SelectTrigger({ className, ...props }: SelectTriggerProps) {
   return (
@@ -200,11 +200,9 @@ function SelectTrigger({ className, ...props }: SelectTriggerProps) {
   );
 }
 
-interface SelectValueProps extends React.ComponentProps<
-  typeof SelectPrimitive.Value
-> {
+type SelectValueProps = {
   placeholder?: string;
-}
+} & React.ComponentProps<typeof SelectPrimitive.Value>;
 
 function SelectValue({
   className,
@@ -256,9 +254,7 @@ function SelectValue({
   );
 }
 
-interface SelectIconProps extends React.ComponentProps<
-  typeof SelectPrimitive.Icon
-> {}
+type SelectIconProps = {} & React.ComponentProps<typeof SelectPrimitive.Icon>;
 
 function SelectIcon({ className, ...props }: SelectIconProps) {
   return (
@@ -273,17 +269,17 @@ function SelectIcon({ className, ...props }: SelectIconProps) {
   );
 }
 
-interface SelectPortalProps extends React.ComponentProps<
+type SelectPortalProps = {} & React.ComponentProps<
   typeof SelectPrimitive.Portal
-> {}
+>;
 
 function SelectPortal(props: SelectPortalProps) {
   return <SelectPrimitive.Portal data-slot="select-portal" {...props} />;
 }
 
-interface SelectBackdropProps extends React.ComponentProps<
+type SelectBackdropProps = {} & React.ComponentProps<
   typeof SelectPrimitive.Backdrop
-> {}
+>;
 
 function SelectBackdrop({ className, ...props }: SelectBackdropProps) {
   const { backdrop = "transparent" } = useSelect();
@@ -304,11 +300,9 @@ function SelectBackdrop({ className, ...props }: SelectBackdropProps) {
   );
 }
 
-interface SelectPositionerProps extends React.ComponentProps<
-  typeof SelectPrimitive.Positioner
-> {
+type SelectPositionerProps = {
   portalContainer?: SelectPortalProps["container"];
-}
+} & React.ComponentProps<typeof SelectPrimitive.Positioner>;
 
 function SelectPositioner({
   sideOffset = 4,
@@ -337,9 +331,7 @@ function SelectPositioner({
   );
 }
 
-interface SelectArrowProps extends React.ComponentProps<
-  typeof SelectPrimitive.Arrow
-> {}
+type SelectArrowProps = {} & React.ComponentProps<typeof SelectPrimitive.Arrow>;
 
 function SelectArrow({ className, ...rest }: SelectArrowProps) {
   return (
@@ -369,18 +361,7 @@ function ArrowSvg(props: React.ComponentProps<"svg">) {
   );
 }
 
-interface SelectPopupProps
-  extends
-    React.ComponentProps<typeof SelectPrimitive.Popup>,
-    Pick<
-      SelectPositionerProps,
-      | "side"
-      | "sideOffset"
-      | "align"
-      | "alignOffset"
-      | "alignItemWithTrigger"
-      | "portalContainer"
-    > {
+type SelectPopupProps = {
   animationPreset?:
     | "none"
     | "scale"
@@ -420,7 +401,16 @@ interface SelectPopupProps
     | "inOutBase";
   reduceMotion?: boolean;
   showArrow?: boolean;
-}
+} & React.ComponentProps<typeof SelectPrimitive.Popup> &
+  Pick<
+    SelectPositionerProps,
+    | "side"
+    | "sideOffset"
+    | "align"
+    | "alignOffset"
+    | "alignItemWithTrigger"
+    | "portalContainer"
+  >;
 
 function SelectPopup({
   className,
@@ -555,9 +545,7 @@ function SelectPopup({
   );
 }
 
-interface SelectListProps extends React.ComponentProps<
-  typeof SelectPrimitive.List
-> {}
+type SelectListProps = {} & React.ComponentProps<typeof SelectPrimitive.List>;
 
 function SelectList({ className, ...props }: SelectListProps) {
   return (
@@ -572,9 +560,7 @@ function SelectList({ className, ...props }: SelectListProps) {
   );
 }
 
-interface SelectItemProps extends React.ComponentProps<
-  typeof SelectPrimitive.Item
-> {}
+type SelectItemProps = {} & React.ComponentProps<typeof SelectPrimitive.Item>;
 
 function SelectItem({ className, ...props }: SelectItemProps) {
   return (
@@ -590,9 +576,9 @@ function SelectItem({ className, ...props }: SelectItemProps) {
   );
 }
 
-interface SelectItemTextProps extends React.ComponentProps<
+type SelectItemTextProps = {} & React.ComponentProps<
   typeof SelectPrimitive.ItemText
-> {}
+>;
 
 function SelectItemText({ className, ...props }: SelectItemTextProps) {
   return (
@@ -604,9 +590,9 @@ function SelectItemText({ className, ...props }: SelectItemTextProps) {
   );
 }
 
-interface SelectItemIndicatorProps extends React.ComponentProps<
+type SelectItemIndicatorProps = {} & React.ComponentProps<
   typeof SelectPrimitive.ItemIndicator
-> {}
+>;
 
 function SelectItemIndicator({
   className,
@@ -621,17 +607,15 @@ function SelectItemIndicator({
   );
 }
 
-interface SelectGroupProps extends React.ComponentProps<
-  typeof SelectPrimitive.Group
-> {}
+type SelectGroupProps = {} & React.ComponentProps<typeof SelectPrimitive.Group>;
 
 function SelectGroup({ ...props }: SelectGroupProps) {
   return <SelectPrimitive.Group data-slot="select-group" {...props} />;
 }
 
-interface SelectGroupLabelProps extends React.ComponentProps<
+type SelectGroupLabelProps = {} & React.ComponentProps<
   typeof SelectPrimitive.GroupLabel
-> {}
+>;
 
 function SelectGroupLabel({ className, ...props }: SelectGroupLabelProps) {
   return (
@@ -665,9 +649,9 @@ function SelectScrollDownArrow(
   );
 }
 
-interface SelectSeparatorProps extends React.ComponentProps<
+type SelectSeparatorProps = {} & React.ComponentProps<
   typeof SelectPrimitive.Separator
-> {}
+>;
 
 function SelectSeparator({ className, ...props }: SelectSeparatorProps) {
   return (

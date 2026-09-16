@@ -1,6 +1,6 @@
 "use client";
 
-import type { SVGProps } from "react";
+import { type SVGProps } from "react";
 
 import { Badge } from "@/registry/base/badge";
 import {

@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import type { HTMLAttributes } from "react";
+import { type HTMLAttributes } from "react";
 
 type SkeletonProps = {
   rounded?: "none" | "sm" | "md" | "lg" | "full";

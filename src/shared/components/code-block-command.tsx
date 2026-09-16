@@ -11,9 +11,9 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/shared/components/ui/tabs";
-import type { PackageManager } from "@/shared/hooks/use-package-manager";
+import { type PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
-import type { Event } from "@/shared/lib/events";
+import { type Event } from "@/shared/lib/events";
 import { highlightCode } from "@/shared/lib/highlight-code";
 
 export const CodeBlockCommand = ({
@@ -36,15 +36,14 @@ export const CodeBlockCommand = ({
     Partial<Record<PackageManager, string>>
   >({});
 
-  const commandTabs = useMemo(
-    () => ({
+  const commandTabs = useMemo(() => {
+    return {
       bun: __bun__,
       npm: __npm__,
       pnpm: __pnpm__,
       yarn: __yarn__,
-    }),
-    [__npm__, __pnpm__, __yarn__, __bun__]
-  );
+    };
+  }, [__npm__, __pnpm__, __yarn__, __bun__]);
 
   const handlePackageManagerChange = useCallback(
     (value: string) => setPackageManager(value as PackageManager),
@@ -98,7 +97,7 @@ export const CodeBlockCommand = ({
   }, [commandEntries]);
 
   const copyValue = useMemo(
-    () => commandTabs[packageManager] || "",
+    () => commandTabs[packageManager] ?? "",
     [commandTabs, packageManager]
   );
 

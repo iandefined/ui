@@ -3,7 +3,7 @@
 import { Autocomplete } from "@base-ui/react/autocomplete";
 import { cn } from "cn";
 import { SearchIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import {
   Dialog,
@@ -58,7 +58,15 @@ const getItemText = (item: unknown) => {
     return String(value.label ?? value.value ?? "");
   }
 
-  return String(item ?? "");
+  if (
+    typeof item === "number" ||
+    typeof item === "boolean" ||
+    typeof item === "bigint"
+  ) {
+    return String(item);
+  }
+
+  return "";
 };
 
 const getItemKeywords = (item: unknown) => {

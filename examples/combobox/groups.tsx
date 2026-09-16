@@ -245,10 +245,12 @@ const familyOrder: ColorFamily[] = [
   "Teal",
 ];
 
-const groupedColors: ColorGroup[] = familyOrder.map((value) => ({
-  items: colorsData.filter((color) => color.family === value),
-  value,
-}));
+const groupedColors: ColorGroup[] = familyOrder.map((value) => {
+  return {
+    items: colorsData.filter((color) => color.family === value),
+    value,
+  };
+});
 
 export default function ComboboxGroupsDemo() {
   const [selectedColor, setSelectedColor] = useState<ColorShade | null>(null);

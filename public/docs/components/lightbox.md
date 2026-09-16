@@ -457,15 +457,12 @@ import { useState } from "react";
 import { Button } from "@/registry/base/button";
 import {
   Lightbox,
-  LightboxCaptions,
   LightboxContent,
-  LightboxCounter,
   LightboxDownload,
   LightboxMore,
   LightboxNext,
   LightboxPrevious,
   LightboxSlides,
-  LightboxThumbnails,
   LightboxToolbar,
   LightboxTrigger,
   LightboxZoomButton,

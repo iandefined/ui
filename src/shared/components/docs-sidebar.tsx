@@ -1,6 +1,6 @@
 "use client";
 
-import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
+import { type Root as PageTreeRoot } from "fumadocs-core/page-tree";
 
 import { Link } from "@/shared/components/link";
 import {

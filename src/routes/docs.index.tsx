@@ -9,7 +9,6 @@ import {
 
 export const Route = createFileRoute("/docs/")({
   component: DocsIndexRoute,
-  head: () => docsPageHead([]),
   loader: async () => {
     if (!docsPageExists([])) {
       throw notFound();
@@ -22,6 +21,7 @@ export const Route = createFileRoute("/docs/")({
 
     return data;
   },
+  head: () => docsPageHead([]),
 });
 
 function DocsIndexRoute() {

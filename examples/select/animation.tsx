@@ -1,5 +1,5 @@
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import {
   Select,

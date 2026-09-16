@@ -7,9 +7,9 @@ import { tv } from "tailwind-variants";
 
 type NumberFieldSize = "sm" | "default" | "lg";
 
-interface NumberFieldContextValue {
+type NumberFieldContextValue = {
   size: NumberFieldSize;
-}
+};
 
 const NumberFieldContext = React.createContext<NumberFieldContextValue>({
   size: "default",
@@ -57,12 +57,9 @@ const numberFieldButtonVariants = tv({
   },
 });
 
-export interface NumberFieldProps extends Omit<
-  React.ComponentProps<typeof NumberFieldPrimitive.Root>,
-  "size"
-> {
+export type NumberFieldProps = {
   size?: NumberFieldSize | number;
-}
+} & Omit<React.ComponentProps<typeof NumberFieldPrimitive.Root>, "size">;
 
 const NumberField = ({
   className,
@@ -87,12 +84,9 @@ const NumberField = ({
   );
 };
 
-export interface NumberFieldGroupProps extends Omit<
-  React.ComponentProps<typeof NumberFieldPrimitive.Group>,
-  "size"
-> {
+export type NumberFieldGroupProps = {
   size?: NumberFieldSize | number;
-}
+} & Omit<React.ComponentProps<typeof NumberFieldPrimitive.Group>, "size">;
 
 const NumberFieldGroup = ({
   className,
@@ -119,12 +113,9 @@ const NumberFieldGroup = ({
   );
 };
 
-export interface NumberFieldInputProps extends Omit<
-  React.ComponentProps<typeof NumberFieldPrimitive.Input>,
-  "size"
-> {
+export type NumberFieldInputProps = {
   size?: NumberFieldSize | number;
-}
+} & Omit<React.ComponentProps<typeof NumberFieldPrimitive.Input>, "size">;
 
 const NumberFieldInput = ({
   className,
@@ -149,12 +140,9 @@ const NumberFieldInput = ({
   );
 };
 
-export interface NumberFieldButtonProps extends Omit<
-  React.ComponentProps<typeof NumberFieldPrimitive.Decrement>,
-  "size"
-> {
+export type NumberFieldButtonProps = {
   size?: NumberFieldSize | number;
-}
+} & Omit<React.ComponentProps<typeof NumberFieldPrimitive.Decrement>, "size">;
 
 const NumberFieldDecrement = ({
   className,

@@ -87,21 +87,19 @@ const checkboxIndicatorStyles = tv({
   },
 });
 
-interface CheckboxRootProps extends React.ComponentProps<
-  typeof CheckboxPrimitive.Root
-> {
+type CheckboxRootProps = {
   reduceMotion?: boolean;
   radius?: "none" | "sm" | "default" | "lg" | "full";
   size?: "sm" | "default" | "lg";
-}
+} & React.ComponentProps<typeof CheckboxPrimitive.Root>;
 
-interface CheckboxContextType {
+type CheckboxContextType = {
   checked: boolean;
   onCheckedChange: CheckboxRootProps["onCheckedChange"];
   indeterminate: boolean | undefined;
   size: NonNullable<CheckboxRootProps["size"]>;
   reduceMotion?: boolean;
-}
+};
 
 const CheckboxContext = createContext<CheckboxContextType | undefined>(
   undefined
@@ -179,11 +177,11 @@ function CheckboxRoot({
   );
 }
 
-interface CheckboxIconProps extends React.ComponentProps<"svg"> {
+type CheckboxIconProps = {
   checked: boolean;
   indeterminate: boolean | undefined;
   reduceMotion?: boolean;
-}
+} & React.ComponentProps<"svg">;
 
 function CheckboxIcon(props: CheckboxIconProps) {
   const { checked, indeterminate, reduceMotion, ...rest } = props;
@@ -230,11 +228,9 @@ function CheckboxIcon(props: CheckboxIconProps) {
   );
 }
 
-interface CheckboxIndicatorProps extends React.ComponentProps<
-  typeof CheckboxPrimitive.Indicator
-> {
+type CheckboxIndicatorProps = {
   icon?: React.ReactNode | ((props: CheckboxIconProps) => React.ReactNode);
-}
+} & React.ComponentProps<typeof CheckboxPrimitive.Indicator>;
 
 function CheckboxIndicator({
   className,
@@ -261,13 +257,11 @@ function CheckboxIndicator({
   );
 }
 
-interface CheckboxProps extends React.ComponentProps<
-  typeof CheckboxPrimitive.Root
-> {
+type CheckboxProps = {
   reduceMotion?: boolean;
   radius?: "none" | "sm" | "default" | "lg" | "full";
   size?: "sm" | "default" | "lg";
-}
+} & React.ComponentProps<typeof CheckboxPrimitive.Root>;
 
 function Checkbox({
   className,

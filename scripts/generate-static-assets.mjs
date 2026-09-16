@@ -547,7 +547,7 @@ const readDocs = async (dir = docsDir) => {
       description: data.description ?? "",
       slugs,
       title: data.title ?? slugs.at(-1) ?? "Docs",
-      url: `${ROUTES.DOCS}${slugs.length ? `/${slugs.join("/")}` : ""}`,
+      url: `${ROUTES.DOCS}${slugs.length > 0 ? `/${slugs.join("/")}` : ""}`,
     });
   }
 
@@ -621,11 +621,11 @@ const documentationIndex = (pages) => {
   );
 
   const hookPages = pages.filter(
-    (page) => page.slugs.length >= 1 && page.slugs[0] === "hooks"
+    (page) => page.slugs.length > 0 && page.slugs[0] === "hooks"
   );
 
   const utilityPages = pages.filter(
-    (page) => page.slugs.length >= 1 && page.slugs[0] === "utilities"
+    (page) => page.slugs.length > 0 && page.slugs[0] === "utilities"
   );
 
   const sections = [
@@ -735,10 +735,12 @@ const sitemapXml = (pages) => {
   const now = new Date().toISOString();
   const urls = [
     { priority: "1.0", url: siteUrl },
-    ...pages.map((page) => ({
-      priority: page.url === ROUTES.DOCS ? "0.9" : "0.8",
-      url: `${siteUrl}${page.url}`,
-    })),
+    ...pages.map((page) => {
+      return {
+        priority: page.url === ROUTES.DOCS ? "0.9" : "0.8",
+        url: `${siteUrl}${page.url}`,
+      };
+    }),
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -767,68 +769,74 @@ const robotsTxt = () =>
     "",
   ].join("\n");
 
-const manifest = () => ({
-  background_color: META_THEME_COLORS.light,
-  description: SITE.DESCRIPTION.LONG,
-  display: "standalone",
-  icons: [
-    {
-      sizes: "192x192",
-      src: "/web-app-manifest-192x192.png",
-      type: "image/png",
-    },
-    {
-      sizes: "512x512",
-      src: "/web-app-manifest-512x512.png",
-      type: "image/png",
-    },
-  ],
-  name: SITE.NAME,
-  short_name: SITE.NAME,
-  start_url: ROUTES.HOME,
-  theme_color: META_THEME_COLORS.light,
-});
+const manifest = () => {
+  return {
+    background_color: META_THEME_COLORS.light,
+    description: SITE.DESCRIPTION.LONG,
+    display: "standalone",
+    icons: [
+      {
+        sizes: "192x192",
+        src: "/web-app-manifest-192x192.png",
+        type: "image/png",
+      },
+      {
+        sizes: "512x512",
+        src: "/web-app-manifest-512x512.png",
+        type: "image/png",
+      },
+    ],
+    name: SITE.NAME,
+    short_name: SITE.NAME,
+    start_url: ROUTES.HOME,
+    theme_color: META_THEME_COLORS.light,
+  };
+};
 
-const apiCatalog = () => ({
-  linkset: [
-    {
-      anchor: siteUrl,
-      describedby: [
-        {
-          href: `${siteUrl}${ROUTES.AGENT_SKILLS_INDEX}`,
-          type: "application/json",
-        },
-      ],
-      "service-desc": [
-        {
-          href: `${siteUrl}${ROUTES.OPENAPI}`,
-          type: "application/openapi+json",
-        },
-      ],
-      "service-doc": [
-        { href: `${siteUrl}${ROUTES.DOCS}`, type: "text/html" },
-        {
-          href: LINK.SHADCN_MCP_DOCS,
-          title: "shadcn MCP server",
-          type: "text/html",
-        },
-      ],
-    },
-  ],
-});
+const apiCatalog = () => {
+  return {
+    linkset: [
+      {
+        anchor: siteUrl,
+        describedby: [
+          {
+            href: `${siteUrl}${ROUTES.AGENT_SKILLS_INDEX}`,
+            type: "application/json",
+          },
+        ],
+        "service-desc": [
+          {
+            href: `${siteUrl}${ROUTES.OPENAPI}`,
+            type: "application/openapi+json",
+          },
+        ],
+        "service-doc": [
+          { href: `${siteUrl}${ROUTES.DOCS}`, type: "text/html" },
+          {
+            href: LINK.SHADCN_MCP_DOCS,
+            title: "shadcn MCP server",
+            type: "text/html",
+          },
+        ],
+      },
+    ],
+  };
+};
 
-const agentSkillsIndex = () => ({
-  skills: [
-    {
-      description:
-        "Discover, inspect, and install components from this public shadcn registry starter.",
-      digest: siteAgentSkillDigest(),
-      href: `${siteUrl}${ROUTES.AGENT_SKILLS_SITE_SKILL}`,
-      mediaType: "text/markdown",
-      name: SITE.NAME,
-    },
-  ],
-});
+const agentSkillsIndex = () => {
+  return {
+    skills: [
+      {
+        description:
+          "Discover, inspect, and install components from this public shadcn registry starter.",
+        digest: siteAgentSkillDigest(),
+        href: `${siteUrl}${ROUTES.AGENT_SKILLS_SITE_SKILL}`,
+        mediaType: "text/markdown",
+        name: SITE.NAME,
+      },
+    ],
+  };
+};
 
 const redirects = () =>
   [
@@ -941,7 +949,7 @@ await writePublic(`${ROUTES.LLMS_MD}/content.md`, homepageMarkdown());
 for (const page of pages) {
   const body = markdownForPage(page);
   const markdownRoute = `${ROUTES.LLMS_MD}${ROUTES.DOCS}${
-    page.slugs.length ? `/${page.slugs.join("/")}` : ""
+    page.slugs.length > 0 ? `/${page.slugs.join("/")}` : ""
   }/content.md`;
 
   await writePublic(markdownRoute, body);

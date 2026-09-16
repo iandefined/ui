@@ -6,6 +6,11 @@ type AssetFetcher = {
   fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
+type LlmHandlerContext = {
+  request: Request;
+  env?: { ASSETS?: AssetFetcher };
+};
+
 const textResponse = () =>
   new Response(llmsText, {
     headers: {
@@ -17,13 +22,8 @@ export const Route = createFileRoute("/llms.txt")({
   preload: false,
   server: {
     handlers: {
-      GET: async (context: {
-        request: Request;
-        env?: { ASSETS?: AssetFetcher };
-      }) => {
-        const assets = (
-          context as typeof context & { env?: { ASSETS?: AssetFetcher } }
-        ).env?.ASSETS;
+      GET: async (context: { request: Request }) => {
+        const assets = (context as LlmHandlerContext).env?.ASSETS;
 
         if (!assets) {
           return textResponse();
@@ -39,4 +39,4 @@ export const Route = createFileRoute("/llms.txt")({
       },
     },
   },
-} as any);
+});

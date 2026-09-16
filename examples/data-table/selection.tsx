@@ -9,11 +9,11 @@ import {
   DataTablePagination,
 } from "@/registry/base/data-table";
 
-interface Employee {
+type Employee = {
   id: string;
   name: string;
   role: string;
-}
+};
 
 const data: Employee[] = [
   { id: "EMP-01", name: "Alexander Wright", role: "Software Architect" },

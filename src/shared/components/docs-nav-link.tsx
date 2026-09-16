@@ -4,9 +4,9 @@ import { cn } from "cn";
 import { useCallback, useRef } from "react";
 
 import { Kbd } from "@/registry/base/kbd";
-import type { ArrowLeftIconHandle } from "@/shared/components/animated-icons/arrow-left";
+import { type ArrowLeftIconHandle } from "@/shared/components/animated-icons/arrow-left";
 import { ArrowLeftIcon } from "@/shared/components/animated-icons/arrow-left";
-import type { ArrowRightIconHandle } from "@/shared/components/animated-icons/arrow-right";
+import { type ArrowRightIconHandle } from "@/shared/components/animated-icons/arrow-right";
 import { ArrowRightIcon } from "@/shared/components/animated-icons/arrow-right";
 import { Link } from "@/shared/components/link";
 import { Button, type ButtonProps } from "@/shared/components/ui/button";

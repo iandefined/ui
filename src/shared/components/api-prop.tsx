@@ -3,7 +3,7 @@
 import { cn } from "cn";
 import { ChevronRightIcon } from "lucide-react";
 import * as React from "react";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { Collapsible, CollapsibleContent } from "@/registry/base/collapsible";
 import {

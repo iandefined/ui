@@ -485,7 +485,7 @@ Open application state from an item's `onClick` handler.
 Choose an `animationPreset` on `DropdownMenuContent`. This gallery uses each preset's exact prop value as its trigger label.
 
 ```tsx
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import { Button } from "@/registry/base/button";
 import {

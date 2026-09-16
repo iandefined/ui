@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import { Button } from "@/registry/base/button";
 import {

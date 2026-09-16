@@ -84,12 +84,14 @@ export const BreadcrumbJsonLd = ({
     data={{
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      itemListElement: items.map((item, index) => ({
-        "@type": "ListItem",
-        item: `${SITE.URL}${item.path.startsWith(ROUTES.HOME) ? item.path : `${ROUTES.HOME}${item.path}`}`,
-        name: item.name,
-        position: index + 1,
-      })),
+      itemListElement: items.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          item: `${SITE.URL}${item.path.startsWith(ROUTES.HOME) ? item.path : `${ROUTES.HOME}${item.path}`}`,
+          name: item.name,
+          position: index + 1,
+        };
+      }),
     }}
   />
 );

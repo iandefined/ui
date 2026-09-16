@@ -15,12 +15,9 @@ import {
   type DatePickerRootDateProps,
 } from "@/lib/date";
 
-interface CalendarProps extends Omit<
-  DatePickerRootDateProps,
-  "inline" | "closeOnSelect"
-> {
+type CalendarProps = {
   size?: "sm" | "default" | "lg";
-}
+} & Omit<DatePickerRootDateProps, "inline" | "closeOnSelect">;
 
 function Calendar({
   children,
@@ -57,7 +54,7 @@ function Calendar({
   );
 }
 
-interface CalendarContentProps extends ComponentProps<"div"> {}
+type CalendarContentProps = {} & ComponentProps<"div">;
 
 function CalendarContent({
   className,

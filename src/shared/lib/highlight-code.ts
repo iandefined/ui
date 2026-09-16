@@ -1,5 +1,9 @@
 import { LRUCache } from "lru-cache";
-import type { BundledLanguage, Highlighter, ShikiTransformer } from "shiki";
+import {
+  type BundledLanguage,
+  type Highlighter,
+  type ShikiTransformer,
+} from "shiki";
 import { createHighlighter } from "shiki";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 

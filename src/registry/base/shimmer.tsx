@@ -100,8 +100,8 @@ function Shimmer({
   children,
   ...props
 }: ShimmerProps): React.ReactElement {
-  const isReverse = reverse || direction === "reverse";
-  const isOnce = once || repeat === "once";
+  const isReverse = reverse === true || direction === "reverse";
+  const isOnce = once === true || repeat === "once";
   const resolvedDuration =
     typeof duration === "number" ? `${duration}ms` : duration;
   const resolvedAngle = typeof angle === "number" ? `${angle}deg` : angle;

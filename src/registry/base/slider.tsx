@@ -43,15 +43,7 @@ const invalidShakeStyles = `
 type SliderValueType = number | [number, number];
 type SliderVariant = NonNullable<SliderProps["variant"]>;
 
-interface SliderProps extends Omit<
-  SliderPrimitive.Root.Props<SliderValueType>,
-  | "children"
-  | "defaultValue"
-  | "onValueChange"
-  | "onValueCommitted"
-  | "thumbAlignment"
-  | "value"
-> {
+type SliderProps = {
   value?: SliderValueType;
   defaultValue?: SliderValueType;
   onValueChange?: (value: SliderValueType) => void;
@@ -63,9 +55,17 @@ interface SliderProps extends Omit<
   showSteps?: boolean;
   reduceMotion?: boolean;
   getAriaLabel?: (index: number) => string;
-}
+} & Omit<
+  SliderPrimitive.Root.Props<SliderValueType>,
+  | "children"
+  | "defaultValue"
+  | "onValueChange"
+  | "onValueCommitted"
+  | "thumbAlignment"
+  | "value"
+>;
 
-interface SliderContextValue {
+type SliderContextValue = {
   disabled: boolean;
   formatValue: (value: number) => string;
   getAriaLabel?: (index: number) => string;
@@ -79,29 +79,23 @@ interface SliderContextValue {
   step: number;
   value: SliderValueType;
   variant: SliderVariant;
-}
+};
 
-interface SliderControlProps extends Omit<
-  SliderPrimitive.Control.Props,
-  "children"
-> {
+type SliderControlProps = {
   children?: React.ReactNode;
-}
+} & Omit<SliderPrimitive.Control.Props, "children">;
 
-interface SliderContentProps extends React.ComponentProps<"div"> {}
+type SliderContentProps = {} & React.ComponentProps<"div">;
 
-interface SliderLabelProps extends SliderPrimitive.Label.Props {}
+type SliderLabelProps = {} & SliderPrimitive.Label.Props;
 
-interface SliderValueProps extends Omit<
-  SliderPrimitive.Value.Props,
-  "children"
-> {
+type SliderValueProps = {
   children?: (
     formattedValues: readonly string[],
     values: readonly number[]
   ) => React.ReactNode;
   editable?: boolean;
-}
+} & Omit<SliderPrimitive.Value.Props, "children">;
 
 const SliderContext = React.createContext<SliderContextValue | null>(null);
 
@@ -119,15 +113,15 @@ type SliderControlPointerEvent = Parameters<
   NonNullable<SliderPrimitive.Control.Props["onPointerDown"]>
 >[0];
 
-interface HoverPreview {
+type HoverPreview = {
   percent: number;
   value: number;
-}
+};
 
-interface TrackPosition {
+type TrackPosition = {
   offset: number;
   percent: number;
-}
+};
 
 const COMPACT_INSET = 10;
 const COMPACT_RAIL_INSET = 0;
@@ -580,7 +574,7 @@ function CompactSliderControl({
   const previewSegment = preview
     ? getPreviewSegment(preview.percent, values, min, max)
     : null;
-  const sortedValues = [...values].sort((first, second) => first - second);
+  const sortedValues = values.toSorted((first, second) => first - second);
   const fillStartValue = sortedValues[0] ?? min;
   const fillEndValue = sortedValues.at(-1) ?? min;
   const compactFillStyle = getTrackSegmentStyle(

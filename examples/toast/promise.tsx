@@ -21,14 +21,19 @@ function startSave(shouldFail: boolean) {
       title: "Saving changes",
       description: "Please wait while the project is saved.",
     },
-    success: (result) => ({
-      title: "Changes saved",
-      description: `${result.name} was saved successfully.`,
-    }),
-    error: (error) => ({
-      title: "Save failed",
-      description: error instanceof Error ? error.message : "Please try again.",
-    }),
+    success: (result) => {
+      return {
+        title: "Changes saved",
+        description: `${result.name} was saved successfully.`,
+      };
+    },
+    error: (error) => {
+      return {
+        title: "Save failed",
+        description:
+          error instanceof Error ? error.message : "Please try again.",
+      };
+    },
   });
 }
 

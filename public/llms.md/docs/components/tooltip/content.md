@@ -388,7 +388,7 @@ export default function TooltipGroupAnimationDemo() {
 Set `animationPreset` on `TooltipPopup`. The gallery uses each preset's exact prop value as its trigger label. `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 ```tsx
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import { Button } from "@/registry/base/button";
 import {

@@ -601,10 +601,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -766,10 +766,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -867,10 +867,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -958,10 +958,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -1037,16 +1037,16 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   label: string;
   group: "Type" | "Component";
-}
+};
 
-interface TagGroup {
+type TagGroup = {
   value: string;
   items: Tag[];
-}
+};
 
 const tagsData: Tag[] = [
   { id: "t1", label: "feature", group: "Type" },
@@ -1129,12 +1129,14 @@ const tagsData: Tag[] = [
 ];
 
 function groupTags(tags: Tag[]): TagGroup[] {
-  const groups: { [key: string]: Tag[] } = {};
+  const groups: Record<string, Tag[]> = {};
   for (const t of tags) {
     (groups[t.group] ??= []).push(t);
   }
   const order = ["Type", "Component"];
-  return order.map((value) => ({ value, items: groups[value] ?? [] }));
+  return order.map((value) => {
+    return { value, items: groups[value] ?? [] };
+  });
 }
 
 const groupedTags: TagGroup[] = groupTags(tagsData);
@@ -1189,10 +1191,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -1289,10 +1291,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },
@@ -1427,11 +1429,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { Spinner } from "@/registry/base/spinner";
 
-interface Movie {
+type Movie = {
   id: string;
   title: string;
   year: number;
-}
+};
 
 const top30Movies: Movie[] = [
   { id: "1", title: "The Shawshank Redemption", year: 1994 },
@@ -1614,11 +1616,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 
-interface Documentation {
+type Documentation = {
   title: string;
   description: string;
   category: string;
-}
+};
 
 const documentationItems: Documentation[] = [
   {
@@ -1805,11 +1807,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 
-interface Framework {
+type Framework = {
   id: string;
   name: string;
   category: string;
-}
+};
 
 const frameworks: Framework[] = [
   { id: "react", name: "React", category: "Frontend" },
@@ -1832,9 +1834,8 @@ export default function AutocompleteUseFilterDemo() {
   const [strategy, setStrategy] = useState<MatchStrategy>("startsWith");
   const filter = useAutocompleteFilter({ sensitivity: "base" });
 
-  const activeFilter = (item: Framework, query: string) => {
-    return filter[strategy](item.name, query);
-  };
+  const activeFilter = (item: Framework, query: string) =>
+    filter[strategy](item.name, query);
 
   return (
     <div className="flex w-full max-w-xs flex-col gap-4">
@@ -2032,12 +2033,12 @@ import {
 import { Kbd } from "@/registry/base/kbd";
 import { Label } from "@/registry/base/label";
 
-interface Command {
+type Command = {
   id: string;
   name: string;
   shortcut?: string;
   section: string;
-}
+};
 
 const commands: Command[] = [
   { id: "c1", name: "Create new file", shortcut: "Ctrl+N", section: "File" },
@@ -4021,10 +4022,10 @@ import {
   SelectValue,
 } from "@/registry/base/select";
 
-interface Currency {
+type Currency = {
   value: string;
   label: string;
-}
+};
 
 const currencies: Currency[] = [
   {
@@ -4799,7 +4800,7 @@ Use `CollapsibleTrigger` as a full-width interactive card trigger with a rotatin
 ```tsx
 "use client";
 
-import type { SVGProps } from "react";
+import { type SVGProps } from "react";
 
 import { Badge } from "@/registry/base/badge";
 import {
@@ -5753,10 +5754,12 @@ const familyOrder: ColorFamily[] = [
   "Teal",
 ];
 
-const groupedColors: ColorGroup[] = familyOrder.map((value) => ({
-  items: colorsData.filter((color) => color.family === value),
-  value,
-}));
+const groupedColors: ColorGroup[] = familyOrder.map((value) => {
+  return {
+    items: colorsData.filter((color) => color.family === value),
+    value,
+  };
+});
 
 export default function ComboboxGroupsDemo() {
   const [selectedColor, setSelectedColor] = useState<ColorShade | null>(null);
@@ -5993,12 +5996,12 @@ import {
   DataTableToolbar,
 } from "@/registry/base/data-table";
 
-interface Payment {
+type Payment = {
   id: string;
   amount: number;
   status: "pending" | "processing" | "success" | "failed";
   email: string;
-}
+};
 
 const data: Payment[] = [
   { id: "m5gr84i9", amount: 316, status: "success", email: "ken99@yahoo.com" },
@@ -6194,11 +6197,11 @@ import {
   DataTableHeader,
 } from "@/registry/base/data-table";
 
-interface User {
+type User = {
   name: string;
   department: string;
   score: number;
-}
+};
 
 const data: User[] = [
   { name: "Sophia Martinez", department: "Engineering", score: 94 },
@@ -6257,11 +6260,11 @@ import {
   DataTablePagination,
 } from "@/registry/base/data-table";
 
-interface Employee {
+type Employee = {
   id: string;
   name: string;
   role: string;
-}
+};
 
 const data: Employee[] = [
   { id: "EMP-01", name: "Alexander Wright", role: "Software Architect" },
@@ -6337,12 +6340,12 @@ import {
   PaginationPrevious,
 } from "@/registry/base/pagination";
 
-interface Project {
+type Project = {
   code: string;
   name: string;
   budget: string;
   status: string;
-}
+};
 
 const data: Project[] = [
   {
@@ -6514,12 +6517,12 @@ import {
   DataTableHeader,
 } from "@/registry/base/data-table";
 
-interface Project {
+type Project = {
   title: string;
   lead: string;
   category: string;
   budget: string;
-}
+};
 
 const data: Project[] = [
   {
@@ -8199,10 +8202,12 @@ const footerVariants = [
   { scroll: "outside", variant: "inset" },
 ] as const;
 
-const cards = Array.from({ length: 12 }, (_, index) => ({
-  description: `Scrollable dialog content item ${index + 1}.`,
-  title: `Card ${index + 1}`,
-}));
+const cards = Array.from({ length: 12 }, (_, index) => {
+  return {
+    description: `Scrollable dialog content item ${index + 1}.`,
+    title: `Card ${index + 1}`,
+  };
+});
 
 function capitalize(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -9027,10 +9032,12 @@ const footerVariants: Array<{
   { position: "right", sticky: true },
 ];
 
-const cards = Array.from({ length: 12 }, (_, index) => ({
-  description: `Scrollable drawer content item ${index + 1}.`,
-  title: `Card ${index + 1}`,
-}));
+const cards = Array.from({ length: 12 }, (_, index) => {
+  return {
+    description: `Scrollable drawer content item ${index + 1}.`,
+    title: `Card ${index + 1}`,
+  };
+});
 
 export default function DrawerFooterPositionsDemo() {
   return (
@@ -10549,7 +10556,7 @@ Open application state from an item's `onClick` handler.
 Choose an `animationPreset` on `DropdownMenuContent`. This gallery uses each preset's exact prop value as its trigger label.
 
 ```tsx
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import { Button } from "@/registry/base/button";
 import {
@@ -14311,15 +14318,12 @@ import { useState } from "react";
 import { Button } from "@/registry/base/button";
 import {
   Lightbox,
-  LightboxCaptions,
   LightboxContent,
-  LightboxCounter,
   LightboxDownload,
   LightboxMore,
   LightboxNext,
   LightboxPrevious,
   LightboxSlides,
-  LightboxThumbnails,
   LightboxToolbar,
   LightboxTrigger,
   LightboxZoomButton,
@@ -17278,12 +17282,12 @@ import {
   SelectValue,
 } from "@/registry/base/select";
 
-interface ShippingMethod {
+type ShippingMethod = {
   id: string;
   name: string;
   duration: string;
   price: string;
-}
+};
 
 const shippingMethods: ShippingMethod[] = [
   {
@@ -17766,7 +17770,7 @@ Set `animationPreset` on `SelectPopup`. This gallery uses each preset's exact pr
 
 ```tsx
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import {
   Select,
@@ -18295,10 +18299,12 @@ const footerVariants: Array<{
   { side: "right", footerVariant: "inset" },
 ];
 
-const cards = Array.from({ length: 12 }, (_, index) => ({
-  description: `Scrollable sheet content item ${index + 1}.`,
-  title: `Card ${index + 1}`,
-}));
+const cards = Array.from({ length: 12 }, (_, index) => {
+  return {
+    description: `Scrollable sheet content item ${index + 1}.`,
+    title: `Card ${index + 1}`,
+  };
+});
 
 function capitalize(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -18451,10 +18457,12 @@ const footerVariants: Array<{
   { side: "right", footerVariant: "inset" },
 ];
 
-const cards = Array.from({ length: 12 }, (_, index) => ({
-  description: `Scrollable floating sheet content item ${index + 1}.`,
-  title: `Card ${index + 1}`,
-}));
+const cards = Array.from({ length: 12 }, (_, index) => {
+  return {
+    description: `Scrollable floating sheet content item ${index + 1}.`,
+    title: `Card ${index + 1}`,
+  };
+});
 
 function capitalize(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -20484,7 +20492,7 @@ import {
   TableRow,
 } from "@/registry/base/table";
 
-interface Order {
+type Order = {
   id: string;
   customer: string;
   status: "Delivered" | "Shipped" | "Processing";
@@ -20492,7 +20500,7 @@ interface Order {
   date: string;
   tracking: string;
   items: string[];
-}
+};
 
 const orders: Order[] = [
   {
@@ -20956,7 +20964,7 @@ import {
 ### Segmented
 
 ```tsx
-import type { SVGProps } from "react";
+import { type SVGProps } from "react";
 
 import { Tabs, TabsList, TabsTrigger } from "@/registry/base/tabs";
 
@@ -21916,14 +21924,19 @@ function startSave(shouldFail: boolean) {
       title: "Saving changes",
       description: "Please wait while the project is saved.",
     },
-    success: (result) => ({
-      title: "Changes saved",
-      description: `${result.name} was saved successfully.`,
-    }),
-    error: (error) => ({
-      title: "Save failed",
-      description: error instanceof Error ? error.message : "Please try again.",
-    }),
+    success: (result) => {
+      return {
+        title: "Changes saved",
+        description: `${result.name} was saved successfully.`,
+      };
+    },
+    error: (error) => {
+      return {
+        title: "Save failed",
+        description:
+          error instanceof Error ? error.message : "Please try again.",
+      };
+    },
   });
 }
 
@@ -22527,7 +22540,7 @@ export default function TooltipGroupAnimationDemo() {
 Set `animationPreset` on `TooltipPopup`. The gallery uses each preset's exact prop value as its trigger label. `scale` is the default. Use `transitionPreset` to select the timing curve, or `reduceMotion` to disable animation. This preview uses one shared tooltip root, so it also animates as you move between presets.
 
 ```tsx
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 import { Button } from "@/registry/base/button";
 import {
@@ -24250,13 +24263,13 @@ import { Badge, type BadgeColor } from "@/registry/base/badge";
 import { Input } from "@/registry/base/input";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 
-interface Item {
+type Item = {
   id: string;
   name: string;
   category: string;
   color: BadgeColor;
   description: string;
-}
+};
 
 const items: Item[] = [
   {
@@ -25423,13 +25436,14 @@ export default function IconSwapDefaultDemo() {
   const [copied, setCopied] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (resetTimerRef.current !== null) {
         window.clearTimeout(resetTimerRef.current);
       }
-    };
-  }, []);
+    },
+    []
+  );
 
   const handleCopy = () => {
     setCopied(true);

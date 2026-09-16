@@ -1,6 +1,6 @@
 import { cn } from "cn";
 import { Children, createElement, isValidElement } from "react";
-import type { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode } from "react";
 
 import { ComponentPreviewTabs } from "@/shared/components/component-preview-tabs";
 import { ComponentSource } from "@/shared/components/component-source";

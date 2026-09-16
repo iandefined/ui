@@ -33,9 +33,9 @@ const invalidShakeStyles = `
   }
 `;
 
-export interface TextareaProps extends React.ComponentProps<"textarea"> {
+export type TextareaProps = {
   size?: "sm" | "default" | "lg" | number;
-}
+} & React.ComponentProps<"textarea">;
 
 function Textarea({ className, size = "default", ...props }: TextareaProps) {
   return (

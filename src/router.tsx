@@ -1,4 +1,4 @@
-import type { ErrorRouteComponent } from "@tanstack/react-router";
+import { type ErrorRouteComponent } from "@tanstack/react-router";
 import { createRouter, useLocation } from "@tanstack/react-router";
 
 import { AppLayout } from "@/app-layout";

@@ -1,6 +1,6 @@
 import { Link } from "@/shared/components/link";
 import { isComponentsFolder } from "@/shared/lib/docs";
-import type { PageTreeFolder, PageTreePage } from "@/shared/lib/page-tree";
+import { type PageTreeFolder, type PageTreePage } from "@/shared/lib/page-tree";
 import {
   getAllPagesFromFolder,
   getPagesFromFolder,
@@ -16,11 +16,16 @@ const getFolder = (name: string): PageTreeFolder | undefined => {
   }
 };
 
-const getPageTitle = (page: PageTreePage): string =>
-  typeof page.name === "string" ? page.name : String(page.name ?? "");
+const getPageTitle = (page: PageTreePage): string => {
+  if (typeof page.name === "string") {
+    return page.name;
+  }
+
+  return typeof page.name === "number" ? String(page.name) : "";
+};
 
 const sortPagesAlphabetically = (pages: PageTreePage[]): PageTreePage[] =>
-  [...pages].sort((a, b) => getPageTitle(a).localeCompare(getPageTitle(b)));
+  pages.toSorted((a, b) => getPageTitle(a).localeCompare(getPageTitle(b)));
 
 const ComponentGrid = ({ pages }: { pages: PageTreePage[] }) => {
   const sortedPages = sortPagesAlphabetically(pages);

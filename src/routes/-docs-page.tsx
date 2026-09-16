@@ -151,10 +151,12 @@ export const loadDocsPage = async (slugs: string[]) => {
       description: frontmatter.description ?? page.data.description,
       links: frontmatter.links,
       title,
-      toc: content.toc.map((item) => ({
-        ...item,
-        title: serializeReactNode(item.title, navLabelFromUrl(item.url)),
-      })),
+      toc: content.toc.map((item) => {
+        return {
+          ...item,
+          title: serializeReactNode(item.title, navLabelFromUrl(item.url)),
+        };
+      }),
     },
     markdownUrl: getPageMarkdownUrl(page).url,
     neighbours: {

@@ -19,11 +19,11 @@ const PositionerContext = createContext<boolean>(false);
 
 import { ChevronsUpDownIcon, X } from "lucide-react";
 
-interface AutocompleteInputProps extends BaseAutocomplete.Input.Props {
+type AutocompleteInputProps = {
   isClearable?: boolean;
   showClear?: boolean;
   showTrigger?: boolean;
-}
+} & BaseAutocomplete.Input.Props;
 
 function AutocompleteInput({
   className,
@@ -165,13 +165,11 @@ function AutocompletePositioner({
   );
 }
 
-interface AutocompletePopupProps
-  extends
-    BaseAutocomplete.Popup.Props,
-    Pick<
-      AutocompletePositionerProps,
-      "align" | "alignOffset" | "side" | "sideOffset"
-    > {}
+type AutocompletePopupProps = {} & BaseAutocomplete.Popup.Props &
+  Pick<
+    AutocompletePositionerProps,
+    "align" | "alignOffset" | "side" | "sideOffset"
+  >;
 
 function AutocompletePopup({
   align = "center",
@@ -280,10 +278,10 @@ function AutocompleteEmpty({
   );
 }
 
-interface AutocompleteListProps extends BaseAutocomplete.List.Props {
+type AutocompleteListProps = {
   hideScrollbar?: boolean;
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
-}
+} & BaseAutocomplete.List.Props;
 
 // Note: Select and DatePickerTimer scroll natively without ScrollArea by placing overflow-y-auto directly
 // on an element with an explicit max-h or height. When nesting ScrollArea in a flex popup (like Combobox and

@@ -21,11 +21,11 @@ type SheetOnOpenChange = NonNullable<
   DialogPrimitive.Root.Props["onOpenChange"]
 >;
 
-interface SheetConfigContextValue {
+type SheetConfigContextValue = {
   modal: boolean | "trap-focus";
   side: SheetSide | null;
   overlay: SheetOverlay;
-}
+};
 
 const SheetConfigContext = React.createContext<SheetConfigContextValue>({
   modal: true,
@@ -218,10 +218,10 @@ const sheetContentVariants = cva(
   }
 );
 
-interface SheetProps<Payload> extends DialogPrimitive.Root.Props<Payload> {
+type SheetProps<Payload> = {
   dismissible?: boolean;
   overlay?: SheetOverlay;
-}
+} & DialogPrimitive.Root.Props<Payload>;
 
 function Sheet<Payload>({
   dismissible = true,
@@ -245,10 +245,9 @@ function Sheet<Payload>({
     [dismissible, onOpenChange]
   );
 
-  const configValue = React.useMemo(
-    () => ({ modal, side: parentConfig.side, overlay }),
-    [modal, overlay, parentConfig.side]
-  );
+  const configValue = React.useMemo(() => {
+    return { modal, side: parentConfig.side, overlay };
+  }, [modal, overlay, parentConfig.side]);
 
   return (
     <SheetConfigContext.Provider value={configValue}>
@@ -320,14 +319,14 @@ function SheetViewport({
   );
 }
 
-interface SheetContentProps extends DialogPrimitive.Popup.Props {
+type SheetContentProps = {
   side?: SheetSide;
   variant?: SheetVariant;
   footerVariant?: SheetFooterVariant;
   showCloseButton?: boolean;
   level?: SheetSurfaceLevel;
   shadowLevel?: SheetShadowLevel;
-}
+} & DialogPrimitive.Popup.Props;
 
 type SheetContentStyle = DialogPrimitive.Popup.Props["style"];
 type SheetContentStyleObject = React.CSSProperties &
@@ -338,10 +337,12 @@ function mergeSheetContentStyle(
   style: SheetContentStyle
 ): SheetContentStyle {
   if (typeof style === "function") {
-    return (state: DialogPrimitive.Popup.State) => ({
-      ...baseStyle,
-      ...style(state),
-    });
+    return (state: DialogPrimitive.Popup.State) => {
+      return {
+        ...baseStyle,
+        ...style(state),
+      };
+    };
   }
 
   return { ...baseStyle, ...style };
@@ -374,10 +375,9 @@ function SheetContent({
       ? createFloatingShadow(shadowLevel)
       : createDirectionalShadow(side, shadowLevel);
   }, [shadowClass, shadowLevel, side, variant]);
-  const contentConfig = React.useMemo(
-    () => ({ modal, overlay, side }),
-    [modal, overlay, side]
-  );
+  const contentConfig = React.useMemo(() => {
+    return { modal, overlay, side };
+  }, [modal, overlay, side]);
 
   return (
     <SheetPortal>
@@ -460,13 +460,13 @@ function getScrollShadow(fadeEdges: SheetFadeEdges) {
   return "none" as const;
 }
 
-interface SheetBodyProps extends React.ComponentProps<"div"> {
+type SheetBodyProps = {
   nativeScroll?: boolean;
   fadeEdges?: SheetFadeEdges;
   scrollbarGutter?: boolean;
   persistScrollbar?: boolean;
   hideScrollbar?: boolean;
-}
+} & React.ComponentProps<"div">;
 
 function SheetBody({
   className,

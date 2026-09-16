@@ -14,10 +14,10 @@ import {
 } from "@/registry/base/autocomplete";
 import { Label } from "@/registry/base/label";
 
-interface Tag {
+type Tag = {
   id: string;
   value: string;
-}
+};
 
 const tags: Tag[] = [
   { id: "t1", value: "feature" },

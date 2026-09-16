@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import type { IconCatalogItem, IconVariant } from "@/icons/catalog";
+import { type IconCatalogItem, type IconVariant } from "@/icons/catalog";
 import { CATEGORY_LABELS, getIconSvg } from "@/icons/catalog";
 import { Badge, type BadgeColor } from "@/registry/base/badge";
 import { Button } from "@/registry/base/button";
@@ -104,11 +104,11 @@ function toReactSvg(svg: string) {
   );
 }
 
-export interface IconDetailDialogProps {
+export type IconDetailDialogProps = {
   item: IconCatalogItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}
+};
 
 export function IconDetailDialog({
   item,
@@ -117,7 +117,10 @@ export function IconDetailDialog({
 }: IconDetailDialogProps) {
   const search = useSearch({ from: "/icons" });
   const navigate = useNavigate({ from: "/icons" });
-  const [codeHtml, setCodeHtml] = useState<string>("");
+  const [highlightedCode, setHighlightedCode] = useState<{
+    source: string;
+    html: string;
+  } | null>(null);
 
   const availableVariants = item
     ? VARIANTS.filter(({ value }) => item.variants.includes(value))
@@ -135,15 +138,17 @@ export function IconDetailDialog({
 
   const updateDialogSearch = (
     key: "iconVariant" | "size" | "syntax",
-    value: IconVariant | string | number
+    value: string | number
   ) => {
-    navigate({
+    void navigate({
       replace: true,
       resetScroll: false,
-      search: (previous) => ({
-        ...previous,
-        [key]: key === "size" ? Number(value) : value,
-      }),
+      search: (previous) => {
+        return {
+          ...previous,
+          [key]: key === "size" ? Number(value) : value,
+        };
+      },
     });
   };
 
@@ -173,7 +178,6 @@ export function IconDetailDialog({
 
   useEffect(() => {
     if (!code) {
-      setCodeHtml("");
       return;
     }
 
@@ -181,7 +185,7 @@ export function IconDetailDialog({
     void highlightCode(code, codeLanguage, { lineNumbers: true }).then(
       (html) => {
         if (isMounted) {
-          setCodeHtml(html);
+          setHighlightedCode({ source: code, html });
         }
       }
     );
@@ -190,6 +194,8 @@ export function IconDetailDialog({
       isMounted = false;
     };
   }, [code, codeLanguage]);
+
+  const codeHtml = highlightedCode?.source === code ? highlightedCode.html : "";
 
   if (!item) return null;
 
@@ -251,7 +257,9 @@ export function IconDetailDialog({
                 items={SIZES}
                 value={size}
                 onValueChange={(val) => {
-                  if (val) updateDialogSearch("size", String(val));
+                  if (typeof val === "string" || typeof val === "number") {
+                    updateDialogSearch("size", val);
+                  }
                 }}
               >
                 <SelectTrigger
@@ -286,8 +294,9 @@ export function IconDetailDialog({
                 items={availableVariants}
                 value={variant}
                 onValueChange={(val) => {
-                  if (val)
+                  if (val) {
                     updateDialogSearch("iconVariant", val as IconVariant);
+                  }
                 }}
               >
                 <SelectTrigger

@@ -8,9 +8,9 @@ import { buttonVariants } from "@/components/ui/button";
 
 export type PaginationSize = "default" | "sm" | "lg";
 
-interface PaginationContextValue {
+type PaginationContextValue = {
   size: PaginationSize;
-}
+};
 
 const PaginationContext = React.createContext<PaginationContextValue>({
   size: "default",
@@ -18,9 +18,9 @@ const PaginationContext = React.createContext<PaginationContextValue>({
 
 export const usePagination = () => React.useContext(PaginationContext);
 
-export interface PaginationProps extends React.ComponentProps<"nav"> {
+export type PaginationProps = {
   size?: PaginationSize;
-}
+} & React.ComponentProps<"nav">;
 
 function Pagination({
   className,
@@ -64,7 +64,7 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
   return <li data-slot="pagination-item" {...props} />;
 }
 
-export interface PaginationLinkProps extends React.ComponentProps<"a"> {
+export type PaginationLinkProps = {
   isActive?: boolean;
   isDisabled?: boolean;
   size?:
@@ -78,7 +78,7 @@ export interface PaginationLinkProps extends React.ComponentProps<"a"> {
     | "icon"
     | "icon-lg"
     | "icon-xl";
-}
+} & React.ComponentProps<"a">;
 
 function PaginationLink({
   className,

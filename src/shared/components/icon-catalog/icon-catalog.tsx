@@ -1,11 +1,11 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { SearchXIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
-import type {
-  IconCatalogItem,
-  IconCategory,
-  IconVariant,
+import {
+  type IconCatalogItem,
+  type IconCategory,
+  type IconVariant,
 } from "@/icons/catalog";
 import { getCategoryCounts, getIconSvg, ICON_CATALOG } from "@/icons/catalog";
 import {
@@ -29,16 +29,14 @@ import { IconToolbar } from "./icon-toolbar";
 
 const iconTooltipHandle = Tooltip.createHandle<string>();
 
-interface IconDisplayItem {
+type IconDisplayItem = {
   item: IconCatalogItem;
   variant: IconVariant;
-}
+};
 
 export function IconCatalog() {
   const search = useSearch({ from: "/icons" });
   const navigate = useNavigate({ from: "/icons" });
-  const [dialogItem, setDialogItem] = useState<IconCatalogItem | null>(null);
-
   const activeItem = useMemo(
     () =>
       search.icon
@@ -46,12 +44,6 @@ export function IconCatalog() {
         : null,
     [search.icon]
   );
-
-  useEffect(() => {
-    if (activeItem) {
-      setDialogItem(activeItem);
-    }
-  }, [activeItem]);
 
   const { filter } = useFuzzyFilter<IconCatalogItem>({
     keys: ["name", "title", "category", "tags"],
@@ -84,7 +76,9 @@ export function IconCatalog() {
             ? item.variants.filter((variant) => variant !== "outline")
             : item.variants.filter((variant) => variant === search.variant);
 
-        return variants.map((variant) => ({ item, variant }));
+        return variants.map((variant) => {
+          return { item, variant };
+        });
       }),
     [filteredItems, search.variant]
   );
@@ -94,29 +88,34 @@ export function IconCatalog() {
     category?: "all" | IconCategory;
     variant?: "all" | "duotone" | "filled";
   }) => {
-    navigate({
+    void navigate({
       replace: true,
-      search: (previous) => ({ ...previous, ...next }),
+      search: (previous) => {
+        return { ...previous, ...next };
+      },
     });
   };
 
   const openIcon = (item: IconCatalogItem, variant: IconVariant) => {
-    setDialogItem(item);
-    navigate({
+    void navigate({
       resetScroll: false,
-      search: (previous) => ({
-        ...previous,
-        icon: item.name,
-        iconVariant: variant,
-      }),
+      search: (previous) => {
+        return {
+          ...previous,
+          icon: item.name,
+          iconVariant: variant,
+        };
+      },
     });
   };
 
   const closeIcon = () => {
-    navigate({
+    void navigate({
       replace: true,
       resetScroll: false,
-      search: (previous) => ({ ...previous, icon: undefined }),
+      search: (previous) => {
+        return { ...previous, icon: undefined };
+      },
     });
   };
 
@@ -193,7 +192,7 @@ export function IconCatalog() {
 
       {/* Detail Dialog */}
       <IconDetailDialog
-        item={dialogItem}
+        item={activeItem}
         open={activeItem !== null}
         onOpenChange={(open) => {
           if (!open) closeIcon();

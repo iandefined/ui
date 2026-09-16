@@ -6,13 +6,13 @@ import { Badge, type BadgeColor } from "@/registry/base/badge";
 import { Input } from "@/registry/base/input";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 
-interface Item {
+type Item = {
   id: string;
   name: string;
   category: string;
   color: BadgeColor;
   description: string;
-}
+};
 
 const items: Item[] = [
   {

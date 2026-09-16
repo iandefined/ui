@@ -85,13 +85,13 @@ export type DataTableColumnDef<
 
 export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
 
-interface DataTableContextValue<TData extends RowData> {
+type DataTableContextValue<TData extends RowData> = {
   table: ReactTable<DataTableFeatures, TData>;
   isResizable: boolean;
   globalFilter: string;
   onGlobalFilterChange: OnChangeFn<string>;
   pagination: PaginationState;
-}
+};
 
 const DataTableContext =
   React.createContext<DataTableContextValue<RowData> | null>(null);
@@ -104,7 +104,7 @@ function useDataTable<TData extends RowData>(): DataTableContextValue<TData> {
   return context as unknown as DataTableContextValue<TData>;
 }
 
-export interface DataTableProps<TData extends RowData, TValue = unknown> {
+export type DataTableProps<TData extends RowData, TValue = unknown> = {
   columns: DataTableColumnDef<TData, TValue>[];
   data: TData[];
   children: React.ReactNode;
@@ -140,7 +140,7 @@ export interface DataTableProps<TData extends RowData, TValue = unknown> {
     index: number,
     parent?: DataTableRow<TData>
   ) => string;
-}
+};
 
 function DataTable<TData extends RowData, TValue = unknown>({
   columns: userColumns,
@@ -340,12 +340,12 @@ function DataTableToolbarSeparator({
   );
 }
 
-export interface DataTableSearchProps extends Omit<
+export type DataTableSearchProps = {
+  placeholder?: string;
+} & Omit<
   React.ComponentProps<typeof Input>,
   "value" | "onChange" | "onValueChange"
-> {
-  placeholder?: string;
-}
+>;
 
 function DataTableSearch({
   placeholder = "Search...",
@@ -494,12 +494,10 @@ function SortableHeader<TData extends RowData>({
   );
 }
 
-export interface DataTableHeaderProps extends React.ComponentProps<
-  typeof TableHeader
-> {
+export type DataTableHeaderProps = {
   enableSorting?: boolean;
   resizable?: boolean;
-}
+} & React.ComponentProps<typeof TableHeader>;
 
 function DataTableHeader({
   enableSorting = false,
@@ -588,11 +586,9 @@ function DataTableHeader({
   );
 }
 
-export interface DataTableBodyProps extends React.ComponentProps<
-  typeof TableBody
-> {
+export type DataTableBodyProps = {
   emptyState?: React.ReactNode;
-}
+} & React.ComponentProps<typeof TableBody>;
 
 function DataTableBody({
   emptyState,
@@ -649,11 +645,11 @@ function DataTableFooter({
   );
 }
 
-export interface DataTablePaginationProps {
+export type DataTablePaginationProps = {
   className?: string;
   showSelectedCount?: boolean;
   size?: "default" | "sm";
-}
+};
 
 function DataTablePagination({
   className,

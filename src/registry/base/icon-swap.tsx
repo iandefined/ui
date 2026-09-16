@@ -1,6 +1,6 @@
 "use client";
 
-import type { HTMLMotionProps } from "motion/react";
+import { type HTMLMotionProps } from "motion/react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 
 const ICON_SWAP_INITIAL = {

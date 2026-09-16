@@ -27,10 +27,12 @@ const footerVariants: Array<{
   { side: "right", footerVariant: "inset" },
 ];
 
-const cards = Array.from({ length: 12 }, (_, index) => ({
-  description: `Scrollable floating sheet content item ${index + 1}.`,
-  title: `Card ${index + 1}`,
-}));
+const cards = Array.from({ length: 12 }, (_, index) => {
+  return {
+    description: `Scrollable floating sheet content item ${index + 1}.`,
+    title: `Card ${index + 1}`,
+  };
+});
 
 function capitalize(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);

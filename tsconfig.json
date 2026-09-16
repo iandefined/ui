@@ -18,6 +18,7 @@
       "@/components/app-sidebar": [
         "./src/registry/base/blocks/sidebar/01/components/app-sidebar.tsx"
       ],
+      "@/registry.json": ["./registry.json"],
       "@/components/ui/breadcrumbs": ["./src/registry/base/breadcrumbs.tsx"],
       "@/components/ui/calendar": ["./src/registry/base/calendar.tsx"],
       "@/components/ui/checkbox": ["./src/registry/base/checkbox.tsx"],

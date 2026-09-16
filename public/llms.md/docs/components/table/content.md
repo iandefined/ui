@@ -351,7 +351,7 @@ import {
   TableRow,
 } from "@/registry/base/table";
 
-interface Order {
+type Order = {
   id: string;
   customer: string;
   status: "Delivered" | "Shipped" | "Processing";
@@ -359,7 +359,7 @@ interface Order {
   date: string;
   tracking: string;
   items: string[];
-}
+};
 
 const orders: Order[] = [
   {

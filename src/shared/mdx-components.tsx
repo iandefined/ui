@@ -1,6 +1,6 @@
 import { cn } from "cn";
-import type { LucideIcon } from "lucide-react";
-import { createElement, type ElementType } from "react";
+import { type LucideIcon } from "lucide-react";
+import { createElement, type ElementType, type ReactNode } from "react";
 
 import {
   Table as BaseTable,
@@ -77,6 +77,19 @@ function MdxElement({ as, mdxClasses, className, ...props }: MdxElementProps) {
     className: resolvedClassName,
   });
 }
+
+const getTextContent = (value: ReactNode): string => {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    typeof value === "bigint"
+  ) {
+    return String(value);
+  }
+
+  return "";
+};
 
 function MdxTable({
   className,
@@ -177,10 +190,10 @@ export const mdxComponents = {
     <MdxElement
       as="img"
       mdxClasses="mt-6 rounded-md border"
-      src={src?.toString() || ""}
+      src={src?.toString() ?? ""}
       width={Number(width)}
       height={Number(height)}
-      alt={alt || ""}
+      alt={alt ?? ""}
       {...props}
     />
   ),
@@ -343,8 +356,7 @@ export const mdxComponents = {
     <MdxElement
       as="h2"
       mdxClasses="[&+]*:[code]:text-xl mt-10 scroll-m-28 font-heading text-xl font-medium tracking-tight first:mt-0 lg:mt-12 [&+.steps]:mt-0! [&+.steps>h3]:mt-4! [&+h3]:mt-6! [&+p]:mt-4!"
-      id={children
-        ?.toString()
+      id={getTextContent(children)
         .replaceAll(" ", "-")
         .replaceAll("'", "")
         .replaceAll("?", "")

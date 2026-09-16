@@ -10,7 +10,6 @@ import {
 
 export const Route = createFileRoute("/docs/$")({
   component: DocsSplatRoute,
-  head: ({ params }) => docsPageHead(slugsFromSplat(params._splat)),
   loader: async ({ params }) => {
     if (params._splat === "styling") {
       throw redirect({ href: "/docs/theming" });
@@ -29,6 +28,7 @@ export const Route = createFileRoute("/docs/$")({
 
     return data;
   },
+  head: ({ params }) => docsPageHead(slugsFromSplat(params._splat)),
 });
 
 function DocsSplatRoute() {

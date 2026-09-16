@@ -4,7 +4,7 @@ import { EllipsisIcon, LinkIcon } from "lucide-react";
 import { useCallback, useMemo, useRef } from "react";
 import { toast } from "sonner";
 
-import type { ShareIconHandle } from "@/shared/components/animated-icons/share";
+import { type ShareIconHandle } from "@/shared/components/animated-icons/share";
 import { ShareIcon } from "@/shared/components/animated-icons/share";
 import { XIcon, LinkedInIcon } from "@/shared/components/icons";
 import { Button } from "@/shared/components/ui/button";
@@ -70,7 +70,7 @@ export const DocsShareMenu = ({
       >
         <DropdownMenuItem
           onClick={() => {
-            copyToClipboard(absoluteUrl);
+            void copyToClipboard(absoluteUrl);
             toast.success("Link copied");
           }}
         >
@@ -114,7 +114,9 @@ export const DocsShareMenu = ({
           <DropdownMenuItem
             onClick={(e) => {
               e.preventDefault();
-              navigator.share({ title, url: absoluteUrl });
+              void navigator
+                .share({ title, url: absoluteUrl })
+                .catch(() => undefined);
             }}
           >
             <EllipsisIcon />

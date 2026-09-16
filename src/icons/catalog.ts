@@ -48,20 +48,20 @@ export const ICON_CATEGORIES = [
 
 export type IconCategory = (typeof ICON_CATEGORIES)[number];
 
-export interface IconCatalogItem {
+export type IconCatalogItem = {
   name: string;
   title: string;
   category: IconCategory;
   tags: string[];
   variant: IconVariant;
   variants: readonly IconVariant[];
-}
+};
 
-export interface CategoryInfo {
+export type CategoryInfo = {
   id: "all" | IconCategory;
   label: string;
   count: number;
-}
+};
 
 // Vite static raw SVG imports
 const duotoneSvgModules = import.meta.glob("./duotone/*.svg", {
@@ -5476,7 +5476,7 @@ const iconSourceOrder = new Map(
 
 export const ICON_CATALOG: readonly IconCatalogItem[] = [
   ...ICON_CATALOG_SOURCE,
-].sort((left, right) => {
+].toSorted((left, right) => {
   const leftRank = iconPopularityRank.get(left.name) ?? Number.MAX_SAFE_INTEGER;
   const rightRank =
     iconPopularityRank.get(right.name) ?? Number.MAX_SAFE_INTEGER;
@@ -5575,7 +5575,7 @@ export function getCategoryCounts(
 
   for (const item of items) {
     const itemCount = getIconVariantCount(item, variant);
-    counts[item.category] = (counts[item.category] || 0) + itemCount;
+    counts[item.category] = (counts[item.category] ?? 0) + itemCount;
     total += itemCount;
   }
 
@@ -5584,7 +5584,7 @@ export function getCategoryCounts(
   ];
 
   for (const category of ICON_CATEGORIES) {
-    const count = counts[category] || 0;
+    const count = counts[category] ?? 0;
     if (count > 0) {
       categoryInfos.push({
         id: category,

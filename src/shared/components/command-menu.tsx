@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
+import { type Root as PageTreeRoot } from "fumadocs-core/page-tree";
 import {
   ArrowRightIcon,
   CornerDownLeftIcon,
@@ -9,7 +9,7 @@ import {
   SquareDashedIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { Kbd } from "@/registry/base/kbd";
 import { Button } from "@/shared/components/ui/button";
@@ -34,7 +34,7 @@ import { SITE } from "@/shared/constants/site";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
 import { useIsMac } from "@/shared/hooks/use-is-mac";
 import { useRouter } from "@/shared/hooks/use-navigation";
-import type { PackageManager } from "@/shared/hooks/use-package-manager";
+import { type PackageManager } from "@/shared/hooks/use-package-manager";
 import { usePackageManager } from "@/shared/hooks/use-package-manager";
 import { getDocsNavigationGroups } from "@/shared/lib/docs-navigation";
 import { trackEvent } from "@/shared/lib/events";
@@ -61,6 +61,19 @@ type DocUrlKind =
 
 const GROUP_HEADING_CLS =
   "!p-0 [&_[data-slot=command-group-heading]]:scroll-mt-16 [&_[data-slot=command-group-heading]]:!p-3 [&_[data-slot=command-group-heading]]:!pb-1";
+
+const getNodeText = (value: ReactNode): string => {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    typeof value === "bigint"
+  ) {
+    return String(value);
+  }
+
+  return "";
+};
 
 type CommandMenuOption = {
   value: string;
@@ -160,16 +173,21 @@ export const CommandMenu = ({
     },
   });
 
-  const treeGroups = useMemo(() => {
-    return getDocsNavigationGroups(tree).map((group) => ({
-      label:
-        typeof group.label === "string" ? group.label : String(group.label),
-      pages: group.pages.map((page) => ({
-        name: typeof page.name === "string" ? page.name : String(page.name),
-        url: page.url,
-      })),
-    }));
-  }, [tree]);
+  const treeGroups = useMemo(
+    () =>
+      getDocsNavigationGroups(tree).map((group) => {
+        return {
+          label: getNodeText(group.label),
+          pages: group.pages.map((page) => {
+            return {
+              name: getNodeText(page.name),
+              url: page.url,
+            };
+          }),
+        };
+      }),
+    [tree]
+  );
 
   const handleDocPageHighlight = useCallback(
     (item: { url: string; name?: string }) => {
@@ -220,7 +238,7 @@ export const CommandMenu = ({
 
   const handleFilter = useCallback(
     (value: string, search: string, keywords?: string[]) => {
-      const extendValue = `${value} ${keywords?.join(" ") || ""}`;
+      const extendValue = `${value} ${keywords?.join(" ") ?? ""}`;
       if (extendValue.toLowerCase().includes(search.toLowerCase())) {
         return 1;
       }
@@ -235,17 +253,19 @@ export const CommandMenu = ({
     if (navItems.length > 0) {
       groups.push({
         value: "Pages",
-        items: navItems.map((item) => ({
-          value: `Navigation ${item.label}`,
-          label: item.label,
-          keywords: ["nav", "navigation", item.label.toLowerCase()],
-          icon: <ArrowRightIcon />,
-          onHighlight: () => {
-            setShowGoToPage(true);
-            setCopyPayload("");
-          },
-          onSelect: () => runCommand(() => router.push(item.href)),
-        })),
+        items: navItems.map((item) => {
+          return {
+            value: `Navigation ${item.label}`,
+            label: item.label,
+            keywords: ["nav", "navigation", item.label.toLowerCase()],
+            icon: <ArrowRightIcon />,
+            onHighlight: () => {
+              setShowGoToPage(true);
+              setCopyPayload("");
+            },
+            onSelect: () => runCommand(() => router.push(item.href)),
+          };
+        }),
       });
     }
 
@@ -272,29 +292,31 @@ export const CommandMenu = ({
       groups.push({
         value: "Blocks",
         className: "p-0! [&_[data-slot=command-group-heading]]:p-3!",
-        items: blocks.map((block) => ({
-          value: block.name,
-          label: block.description,
-          keywords: [
-            "block",
-            block.name,
-            block.description,
-            ...block.categories,
-          ],
-          icon: <SquareDashedIcon />,
-          trailing: (
-            <span className="text-muted-foreground ml-auto font-mono text-xs font-normal tabular-nums">
-              {block.name}
-            </span>
-          ),
-          onHighlight: () => handleBlockHighlight(block),
-          onSelect: () =>
-            runCommand(() =>
-              router.push(
-                `/blocks?category=${encodeURIComponent(block.categories[0] ?? "all")}`
-              )
+        items: blocks.map((block) => {
+          return {
+            value: block.name,
+            label: block.description,
+            keywords: [
+              "block",
+              block.name,
+              block.description,
+              ...block.categories,
+            ],
+            icon: <SquareDashedIcon />,
+            trailing: (
+              <span className="text-muted-foreground ml-auto font-mono text-xs font-normal tabular-nums">
+                {block.name}
+              </span>
             ),
-        })),
+            onHighlight: () => handleBlockHighlight(block),
+            onSelect: () =>
+              runCommand(() =>
+                router.push(
+                  `/blocks?category=${encodeURIComponent(block.categories[0] ?? "all")}`
+                )
+              ),
+          };
+        }),
       });
     }
 
@@ -349,7 +371,7 @@ export const CommandMenu = ({
         copyPayload.includes("shadcn@latest")
       ) {
         runCommand(() => {
-          copyToClipboard(copyPayload);
+          void copyToClipboard(copyPayload);
         });
       }
     };

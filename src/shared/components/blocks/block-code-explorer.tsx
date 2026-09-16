@@ -22,7 +22,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
-import type { RegistryBlock } from "@/shared/lib/blocks";
+import { type RegistryBlock } from "@/shared/lib/blocks";
 import { formatCode } from "@/shared/lib/format-code";
 import { highlightCode } from "@/shared/lib/highlight-code";
 import { readOptionalFromRoot } from "@/shared/lib/registry";
@@ -132,10 +132,12 @@ const buildFileTree = (files: CodeFile[]): TreeItem[] => {
 export function BlockCodeExplorer({ block }: { block: RegistryBlock }) {
   const files = useMemo<CodeFile[]>(
     () =>
-      block.files.map((file) => ({
-        ...file,
-        displayPath: getDisplayPath(block, file),
-      })),
+      block.files.map((file) => {
+        return {
+          ...file,
+          displayPath: getDisplayPath(block, file),
+        };
+      }),
     [block]
   );
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
@@ -178,7 +180,7 @@ export function BlockCodeExplorer({ block }: { block: RegistryBlock }) {
       }
     };
 
-    loadCode();
+    void loadCode();
 
     return () => {
       isMounted = false;

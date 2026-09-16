@@ -14,12 +14,12 @@ import {
 } from "@/shared/components/ui/tooltip";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
 
-export interface ColorCardProps {
+export type ColorCardProps = {
   color: string;
   darkColor?: string;
   title: string;
   className?: string;
-}
+};
 
 function formatTitle(title: string): React.ReactNode {
   if (title !== "Foreground" && title.endsWith(" Foreground")) {

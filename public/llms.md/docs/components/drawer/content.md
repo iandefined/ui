@@ -311,10 +311,12 @@ const footerVariants: Array<{
   { position: "right", sticky: true },
 ];
 
-const cards = Array.from({ length: 12 }, (_, index) => ({
-  description: `Scrollable drawer content item ${index + 1}.`,
-  title: `Card ${index + 1}`,
-}));
+const cards = Array.from({ length: 12 }, (_, index) => {
+  return {
+    description: `Scrollable drawer content item ${index + 1}.`,
+    title: `Card ${index + 1}`,
+  };
+});
 
 export default function DrawerFooterPositionsDemo() {
   return (

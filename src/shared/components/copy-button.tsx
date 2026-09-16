@@ -12,15 +12,15 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
-import type { Event } from "@/shared/lib/events";
+import { type Event } from "@/shared/lib/events";
 import { trackEvent } from "@/shared/lib/events";
 
-export interface CopyButtonProps extends Omit<ButtonProps, "color" | "value"> {
+export type CopyButtonProps = {
   value: string | (() => Promise<string> | string);
   src?: string;
   event?: Event["name"];
   showTooltip?: boolean;
-}
+} & Omit<ButtonProps, "color" | "value">;
 
 export const CopyButton = ({
   value,

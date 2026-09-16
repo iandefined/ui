@@ -113,9 +113,7 @@ function useAnimatedHeight(
     observerRef.current = observer;
   }, []);
 
-  React.useEffect(() => {
-    return () => observerRef.current?.disconnect();
-  }, []);
+  React.useEffect(() => () => observerRef.current?.disconnect(), []);
 
   return { outerRef, innerRef };
 }
@@ -258,7 +256,7 @@ function TransitionPanel({
 
   if (process.env.NODE_ENV !== "production") {
     if (orderedKeys.length > 0 && !orderedKeys.includes(activeKey)) {
-      console.warn(
+      console.debug(
         `[TransitionPanel] activeKey="${activeKey}" doesn't match any ` +
           `registered TransitionPanelView viewKey. Registered: ${orderedKeys.join(", ")}.`
       );

@@ -45,13 +45,14 @@ export const useCopyToClipboard = ({
   const [isCopied, setIsCopied] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (resetTimerRef.current !== null) {
         window.clearTimeout(resetTimerRef.current);
       }
-    };
-  }, []);
+    },
+    []
+  );
 
   const copyToClipboard = async (value: string) => {
     if (typeof window === "undefined") {

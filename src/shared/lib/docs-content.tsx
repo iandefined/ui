@@ -1,6 +1,6 @@
 import browserCollections from "collections/browser";
 import { Children, isValidElement } from "react";
-import type { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode } from "react";
 
 import {
   preloadComponentSource,
@@ -62,14 +62,16 @@ const getSourceProps = ({
   name,
   src,
   title,
-}: ComponentSourceProps): ComponentSourceProps => ({
-  code,
-  language,
-  maxLines,
-  name,
-  src,
-  title,
-});
+}: ComponentSourceProps): ComponentSourceProps => {
+  return {
+    code,
+    language,
+    maxLines,
+    name,
+    src,
+    title,
+  };
+};
 
 export const preloadDocsComponentSources = async (doc: MdxDoc) => {
   const pending: Promise<unknown>[] = [];

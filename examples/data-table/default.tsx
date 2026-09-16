@@ -13,12 +13,12 @@ import {
   DataTableToolbar,
 } from "@/registry/base/data-table";
 
-interface Payment {
+type Payment = {
   id: string;
   amount: number;
   status: "pending" | "processing" | "success" | "failed";
   email: string;
-}
+};
 
 const data: Payment[] = [
   { id: "m5gr84i9", amount: 316, status: "success", email: "ken99@yahoo.com" },

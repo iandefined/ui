@@ -19,13 +19,14 @@ export default function IconSwapDefaultDemo() {
   const [copied, setCopied] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (resetTimerRef.current !== null) {
         window.clearTimeout(resetTimerRef.current);
       }
-    };
-  }, []);
+    },
+    []
+  );
 
   const handleCopy = () => {
     setCopied(true);

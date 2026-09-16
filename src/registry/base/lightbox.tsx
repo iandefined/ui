@@ -111,7 +111,7 @@ type LightboxChangeReason =
   | "programmatic"
   | "items-change";
 
-interface LightboxImageItem {
+type LightboxImageItem = {
   id?: string;
   type: "image";
   src: string;
@@ -126,9 +126,9 @@ interface LightboxImageItem {
   className?: string;
   download?: boolean | { src?: string; filename?: string };
   zoomable?: boolean;
-}
+};
 
-interface LightboxVideoItem {
+type LightboxVideoItem = {
   id?: string;
   type: "video";
   src: string;
@@ -147,39 +147,39 @@ interface LightboxVideoItem {
   className?: string;
   download?: boolean | { src?: string; filename?: string };
   zoomable?: boolean;
-}
+};
 
 type LightboxItem = LightboxImageItem | LightboxVideoItem;
 
-interface LightboxImageChangeEventDetails {
+type LightboxImageChangeEventDetails = {
   reason: LightboxChangeReason;
   event?: Event;
   previousIndex: number;
-}
+};
 
-interface LightboxOpenEventDetails {
+type LightboxOpenEventDetails = {
   reason: DialogPrimitive.Root.ChangeEventReason;
   event?: Event;
   index: number;
   item?: LightboxItem;
-}
+};
 
-interface LightboxControlContext {
+type LightboxControlContext = {
   item?: LightboxItem;
   index: number;
   event: React.MouseEvent<HTMLElement>;
   actions: LightboxActions;
-}
+};
 
-interface LightboxControl {
+type LightboxControl = {
   id: string;
   icon: React.ReactNode;
   label: string;
   disabled?: boolean;
   onClick: (context: LightboxControlContext) => void;
-}
+};
 
-interface LightboxActions {
+type LightboxActions = {
   open: (index?: number) => void;
   close: () => void;
   goTo: (index: number) => void;
@@ -188,18 +188,9 @@ interface LightboxActions {
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
-}
+};
 
-interface LightboxProps extends Omit<
-  DialogPrimitive.Root.Props,
-  | "children"
-  | "modal"
-  | "onOpenChange"
-  | "onOpenChangeComplete"
-  | "open"
-  | "defaultOpen"
-  | "actionsRef"
-> {
+type LightboxProps = {
   children?: React.ReactNode;
   items?: LightboxItem[];
   open?: boolean;
@@ -227,7 +218,16 @@ interface LightboxProps extends Omit<
   dir?: "ltr" | "rtl";
   className?: string;
   actionsRef?: React.Ref<LightboxActions>;
-}
+} & Omit<
+  DialogPrimitive.Root.Props,
+  | "children"
+  | "modal"
+  | "onOpenChange"
+  | "onOpenChangeComplete"
+  | "open"
+  | "defaultOpen"
+  | "actionsRef"
+>;
 
 type LightboxBackdropStyle = DialogPrimitive.Backdrop.Props["style"];
 type LightboxBackdropStyleObject = React.CSSProperties & {
@@ -239,10 +239,12 @@ function mergeLightboxBackdropStyle(
   style: LightboxBackdropStyle
 ): LightboxBackdropStyle {
   if (typeof style === "function") {
-    return (state: DialogPrimitive.Backdrop.State) => ({
-      ...baseStyle,
-      ...style(state),
-    });
+    return (state: DialogPrimitive.Backdrop.State) => {
+      return {
+        ...baseStyle,
+        ...style(state),
+      };
+    };
   }
 
   return { ...baseStyle, ...style };
@@ -258,23 +260,25 @@ function mergeLightboxContentStyle(
   style: LightboxContentStyle
 ): LightboxContentStyle {
   if (typeof style === "function") {
-    return (state: DialogPrimitive.Popup.State) => ({
-      ...baseStyle,
-      ...style(state),
-    });
+    return (state: DialogPrimitive.Popup.State) => {
+      return {
+        ...baseStyle,
+        ...style(state),
+      };
+    };
   }
 
   return { ...baseStyle, ...style };
 }
 
-interface TransformState {
+type TransformState = {
   scale: number;
   panX: number;
   panY: number;
   swipeX: number;
   dismissY: number;
   dragging: boolean;
-}
+};
 
 const initialTransform: TransformState = {
   scale: 1,
@@ -285,12 +289,12 @@ const initialTransform: TransformState = {
   dragging: false,
 };
 
-interface RegisteredSource {
+type RegisteredSource = {
   element: HTMLElement;
   morph: boolean;
-}
+};
 
-interface LightboxContextValue {
+type LightboxContextValue = {
   activeIndex: number;
   activeItem?: LightboxItem;
   actions: LightboxActions;
@@ -329,7 +333,7 @@ interface LightboxContextValue {
   shouldReduceMotion: boolean;
   stopZoomAnimation: () => void;
   transform: TransformState;
-}
+};
 
 const LightboxContext = React.createContext<LightboxContextValue | null>(null);
 
@@ -609,13 +613,13 @@ function Lightbox({
       image.setAttribute("aria-haspopup", "dialog");
       image.setAttribute(
         "aria-label",
-        image.getAttribute("aria-label") ||
+        image.getAttribute("aria-label") ??
           `Open ${image.alt || `image ${index + 1}`} in lightbox`
       );
       image.setAttribute("data-lightbox-source", "");
 
       if (!image.hasAttribute("alt")) {
-        console.warn(
+        console.debug(
           "Lightbox auto-discovered an <img> without an alt attribute."
         );
       }
@@ -924,8 +928,8 @@ function Lightbox({
     activeItem?.type === "image"
       ? activeItem.zoomable !== false
       : Boolean(activeItem?.zoomable);
-  const actions = React.useMemo<LightboxActions>(
-    () => ({
+  const actions = React.useMemo<LightboxActions>(() => {
+    return {
       open: (nextIndex = activeIndex) => requestOpen(nextIndex),
       close: () =>
         closeWithDetails(getEventDetails("imperative-action", undefined, null)),
@@ -955,22 +959,21 @@ function Lightbox({
         });
       },
       resetZoom: () => animateZoom({ scale: 1, panX: 0, panY: 0 }),
-    }),
-    [
-      activeIndex,
-      activeZoomable,
-      animateZoom,
-      changeIndex,
-      closeWithDetails,
-      maxZoom,
-      requestOpen,
-    ]
-  );
+    };
+  }, [
+    activeIndex,
+    activeZoomable,
+    animateZoom,
+    changeIndex,
+    closeWithDetails,
+    maxZoom,
+    requestOpen,
+  ]);
 
   React.useImperativeHandle(actionsRef, () => actions, [actions]);
 
-  const context = React.useMemo<LightboxContextValue>(
-    () => ({
+  const context = React.useMemo<LightboxContextValue>(() => {
+    return {
       activeIndex,
       activeItem,
       actions,
@@ -999,36 +1002,35 @@ function Lightbox({
       shouldReduceMotion,
       stopZoomAnimation,
       transform,
-    }),
-    [
-      activeIndex,
-      activeItem,
-      actions,
-      animateZoom,
-      changeIndex,
-      closeWithDetails,
-      controls,
-      direction,
-      items,
-      loadedAssets,
-      loading,
-      loop,
-      markAssetLoaded,
-      maxZoom,
-      noCarousel,
-      noControls,
-      noCounter,
-      open,
-      overlay,
-      preload,
-      registerMedia,
-      registerSource,
-      requestOpen,
-      shouldReduceMotion,
-      stopZoomAnimation,
-      transform,
-    ]
-  );
+    };
+  }, [
+    activeIndex,
+    activeItem,
+    actions,
+    animateZoom,
+    changeIndex,
+    closeWithDetails,
+    controls,
+    direction,
+    items,
+    loadedAssets,
+    loading,
+    loop,
+    markAssetLoaded,
+    maxZoom,
+    noCarousel,
+    noControls,
+    noCounter,
+    open,
+    overlay,
+    preload,
+    registerMedia,
+    registerSource,
+    requestOpen,
+    shouldReduceMotion,
+    stopZoomAnimation,
+    transform,
+  ]);
 
   const handleGalleryClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.defaultPrevented || itemsProp) return;
@@ -1040,8 +1042,9 @@ function Lightbox({
       !image ||
       !gallery.contains(image) ||
       !isStandaloneImage(image, gallery)
-    )
+    ) {
       return;
+    }
     const sources = Array.from(gallery.querySelectorAll("img")).filter((item) =>
       isStandaloneImage(item, gallery)
     );
@@ -1104,10 +1107,10 @@ function Lightbox({
   );
 }
 
-interface LightboxTriggerProps extends DialogPrimitive.Trigger.Props {
+type LightboxTriggerProps = {
   index?: number;
   morph?: boolean;
-}
+} & DialogPrimitive.Trigger.Props;
 
 function LightboxTrigger({
   index = 0,
@@ -1215,7 +1218,7 @@ function LightboxViewport({
   );
 }
 
-interface LightboxContentProps extends DialogPrimitive.Popup.Props {}
+type LightboxContentProps = {} & DialogPrimitive.Popup.Props;
 
 function LightboxContent({
   className,
@@ -1322,11 +1325,13 @@ function LightboxContent({
       0,
       (baseHeight * transform.scale - window.innerHeight) / 2
     );
-    setTransform((current) => ({
-      ...current,
-      panX: clamp(current.panX + deltaX, -maxX, maxX),
-      panY: clamp(current.panY + deltaY, -maxY, maxY),
-    }));
+    setTransform((current) => {
+      return {
+        ...current,
+        panX: clamp(current.panX + deltaX, -maxX, maxX),
+        panY: clamp(current.panY + deltaY, -maxY, maxY),
+      };
+    });
   }
 
   return (
@@ -1385,7 +1390,8 @@ function LightboxContent({
                   <LightboxNext />
                 </>
               )}
-              {(activeItem?.caption || (!noCarousel && items.length > 1)) && (
+              {(Boolean(activeItem?.caption) ||
+                (!noCarousel && items.length > 1)) && (
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex flex-col items-center gap-3 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4">
                   <LightboxCaptions />
                   {!noCarousel && items.length > 1 && <LightboxThumbnails />}
@@ -1413,9 +1419,9 @@ function LightboxContent({
   LightboxContent as typeof LightboxContent & { __lightboxContent: boolean }
 ).__lightboxContent = true;
 
-interface LightboxZoomProps extends useRender.ComponentProps<"div"> {
+type LightboxZoomProps = {
   active?: boolean;
-}
+} & useRender.ComponentProps<"div">;
 
 function LightboxZoom({
   active = true,
@@ -1465,10 +1471,10 @@ function LightboxZoom({
   });
 }
 
-interface LightboxSlideProps extends React.ComponentProps<"div"> {
+type LightboxSlideProps = {
   index: number;
   active?: boolean;
-}
+} & React.ComponentProps<"div">;
 
 function LightboxSlide({
   index,
@@ -1644,7 +1650,7 @@ function isIndexMounted(
   );
 }
 
-interface GestureSession {
+type GestureSession = {
   mode: "pending" | "pan" | "swipe" | "dismiss" | "pinch";
   startX: number;
   startY: number;
@@ -1661,7 +1667,7 @@ interface GestureSession {
   lastTime: number;
   velocityX: number;
   velocityY: number;
-}
+};
 
 function LightboxSlides({
   className,
@@ -1774,7 +1780,9 @@ function LightboxSlides({
     ) => {
       stopAnimation();
       if (shouldReduceMotion) {
-        setTransform((current) => ({ ...current, [key]: to }));
+        setTransform((current) => {
+          return { ...current, [key]: to };
+        });
         onComplete?.();
         return;
       }
@@ -1783,7 +1791,9 @@ function LightboxSlides({
         duration: 0.24,
         ease: "easeOut",
         onUpdate: (value) =>
-          setTransform((current) => ({ ...current, [key]: value })),
+          setTransform((current) => {
+            return { ...current, [key]: value };
+          }),
         onComplete: () => {
           animationRef.current = null;
           onComplete?.();
@@ -1851,8 +1861,9 @@ function LightboxSlides({
       if (
         activeItem?.zoomable === false ||
         (activeItem?.type === "video" && !activeItem.zoomable)
-      )
+      ) {
         return;
+      }
       const nextScale =
         transformRef.current.scale > 1 ? 1 : Math.min(2, maxZoom);
       animateZoomAt(nextScale, clientX, clientY);
@@ -1900,7 +1911,9 @@ function LightboxSlides({
       const width = viewport?.clientWidth ?? window.innerWidth;
       const height = viewport?.clientHeight ?? window.innerHeight;
       const current = transformRef.current;
-      setTransform((value) => ({ ...value, dragging: false }));
+      setTransform((value) => {
+        return { ...value, dragging: false };
+      });
 
       if (session.mode === "swipe") {
         if (noCarousel) {
@@ -1933,13 +1946,15 @@ function LightboxSlides({
       } else if (session.mode === "pan" || session.mode === "pinch") {
         const scale = clamp(current.scale, 1, maxZoom);
         const bounds = getPanBounds(scale);
-        setTransform((value) => ({
-          ...value,
-          scale,
-          panX: clamp(value.panX, -bounds.x, bounds.x),
-          panY: clamp(value.panY, -bounds.y, bounds.y),
-          dragging: false,
-        }));
+        setTransform((value) => {
+          return {
+            ...value,
+            scale,
+            panX: clamp(value.panX, -bounds.x, bounds.x),
+            panY: clamp(value.panY, -bounds.y, bounds.y),
+            dragging: false,
+          };
+        });
       } else {
         animateTransformValue("swipeX", 0);
         animateTransformValue("dismissY", 0);
@@ -2000,13 +2015,16 @@ function LightboxSlides({
       velocityX: 0,
       velocityY: 0,
     };
-    setTransform((value) => ({ ...value, dragging: true }));
+    setTransform((value) => {
+      return { ...value, dragging: true };
+    });
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     onPointerMove?.(event);
-    if (event.defaultPrevented || !pointersRef.current.has(event.pointerId))
+    if (event.defaultPrevented || !pointersRef.current.has(event.pointerId)) {
       return;
+    }
     pointersRef.current.set(event.pointerId, {
       x: event.clientX,
       y: event.clientY,
@@ -2066,18 +2084,24 @@ function LightboxSlides({
         Math.abs(value) <= maximum
           ? value
           : Math.sign(value) * (maximum + (Math.abs(value) - maximum) * 0.35);
-      setTransform((value) => ({
-        ...value,
-        panX: resist(rawX, bounds.x),
-        panY: resist(rawY, bounds.y),
-      }));
+      setTransform((value) => {
+        return {
+          ...value,
+          panX: resist(rawX, bounds.x),
+          panY: resist(rawY, bounds.y),
+        };
+      });
     } else if (session.mode === "swipe") {
-      setTransform((value) => ({ ...value, swipeX: session.startSwipeX + dx }));
+      setTransform((value) => {
+        return { ...value, swipeX: session.startSwipeX + dx };
+      });
     } else if (session.mode === "dismiss") {
-      setTransform((value) => ({
-        ...value,
-        dismissY: session.startDismissY + dy,
-      }));
+      setTransform((value) => {
+        return {
+          ...value,
+          dismissY: session.startDismissY + dy,
+        };
+      });
     }
   };
 
@@ -2160,8 +2184,9 @@ function LightboxSlides({
     }
     releaseGesture(event.nativeEvent);
     if (shouldToggleTouchZoom) toggleZoomAt(event.clientX, event.clientY);
-    else if (shouldToggleZoomOnDesktop)
+    else if (shouldToggleZoomOnDesktop) {
       toggleZoomAt(event.clientX, event.clientY);
+    }
   };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -2180,8 +2205,9 @@ function LightboxSlides({
       !activeZoom ||
       (interactiveTarget && interactiveTarget !== event.currentTarget) ||
       !clickZoomable
-    )
+    ) {
       return;
+    }
     toggleZoomAt(event.clientX, event.clientY);
   };
 
@@ -2192,8 +2218,9 @@ function LightboxSlides({
       event.target !== event.currentTarget ||
       !clickZoomable ||
       (event.key !== "Enter" && event.key !== " ")
-    )
+    ) {
       return;
+    }
     event.preventDefault();
     const rect = event.currentTarget.getBoundingClientRect();
     toggleZoomAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
@@ -2256,11 +2283,13 @@ function LightboxSlides({
     event.preventDefault();
     if (transformRef.current.scale > 1) {
       const bounds = getPanBounds(transformRef.current.scale);
-      setTransform((value) => ({
-        ...value,
-        panX: clamp(value.panX - event.deltaX, -bounds.x, bounds.x),
-        panY: clamp(value.panY - event.deltaY, -bounds.y, bounds.y),
-      }));
+      setTransform((value) => {
+        return {
+          ...value,
+          panX: clamp(value.panX - event.deltaX, -bounds.x, bounds.x),
+          panY: clamp(value.panY - event.deltaY, -bounds.y, bounds.y),
+        };
+      });
       return;
     }
     wheelRef.current.x += event.deltaX;
@@ -2269,9 +2298,13 @@ function LightboxSlides({
       !noCarousel &&
       Math.abs(wheelRef.current.x) > Math.abs(wheelRef.current.y)
     ) {
-      setTransform((value) => ({ ...value, swipeX: -wheelRef.current.x }));
+      setTransform((value) => {
+        return { ...value, swipeX: -wheelRef.current.x };
+      });
     } else {
-      setTransform((value) => ({ ...value, dismissY: wheelRef.current.y }));
+      setTransform((value) => {
+        return { ...value, dismissY: wheelRef.current.y };
+      });
     }
     window.clearTimeout(wheelRef.current.timer);
     const nativeEvent = event.nativeEvent;
@@ -2315,8 +2348,9 @@ function LightboxSlides({
       {items.map((item, itemIndex) => {
         if (
           !isIndexMounted(itemIndex, activeIndex, items.length, preload, loop)
-        )
+        ) {
           return null;
+        }
         const physicalDirection =
           transform.swipeX === 0 ? 0 : -Math.sign(transform.swipeX);
         const preferredOffset =
@@ -2380,10 +2414,10 @@ function LightboxCounter({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     >
       <span aria-hidden="true">
-        {items.length ? activeIndex + 1 : 0} / {items.length}
+        {items.length > 0 ? activeIndex + 1 : 0} / {items.length}
       </span>
       <span className="sr-only">
-        Item {items.length ? activeIndex + 1 : 0} of {items.length}
+        Item {items.length > 0 ? activeIndex + 1 : 0} of {items.length}
       </span>
     </div>
   );
@@ -2415,13 +2449,10 @@ type LightboxActionButtonProps = Omit<
   "color" | "size" | "variant"
 >;
 
-interface LightboxThumbnailProps extends Omit<
-  LightboxActionButtonProps,
-  "onClick"
-> {
+type LightboxThumbnailProps = {
   index: number;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+} & Omit<LightboxActionButtonProps, "onClick">;
 
 function LightboxVideoThumbnail({
   crossOrigin,
@@ -2508,8 +2539,9 @@ function LightboxThumbnail({
   }, [active, intersected, loading, thumbnailCached]);
 
   React.useEffect(() => {
-    if (active)
+    if (active) {
       buttonRef.current?.scrollIntoView({ block: "nearest", inline: "center" });
+    }
   }, [active]);
 
   if (!item) return null;
@@ -2565,8 +2597,9 @@ function LightboxThumbnail({
       )}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented)
+        if (!event.defaultPrevented) {
           changeIndex(index, "thumbnail-press", event.nativeEvent);
+        }
       }}
       {...props}
     >
@@ -2663,7 +2696,7 @@ function LightboxPrevious({
 }: LightboxActionButtonProps) {
   const { activeIndex, changeIndex, direction, items, loop } = useLightbox();
   const disabled =
-    disabledProp || items.length < 2 || (!loop && activeIndex === 0);
+    disabledProp === true || items.length < 2 || (!loop && activeIndex === 0);
   if (disabled) return null;
   return (
     <Button
@@ -2681,8 +2714,9 @@ function LightboxPrevious({
       }}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented)
+        if (!event.defaultPrevented) {
           changeIndex(activeIndex - 1, "previous-press", event.nativeEvent);
+        }
       }}
       {...props}
     >
@@ -2704,7 +2738,7 @@ function LightboxNext({
 }: LightboxActionButtonProps) {
   const { activeIndex, changeIndex, direction, items, loop } = useLightbox();
   const disabled =
-    disabledProp ||
+    disabledProp === true ||
     items.length < 2 ||
     (!loop && activeIndex === items.length - 1);
   if (disabled) return null;
@@ -2724,8 +2758,9 @@ function LightboxNext({
       }}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented)
+        if (!event.defaultPrevented) {
           changeIndex(activeIndex + 1, "next-press", event.nativeEvent);
+        }
       }}
       {...props}
     >
@@ -2847,14 +2882,15 @@ function LightboxDownload({
     "idle" | "loading" | "success" | "error"
   >("idle");
 
-  React.useEffect(() => {
-    return () => {
+  React.useEffect(
+    () => () => {
       const controller = abortControllerRef.current;
       abortControllerRef.current = null;
       controller?.abort();
       window.clearTimeout(resetTimerRef.current);
-    };
-  }, [download?.src]);
+    },
+    [download?.src]
+  );
 
   if (!download || disabled) return null;
 

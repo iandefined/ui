@@ -1,18 +1,18 @@
 "use client";
 
 import { cn } from "cn";
-import type { Variants } from "motion/react";
+import { type Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
-export interface ShareIconHandle {
+export type ShareIconHandle = {
   startAnimation: () => void;
   stopAnimation: () => void;
-}
+};
 
-interface ShareIconProps extends React.HTMLAttributes<HTMLDivElement> {
+type ShareIconProps = {
   size?: number;
-}
+} & React.HTMLAttributes<HTMLDivElement>;
 
 const arrowVariants: Variants = {
   animate: {

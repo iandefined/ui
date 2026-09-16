@@ -80,7 +80,7 @@ function Combobox<Value, Multiple extends boolean | undefined = false>({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const [isFocused, setIsFocused] = useState(false);
 
-  const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen;
+  const open = controlledOpen ?? uncontrolledOpen;
 
   const handleOpenChange = (
     nextOpen: boolean,

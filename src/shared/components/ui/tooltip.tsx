@@ -30,15 +30,13 @@ const TooltipTrigger = ({
   <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
 );
 
-interface TooltipContentProps
-  extends
-    TooltipPrimitive.Popup.Props,
-    Pick<
-      TooltipPrimitive.Positioner.Props,
-      "side" | "align" | "alignOffset" | "sideOffset"
-    > {
+type TooltipContentProps = {
   hideArrow?: boolean;
-}
+} & TooltipPrimitive.Popup.Props &
+  Pick<
+    TooltipPrimitive.Positioner.Props,
+    "side" | "align" | "alignOffset" | "sideOffset"
+  >;
 
 const TooltipContent = ({
   className,

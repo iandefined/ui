@@ -1,5 +1,6 @@
-import type { ComponentType } from "react";
+import { type ComponentType } from "react";
 
+import registryManifest from "@/registry.json";
 import { Badge as BaseBadge } from "@/registry/base/badge";
 import Sidebar01Page from "@/registry/base/blocks/sidebar/01/page";
 import { Button as BaseButton } from "@/registry/base/button";
@@ -13,8 +14,6 @@ import { Skeleton as BaseSkeleton } from "@/registry/base/skeleton";
 import { Spinner as BaseSpinner } from "@/registry/base/spinner";
 import { Textarea as BaseTextarea } from "@/registry/base/textarea";
 import { Tooltip as BaseTooltip } from "@/registry/base/tooltip";
-
-import registryManifest from "../../../registry.json";
 
 export type RegistryFile = {
   path: string;
@@ -116,13 +115,17 @@ const demoComponentsByName = Object.fromEntries(
   })
 ) as Record<string, RegistryComponent>;
 
-const withFileContent = (item: RegistryItem): RegistryItem => ({
-  ...item,
-  files: item.files?.map((file) => ({
-    ...file,
-    content: sourceByRootPath.get(normalizePath(file.path)),
-  })),
-});
+const withFileContent = (item: RegistryItem): RegistryItem => {
+  return {
+    ...item,
+    files: item.files?.map((file) => {
+      return {
+        ...file,
+        content: sourceByRootPath.get(normalizePath(file.path)),
+      };
+    }),
+  };
+};
 
 export const getRegistryItemSync = (name: string): RegistryItem | null => {
   const item = allRegistryItems[name];
@@ -132,9 +135,8 @@ export const getRegistryItemSync = (name: string): RegistryItem | null => {
 
 export const readOptionalFromRoot = async (
   relativePath: string
-): Promise<string | null> => {
-  return sourceByRootPath.get(normalizePath(relativePath)) ?? null;
-};
+): Promise<string | null> =>
+  sourceByRootPath.get(normalizePath(relativePath)) ?? null;
 
 const getDemoComponent = (name: string) => demoComponentsByName[name] ?? null;
 

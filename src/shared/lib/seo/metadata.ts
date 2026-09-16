@@ -2,7 +2,7 @@ import { LINK } from "@/shared/constants/links";
 import { ROUTES } from "@/shared/constants/routes";
 import { META_THEME_COLORS, SITE } from "@/shared/constants/site";
 
-interface CreatePageMetadataOptions {
+type CreatePageMetadataOptions = {
   description?: string;
   noIndex?: boolean;
   ogDescription?: string;
@@ -12,7 +12,7 @@ interface CreatePageMetadataOptions {
   ogType?: "article" | "website";
   path: string;
   title: string;
-}
+};
 
 type HeadMeta =
   | { charSet: string }
@@ -28,10 +28,10 @@ type HeadLink = {
   media?: string;
 };
 
-export interface PageHead {
+export type PageHead = {
   links?: HeadLink[];
   meta: HeadMeta[];
-}
+};
 
 const ogImageSize = {
   height: 630,

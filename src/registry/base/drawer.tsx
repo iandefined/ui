@@ -24,7 +24,7 @@ type DrawerOnOpenChangeComplete = NonNullable<
 
 type DrawerSnapPoint = number | string;
 
-interface DrawerContextValue {
+type DrawerContextValue = {
   drawerId?: string;
   isNested?: boolean;
   position: DrawerPosition;
@@ -38,7 +38,7 @@ interface DrawerContextValue {
   closeDrawer?: () => void;
   isAtFullSnap?: boolean;
   keepMounted?: boolean;
-}
+};
 
 const DrawerContext = React.createContext<DrawerContextValue>({
   dismissible: true,
@@ -47,10 +47,10 @@ const DrawerContext = React.createContext<DrawerContextValue>({
   isAtFullSnap: true,
 });
 
-interface DrawerPopupContextValue {
+type DrawerPopupContextValue = {
   position: DrawerPosition;
   variant: DrawerVariant;
-}
+};
 
 const DrawerPopupContext = React.createContext<DrawerPopupContextValue | null>(
   null
@@ -183,22 +183,26 @@ function useDrawerIndentMotion(
   }, [elementRef, getAnimation, shouldReduceMotion]);
 }
 
-const getIndentAnimation = (active: boolean) => ({
-  scale: active ? 0.96 : 1,
-});
+const getIndentAnimation = (active: boolean) => {
+  return {
+    scale: active ? 0.96 : 1,
+  };
+};
 
-const getIndentBackgroundAnimation = (active: boolean) => ({
-  opacity: active ? 1 : 0,
-});
+const getIndentBackgroundAnimation = (active: boolean) => {
+  return {
+    opacity: active ? 1 : 0,
+  };
+};
 
 const createDrawerHandle: typeof DrawerPrimitive.createHandle =
   DrawerPrimitive.createHandle;
 
-interface DrawerProps extends DrawerPrimitive.Root.Props {
+type DrawerProps = {
   dismissible?: boolean;
   overlay?: DrawerOverlay;
   position?: DrawerPosition;
-}
+} & DrawerPrimitive.Root.Props;
 
 type DrawerOnSnapPointChange = NonNullable<
   DrawerPrimitive.Root.Props["onSnapPointChange"]
@@ -295,14 +299,12 @@ function Drawer({
     null
   );
 
-  React.useImperativeHandle(
-    actionsRef,
-    () => ({
+  React.useImperativeHandle(actionsRef, () => {
+    return {
       close: () => internalActionsRef.current?.close(),
       unmount: () => internalActionsRef.current?.unmount(),
-    }),
-    []
-  );
+    };
+  }, []);
 
   const closeDrawer = React.useCallback(() => {
     if (dismissible) {
@@ -348,10 +350,7 @@ function Drawer({
     if (currentIndex < snapPoints.length - 1) {
       const nextPoint = snapPoints[currentIndex + 1];
       updateSnapPoint(nextPoint);
-      onSnapPointChange?.(
-        nextPoint,
-        createImperativeSnapPointChangeDetails()
-      );
+      onSnapPointChange?.(nextPoint, createImperativeSnapPointChangeDetails());
     }
   }, [snapPoints, currentSnapPoint, onSnapPointChange, updateSnapPoint]);
 
@@ -361,10 +360,7 @@ function Drawer({
     if (currentIndex > 0) {
       const prevPoint = snapPoints[currentIndex - 1];
       updateSnapPoint(prevPoint);
-      onSnapPointChange?.(
-        prevPoint,
-        createImperativeSnapPointChangeDetails()
-      );
+      onSnapPointChange?.(prevPoint, createImperativeSnapPointChangeDetails());
     }
   }, [snapPoints, currentSnapPoint, onSnapPointChange, updateSnapPoint]);
 
@@ -401,8 +397,8 @@ function Drawer({
       [onOpenChangeComplete]
     );
 
-  const contextValue = React.useMemo<DrawerContextValue>(
-    () => ({
+  const contextValue = React.useMemo<DrawerContextValue>(() => {
+    return {
       drawerId,
       isNested,
       dismissible,
@@ -416,23 +412,22 @@ function Drawer({
       closeDrawer,
       isAtFullSnap,
       keepMounted,
-    }),
-    [
-      drawerId,
-      isNested,
-      dismissible,
-      overlay,
-      position,
-      snapPoints,
-      currentSnapPoint,
-      lastVisibleSnapPoint,
-      expandToNextSnapPoint,
-      collapseToPrevSnapPoint,
-      closeDrawer,
-      isAtFullSnap,
-      keepMounted,
-    ]
-  );
+    };
+  }, [
+    drawerId,
+    isNested,
+    dismissible,
+    overlay,
+    position,
+    snapPoints,
+    currentSnapPoint,
+    lastVisibleSnapPoint,
+    expandToNextSnapPoint,
+    collapseToPrevSnapPoint,
+    closeDrawer,
+    isAtFullSnap,
+    keepMounted,
+  ]);
 
   return (
     <DrawerContext.Provider value={contextValue}>
@@ -658,17 +653,17 @@ function DrawerBackdrop({
       )}
       data-slot="drawer-backdrop"
       data-drawer-id={drawerId}
-      forceRender={Boolean(forceRender || isNested)}
+      forceRender={forceRender === true || isNested}
       onWheel={handleWheel}
       {...props}
     />
   );
 }
 
-interface DrawerViewportProps extends DrawerPrimitive.Viewport.Props {
+type DrawerViewportProps = {
   position?: DrawerPosition;
   variant?: DrawerVariant;
-}
+} & DrawerPrimitive.Viewport.Props;
 
 function DrawerViewport({
   className,
@@ -711,13 +706,13 @@ function DrawerViewport({
   );
 }
 
-interface DrawerPopupProps extends DrawerPrimitive.Popup.Props {
+type DrawerPopupProps = {
   position?: DrawerPosition;
   variant?: DrawerVariant;
   showBar?: boolean;
   level?: DrawerSurfaceLevel;
   shadowLevel?: DrawerShadowLevel;
-}
+} & DrawerPrimitive.Popup.Props;
 
 type DrawerPopupStyle = DrawerPrimitive.Popup.Props["style"];
 type DrawerPopupStyleObject = React.CSSProperties &
@@ -734,10 +729,12 @@ function mergeDrawerPopupStyle(
   style: DrawerPopupStyle
 ): DrawerPopupStyle {
   if (typeof style === "function") {
-    return (state: DrawerPrimitive.Popup.State) => ({
-      ...baseStyle,
-      ...style(state),
-    });
+    return (state: DrawerPrimitive.Popup.State) => {
+      return {
+        ...baseStyle,
+        ...style(state),
+      };
+    };
   }
 
   return { ...baseStyle, ...style };
@@ -768,10 +765,9 @@ function DrawerPopup({
     variant === "floating" &&
     position === "bottom" &&
     Boolean(snapPoints?.length);
-  const popupContextValue = React.useMemo(
-    () => ({ position, variant }),
-    [position, variant]
-  );
+  const popupContextValue = React.useMemo(() => {
+    return { position, variant };
+  }, [position, variant]);
   const floatingSnapOffset = usesFloatingSnapPoints
     ? getFloatingDrawerSnapOffset(currentSnapPoint ?? lastVisibleSnapPoint)
     : "0px";
@@ -952,9 +948,9 @@ function DrawerPopup({
   );
 }
 
-interface DrawerHeaderProps extends useRender.ComponentProps<"div"> {
+type DrawerHeaderProps = {
   allowSelection?: boolean;
-}
+} & useRender.ComponentProps<"div">;
 
 function DrawerHeader({
   className,
@@ -978,11 +974,11 @@ function DrawerHeader({
   });
 }
 
-interface DrawerFooterProps extends useRender.ComponentProps<"div"> {
+type DrawerFooterProps = {
   variant?: "default" | "inset";
   sticky?: boolean;
   allowSelection?: boolean;
-}
+} & useRender.ComponentProps<"div">;
 
 function DrawerFooter({
   className,
@@ -1061,11 +1057,11 @@ function DrawerDescription({
   );
 }
 
-interface DrawerPanelProps extends useRender.ComponentProps<"div"> {
+type DrawerPanelProps = {
   scrollFade?: boolean;
   scrollable?: boolean;
   allowSelection?: boolean;
-}
+} & useRender.ComponentProps<"div">;
 
 function DrawerPanel({
   className,
@@ -1087,8 +1083,9 @@ function DrawerPanel({
   const scrollAreaRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
-    if (!scrollable || !isBottom || !hasSnapPoints || usesFloatingSnapHeight)
+    if (!scrollable || !isBottom || !hasSnapPoints || usesFloatingSnapHeight) {
       return;
+    }
     const contentElement = contentRef.current;
     const scrollAreaElement = scrollAreaRef.current;
     if (!contentElement || !scrollAreaElement) return;
@@ -1165,9 +1162,9 @@ function DrawerPanel({
   return content;
 }
 
-interface DrawerBarProps extends useRender.ComponentProps<"div"> {
+type DrawerBarProps = {
   position?: DrawerPosition;
-}
+} & useRender.ComponentProps<"div">;
 
 function DrawerBar({
   className,

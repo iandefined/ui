@@ -50,24 +50,20 @@ const segmentedControlSizeClasses = {
   lg: "min-h-10",
 } as const;
 
-export interface SegmentedControlProps<
-  Value = string,
-> extends RadioGroupPrimitive.Props<Value> {
+export type SegmentedControlProps<Value = string> = {
   invalid?: boolean;
   size?: "sm" | "default" | "lg";
-}
+} & RadioGroupPrimitive.Props<Value>;
 
-export interface SegmentedControlItemProps<
-  Value = string,
-> extends RadioPrimitive.Root.Props<Value> {
+export type SegmentedControlItemProps<Value = string> = {
   size?: "sm" | "default" | "lg";
-}
+} & RadioPrimitive.Root.Props<Value>;
 
 export type SegmentedControlSize = NonNullable<SegmentedControlProps["size"]>;
 
-interface SegmentedControlContextValue {
+type SegmentedControlContextValue = {
   size: SegmentedControlSize;
-}
+};
 
 const SegmentedControlContext = createContext<SegmentedControlContextValue>({
   size: "default",
@@ -181,7 +177,7 @@ function SegmentedControl<Value = string>({
             "motion-reduce:transition-none",
             className
           )}
-          aria-invalid={invalid || undefined}
+          aria-invalid={invalid === true ? true : undefined}
           data-invalid={invalid ? "" : undefined}
           data-invalid-shake="owner"
           data-size={size}

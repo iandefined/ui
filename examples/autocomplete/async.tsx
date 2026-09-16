@@ -16,11 +16,11 @@ import {
 import { Label } from "@/registry/base/label";
 import { Spinner } from "@/registry/base/spinner";
 
-interface Movie {
+type Movie = {
   id: string;
   title: string;
   year: number;
-}
+};
 
 const top30Movies: Movie[] = [
   { id: "1", title: "The Shawshank Redemption", year: 1994 },
