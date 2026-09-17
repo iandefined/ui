@@ -729,36 +729,4 @@ can omit both `thumbnail` and `poster` to derive a thumbnail automatically.
 
 In Chromium-based browsers, a fixed backdrop using `backdrop-filter: blur(...)` can produce horizontal or vertical colorless seams when sampling nested scroll containers under high device-pixel ratios. This is a browser compositor tile-rendering artifact rather than a CSS box shadow.
 
-When an application layout triggers this artifact, use the `data-overlay="blur"` attribute on `[data-slot="lightbox-backdrop"]` to disable the backdrop filter and apply an ordinary `filter: blur(...)` directly to the children of the application scroll container. Keep the lightbox portal mounted outside the blurred container.
-
-```css title="app.css"
-@property --app-lightbox-blur {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-[data-slot="lightbox-backdrop"][data-overlay="blur"]:not([hidden]) {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-:root {
-  --app-lightbox-blur: 0px;
-  transition: --app-lightbox-blur 200ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-:root:has([data-slot="lightbox-backdrop"][data-overlay="blur"]:not([hidden]):not([data-ending-style])) {
-  --app-lightbox-blur: 12px;
-}
-
-.app-scroll-container > * {
-  filter: blur(var(--app-lightbox-blur));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    transition: none;
-  }
-}
-```
+When an application layout triggers this artifact, use the shared [Overlay Effects](../overlays#chromium-backdrop-blur-seams) workaround. It includes `[data-slot="lightbox-backdrop"]`, matches Lightbox's 200ms transition and 12px blur radius, and covers the underlying overlay wrapper when Lightbox is opened from a Dialog, Drawer, Sheet, or Popover.

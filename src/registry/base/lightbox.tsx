@@ -57,7 +57,7 @@ const LIGHTBOX_STYLES = String.raw`
   }
 
   :where([data-slot="lightbox-zoom"][data-zoomed="true"]) {
-    cursor: grab;
+    cursor: zoom-out;
   }
 
   :where([data-slot="lightbox-zoom"][data-zoomed="true"][data-dragging="true"]) {

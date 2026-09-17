@@ -4,7 +4,7 @@ Configure backdrop treatments and work around browser compositing artifacts.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
 
-`Dialog`, `Drawer`, and `Sheet` share the same overlay modes. Use the default blur for depth, brightness for a plain dimmer, or transparent when modal interaction should remain without a visible backdrop.
+`Dialog`, `Drawer`, and `Sheet` share the same overlay modes. Use the default blur for depth, brightness for a plain dimmer, or transparent when modal interaction should remain without a visible backdrop. `Lightbox` supports the same blur and brightness treatments.
 
 | Value           | Treatment                                            |
 | --------------- | ---------------------------------------------------- |
@@ -20,12 +20,18 @@ The artifact is most likely when the page scrolls inside a nested container and 
 
 ### Nested Scroller Workaround
 
-The backdrop exposes `data-overlay="blur"`, and each component uses a specific `data-slot`: `dialog-backdrop`, `drawer-backdrop`, or `sheet-backdrop`. Disable the backdrop filter while a blur overlay is mounted, then blur the application layers directly. Mount the overlay portal outside `.app-scroll-container` so the popup remains sharp.
+The backdrop exposes `data-overlay="blur"`, and each component uses a specific `data-slot`: `dialog-backdrop`, `drawer-backdrop`, `sheet-backdrop`, or `lightbox-backdrop`. Disable the backdrop filter while a blur overlay is mounted, then blur the application layers directly. Mount the overlay portal outside `.app-scroll-container` so the popup remains sharp.
 
 ```css title="app.css"
 @property --app-overlay-blur {
   syntax: "<length>";
   inherits: true;
+  initial-value: 0px;
+}
+
+@property --app-lightbox-underlay-blur {
+  syntax: "<length>";
+  inherits: false;
   initial-value: 0px;
 }
 
@@ -41,7 +47,8 @@ The backdrop exposes `data-overlay="blur"`, and each component uses a specific `
 :is(
     [data-slot="dialog-backdrop"],
     [data-slot="drawer-backdrop"],
-    [data-slot="sheet-backdrop"]
+    [data-slot="sheet-backdrop"],
+    [data-slot="lightbox-backdrop"]
   )[data-overlay="blur"]:not([hidden]) {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -77,10 +84,21 @@ The backdrop exposes `data-overlay="blur"`, and each component uses a specific `
 }
 
 :root:has(
+    [data-slot="lightbox-backdrop"][data-overlay="blur"]:not(
+        [hidden],
+        [data-ending-style]
+      )
+  )
+  .app-scroll-container {
+  --app-overlay-blur: 12px;
+}
+
+:root:has(
     :is(
         [data-slot="dialog-backdrop"],
         [data-slot="drawer-backdrop"],
-        [data-slot="sheet-backdrop"]
+        [data-slot="sheet-backdrop"],
+        [data-slot="lightbox-backdrop"]
       )[data-overlay="blur"]:not([hidden])
   )
   .app-scroll-container
@@ -88,15 +106,54 @@ The backdrop exposes `data-overlay="blur"`, and each component uses a specific `
   filter: blur(var(--app-overlay-blur));
 }
 
+:root:has([data-slot="lightbox-backdrop"][data-overlay="blur"]:not([hidden]))
+  :is(
+    [data-slot="dialog-viewport"],
+    [data-slot="drawer-viewport"],
+    [data-slot="sheet-viewport"],
+    [data-slot="popover-positioner"]
+  ) {
+  --app-lightbox-underlay-blur: 0px;
+
+  filter: blur(var(--app-lightbox-underlay-blur));
+  transition: --app-lightbox-underlay-blur 200ms ease-out;
+}
+
+:root:has(
+    [data-slot="lightbox-backdrop"][data-overlay="blur"]:not(
+        [hidden],
+        [data-ending-style]
+      )
+  )
+  :is(
+    [data-slot="dialog-viewport"],
+    [data-slot="drawer-viewport"],
+    [data-slot="sheet-viewport"],
+    [data-slot="popover-positioner"]
+  ) {
+  --app-lightbox-underlay-blur: 12px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .app-scroll-container {
+    transition-duration: 0ms;
+  }
+
+  :is(
+    [data-slot="dialog-viewport"],
+    [data-slot="drawer-viewport"],
+    [data-slot="sheet-viewport"],
+    [data-slot="popover-positioner"]
+  ) {
     transition-duration: 0ms;
   }
 }
 ```
 
-Keep the fallback blur duration and easing synchronized with the overlay surface. `Dialog` uses a 200ms surface transition. `Drawer` and `Sheet` use a 300ms `ease-out` surface transition, so the example gives their backdrop and fallback blur that same timing. If you change `backdrop-blur-sm`, update the `8px` target to the matching blur radius.
+Keep the fallback blur duration and easing synchronized with the overlay surface. `Dialog` and `Lightbox` use a 200ms surface transition. `Drawer` and `Sheet` use a 300ms `ease-out` surface transition, so the example gives their backdrop and fallback blur that same timing. The example matches `backdrop-blur-sm` with `8px` and Lightbox's `backdrop-blur-md` with `12px`; update both targets if you change those utilities.
 
 The selector excludes `[data-ending-style]` from the active target but keeps `filter` mounted until `[hidden]` appears. This lets the registered custom property interpolate to `0px` during the exit animation instead of snapping off. Keep `inherits: true`; the direct application layers must inherit the animated value from the scroll container.
 
 Interactive swipe progress is scoped to the drawer portal and cannot cross into a sibling application container through CSS inheritance. If the fallback blur must track a drag continuously, mirror the drawer progress onto a shared ancestor. The CSS above synchronizes ordinary open and close transitions.
+
+When a body-portalled Lightbox opens from another overlay, that overlay is also outside `.app-scroll-container`. The second registered property applies the same compositor-safe blur to the underlying Dialog, Drawer, Sheet, or Popover wrapper while keeping the Lightbox itself sharp.
