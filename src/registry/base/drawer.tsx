@@ -88,14 +88,25 @@ const drawerShadowDirections: Record<DrawerPosition, [number, number]> = {
 
 // Logarithmic scaling keeps the generator finite for every positive level while
 // the superlinear dimensions preserve a subtle low-elevation curve.
-function createShadow(direction: [number, number], level: DrawerShadowLevel) {
+function createShadow(
+  direction: [number, number],
+  level: DrawerShadowLevel,
+  includeAmbientShadow = true
+) {
   const normalizedLevel = Number.isFinite(level) ? Math.max(1, level) : 1;
   const scale = Math.log2(normalizedLevel);
   const distance = Math.round(1.5 * scale ** 2.2);
   const blur = Math.max(4, Math.round(4 + 3 * scale ** 2));
   const opacity = Math.min(0.08, 0.03 + 0.02 * scale);
 
-  const directionalShadow = `${direction[0] * distance}px ${direction[1] * distance}px ${blur}px 0px rgb(0 0 0 / ${opacity.toFixed(3)})`;
+  const isDirectional = direction[0] !== 0 || direction[1] !== 0;
+  const spread = isDirectional ? -blur : 0;
+  const directionalShadow = `${direction[0] * distance}px ${direction[1] * distance}px ${blur}px ${spread}px rgb(0 0 0 / ${opacity.toFixed(3)})`;
+
+  if (!includeAmbientShadow) {
+    return directionalShadow;
+  }
+
   const ambientBlur = Math.max(4, Math.round(2 + 4 * scale ** 1.8));
   const ambientShadow = `0px 0px ${ambientBlur}px 0px rgb(0 0 0 / ${(opacity * 0.75).toFixed(3)})`;
 
@@ -106,7 +117,7 @@ function createDirectionalShadow(
   position: DrawerPosition,
   level: DrawerShadowLevel
 ) {
-  return createShadow(drawerShadowDirections[position], level);
+  return createShadow(drawerShadowDirections[position], level, false);
 }
 
 function createFloatingShadow(level: DrawerShadowLevel) {
