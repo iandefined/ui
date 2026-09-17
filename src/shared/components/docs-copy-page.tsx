@@ -150,6 +150,16 @@ const MENU_ITEMS: [string, (url: string) => React.ReactElement][] = [
   ],
 ];
 
+export const fetchMarkdown = async (markdownUrl: string) => {
+  const response = await fetch(markdownUrl);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch Markdown: ${response.status}`);
+  }
+
+  return response.text();
+};
+
 export const DocsCopyPage = ({
   markdownUrl,
   url,
@@ -157,10 +167,10 @@ export const DocsCopyPage = ({
   markdownUrl: string;
   url: string;
 }) => {
-  const copyValue = useCallback(async () => {
-    const response = await fetch(markdownUrl);
-    return response.text();
-  }, [markdownUrl]);
+  const copyValue = useCallback(
+    () => fetchMarkdown(markdownUrl),
+    [markdownUrl]
+  );
 
   const menuTrigger = (
     <Button

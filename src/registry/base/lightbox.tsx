@@ -103,6 +103,8 @@ const LIGHTBOX_STYLES = String.raw`
 const EMPTY_CAPTIONS_TRACK = "data:text/vtt;charset=utf-8,WEBVTT%0A%0A";
 const interactiveSelector =
   "a,button,input,select,textarea,summary,video,audio,iframe,[contenteditable=true],[role=button],[role=link],[data-lightbox-gesture-ignore]";
+const postGestureActivationSelector =
+  'a[href],button,input:not([type="hidden"]),select,textarea,summary,label,[contenteditable=true],[role="button"],[role="link"],[role="checkbox"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[role="option"],[role="radio"],[role="switch"],[role="tab"]';
 
 type LightboxOverlay = "blur" | "brightness";
 type LightboxDirection = "ltr" | "rtl";
@@ -303,6 +305,7 @@ type LightboxContextValue = {
   activeIndex: number;
   activeItem?: LightboxItem;
   actions: LightboxActions;
+  armPostGestureActivationRepair: (event: Event) => void;
   animateZoom: (
     target: Pick<TransformState, "scale" | "panX" | "panY">
   ) => void;
@@ -421,6 +424,19 @@ function getStandaloneGalleryImage(
   return image;
 }
 
+function getPostGestureActivationTarget(target: EventTarget | null) {
+  if (!(target instanceof Element)) return null;
+  const element = target.closest<HTMLElement>(postGestureActivationSelector);
+  if (
+    !element ||
+    element.matches(':disabled,[aria-disabled="true"]') ||
+    element.closest("[inert]")
+  ) {
+    return null;
+  }
+  return element;
+}
+
 function imageToItem(image: HTMLImageElement): LightboxImageItem {
   const figure = image.closest("figure");
   const caption =
@@ -504,6 +520,9 @@ function Lightbox({
     new Map<HTMLImageElement, Record<string, string | null>>()
   );
   const openingCleanupRef = React.useRef<(() => void) | null>(null);
+  const postGestureActivationCleanupRef = React.useRef<(() => void) | null>(
+    null
+  );
   const zoomAnimationRef = React.useRef<ReturnType<typeof animate> | null>(
     null
   );
@@ -537,6 +556,150 @@ function Lightbox({
   );
   const activeItem = items[activeIndex];
   const direction = dir ?? inheritedDirection;
+
+  const armPostGestureActivationRepair = React.useCallback(
+    (releaseEvent: Event) => {
+      if (
+        !(releaseEvent instanceof PointerEvent) ||
+        (releaseEvent.pointerType !== "touch" &&
+          releaseEvent.pointerType !== "pen")
+      ) {
+        return;
+      }
+
+      const releaseTarget = releaseEvent.target;
+      const doc =
+        releaseTarget instanceof Node
+          ? (releaseTarget.ownerDocument ?? document)
+          : document;
+      const view = doc.defaultView ?? window;
+      postGestureActivationCleanupRef.current?.();
+
+      let active = true;
+      let fallbackTimer = 0;
+      let suppressionTimer = 0;
+      let press: {
+        pointerId: number;
+        target: HTMLElement;
+        startX: number;
+        startY: number;
+      } | null = null;
+      let pendingTarget: HTMLElement | null = null;
+      let syntheticTarget: HTMLElement | null = null;
+
+      function cleanup() {
+        if (!active) return;
+        active = false;
+        view.clearTimeout(fallbackTimer);
+        view.clearTimeout(suppressionTimer);
+        doc.removeEventListener("click", handleClick, true);
+        doc.removeEventListener("pointercancel", handlePointerCancel, true);
+        doc.removeEventListener("pointerdown", handlePointerDown, true);
+        doc.removeEventListener("pointermove", handlePointerMove, true);
+        doc.removeEventListener("pointerup", handlePointerUp, true);
+        if (postGestureActivationCleanupRef.current === cleanup) {
+          postGestureActivationCleanupRef.current = null;
+        }
+      }
+
+      function handlePointerDown(event: PointerEvent) {
+        if (!event.isPrimary) {
+          if (press || pendingTarget) cleanup();
+          return;
+        }
+        if (event.button !== 0) return;
+        if (press || pendingTarget || syntheticTarget) {
+          cleanup();
+          return;
+        }
+        const target = getPostGestureActivationTarget(event.target);
+        if (!target || target.closest('[data-slot="lightbox-portal"]')) {
+          cleanup();
+          return;
+        }
+        press = {
+          pointerId: event.pointerId,
+          target,
+          startX: event.clientX,
+          startY: event.clientY,
+        };
+      }
+
+      function handlePointerMove(event: PointerEvent) {
+        if (!press || press.pointerId !== event.pointerId) return;
+        if (
+          Math.hypot(
+            event.clientX - press.startX,
+            event.clientY - press.startY
+          ) > 8
+        ) {
+          cleanup();
+        }
+      }
+
+      function handlePointerCancel(event: PointerEvent) {
+        if (press?.pointerId === event.pointerId) cleanup();
+      }
+
+      function handlePointerUp(event: PointerEvent) {
+        if (!press || press.pointerId !== event.pointerId) return;
+        const currentPress = press;
+        press = null;
+        const target = getPostGestureActivationTarget(event.target);
+        if (
+          target !== currentPress.target ||
+          Math.hypot(
+            event.clientX - currentPress.startX,
+            event.clientY - currentPress.startY
+          ) > 8
+        ) {
+          cleanup();
+          return;
+        }
+
+        pendingTarget = currentPress.target;
+        fallbackTimer = view.setTimeout(() => {
+          const activationTarget = pendingTarget;
+          if (
+            !active ||
+            !activationTarget?.isConnected ||
+            getPostGestureActivationTarget(activationTarget) !==
+              activationTarget
+          ) {
+            cleanup();
+            return;
+          }
+          pendingTarget = null;
+          syntheticTarget = activationTarget;
+          activationTarget.click();
+          suppressionTimer = view.setTimeout(cleanup, 500);
+        }, 80);
+      }
+
+      function handleClick(event: MouseEvent) {
+        if (!event.isTrusted) return;
+        const target =
+          event.target instanceof Element
+            ? event.target.closest<HTMLElement>(postGestureActivationSelector)
+            : null;
+        if (syntheticTarget && target === syntheticTarget) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          cleanup();
+          return;
+        }
+        if (pendingTarget) cleanup();
+      }
+
+      doc.addEventListener("click", handleClick, true);
+      doc.addEventListener("pointercancel", handlePointerCancel, true);
+      doc.addEventListener("pointerdown", handlePointerDown, true);
+      doc.addEventListener("pointermove", handlePointerMove, true);
+      doc.addEventListener("pointerup", handlePointerUp, true);
+      postGestureActivationCleanupRef.current = cleanup;
+    },
+    []
+  );
 
   const markAssetLoaded = React.useCallback((key: string) => {
     setLoadedAssets((current) => {
@@ -599,6 +762,7 @@ function Lightbox({
   React.useEffect(
     () => () => {
       openingCleanupRef.current?.();
+      postGestureActivationCleanupRef.current?.();
       stopZoomAnimation();
     },
     [stopZoomAnimation]
@@ -1011,6 +1175,7 @@ function Lightbox({
       activeIndex,
       activeItem,
       actions,
+      armPostGestureActivationRepair,
       animateZoom,
       changeIndex,
       closeWithDetails,
@@ -1041,6 +1206,7 @@ function Lightbox({
     activeIndex,
     activeItem,
     actions,
+    armPostGestureActivationRepair,
     animateZoom,
     changeIndex,
     closeWithDetails,
@@ -1785,6 +1951,7 @@ function LightboxSlides({
   const {
     activeIndex,
     activeItem,
+    armPostGestureActivationRepair,
     animateZoom,
     changeIndex,
     closeWithDetails,
@@ -2014,6 +2181,14 @@ function LightboxSlides({
     ]
   );
 
+  const closeFromGesture = React.useCallback(
+    (event?: Event) => {
+      if (event) armPostGestureActivationRepair(event);
+      closeWithDetails(getEventDetails("imperative-action", event, null));
+    },
+    [armPostGestureActivationRepair, closeWithDetails]
+  );
+
   const releaseGesture = React.useCallback(
     (event?: Event) => {
       const session = sessionRef.current;
@@ -2050,7 +2225,7 @@ function LightboxSlides({
           const target =
             Math.sign(current.dismissY || session.velocityY) * height;
           animateTransformValue("dismissY", target);
-          closeWithDetails(getEventDetails("imperative-action", event, null));
+          closeFromGesture(event);
         } else {
           animateTransformValue("dismissY", 0);
         }
@@ -2075,7 +2250,7 @@ function LightboxSlides({
     [
       animateNavigation,
       animateTransformValue,
-      closeWithDetails,
+      closeFromGesture,
       direction,
       getPanBounds,
       maxZoom,
@@ -2356,7 +2531,7 @@ function LightboxSlides({
         const target =
           Math.sign(current.y || transformRef.current.dismissY) * height;
         animateTransformValue("dismissY", target);
-        closeWithDetails(getEventDetails("imperative-action", event, null));
+        closeFromGesture(event);
       } else {
         animateTransformValue("swipeX", 0);
         animateTransformValue("dismissY", 0);
@@ -2367,7 +2542,7 @@ function LightboxSlides({
     [
       animateNavigation,
       animateTransformValue,
-      closeWithDetails,
+      closeFromGesture,
       direction,
       noCarousel,
     ]

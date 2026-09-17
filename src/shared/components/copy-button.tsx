@@ -58,16 +58,20 @@ export const CopyButton = ({
     };
 
     if (typeof valueToCopy === "string") {
-      void copyToClipboard(valueToCopy).then((hasCopied) => {
-        trackCopy(valueToCopy, hasCopied);
-      });
+      void copyToClipboard(valueToCopy)
+        .then((hasCopied) => {
+          trackCopy(valueToCopy, hasCopied);
+        })
+        .catch(() => undefined);
       return;
     }
 
-    void valueToCopy.then(async (text) => {
-      const hasCopied = await copyToClipboard(text);
-      trackCopy(text, hasCopied);
-    });
+    void valueToCopy
+      .then(async (text) => {
+        const hasCopied = await copyToClipboard(text);
+        trackCopy(text, hasCopied);
+      })
+      .catch(() => undefined);
   }, [copyToClipboard, event, getValue]);
 
   const copyButton = (

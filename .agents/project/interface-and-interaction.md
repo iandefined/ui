@@ -48,6 +48,11 @@ Every rule in this document is explicitly categorized into one of three levels:
 - Keep the active drag cursor on a stable gesture surface for the full pointer-capture session. Do not attach `grabbing` only to a translated child because moving that child out from under the pointer makes the browser fall back to another cursor while the drag is still active.
 - Apply the active cursor to the gesture surface and its descendants so zoom panning, carousel swiping, and other pointer drags retain one consistent affordance until pointer release or cancellation.
 
+### [HARD REQUIREMENT] Post-Gesture Activation Recovery
+- If browser event tracing confirms that the first control pressed after a touch or pen dismissal receives `pointerdown` and `pointerup` but no `click`, repair the missing activation once at the persistent overlay root. Do not add separate fallbacks to each affected page control.
+- Arm recovery only for the committed gesture-close path. Track one primary, stationary press on the same enabled interactive element; cancel on movement, multitouch, cancellation, target changes, or component unmount.
+- Give the browser's trusted click a short opportunity to arrive before invoking the original element. If fallback activation is required, suppress only the matching late trusted click and clear that suppression as soon as another physical press begins so activation cannot double-fire.
+
 ---
 
 ## 2. Forms and Input States

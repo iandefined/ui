@@ -240,6 +240,7 @@ function ScrollBar({
         "relative z-20 m-1.5 flex rounded-full bg-muted opacity-0 transition-opacity delay-200 data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:flex-col data-[orientation=vertical]:w-1.5 data-hovering:opacity-100 data-scrolling:opacity-100 data-hovering:delay-0 data-scrolling:delay-0 data-hovering:duration-100 data-scrolling:duration-100",
         className
       )}
+      data-base-ui-swipe-ignore
       data-slot="scroll-area-scrollbar"
       orientation={orientation}
       {...props}
