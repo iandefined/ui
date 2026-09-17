@@ -98,7 +98,6 @@ export const createPageHead = ({
 
 export const rootHead: PageHead = {
   links: [
-    { href: ROUTES.HOME, rel: "canonical" },
     {
       href: "/apple-touch-icon.png",
       rel: "apple-touch-icon",
