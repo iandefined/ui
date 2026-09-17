@@ -5,7 +5,8 @@
   "description": "A filterable input for selecting one or more predefined values.",
   "dependencies": [
     "@base-ui/react",
-    "cn"
+    "cn",
+    "lucide-react"
   ],
   "registryDependencies": [
     "https://ui.iandefined.com/r/input.json",

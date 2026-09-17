@@ -29,7 +29,7 @@ const buttonVariants = tv({
       outline:
         "border border-border bg-background shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.02),0_3px_3px_-1.5px_rgb(0_0_0/0.04)] hover:bg-accent active:bg-accent/80 hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground dark:border-input dark:bg-input/30 dark:shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.44),0_3px_3px_-2px_rgb(0_0_0/0.40)] dark:hover:bg-input/50 dark:aria-expanded:bg-input/50 dark:active:bg-input/40",
       ghost:
-        "hover:bg-muted active:bg-muted/80 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 dark:aria-expanded:bg-muted/50 dark:active:bg-muted/40 focus-visible:bg-muted dark:focus-visible:bg-muted/50 focus-visible:border-primary/25",
+        "hover:bg-muted active:bg-muted/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 dark:aria-expanded:bg-muted/50 dark:active:bg-muted/40 focus-visible:bg-muted dark:focus-visible:bg-muted/50 focus-visible:border-primary/25",
       link: "text-primary hover:underline hover:underline-offset-4 hover:decoration-1 active:underline active:underline-offset-4 active:decoration-1 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-1",
       destructive:
         "[--button-bg:var(--destructive)] font-medium text-destructive-foreground ring-1 ring-[color-mix(in_oklch,var(--destructive),black_18%)] shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--destructive),white_30%),0_1px_2px_oklch(0.1_0_0_/_0.1)] focus-visible:border-destructive focus-visible:ring-destructive",
@@ -114,8 +114,7 @@ type SharedButtonProps = Omit<BaseButtonProps, "color" | "style"> & {
     | "icon-xl";
   style?: ButtonStyle;
 };
-
-type ButtonProps = SharedButtonProps &
+type ButtonPropsSource = SharedButtonProps &
   (
     | {
         /** CSS color used as the default variant's background color. */
@@ -133,6 +132,14 @@ type ButtonProps = SharedButtonProps &
           | "destructive";
       }
   );
+
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown
+  ? Omit<T, K>
+  : never;
+type ButtonProps<TOmitted extends PropertyKey = never> = DistributiveOmit<
+  ButtonPropsSource,
+  TOmitted
+>;
 
 type ButtonVariant = NonNullable<ButtonProps["variant"]>;
 type ButtonSize = NonNullable<ButtonProps["size"]>;

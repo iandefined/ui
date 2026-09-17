@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import type React from "react";
+import * as React from "react";
 import { tv } from "tailwind-variants";
 
 const cardVariants = tv({
@@ -21,23 +21,30 @@ type CardProps = React.ComponentProps<"div"> & {
 
 type CardVariant = NonNullable<CardProps["variant"]>;
 
+const CardVariantContext = React.createContext<CardVariant>("default");
+
 function Card({ className, variant = "default", ...props }: CardProps) {
   return (
-    <div
-      data-slot="card"
-      data-card-variant={variant}
-      className={cn(cardVariants({ variant }), className)}
-      {...props}
-    />
+    <CardVariantContext.Provider value={variant}>
+      <div
+        data-slot="card"
+        data-card-variant={variant}
+        className={cn(cardVariants({ variant }), className)}
+        {...props}
+      />
+    </CardVariantContext.Provider>
   );
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  const variant = React.useContext(CardVariantContext);
   return (
     <div
       data-slot="card-header"
       className={cn(
-        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 gap-1 [[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:py-3",
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4 gap-1",
+        variant === "default" && "px-4",
+        variant === "inset" && "px-3 py-3",
         className
       )}
       {...props}
@@ -85,11 +92,14 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  const variant = React.useContext(CardVariantContext);
   return (
     <div
       data-slot="card-content"
       className={cn(
-        "[[data-card-variant=default]>_&]:px-4 [[data-card-variant=inset]>_&]:flex [[data-card-variant=inset]>_&]:flex-1 [[data-card-variant=inset]>_&]:flex-col [[data-card-variant=inset]>_&]:rounded-lg [[data-card-variant=inset]>_&]:bg-card dark:[[data-card-variant=inset]>_&]:bg-muted [[data-card-variant=inset]>_&]:p-4 [[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:[[data-card-variant=inset]>_&]:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
+        variant === "default" && "px-4",
+        variant === "inset" &&
+          "flex flex-1 flex-col rounded-lg bg-card p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:bg-muted dark:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]",
         className
       )}
       {...props}
@@ -98,11 +108,14 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  const variant = React.useContext(CardVariantContext);
   return (
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center [[data-card-variant=default]>_&]:pt-4 mt-auto [[data-card-variant=default]>_&]:px-4 justify-end [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:pt-2 [[data-card-variant=inset]>_&]:px-3 [[data-card-variant=inset]>_&]:pb-1",
+        "mt-auto flex items-center justify-end",
+        variant === "default" && "px-4 pt-4",
+        variant === "inset" && "px-3 pt-2 pb-1",
         className
       )}
       {...props}

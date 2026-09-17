@@ -5,7 +5,8 @@
   "description": "A filterable text input that suggests matching options while accepting free-form text.",
   "dependencies": [
     "@base-ui/react",
-    "cn"
+    "cn",
+    "lucide-react"
   ],
   "registryDependencies": [
     "https://ui.iandefined.com/r/input.json",

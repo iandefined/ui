@@ -19,6 +19,9 @@ export type AccordionProps = BaseAccordion.Root.Props & {
   variant?: AccordionVariant;
 };
 
+const AccordionVariantContext =
+  React.createContext<AccordionVariant>("default");
+
 function Accordion({
   className,
   multiple = false,
@@ -28,65 +31,46 @@ function Accordion({
   const isInset = variant === "inset" || variant === "nested";
 
   return (
-    <BaseAccordion.Root
-      data-slot="accordion"
-      data-variant={variant}
-      multiple={multiple}
-      className={cn(
-        "group/accordion flex w-full flex-col",
-        variant === "split" && "space-y-2",
-        variant === "outline" &&
-          "bg-card overflow-hidden rounded-lg border border-border",
-        isInset && "rounded-xl border border-border bg-muted dark:bg-card p-1",
-        className
-      )}
-      {...props}
-    />
+    <AccordionVariantContext.Provider value={variant}>
+      <BaseAccordion.Root
+        data-slot="accordion"
+        data-variant={variant}
+        multiple={multiple}
+        className={cn(
+          "group/accordion flex w-full flex-col",
+          variant === "split" && "space-y-2",
+          variant === "outline" &&
+            "bg-card overflow-hidden rounded-lg border border-border",
+          isInset &&
+            "rounded-xl border border-border bg-muted p-1 dark:bg-card",
+          className
+        )}
+        {...props}
+      />
+    </AccordionVariantContext.Provider>
   );
 }
 
 export type AccordionItemProps = BaseAccordion.Item.Props;
 
 function AccordionItem({ className, ...props }: AccordionItemProps) {
+  const variant = React.useContext(AccordionVariantContext);
   return (
     <BaseAccordion.Item
       data-slot="accordion-item"
       className={cn(
         "ease-[cubic-bezier(0.16,1,0.3,1)] transition-[margin,border-radius,border] duration-250",
-        // Default variant
-        "group-data-[variant=default]/accordion:border-b group-data-[variant=default]/accordion:border-border group-data-[variant=default]/accordion:last:border-b-0",
-        // Split variant
-        "group-data-[variant=split]/accordion:bg-card group-data-[variant=split]/accordion:border-border group-data-[variant=split]/accordion:overflow-hidden group-data-[variant=split]/accordion:rounded-lg group-data-[variant=split]/accordion:border",
-        // Outline variant
-        "group-data-[variant=outline]/accordion:border-border group-data-[variant=outline]/accordion:border-b group-data-[variant=outline]/accordion:last:border-b-0",
-        // Inset / Nested variant
-        "group-data-[variant=inset]/accordion:mt-0.5 group-data-[variant=inset]/accordion:first:mt-0",
-        "group-data-[variant=nested]/accordion:mt-0.5 group-data-[variant=nested]/accordion:first:mt-0",
-        // Isolated bordered variant
-        "group-data-[variant=isolated-bordered]/accordion:bg-card group-data-[variant=isolated-bordered]/accordion:border-border group-data-[variant=isolated-bordered]/accordion:overflow-hidden group-data-[variant=isolated-bordered]/accordion:border",
-        "group-data-[variant=isolated-bordered]/accordion:relative group-data-[variant=isolated-bordered]/accordion:not-first:not-data-open:not-[[data-open]+&]:-mt-px",
-        "group-data-[variant=isolated-bordered]/accordion:data-open:mt-2 group-data-[variant=isolated-bordered]/accordion:data-open:mb-2 group-data-[variant=isolated-bordered]/accordion:data-open:rounded-lg",
-        "group-data-[variant=isolated-bordered]/accordion:first:rounded-t-lg group-data-[variant=isolated-bordered]/accordion:data-open:first:mt-0",
-        "group-data-[variant=isolated-bordered]/accordion:last:rounded-b-lg group-data-[variant=isolated-bordered]/accordion:data-open:last:mb-0",
-        "group-data-[variant=isolated-bordered]/accordion:[[data-open]+&]:rounded-t-lg",
-        "group-data-[variant=isolated-bordered]/accordion:[&:has(+_[data-open])]:rounded-b-lg",
-        // Isolated filled variant
-        "group-data-[variant=isolated-filled]/accordion:bg-muted group-data-[variant=isolated-filled]/accordion:overflow-hidden",
-        "group-data-[variant=isolated-filled]/accordion:data-open:my-2 group-data-[variant=isolated-filled]/accordion:data-open:rounded-lg",
-        "group-data-[variant=isolated-filled]/accordion:first:rounded-t-lg group-data-[variant=isolated-filled]/accordion:data-open:first:mt-0",
-        "group-data-[variant=isolated-filled]/accordion:last:rounded-b-lg group-data-[variant=isolated-filled]/accordion:data-open:last:mb-0",
-        "group-data-[variant=isolated-filled]/accordion:[[data-open]+&]:rounded-t-lg",
-        "group-data-[variant=isolated-filled]/accordion:[&:has(+_[data-open])]:rounded-b-lg",
-        // Isolated filled bordered variant
-        "group-data-[variant=isolated-filled-bordered]/accordion:bg-muted group-data-[variant=isolated-filled-bordered]/accordion:overflow-hidden",
-        "group-data-[variant=isolated-filled-bordered]/accordion:not-last:border-border group-data-[variant=isolated-filled-bordered]/accordion:not-last:border-b",
-        "group-data-[variant=isolated-filled-bordered]/accordion:[&:has(+_[data-open])]:border-transparent",
-        "group-data-[variant=isolated-filled-bordered]/accordion:data-open:border-transparent",
-        "group-data-[variant=isolated-filled-bordered]/accordion:data-open:my-2 group-data-[variant=isolated-filled-bordered]/accordion:data-open:rounded-lg",
-        "group-data-[variant=isolated-filled-bordered]/accordion:first:rounded-t-lg group-data-[variant=isolated-filled-bordered]/accordion:data-open:first:mt-0",
-        "group-data-[variant=isolated-filled-bordered]/accordion:last:rounded-b-lg group-data-[variant=isolated-filled-bordered]/accordion:data-open:last:mb-0",
-        "group-data-[variant=isolated-filled-bordered]/accordion:[[data-open]+&]:rounded-t-lg",
-        "group-data-[variant=isolated-filled-bordered]/accordion:[&:has(+_[data-open])]:rounded-b-lg",
+        variant === "default" && "border-border border-b last:border-b-0",
+        variant === "split" &&
+          "overflow-hidden rounded-lg border border-border bg-card",
+        variant === "outline" && "border-border border-b last:border-b-0",
+        (variant === "inset" || variant === "nested") && "mt-0.5 first:mt-0",
+        variant === "isolated-bordered" &&
+          "relative overflow-hidden border border-border bg-card not-first:not-data-open:not-[[data-open]+&]:-mt-px data-open:mt-2 data-open:mb-2 data-open:rounded-lg first:rounded-t-lg data-open:first:mt-0 last:rounded-b-lg data-open:last:mb-0 [[data-open]+&]:rounded-t-lg [&:has(+_[data-open])]:rounded-b-lg",
+        variant === "isolated-filled" &&
+          "overflow-hidden bg-muted data-open:my-2 data-open:rounded-lg first:rounded-t-lg data-open:first:mt-0 last:rounded-b-lg data-open:last:mb-0 [[data-open]+&]:rounded-t-lg [&:has(+_[data-open])]:rounded-b-lg",
+        variant === "isolated-filled-bordered" &&
+          "overflow-hidden bg-muted not-last:border-border not-last:border-b [&:has(+_[data-open])]:border-transparent data-open:border-transparent data-open:my-2 data-open:rounded-lg first:rounded-t-lg data-open:first:mt-0 last:rounded-b-lg data-open:last:mb-0 [[data-open]+&]:rounded-t-lg [&:has(+_[data-open])]:rounded-b-lg",
         className
       )}
       {...props}
@@ -124,6 +108,7 @@ function AccordionTrigger({
   subtitle,
   ...props
 }: AccordionTriggerProps) {
+  const variant = React.useContext(AccordionVariantContext);
   const hasStartIndicator = showIndicator && indicatorPosition === "start";
   const hasEndIndicator = showIndicator && indicatorPosition === "end";
 
@@ -158,13 +143,10 @@ function AccordionTrigger({
         data-has-icon={hasStartIndicator ? "true" : undefined}
         className={cn(
           "group/trigger flex w-full cursor-pointer items-center justify-between gap-3 p-3.5 text-left text-sm font-medium outline-none disabled:pointer-events-none disabled:opacity-60",
-          // Default variant
-          "group-data-[variant=default]/accordion:px-0",
-          // Split variant
-          "group-data-[variant=split]/accordion:rounded-t-lg",
-          // Inset / Nested variant
-          "group-data-[variant=nested]/accordion:hover:bg-card/60 dark:group-data-[variant=nested]/accordion:hover:bg-muted/60 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:px-3.5 group-data-[variant=nested]/accordion:py-2.5",
-          "group-data-[variant=inset]/accordion:hover:bg-card/60 dark:group-data-[variant=inset]/accordion:hover:bg-muted/60 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:px-3.5 group-data-[variant=inset]/accordion:py-2.5",
+          variant === "default" && "px-0",
+          variant === "split" && "rounded-t-lg",
+          (variant === "nested" || variant === "inset") &&
+            "rounded-lg px-3.5 py-2.5 hover:bg-card/60 dark:hover:bg-muted/60",
           // Indicator animations
           indicatorType === "chevron" &&
             "[&[data-panel-open]_[data-slot=accordion-indicator]]:rotate-180",
@@ -204,6 +186,7 @@ function AccordionContent({
   className,
   ...props
 }: AccordionContentProps) {
+  const variant = React.useContext(AccordionVariantContext);
   return (
     <BaseAccordion.Panel
       data-slot="accordion-content"
@@ -214,22 +197,20 @@ function AccordionContent({
     >
       <div
         className={cn(
-          "text-muted-foreground p-3.5",
-          "group-data-[variant=default]/accordion:px-0 group-data-[variant=default]/accordion:pt-0",
-          "group-data-[variant=split]/accordion:pt-0",
-          "group-data-[variant=outline]/accordion:pt-0",
-          // Inset / Nested variant
-          "group-data-[variant=nested]/accordion:mx-px group-data-[variant=nested]/accordion:my-1 group-data-[variant=nested]/accordion:rounded-lg group-data-[variant=nested]/accordion:bg-card dark:group-data-[variant=nested]/accordion:bg-muted group-data-[variant=nested]/accordion:p-4 group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=nested]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] group-data-[variant=nested]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
-          "group-data-[variant=inset]/accordion:mx-px group-data-[variant=inset]/accordion:my-1 group-data-[variant=inset]/accordion:rounded-lg group-data-[variant=inset]/accordion:bg-card dark:group-data-[variant=inset]/accordion:bg-muted group-data-[variant=inset]/accordion:p-4 group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:group-data-[variant=inset]/accordion:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] group-data-[variant=inset]/accordion:[[data-slot=accordion-item]:last-child_&]:mb-0",
-          // Isolated bordered variant
-          "group-data-[variant=isolated-bordered]/accordion:pt-0",
-          // Isolated filled variant
-          "group-data-[variant=isolated-filled]/accordion:pt-0",
-          // Isolated filled bordered variant
-          "group-data-[variant=isolated-filled-bordered]/accordion:pt-0",
+          "p-3.5 text-muted-foreground",
+          (variant === "default" ||
+            variant === "split" ||
+            variant === "outline" ||
+            variant === "isolated-bordered" ||
+            variant === "isolated-filled" ||
+            variant === "isolated-filled-bordered") &&
+            "pt-0",
+          (variant === "nested" || variant === "inset") &&
+            "mx-px my-1 rounded-lg bg-card p-4 shadow-[0_0_0_1px_rgb(0_0_0/0.06),0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:bg-muted dark:shadow-[0_0_0_1px_rgb(0_0_0/0.12),0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)] [[data-slot=accordion-item]:last-child_&]:mb-0",
           // Icon alignment - add left padding when parent item contains a trigger with icon
           "[[data-slot=accordion-item]:has([data-has-icon])_&]:pl-[calc(1rem+0.75rem)]",
-          "[[data-slot=accordion-item]:has([data-has-icon])_&]:group-data-[variant=default]/accordion:pl-[calc(1rem+0.75rem)]",
+          variant === "default" &&
+            "[[data-slot=accordion-item]:has([data-has-icon])_&]:pl-[calc(1rem+0.75rem)]",
           className
         )}
       >

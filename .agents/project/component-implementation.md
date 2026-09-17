@@ -18,6 +18,7 @@ For manifest ownership and portable CSS, see [registry-system.md](registry-syste
 - Forward or expose semantic state for styling when the component owns it: use Base UI state attributes first, then stable attributes such as `data-invalid`, `data-variant`, or `data-size` when needed.
 - Registry source imports `cn` from the `cn` package and other installed registry items from `@/components/ui/<name>`, matching consumer aliases.
 - Examples import from `@/registry/base/*`; displayed consumer code imports from the manifest target path.
+- Visual color ownership stays with the rendered part: keep `bg-*`, `text-*`, `border-*`, `ring-*`, shadow, hover, selected, striped, and dark-mode color classes on that part, not on a parent descendant selector. Use private context or semantic data attributes to coordinate compound state, and merge consumer `className` values last.
 
 ## Portability
 

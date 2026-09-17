@@ -64,12 +64,24 @@ const tableInsetCornerBackgrounds = {
 } as const;
 
 type TableContextValue = {
+  bordered: boolean;
+  hoverable: boolean;
+  rowDividers: boolean;
   resizable?: boolean;
+  striped: boolean;
 };
 
 const TableContext = React.createContext<TableContextValue>({
+  bordered: false,
+  hoverable: true,
+  rowDividers: true,
   resizable: false,
+  striped: false,
 });
+
+type TableSection = "header" | "body" | "footer";
+
+const TableSectionContext = React.createContext<TableSection>("body");
 
 function Table({
   className,
@@ -164,7 +176,15 @@ function Table({
   });
 
   return (
-    <TableContext.Provider value={{ resizable }}>
+    <TableContext.Provider
+      value={{
+        bordered,
+        hoverable,
+        resizable,
+        rowDividers,
+        striped: isStriped,
+      }}
+    >
       <div
         ref={containerRef}
         data-slot="table-container"
@@ -204,7 +224,7 @@ function Table({
             <table
               data-slot="table"
               className={cn(
-                "w-full caption-bottom text-sm border-separate border-spacing-0",
+                "w-full caption-bottom border-separate border-spacing-0 bg-card text-sm dark:bg-background",
                 resizable && "table-fixed",
                 bordered && "border-separate border-spacing-0"
               )}
@@ -267,47 +287,51 @@ function TableHeader({ className, render, ...props }: TableHeaderProps) {
     "data-slot": "table-header",
     className: cn(
       "[&_tr]:border-0",
-      "[&_tr_th]:bg-muted dark:[&_tr_th]:bg-card",
       "[&_tr_th:has(+_th[data-empty])]:after:hidden",
       "sticky top-0 z-20",
       className
     ),
   };
 
-  return useRender({
-    defaultTagName: "thead",
-    render,
-    props: mergeProps<"thead">(defaultProps, props),
-  });
+  return (
+    <TableSectionContext.Provider value="header">
+      {useRender({
+        defaultTagName: "thead",
+        render,
+        props: mergeProps<"thead">(defaultProps, props),
+      })}
+    </TableSectionContext.Provider>
+  );
 }
 
 export type TableBodyProps = useRender.ComponentProps<"tbody">;
 
 function TableBody({ className, render, ...props }: TableBodyProps) {
+  const { bordered, rowDividers } = React.useContext(TableContext);
   const defaultProps = {
     "data-slot": "table-body",
     className: cn(
-      "[&_tr_td]:bg-background",
-      "[&_tr_td]:border-border/70 dark:[&_tr_td]:border-border",
       "group-data-[rounded-inset=false]/table:[&_tr:first-child_td]:border-t",
       "group-data-[rounded-inset=false]/table:[&_tr:last-child_td]:border-b",
       "group-data-[rounded-inset=false]/table:[&_tr:has(+_tr:last-child[hidden])_td]:border-b",
       "group-data-[rounded-inset=false]/table:[&_tr_td:first-child]:border-l",
       "group-data-[rounded-inset=false]/table:[&_tr_td:last-child]:border-r",
-      "group-data-[row-dividers]/table:[&_tr:not(:last-child)_td]:border-b group-data-[row-dividers]/table:[&_tr_td]:border-border/60",
-      "group-data-bordered/table:[&_tr:not(:last-child)_td]:border-b group-data-bordered/table:[&_tr_td:not(:last-child)]:border-r group-data-bordered/table:[&_tr_td]:border-border/70 dark:group-data-bordered/table:[&_tr_td]:border-border",
-      "group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-muted/40 dark:group-data-[striped]/table:[&_tr:nth-child(even)_td]:bg-card/30",
-      "[@media(hover:hover)]:group-data-hoverable/table:[&_tr:hover_td]:bg-secondary/70 dark:[@media(hover:hover)]:group-data-hoverable/table:[&_tr:hover_td]:bg-muted/50",
-      "[@media(hover:hover)]:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-secondary/70 dark:[@media(hover:hover)]:group-data-hoverable/table:[&_tr:nth-child(even):hover_td]:bg-muted/50",
+      rowDividers && "[&_tr:not(:last-child)_td]:border-b",
+      bordered &&
+        "[&_tr:not(:last-child)_td]:border-b [&_tr_td:not(:last-child)]:border-r",
       className
     ),
   };
 
-  return useRender({
-    defaultTagName: "tbody",
-    render,
-    props: mergeProps<"tbody">(defaultProps, props),
-  });
+  return (
+    <TableSectionContext.Provider value="body">
+      {useRender({
+        defaultTagName: "tbody",
+        render,
+        props: mergeProps<"tbody">(defaultProps, props),
+      })}
+    </TableSectionContext.Provider>
+  );
 }
 
 export type TableFooterProps = useRender.ComponentProps<"tfoot">;
@@ -315,21 +339,18 @@ export type TableFooterProps = useRender.ComponentProps<"tfoot">;
 function TableFooter({ className, render, ...props }: TableFooterProps) {
   const defaultProps = {
     "data-slot": "table-footer",
-    className: cn(
-      "[&_tr]:border-0",
-      "[&_tr_td]:bg-muted dark:[&_tr_td]:bg-card",
-      "[&_tr_td]:px-3 [&_tr_td]:pt-2 [&_tr_td]:pb-1",
-      "[&_tr_td]:align-middle",
-      "text-sm font-medium",
-      className
-    ),
+    className: cn("[&_tr]:border-0", "text-sm font-medium", className),
   };
 
-  return useRender({
-    defaultTagName: "tfoot",
-    render,
-    props: mergeProps<"tfoot">(defaultProps, props),
-  });
+  return (
+    <TableSectionContext.Provider value="footer">
+      {useRender({
+        defaultTagName: "tfoot",
+        render,
+        props: mergeProps<"tfoot">(defaultProps, props),
+      })}
+    </TableSectionContext.Provider>
+  );
 }
 
 export type TableRowSticky = "top" | "bottom";
@@ -346,12 +367,20 @@ function TableRow({
   sticky,
   ...props
 }: TableRowProps) {
+  const { hoverable, striped } = React.useContext(TableContext);
+  const section = React.useContext(TableSectionContext);
   const defaultProps = {
     "data-slot": "table-row",
     "data-state": selected ? "selected" : undefined,
     "data-sticky": sticky,
     className: cn(
       "transition-colors duration-100 hover:transition-none",
+      section === "body" && striped && "even:bg-muted/40 dark:even:bg-card/30",
+      section === "body" &&
+        hoverable &&
+        "[@media(hover:hover)]:hover:bg-secondary/70 dark:[@media(hover:hover)]:hover:bg-muted/50",
+      selected &&
+        "data-[state=selected]:bg-secondary/60 dark:data-[state=selected]:bg-muted/30",
       sticky === "top" &&
         "[&>th]:sticky [&>th]:top-0 [&>th]:z-20 [&>td]:sticky [&>td]:top-0 [&>td]:z-20",
       sticky === "bottom" &&
@@ -368,12 +397,14 @@ function TableRow({
 }
 
 export type TableColumnResizerProps = {
+  indicatorClassName?: string;
   isResizing?: boolean;
   minWidth?: number;
 } & React.ComponentProps<"div">;
 
 function TableColumnResizer({
   className,
+  indicatorClassName,
   isResizing: isResizingProp,
   minWidth = 48,
   onMouseDown,
@@ -520,7 +551,6 @@ function TableColumnResizer({
       onKeyDown={handleKeyDown}
       className={cn(
         "group/resizer absolute right-0 top-0 z-20 flex h-full w-4 cursor-col-resize touch-none select-none items-center justify-center outline-none [@media(pointer:coarse)]:w-11",
-        "focus-visible:[&>div]:bg-[oklch(0.7_0_0)] dark:focus-visible:[&>div]:bg-[oklch(0.5_0_0)]",
         "[[data-slot=table-head]:last-child_&]:hidden",
         className
       )}
@@ -529,8 +559,10 @@ function TableColumnResizer({
       <div
         className={cn(
           "w-px h-4 bg-border transition-colors duration-150",
+          "group-focus-visible/resizer:bg-[oklch(0.7_0_0)] dark:group-focus-visible/resizer:bg-[oklch(0.5_0_0)]",
           "group-hover/resizer:bg-[oklch(0.7_0_0)] dark:group-hover/resizer:bg-[oklch(0.5_0_0)]",
-          isResizing && "bg-[oklch(0.7_0_0)] dark:bg-[oklch(0.5_0_0)]"
+          isResizing && "bg-[oklch(0.7_0_0)] dark:bg-[oklch(0.5_0_0)]",
+          indicatorClassName
         )}
       />
     </div>
@@ -564,15 +596,15 @@ function TableHead({
     "data-slot": "table-head",
     "data-empty": hasLabel ? undefined : "",
     className: cn(
-      "text-muted-foreground relative overflow-hidden px-3 py-2 text-left text-ellipsis align-middle text-sm font-medium whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
+      "relative overflow-hidden bg-muted px-3 py-2 text-left text-muted-foreground text-ellipsis align-middle text-sm font-medium whitespace-nowrap dark:bg-card [[align=center]]:text-center [[align=right]]:text-right",
       "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
       "after:absolute after:right-0 after:top-1/2 after:h-4 after:w-px after:-translate-y-1/2 after:bg-border after:content-['']",
       "last:after:hidden",
       "group-data-[bordered]/table:after:hidden group-data-bordered/table:after:hidden",
       !hasLabel && "after:hidden",
       hasResizer && "after:hidden select-none",
-      sticky === "left" && "sticky left-0 z-20 bg-muted dark:bg-card",
-      sticky === "right" && "sticky right-0 z-20 bg-muted dark:bg-card",
+      sticky === "left" && "sticky left-0 z-20",
+      sticky === "right" && "sticky right-0 z-20",
       className
     ),
     children: (
@@ -599,14 +631,18 @@ export type TableCellProps = {
 } & useRender.ComponentProps<"td">;
 
 function TableCell({ className, render, sticky, ...props }: TableCellProps) {
+  const section = React.useContext(TableSectionContext);
   const defaultProps = {
     "data-slot": "table-cell",
     className: cn(
-      "bg-card overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap dark:bg-background [[align=center]]:text-center [[align=right]]:text-right",
+      "overflow-hidden px-3 py-2.5 text-ellipsis align-middle whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
+      section === "header" && "bg-muted text-muted-foreground dark:bg-card",
+      section === "footer" &&
+        "bg-muted px-3 pt-2 pb-1 align-middle dark:bg-card",
+      "border-border/70 dark:border-border",
       "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
-      "[[data-state=selected]_&]:bg-secondary/60 dark:[[data-state=selected]_&]:bg-muted/30 dark:[[data-state=selected]:hover_&]:bg-muted/30",
-      sticky === "left" && "sticky left-0 z-[1]",
-      sticky === "right" && "sticky right-0 z-[1]",
+      sticky === "left" && "sticky left-0 z-[1] bg-card dark:bg-background",
+      sticky === "right" && "sticky right-0 z-[1] bg-card dark:bg-background",
       className
     ),
   };

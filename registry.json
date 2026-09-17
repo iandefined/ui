@@ -884,7 +884,7 @@
       "type": "registry:ui",
       "title": "Combobox",
       "description": "A filterable input for selecting one or more predefined values.",
-      "dependencies": ["@base-ui/react", "cn"],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/input.json",
         "https://ui.iandefined.com/r/label.json",
@@ -903,7 +903,7 @@
       "type": "registry:ui",
       "title": "Autocomplete",
       "description": "A filterable text input that suggests matching options while accepting free-form text.",
-      "dependencies": ["@base-ui/react", "cn"],
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
       "registryDependencies": [
         "https://ui.iandefined.com/r/input.json",
         "https://ui.iandefined.com/r/label.json",
