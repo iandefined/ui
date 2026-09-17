@@ -131,6 +131,16 @@ const Popover = Object.assign(
   }: PopoverProps<Payload>) {
     const handleOpenChange = useCallback<PopoverOnOpenChange>(
       (nextOpen, eventDetails) => {
+        const target = eventDetails.event?.target;
+        if (
+          !nextOpen &&
+          target instanceof Element &&
+          target.closest("[data-slot=lightbox-portal]")
+        ) {
+          eventDetails.cancel();
+          return;
+        }
+
         if (
           !dismissible &&
           !nextOpen &&

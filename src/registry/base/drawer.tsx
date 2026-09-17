@@ -383,6 +383,16 @@ function Drawer({
 
   const handleOpenChange = React.useCallback<DrawerOnOpenChange>(
     (nextOpen, eventDetails) => {
+      const target = eventDetails.event?.target;
+      if (
+        !nextOpen &&
+        target instanceof Element &&
+        target.closest("[data-slot=lightbox-portal]")
+      ) {
+        eventDetails.cancel();
+        return;
+      }
+
       if (!dismissible && !nextOpen && eventDetails.reason !== "close-press") {
         eventDetails.cancel();
         return;
@@ -565,6 +575,9 @@ function useOutsideDrawerWheel(
       if (event.defaultPrevented) return;
 
       const target = event.target as HTMLElement | null;
+      if (target?.closest?.("[data-slot=lightbox-portal]")) {
+        return;
+      }
       if (target?.closest?.("[data-slot=drawer-popup]")) {
         return;
       }

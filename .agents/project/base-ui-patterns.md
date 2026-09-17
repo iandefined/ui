@@ -27,6 +27,8 @@ For public prop shapes and slots, see [component-implementation.md](component-im
 
 ## Overlay animation ownership
 
+- A full-screen child overlay such as `Lightbox` must render its own backdrop when Base UI marks it as nested, and parent overlays must ignore dismissal and wheel input originating inside `[data-slot="lightbox-portal"]`. This keeps Drawer, Dialog, Popover, and Sheet state stable while the child overlay owns interaction.
+
 - Do not use trigger `pointerdown`, `pointerenter`, or focus handlers to mount and lay out a portalled overlay subtree. That work runs before activation can open the primitive and can delay the first visible frame. When repeat-open performance warrants retention, enable `keepMounted` only after the first opening transition completes; never eagerly retain every overlay on the page.
 - Keep the primitive's release state authoritative. A `null` snap point used as a dismissal sentinel must not replace the last visible snap geometry while the exit animation is running. Freeze the exit distance from the last non-null snap value so close, Escape, outside press, and swipe dismissal share one path.
 - Apply high-frequency gesture variables on the element where Base UI defines them. Registered non-inheriting variables should not be re-exposed through a deep subtree. Disable transitions during direct manipulation and use a release-specific state attribute with a bounded duration for the handoff to CSS animation.

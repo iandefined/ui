@@ -235,6 +235,16 @@ function Sheet<Payload>({
 
   const handleOpenChange = React.useCallback<SheetOnOpenChange>(
     (nextOpen, eventDetails) => {
+      const target = eventDetails.event?.target;
+      if (
+        !nextOpen &&
+        target instanceof Element &&
+        target.closest("[data-slot=lightbox-portal]")
+      ) {
+        eventDetails.cancel();
+        return;
+      }
+
       if (!dismissible && !nextOpen && eventDetails.reason !== "close-press") {
         eventDetails.cancel();
         return;

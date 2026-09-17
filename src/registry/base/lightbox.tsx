@@ -427,16 +427,19 @@ function imageToItem(image: HTMLImageElement): LightboxImageItem {
     image.dataset.lightboxCaption ??
     figure?.querySelector(":scope > figcaption")?.textContent?.trim() ??
     undefined;
+  const width = Number(image.getAttribute("width"));
+  const height = Number(image.getAttribute("height"));
+  const srcSet = image.srcset || undefined;
 
   return {
     id: image.id || undefined,
     type: "image",
     src: image.currentSrc || image.src,
     alt: image.alt,
-    width: image.naturalWidth || undefined,
-    height: image.naturalHeight || undefined,
-    srcSet: image.srcset || undefined,
-    sizes: image.sizes || undefined,
+    width: width > 0 ? width : image.naturalWidth || undefined,
+    height: height > 0 ? height : image.naturalHeight || undefined,
+    srcSet,
+    sizes: srcSet ? image.sizes || undefined : undefined,
     thumbnailSrc: image.currentSrc || image.src,
     caption,
   };
@@ -1114,7 +1117,8 @@ function Lightbox({
     if (
       !press ||
       press.pointerId !== event.pointerId ||
-      Math.hypot(event.clientX - press.startX, event.clientY - press.startY) <= 8
+      Math.hypot(event.clientX - press.startX, event.clientY - press.startY) <=
+        8
     ) {
       return;
     }
@@ -1149,11 +1153,7 @@ function Lightbox({
     );
     const sourceIndex = sources.indexOf(image);
     if (sourceIndex < 0) return;
-    requestOpen(
-      sourceIndex,
-      { element: image, morph: true },
-      event
-    );
+    requestOpen(sourceIndex, { element: image, morph: true }, event);
   }
 
   const handleGalleryKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -1432,8 +1432,11 @@ function LightboxContent({
   }
 
   return (
-    <DialogPrimitive.Portal data-slot="lightbox-portal">
-      <LightboxBackdrop />
+    <DialogPrimitive.Portal
+      data-slot="lightbox-portal"
+      container={typeof document === "undefined" ? undefined : document.body}
+    >
+      <LightboxBackdrop forceRender />
       <LightboxViewport
         dir={direction}
         data-lightbox-motion={shouldReduceMotion ? "reduced" : "full"}
@@ -1806,6 +1809,16 @@ function LightboxSlides({
   const suppressClickRef = React.useRef(false);
   const suppressClickTimerRef = React.useRef(0);
   const transformRef = React.useRef(transform);
+  React.useLayoutEffect(() => {
+    // Opening from a pointer-up can cause the browser's synthesized click to
+    // land on the newly mounted viewport. Ignore only that same-task click so
+    // the image always opens at its initial scale.
+    suppressClickRef.current = true;
+    window.clearTimeout(suppressClickTimerRef.current);
+    suppressClickTimerRef.current = window.setTimeout(() => {
+      suppressClickRef.current = false;
+    }, 0);
+  }, []);
   React.useLayoutEffect(() => {
     transformRef.current = transform;
   }, [transform]);
@@ -2362,6 +2375,7 @@ function LightboxSlides({
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     onWheel?.(event);
+    event.stopPropagation();
     if (event.defaultPrevented) return;
     const target = event.target as HTMLElement;
     const interactiveTarget = target.closest(interactiveSelector);
@@ -2428,7 +2442,7 @@ function LightboxSlides({
       }
       tabIndex={clickZoomable ? 0 : undefined}
       className={cn(
-        "relative min-h-0 flex-1 overflow-hidden touch-none select-none",
+        "relative min-h-0 flex-1 overflow-hidden touch-none outline-none select-none focus-visible:outline-none focus-visible:ring-0",
         className
       )}
       onPointerDown={handlePointerDown}
