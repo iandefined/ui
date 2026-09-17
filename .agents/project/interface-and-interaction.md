@@ -44,6 +44,10 @@ Every rule in this document is explicitly categorized into one of three levels:
 - Use raw semantic elements for document structure and native form structure, including `form`, `fieldset`, `legend`, headings, paragraphs, lists, landmarks, and media.
 - Use a raw interactive control only when no published registry primitive applies or native browser behavior is explicitly required (e.g. an invisible native file input trigger). Record the reason in a comment when it is not obvious.
 
+### [HARD REQUIREMENT] Stable Cursor During Pointer Drags
+- Keep the active drag cursor on a stable gesture surface for the full pointer-capture session. Do not attach `grabbing` only to a translated child because moving that child out from under the pointer makes the browser fall back to another cursor while the drag is still active.
+- Apply the active cursor to the gesture surface and its descendants so zoom panning, carousel swiping, and other pointer drags retain one consistent affordance until pointer release or cancellation.
+
 ---
 
 ## 2. Forms and Input States
@@ -142,6 +146,11 @@ When animating container width or height due to dynamic content:
 - Composite animations using GPU-friendly `transform` and `opacity` properties.
 - Apply `transform-gpu` and `will-change-transform` to animated overlay triggers and popup content.
 - Avoid animating layout-triggering properties (`width`, `height`, `top`, `left`, `margin`, `padding`) unless the measured-bounds pattern is necessary for content-driven sizing.
+
+### [HARD REQUIREMENT] Rounded Media Placeholder Cleanup
+- A loading-only background or `Skeleton` must stop painting as soon as the real image or video is ready. Do not leave a contrasting placeholder background beneath loaded rounded media; covering it with the media or cross-fading it can expose the underlay as a one-pixel halo at anti-aliased edges.
+- Give the media stack one rounded, `overflow-hidden` clipping owner. Let the media and placeholder fill that clip without adding their own rounded clipping; independently rasterized parent and child curves may not coincide exactly.
+- If the loaded media fades in, transition the media layer against a transparent clipping surface and remove the placeholder fill immediately. Persistent backgrounds are reserved for intentional frames or borders, not loading state.
 
 ### [HARD REQUIREMENT] Non-Blocking Measurement and Observation
 - Do not synchronously measure layout in a layout effect and then set React state before an overlay or animated surface can paint unless correctness explicitly requires pre-paint geometry reconciliation. Reuse primitive-owned measurements when available; otherwise observe only the configurations that require custom sizing.

@@ -169,6 +169,9 @@
 /docs/llms.md
   Content-Type: text/markdown; charset=utf-8
 
+/docs/overlays.md
+  Content-Type: text/markdown; charset=utf-8
+
 /docs/theming.md
   Content-Type: text/markdown; charset=utf-8
 

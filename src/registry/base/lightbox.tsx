@@ -64,6 +64,11 @@ const LIGHTBOX_STYLES = String.raw`
     cursor: grabbing;
   }
 
+  :where([data-slot="lightbox-content"][data-dragging="true"]),
+  :where([data-slot="lightbox-content"][data-dragging="true"] *) {
+    cursor: grabbing;
+  }
+
   :where([data-slot="lightbox-slide"][aria-hidden="true"]) {
     pointer-events: none;
   }
@@ -400,6 +405,22 @@ function isStandaloneImage(image: HTMLImageElement, gallery: HTMLElement) {
   return !interactiveAncestor || interactiveAncestor === gallery;
 }
 
+function getStandaloneGalleryImage(
+  target: EventTarget | null,
+  gallery: HTMLElement
+) {
+  if (!(target instanceof Element)) return null;
+  const image = target.closest("img");
+  if (
+    !(image instanceof HTMLImageElement) ||
+    !gallery.contains(image) ||
+    !isStandaloneImage(image, gallery)
+  ) {
+    return null;
+  }
+  return image;
+}
+
 function imageToItem(image: HTMLImageElement): LightboxImageItem {
   const figure = image.closest("figure");
   const caption =
@@ -466,6 +487,16 @@ function Lightbox({
   const galleryRef = React.useRef<HTMLDivElement | null>(null);
   const mediaRef = React.useRef<HTMLElement | null>(null);
   const sourceMapRef = React.useRef(new Map<number, RegisteredSource>());
+  const galleryTouchPressRef = React.useRef<{
+    pointerId: number;
+    image: HTMLImageElement;
+    startX: number;
+    startY: number;
+  } | null>(null);
+  const suppressedGalleryClickRef = React.useRef<{
+    image: HTMLImageElement;
+    time: number;
+  } | null>(null);
   const annotatedImagesRef = React.useRef(
     new Map<HTMLImageElement, Record<string, string | null>>()
   );
@@ -1035,16 +1066,84 @@ function Lightbox({
   const handleGalleryClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.defaultPrevented || itemsProp) return;
     const gallery = galleryRef.current;
-    const target = event.target;
-    if (!gallery || !(target instanceof Element)) return;
-    const image = target.closest("img");
+    if (!gallery) return;
+    const image = getStandaloneGalleryImage(event.target, gallery);
+    if (!image) return;
+    const suppressedClick = suppressedGalleryClickRef.current;
+    suppressedGalleryClickRef.current = null;
     if (
-      !image ||
-      !gallery.contains(image) ||
-      !isStandaloneImage(image, gallery)
+      event.detail !== 0 &&
+      suppressedClick?.image === image &&
+      performance.now() - suppressedClick.time < 700
     ) {
       return;
     }
+    openGalleryImage(image, event.nativeEvent);
+  };
+
+  const handleGalleryPointerDown = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    suppressedGalleryClickRef.current = null;
+    if (
+      itemsProp ||
+      event.pointerType !== "touch" ||
+      !event.isPrimary ||
+      event.button !== 0
+    ) {
+      galleryTouchPressRef.current = null;
+      return;
+    }
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    const image = getStandaloneGalleryImage(event.target, gallery);
+    galleryTouchPressRef.current = image
+      ? {
+          pointerId: event.pointerId,
+          image,
+          startX: event.clientX,
+          startY: event.clientY,
+        }
+      : null;
+  };
+
+  const handleGalleryPointerMove = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const press = galleryTouchPressRef.current;
+    if (
+      !press ||
+      press.pointerId !== event.pointerId ||
+      Math.hypot(event.clientX - press.startX, event.clientY - press.startY) <= 8
+    ) {
+      return;
+    }
+    galleryTouchPressRef.current = null;
+  };
+
+  const handleGalleryPointerUp = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const press = galleryTouchPressRef.current;
+    galleryTouchPressRef.current = null;
+    if (
+      !press ||
+      press.pointerId !== event.pointerId ||
+      Math.hypot(event.clientX - press.startX, event.clientY - press.startY) > 8
+    ) {
+      return;
+    }
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    const image = getStandaloneGalleryImage(event.target, gallery);
+    if (image !== press.image) return;
+    suppressedGalleryClickRef.current = { image, time: performance.now() };
+    openGalleryImage(image, event.nativeEvent);
+  };
+
+  function openGalleryImage(image: HTMLImageElement, event: Event) {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
     const sources = Array.from(gallery.querySelectorAll("img")).filter((item) =>
       isStandaloneImage(item, gallery)
     );
@@ -1053,9 +1152,9 @@ function Lightbox({
     requestOpen(
       sourceIndex,
       { element: image, morph: true },
-      event.nativeEvent
+      event
     );
-  };
+  }
 
   const handleGalleryKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (itemsProp || (event.key !== "Enter" && event.key !== " ")) return;
@@ -1064,16 +1163,7 @@ function Lightbox({
     if (!gallery || !(target instanceof HTMLImageElement)) return;
     if (!isStandaloneImage(target, gallery)) return;
     event.preventDefault();
-    const sources = Array.from(gallery.querySelectorAll("img")).filter((item) =>
-      isStandaloneImage(item, gallery)
-    );
-    const sourceIndex = sources.indexOf(target);
-    if (sourceIndex < 0) return;
-    requestOpen(
-      sourceIndex,
-      { element: target, morph: true },
-      event.nativeEvent
-    );
+    openGalleryImage(target, event.nativeEvent);
   };
 
   const customContent = hasCustomContent(children);
@@ -1097,6 +1187,12 @@ function Lightbox({
             data-slot="lightbox-gallery"
             onClick={handleGalleryClick}
             onKeyDown={handleGalleryKeyDown}
+            onPointerCancel={() => {
+              galleryTouchPressRef.current = null;
+            }}
+            onPointerDown={handleGalleryPointerDown}
+            onPointerMove={handleGalleryPointerMove}
+            onPointerUp={handleGalleryPointerUp}
           >
             {children}
           </div>
@@ -1345,6 +1441,7 @@ function LightboxContent({
         <DialogPrimitive.Popup
           ref={popupRef}
           data-slot="lightbox-content"
+          data-dragging={transform.dragging ? "true" : "false"}
           aria-describedby={
             activeItem?.caption ? `lightbox-caption-${activeIndex}` : undefined
           }
@@ -2558,7 +2655,7 @@ function LightboxThumbnail({
           alt=""
           draggable={false}
           loading="lazy"
-          className="size-full object-cover transition-opacity duration-200"
+          className="size-full object-cover"
           onLoad={() => markAssetLoaded(thumbnailLoadKey)}
         />
       ) : item.poster ? (
@@ -2567,7 +2664,7 @@ function LightboxThumbnail({
           alt=""
           draggable={false}
           loading="lazy"
-          className="size-full object-cover transition-opacity duration-200"
+          className="size-full object-cover"
           onLoad={() => markAssetLoaded(thumbnailLoadKey)}
         />
       ) : (
@@ -2593,7 +2690,7 @@ function LightboxThumbnail({
       aria-label={`Show ${getItemLabel(item, index)}`}
       tabIndex={active ? 0 : -1}
       className={cn(
-        "size-12 shrink-0 overflow-hidden rounded-lg text-muted-foreground text-xs font-medium p-0 opacity-65 hover:opacity-100 focus-visible:opacity-100 bg-muted data-[active=true]:opacity-100 sm:size-14",
+        "size-12 shrink-0 overflow-hidden rounded-lg bg-transparent! p-0 text-muted-foreground text-xs font-medium opacity-65 hover:bg-transparent! hover:opacity-100 active:bg-transparent! focus-visible:bg-transparent! focus-visible:opacity-100 aria-expanded:bg-transparent! data-[active=true]:opacity-100 sm:size-14",
         className
       )}
       onClick={(event) => {
@@ -2607,20 +2704,19 @@ function LightboxThumbnail({
       <span
         aria-hidden="true"
         data-slot="lightbox-thumbnail-content"
-        className="pointer-events-none relative flex size-full items-center justify-center overflow-hidden rounded-[inherit]"
+        className="pointer-events-none relative flex size-full items-center justify-center"
       >
-        <Skeleton
-          aria-hidden="true"
-          rounded="lg"
-          className={cn(
-            "absolute inset-0 size-full transition-opacity duration-200",
-            mediaLoaded && "opacity-0"
-          )}
-        />
+        {!mediaLoaded && (
+          <Skeleton
+            aria-hidden="true"
+            rounded="none"
+            className="absolute inset-0 size-full"
+          />
+        )}
         {thumbnail && (
           <span
             className={cn(
-              "relative size-full overflow-hidden rounded-[inherit] [&>*]:size-full [&>img]:object-cover [&>video]:object-cover",
+              "relative size-full transition-opacity duration-200 [&>*]:size-full [&>img]:object-cover [&>video]:object-cover",
               !mediaLoaded && "opacity-0"
             )}
           >

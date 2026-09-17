@@ -430,7 +430,7 @@ function ExpandableOrderRow({ order }: { order: Order }) {
             variant="ghost"
             size="icon-xs"
             aria-label="Toggle details"
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
+            className="text-muted-foreground hover:text-foreground cursor-pointer hover:bg-transparent! active:bg-transparent!"
             onClick={(e) => {
               e.stopPropagation();
               setOpen((prev) => !prev);

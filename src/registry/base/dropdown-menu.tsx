@@ -44,6 +44,9 @@ const animationPresets: Record<DropdownMenuAnimationPreset, string> = {
 const motionReduceClasses =
   "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:[translate:none] motion-reduce:[scale:1] motion-reduce:[rotate:none] motion-reduce:filter-none";
 
+const dropdownMenuItemState =
+  "transform-gpu motion-reduce:transform-none motion-reduce:transition-none active:scale-98 data-disabled:scale-100 [transition:scale_100ms,background-color_200ms,border-color_200ms,color_200ms] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] hover:border-border/30 hover:bg-accent hover:text-accent-foreground active:border-border/30 active:bg-accent/80 active:text-accent-foreground";
+
 const transitionPresets: Record<DropdownMenuTransitionPreset, string> = {
   inExpo: "duration-[0.35s] ease-[cubic-bezier(0.95,0.05,0.795,0.035)]",
   outExpo: "duration-[0.35s] ease-[cubic-bezier(0.19,1,0.22,1)]",
@@ -316,7 +319,8 @@ function DropdownMenuItem({
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:z-0 data-highlighted:text-accent-foreground data-highlighted:before:absolute data-highlighted:before:-inset-px data-highlighted:before:z-[-1] data-highlighted:before:rounded-[10px] data-highlighted:before:border data-highlighted:before:border-border/30 data-highlighted:before:bg-accent/70 dark:data-highlighted:before:bg-accent data-[variant=destructive]:text-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        dropdownMenuItemState,
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:z-0 data-highlighted:border-border/30 data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:text-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-item"
@@ -334,7 +338,8 @@ function DropdownMenuCheckboxItem({
   return (
     <DropdownMenuPrimitive.CheckboxItem
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground dark:data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        dropdownMenuItemState,
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-checkbox-item"
@@ -380,7 +385,8 @@ function DropdownMenuRadioItem({
   return (
     <DropdownMenuPrimitive.RadioItem
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground dark:data-highlighted:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        dropdownMenuItemState,
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:border-border/30 data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-radio-item"
@@ -442,7 +448,8 @@ function DropdownMenuSubTrigger({
   return (
     <DropdownMenuPrimitive.SubmenuTrigger
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-highlighted:border-border/30 data-highlighted:bg-accent/70 data-highlighted:text-accent-foreground data-popup-open:border-border/30 data-popup-open:bg-accent/70 data-popup-open:text-accent-foreground dark:data-highlighted:bg-accent dark:data-popup-open:bg-accent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        dropdownMenuItemState,
+        "relative flex cursor-pointer items-center gap-2 rounded-[10px] border-[0.5px] border-transparent px-(--item-inline-padding) py-(--item-block-padding) text-sm outline-hidden select-none data-highlighted:border-border/30 data-highlighted:bg-accent data-highlighted:text-accent-foreground data-popup-open:border-border/30 data-popup-open:bg-accent data-popup-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="dropdown-menu-sub-trigger"

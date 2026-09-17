@@ -651,7 +651,7 @@ Give every explicit image item a meaningful `alt`. Label video items with `label
 | `onClose` | `(details: LightboxOpenEventDetails) => void` | `-` | Runs when a close request is accepted. |
 | `onOpenChangeComplete` | `(open: boolean) => void` | `-` | Runs after the open or close transition completes. |
 | `onChangeImage` | `(index: number, item: LightboxItem, details: LightboxImageChangeEventDetails) => void` | `-` | Runs after the active item changes. |
-| `overlay` | `"blur" \| "brightness"` | `blur` | Selects the backdrop treatment. `blur` combines a dark surface with backdrop blur. `brightness` uses a plain dark dimmer. |
+| `overlay` | `"blur" \| "brightness"` | `blur` | Selects the backdrop treatment. `blur` combines a dark surface with backdrop blur. `brightness` uses a plain dark dimmer. See Notes for Chromium compositor seam workarounds when using `"blur"` in nested scrolling layouts. |
 | `noCounter` | `boolean` | `false` | Hides the current item counter without changing gallery navigation. |
 | `noCarousel` | `boolean` | `false` | Disables slide navigation, hides the thumbnail rail and previous and next controls, and mounts only the selected item. |
 | `noControls` | `boolean` | `false` | Hides the top-end toolbar, including download, zoom, More, and Close. |
@@ -722,3 +722,43 @@ can omit both `thumbnail` and `poster` to derive a thumbnail automatically.
 | `LightboxSlide.active` | `boolean` | `false` | Marks the slide as the active item. |
 | `LightboxZoom.active` | `boolean` | `true` | Registers this zoom surface as the active gesture target. |
 | `LightboxThumbnail.index` | `number` | `-` | Selects the item represented by the thumbnail. |
+
+### Notes
+
+#### Chromium Backdrop Blur Seams
+
+In Chromium-based browsers, a fixed backdrop using `backdrop-filter: blur(...)` can produce horizontal or vertical colorless seams when sampling nested scroll containers under high device-pixel ratios. This is a browser compositor tile-rendering artifact rather than a CSS box shadow.
+
+When an application layout triggers this artifact, use the `data-overlay="blur"` attribute on `[data-slot="lightbox-backdrop"]` to disable the backdrop filter and apply an ordinary `filter: blur(...)` directly to the children of the application scroll container. Keep the lightbox portal mounted outside the blurred container.
+
+```css title="app.css"
+@property --app-lightbox-blur {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+[data-slot="lightbox-backdrop"][data-overlay="blur"]:not([hidden]) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+:root {
+  --app-lightbox-blur: 0px;
+  transition: --app-lightbox-blur 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+:root:has([data-slot="lightbox-backdrop"][data-overlay="blur"]:not([hidden]):not([data-ending-style])) {
+  --app-lightbox-blur: 12px;
+}
+
+.app-scroll-container > * {
+  filter: blur(var(--app-lightbox-blur));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
+```

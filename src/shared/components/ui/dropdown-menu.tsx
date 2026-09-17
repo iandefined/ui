@@ -4,6 +4,9 @@ import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu";
 import { cn } from "cn";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 
+const dropdownMenuItemState =
+  "transform-gpu motion-reduce:transform-none motion-reduce:transition-none active:scale-98 data-disabled:scale-100 [transition:scale_100ms,background-color_200ms,color_200ms] [transition-timing-function:cubic-bezier(.6,.04,.98,.335)] hover:bg-accent hover:text-accent-foreground active:bg-accent/80 active:text-accent-foreground";
+
 type DropdownMenuPositionerProps = Pick<
   DropdownMenuPrimitive.Positioner.Props,
   | "align"
@@ -106,6 +109,7 @@ const DropdownMenuItem = ({
     data-inset={inset}
     data-variant={variant}
     className={cn(
+      dropdownMenuItemState,
       "focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
       className
     )}
@@ -122,6 +126,7 @@ const DropdownMenuCheckboxItem = ({
   <DropdownMenuPrimitive.CheckboxItem
     data-slot="dropdown-menu-checkbox-item"
     className={cn(
+      dropdownMenuItemState,
       "focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
       className
     )}
@@ -154,6 +159,7 @@ const DropdownMenuRadioItem = ({
   <DropdownMenuPrimitive.RadioItem
     data-slot="dropdown-menu-radio-item"
     className={cn(
+      dropdownMenuItemState,
       "focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
       className
     )}
@@ -229,6 +235,7 @@ const DropdownMenuSubTrigger = ({
     data-slot="dropdown-menu-sub-trigger"
     data-inset={inset}
     className={cn(
+      dropdownMenuItemState,
       "focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-popup-open:bg-accent data-popup-open:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8",
       className
     )}

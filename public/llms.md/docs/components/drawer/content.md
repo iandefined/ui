@@ -1278,7 +1278,7 @@ Root component that provides the position context and maps it to Base UI's `swip
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `dismissible` | `boolean` | `true` | Allows outside presses, Escape, and swipe gestures to dismiss the drawer. When `false`, swipe dragging is disabled, the drawer has no thumb, and it can close only through `DrawerCloseTrigger` or an externally controlled `open` value. |
-| `overlay` | `"blur" \| "brightness" \| "transparent"` | `blur` | Controls the backdrop treatment. Use `"brightness"` for a plain dark dimmer or `"transparent"` to retain modal interaction without visual dimming. |
+| `overlay` | `"blur" \| "brightness" \| "transparent"` | `blur` | Controls the backdrop treatment. Use `"brightness"` for a plain dark dimmer or `"transparent"` to retain modal interaction without visual dimming. See [Overlay Effects](../overlays#chromium-backdrop-blur-seams) when `"blur"` produces compositor seams in a nested scrolling layout. |
 | `position` | `"top" \| "right" \| "bottom" \| "left"` | `bottom` | Chooses the edge where the drawer opens and the direction used for swipe dismissal. An explicit `swipeDirection` still takes precedence. |
 
 #### DrawerPopup
