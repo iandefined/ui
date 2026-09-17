@@ -26,8 +26,6 @@ import {
 import { Separator } from "@/shared/components/ui/separator";
 import { SITE } from "@/shared/constants/site";
 
-const NO_HOVER_BUTTON_CLASS = "hover:[--button-mix-amount:0%]";
-
 const getPromptUrl = (baseURL: string, url: string, param = "q") =>
   `${baseURL}?${param}=${encodeURIComponent(
     `I'm looking at this ${SITE.NAME} documentation: ${url}.
@@ -170,7 +168,7 @@ export const DocsCopyPage = ({
       size="sm"
       className={cn(
         "peer -ml-0.5 size-9 px-2 sm:size-8 md:size-7 md:text-[0.8rem]",
-        NO_HOVER_BUTTON_CLASS
+        "[--button-mix-amount:0%]!"
       )}
       aria-label="Open markdown actions"
     >
@@ -186,7 +184,7 @@ export const DocsCopyPage = ({
         variant="secondary"
         className={cn(
           "h-9 sm:h-8 md:h-7 md:text-[0.8rem]",
-          NO_HOVER_BUTTON_CLASS
+          "hover:[--button-mix-amount:0%] active:[--button-mix-amount:0%]"
         )}
       >
         Copy Markdown
@@ -199,7 +197,11 @@ export const DocsCopyPage = ({
           className="animate-none! rounded-lg shadow-none"
         >
           {MENU_ITEMS.map(([key, render]) => (
-            <DropdownMenuItem key={key} render={render(url)} />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              key={key}
+              render={render(url)}
+            />
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

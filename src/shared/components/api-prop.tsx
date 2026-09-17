@@ -5,6 +5,7 @@ import { ChevronRightIcon } from "lucide-react";
 import * as React from "react";
 import { type ReactNode } from "react";
 
+import { Button } from "@/registry/base/button";
 import { Collapsible, CollapsibleContent } from "@/registry/base/collapsible";
 import {
   Table,
@@ -14,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/registry/base/table";
-import { Button } from "@/shared/components/ui/button";
 
 export type ApiPropProps = {
   name: string;
@@ -64,7 +64,7 @@ export function ApiProp({
             type="button"
             variant="ghost"
             size="icon-xs"
-            className="hitbox-4 rounded p-0 text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground cursor-pointer hover:bg-transparent! active:bg-transparent!"
             aria-label="Toggle details"
             onClick={(e) => {
               e.stopPropagation();

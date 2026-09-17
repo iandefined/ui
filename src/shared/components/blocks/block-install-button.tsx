@@ -63,7 +63,7 @@ export function BlockInstallButton({ name }: { name: string }) {
               <DropdownMenuTrigger
                 render={
                   <Button
-                    className="h-8 rounded-none border-y-0 border-r-0 px-2.5 shadow-none"
+                    className="h-8 rounded-none active:scale-100 border-y-0 border-r-0 px-2.5 shadow-none"
                     size="icon-sm"
                     variant="outline"
                   />
