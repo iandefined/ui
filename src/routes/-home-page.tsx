@@ -1,5 +1,6 @@
 import { AppLayout } from "@/app-layout";
 import { CommandBox } from "@/shared/components/command-box";
+import { HomeComponentGrid } from "@/shared/components/home-component-grid";
 import { HomeCtas } from "@/shared/components/home-ctas";
 import { PageTransition } from "@/shared/components/page-transition";
 import { ROUTES } from "@/shared/constants/routes";
@@ -25,6 +26,8 @@ export const HomePage = () => (
           <HomeCtas className="mt-4" />
         </div>
       </section>
+
+      <HomeComponentGrid />
     </PageTransition>
   </AppLayout>
 );

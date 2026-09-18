@@ -11,6 +11,7 @@ type ScrollAreaProps = {
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
   verticalScrollbarStyle?: React.CSSProperties;
   viewportClassName?: string;
+  viewportTabIndex?: number;
 } & ScrollAreaPrimitive.Root.Props;
 
 type ScrollAreaStyle = React.CSSProperties & Record<`--${string}`, string>;
@@ -21,6 +22,7 @@ function ScrollArea({
   fadeColor,
   horizontalScrollbarStyle,
   viewportClassName,
+  viewportTabIndex,
   hideScrollbar = false,
   orientation = "vertical",
   scrollbarClassName,
@@ -41,6 +43,7 @@ function ScrollArea({
         data-fade-mode={fadeColor === undefined ? "auto" : "custom"}
         data-scroll-shadow={scrollShadow}
         data-slot="scroll-area-viewport"
+        tabIndex={viewportTabIndex}
         className={cn(
           "size-full min-h-0 flex-1 overscroll-contain rounded-[inherit] outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
           orientation === "vertical" &&

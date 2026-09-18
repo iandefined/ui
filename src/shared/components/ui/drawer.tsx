@@ -54,7 +54,7 @@ const DrawerContent = ({
       <DrawerPrimitive.Popup
         data-slot="drawer-content"
         className={cn(
-          "group/drawer-content pointer-events-auto fixed z-50 flex h-auto min-h-0 flex-col bg-background outline-hidden transition-[transform,height,opacity] duration-300 ease-in-out will-change-transform",
+          "group/drawer-content pointer-events-auto fixed z-50 flex h-auto min-h-0 flex-col bg-background outline-hidden focus:outline-none focus-visible:outline-none transition-[transform,height,opacity] duration-300 ease-in-out will-change-transform",
           "data-starting-style:transform-(--closed-transform) data-ending-style:transform-(--closed-transform)",
           "data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80vh] data-[swipe-direction=up]:rounded-b-lg data-[swipe-direction=up]:border-b",
           "data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-lg data-[swipe-direction=down]:border-t",
@@ -63,6 +63,7 @@ const DrawerContent = ({
           "data-[swipe-direction=down]:[--closed-transform:translate3d(0,calc(100%+2px),0)] data-[swipe-direction=up]:[--closed-transform:translate3d(0,calc(-100%-2px),0)] data-[swipe-direction=right]:[--closed-transform:translate3d(calc(100%+2px),0,0)] data-[swipe-direction=left]:[--closed-transform:translate3d(calc(-100%-2px),0,0)]",
           className
         )}
+        tabIndex={-1}
         {...props}
       >
         <div className="mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full bg-muted group-data-[swipe-direction=down]/drawer-content:block" />

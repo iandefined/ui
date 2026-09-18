@@ -36,6 +36,7 @@
       "@/hooks/*": ["./src/shared/hooks/*"],
       "@/lib/*": ["./src/shared/lib/*"],
       "@/*": ["./src/*"],
+      "@examples/*": ["./examples/*"],
       "collections/*": ["./.source/*"]
     }
   },

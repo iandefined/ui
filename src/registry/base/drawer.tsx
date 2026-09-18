@@ -846,7 +846,7 @@ function DrawerPopup({
               : "transition-[translate,scale,box-shadow,height,background-color,opacity] duration-300 ease-out",
             "motion-reduce:transition-none motion-reduce:[translate:none] motion-reduce:[scale:1]",
             "data-swiping:transition-none",
-            "focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-solid forced-colors:focus-visible:outline-[Highlight]",
+            "focus:outline-none focus-visible:outline-none",
             "[--peek:1.5rem] [--stack-step:0.05]",
             "[--stack-progress:clamp(0,var(--drawer-swipe-progress,0),1)]",
             "[--scale-base:calc(max(0,1-(var(--nested-drawers)*var(--stack-step))))]",
@@ -949,6 +949,7 @@ function DrawerPopup({
           data-slot="drawer-popup"
           data-drawer-id={drawerId}
           data-base-ui-swipe-ignore={!dismissible ? "" : undefined}
+          tabIndex={-1}
           style={popupStyle}
           {...props}
         >
@@ -957,7 +958,7 @@ function DrawerPopup({
               className={cn(
                 "pointer-events-auto relative mt-auto flex h-full min-h-0 w-full shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground",
                 getDrawerShadowClass("floating", shadowLevel),
-                "group-focus-visible/drawer-popup:outline-ring/50 group-focus-visible/drawer-popup:outline-2 group-focus-visible/drawer-popup:outline-offset-2 group-focus-visible/drawer-popup:outline-solid"
+                "group-focus-visible/drawer-popup:outline-none"
               )}
               data-slot="drawer-floating-surface"
               style={{ contain: "layout paint size" }}
@@ -1174,6 +1175,8 @@ function DrawerPanel({
         )}
         ref={scrollAreaRef}
         scrollShadow={scrollFade ? "vertical" : "none"}
+        viewportClassName="focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        viewportTabIndex={-1}
       >
         <ScrollAreaContent className="w-full">
           <div ref={contentRef} className="w-full">
