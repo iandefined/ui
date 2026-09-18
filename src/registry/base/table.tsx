@@ -374,7 +374,7 @@ function TableRow({
     "data-state": selected ? "selected" : undefined,
     "data-sticky": sticky,
     className: cn(
-      "transition-colors duration-100 hover:transition-none",
+      "group/table-row transition-colors duration-100 hover:transition-none",
       section === "body" && striped && "even:bg-muted/40 dark:even:bg-card/30",
       section === "body" &&
         hoverable &&
@@ -631,6 +631,7 @@ export type TableCellProps = {
 } & useRender.ComponentProps<"td">;
 
 function TableCell({ className, render, sticky, ...props }: TableCellProps) {
+  const { hoverable } = React.useContext(TableContext);
   const section = React.useContext(TableSectionContext);
   const defaultProps = {
     "data-slot": "table-cell",
@@ -643,6 +644,10 @@ function TableCell({ className, render, sticky, ...props }: TableCellProps) {
       "[&:has([role=checkbox])]:w-12 [&:has([role=checkbox])]:px-3 [&>[role=checkbox]]:translate-y-[2px]",
       sticky === "left" && "sticky left-0 z-[1] bg-card dark:bg-background",
       sticky === "right" && "sticky right-0 z-[1] bg-card dark:bg-background",
+      section === "body" &&
+        hoverable &&
+        sticky &&
+        "[@media(hover:hover)]:group-hover/table-row:bg-inherit",
       className
     ),
   };
