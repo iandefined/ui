@@ -101,10 +101,17 @@ const LIGHTBOX_STYLES = String.raw`
   }
 `;
 const EMPTY_CAPTIONS_TRACK = "data:text/vtt;charset=utf-8,WEBVTT%0A%0A";
+const VIDEO_THUMBNAIL_MAX_SIZE = 112;
 const interactiveSelector =
   "a,button,input,select,textarea,summary,video,audio,iframe,[contenteditable=true],[role=button],[role=link],[data-lightbox-gesture-ignore]";
 const postGestureActivationSelector =
   'a[href],button,input:not([type="hidden"]),select,textarea,summary,label,[contenteditable=true],[role="button"],[role="link"],[role="checkbox"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[role="option"],[role="radio"],[role="switch"],[role="tab"]';
+type GalleryMediaElement = HTMLImageElement | HTMLVideoElement;
+
+const generatedVideoThumbnails = new WeakMap<
+  HTMLVideoElement,
+  { source: string; thumbnail: string }
+>();
 
 type LightboxOverlay = "blur" | "brightness";
 type LightboxDirection = "ltr" | "rtl";
@@ -353,8 +360,12 @@ function useLightbox() {
   return context;
 }
 
+function getAssetLoadKey(type: LightboxItem["type"], source: string) {
+  return `${type}:${source}`;
+}
+
 function getMediaLoadKey(item: LightboxItem) {
-  return `media:${item.type}:${item.src}`;
+  return getAssetLoadKey(item.type, item.src);
 }
 
 function getThumbnailLoadKey(item: LightboxItem) {
@@ -362,7 +373,7 @@ function getThumbnailLoadKey(item: LightboxItem) {
     item.type === "image"
       ? (item.thumbnailSrc ?? item.src)
       : (item.poster ?? item.src);
-  return `thumbnail:${item.type}:${source}`;
+  return getAssetLoadKey(item.type, source);
 }
 
 function clamp(value: number, min: number, max: number) {
@@ -403,25 +414,25 @@ function getMorphTarget(element: HTMLElement | null) {
   return element.querySelector<HTMLElement>("img,video,canvas") ?? element;
 }
 
-function isStandaloneImage(image: HTMLImageElement, gallery: HTMLElement) {
-  const interactiveAncestor = image.parentElement?.closest(interactiveSelector);
+function isStandaloneMedia(media: GalleryMediaElement, gallery: HTMLElement) {
+  const interactiveAncestor = media.parentElement?.closest(interactiveSelector);
   return !interactiveAncestor || interactiveAncestor === gallery;
 }
 
-function getStandaloneGalleryImage(
+function getStandaloneGalleryMedia(
   target: EventTarget | null,
   gallery: HTMLElement
 ) {
   if (!(target instanceof Element)) return null;
-  const image = target.closest("img");
+  const media = target.closest("img,video");
   if (
-    !(image instanceof HTMLImageElement) ||
-    !gallery.contains(image) ||
-    !isStandaloneImage(image, gallery)
+    !(media instanceof HTMLImageElement || media instanceof HTMLVideoElement) ||
+    !gallery.contains(media) ||
+    !isStandaloneMedia(media, gallery)
   ) {
     return null;
   }
-  return image;
+  return media;
 }
 
 function getPostGestureActivationTarget(target: EventTarget | null) {
@@ -459,6 +470,104 @@ function imageToItem(image: HTMLImageElement): LightboxImageItem {
     thumbnailSrc: image.currentSrc || image.src,
     caption,
   };
+}
+
+function getVideoThumbnail(video: HTMLVideoElement) {
+  const source = video.currentSrc || video.src;
+  if (
+    !source ||
+    video.readyState < 2 ||
+    video.videoWidth <= 0 ||
+    video.videoHeight <= 0
+  ) {
+    return undefined;
+  }
+
+  const cached = generatedVideoThumbnails.get(video);
+  if (cached?.source === source) return cached.thumbnail;
+
+  const scale = Math.min(
+    1,
+    VIDEO_THUMBNAIL_MAX_SIZE / Math.max(video.videoWidth, video.videoHeight)
+  );
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
+  canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
+
+  try {
+    const context = canvas.getContext("2d");
+    if (!context) return undefined;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const thumbnail = canvas.toDataURL("image/webp", 0.72);
+    generatedVideoThumbnails.set(video, { source, thumbnail });
+    return thumbnail;
+  } catch {
+    // Cross-origin videos without CORS headers cannot be copied to a canvas.
+    return undefined;
+  }
+}
+
+function videoToItem(video: HTMLVideoElement): LightboxVideoItem {
+  const figure = video.closest("figure");
+  const caption =
+    video.dataset.lightboxCaption ??
+    figure?.querySelector(":scope > figcaption")?.textContent?.trim() ??
+    undefined;
+  const width = Number(video.getAttribute("width"));
+  const height = Number(video.getAttribute("height"));
+  const sources = Array.from(video.querySelectorAll("source"), (source) => {
+    return {
+      media: source.media || undefined,
+      src: source.src,
+      type: source.type || undefined,
+    };
+  });
+  const src =
+    [video.currentSrc, video.dataset.lightboxSrc, video.src, sources.at(0)?.src].find(
+      (source) => source
+    ) ?? "";
+  const label = [video.getAttribute("aria-label"), video.title, caption].find(
+    (value) => value
+  );
+
+  return {
+    id: video.id || undefined,
+    type: "video",
+    src,
+    label: label ?? "Video",
+    poster: video.poster || getVideoThumbnail(video),
+    width: width > 0 ? width : video.videoWidth || undefined,
+    height: height > 0 ? height : video.videoHeight || undefined,
+    sources: sources.length > 0 ? sources : undefined,
+    caption,
+    videoProps: {
+      autoPlay: video.autoplay,
+      controls: true,
+      loop: video.loop,
+      muted: video.muted,
+      playsInline: video.playsInline,
+      preload: "auto",
+    },
+  };
+}
+
+function getLoadedAssetKeys(media: GalleryMediaElement, item: LightboxItem) {
+  const loaded =
+    media instanceof HTMLImageElement
+      ? media.complete && media.naturalWidth > 0
+      : media.readyState >= 2;
+  if (!loaded) return [];
+
+  const mediaKey = getMediaLoadKey(item);
+  const thumbnailKey = getThumbnailLoadKey(item);
+  if (mediaKey === thumbnailKey) return [mediaKey];
+  return item.type === "video" && item.poster?.startsWith("data:")
+    ? [mediaKey, thumbnailKey]
+    : [mediaKey];
+}
+
+function mediaToItem(media: GalleryMediaElement): LightboxItem {
+  return media instanceof HTMLImageElement ? imageToItem(media) : videoToItem(media);
 }
 
 function hasCustomContent(children: React.ReactNode) {
@@ -508,16 +617,16 @@ function Lightbox({
   const sourceMapRef = React.useRef(new Map<number, RegisteredSource>());
   const galleryTouchPressRef = React.useRef<{
     pointerId: number;
-    image: HTMLImageElement;
+    media: GalleryMediaElement;
     startX: number;
     startY: number;
   } | null>(null);
   const suppressedGalleryClickRef = React.useRef<{
-    image: HTMLImageElement;
+    media: GalleryMediaElement;
     time: number;
   } | null>(null);
-  const annotatedImagesRef = React.useRef(
-    new Map<HTMLImageElement, Record<string, string | null>>()
+  const annotatedMediaRef = React.useRef(
+    new Map<GalleryMediaElement, Record<string, string | null>>()
   );
   const openingCleanupRef = React.useRef<(() => void) | null>(null);
   const postGestureActivationCleanupRef = React.useRef<(() => void) | null>(
@@ -701,14 +810,20 @@ function Lightbox({
     []
   );
 
-  const markAssetLoaded = React.useCallback((key: string) => {
+  const markAssetsLoaded = React.useCallback((keys: string[]) => {
+    if (keys.length === 0) return;
     setLoadedAssets((current) => {
-      if (current.has(key)) return current;
+      const missingKeys = keys.filter((key) => !current.has(key));
+      if (missingKeys.length === 0) return current;
       const next = new Set(current);
-      next.add(key);
+      for (const key of missingKeys) next.add(key);
       return next;
     });
   }, []);
+  const markAssetLoaded = React.useCallback(
+    (key: string) => markAssetsLoaded([key]),
+    [markAssetsLoaded]
+  );
 
   React.useLayoutEffect(() => {
     transformRef.current = transform;
@@ -780,51 +895,63 @@ function Lightbox({
   );
 
   const restoreAnnotations = React.useCallback(() => {
-    for (const [image, previous] of annotatedImagesRef.current) {
+    for (const [media, previous] of annotatedMediaRef.current) {
       for (const [name, value] of Object.entries(previous)) {
-        if (value == null) image.removeAttribute(name);
-        else image.setAttribute(name, value);
+        if (value == null) media.removeAttribute(name);
+        else media.setAttribute(name, value);
       }
     }
-    annotatedImagesRef.current.clear();
+    annotatedMediaRef.current.clear();
   }, []);
 
-  const scanImages = React.useCallback(() => {
+  const scanMedia = React.useCallback(() => {
     const gallery = galleryRef.current;
     if (!gallery || itemsProp) return { foundItems: [], sources: [] };
 
     restoreAnnotations();
-    const images = Array.from(gallery.querySelectorAll("img")).filter((image) =>
-      isStandaloneImage(image, gallery)
-    );
+    const mediaItems = Array.from(
+      gallery.querySelectorAll<GalleryMediaElement>("img,video")
+    ).filter((media) => isStandaloneMedia(media, gallery));
 
-    images.forEach((image, index) => {
-      annotatedImagesRef.current.set(image, {
-        role: image.getAttribute("role"),
-        tabindex: image.getAttribute("tabindex"),
-        "aria-haspopup": image.getAttribute("aria-haspopup"),
-        "aria-label": image.getAttribute("aria-label"),
-        "data-lightbox-source": image.getAttribute("data-lightbox-source"),
+    mediaItems.forEach((media, index) => {
+      annotatedMediaRef.current.set(media, {
+        role: media.getAttribute("role"),
+        tabindex: media.getAttribute("tabindex"),
+        "aria-haspopup": media.getAttribute("aria-haspopup"),
+        "aria-label": media.getAttribute("aria-label"),
+        "data-lightbox-source": media.getAttribute("data-lightbox-source"),
       });
-      image.setAttribute("role", "button");
-      image.setAttribute("tabindex", "0");
-      image.setAttribute("aria-haspopup", "dialog");
-      image.setAttribute(
+      media.setAttribute("role", "button");
+      media.setAttribute("tabindex", "0");
+      media.setAttribute("aria-haspopup", "dialog");
+      const label =
+        media instanceof HTMLImageElement
+          ? media.alt || `image ${index + 1}`
+          : ([media.getAttribute("aria-label"), media.title].find((value) => value) ??
+            `video ${index + 1}`);
+      media.setAttribute(
         "aria-label",
-        image.getAttribute("aria-label") ??
-          `Open ${image.alt || `image ${index + 1}`} in lightbox`
+        media.getAttribute("aria-label") ?? `Open ${label} in lightbox`
       );
-      image.setAttribute("data-lightbox-source", "");
+      media.setAttribute("data-lightbox-source", "");
 
-      if (!image.hasAttribute("alt")) {
+      if (media instanceof HTMLImageElement && !media.hasAttribute("alt")) {
         console.debug(
           "Lightbox auto-discovered an <img> without an alt attribute."
         );
       }
     });
 
-    return { foundItems: images.map(imageToItem), sources: images };
-  }, [itemsProp, restoreAnnotations]);
+    const foundItems = mediaItems.map(mediaToItem);
+    markAssetsLoaded(
+      mediaItems.flatMap((media, index) => {
+        const item = foundItems[index];
+        return item ? getLoadedAssetKeys(media, item) : [];
+      })
+    );
+
+    return { foundItems, sources: mediaItems };
+  }, [itemsProp, markAssetsLoaded, restoreAnnotations]);
 
   React.useEffect(() => {
     if (itemsProp) {
@@ -837,7 +964,7 @@ function Lightbox({
 
     const refresh = () => {
       if (open && autoItems.length > 0) return;
-      const { foundItems, sources } = scanImages();
+      const { foundItems, sources } = scanMedia();
       sourceMapRef.current.clear();
       sources.forEach((element, index) => {
         sourceMapRef.current.set(index, { element, morph: true });
@@ -851,13 +978,24 @@ function Lightbox({
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["src", "srcset", "sizes", "alt", "class"],
+      attributeFilter: [
+        "src",
+        "srcset",
+        "sizes",
+        "alt",
+        "poster",
+        "width",
+        "height",
+        "data-lightbox-caption",
+        "data-lightbox-src",
+        "class",
+      ],
     });
     return () => {
       observer.disconnect();
       restoreAnnotations();
     };
-  }, [autoItems.length, itemsProp, open, restoreAnnotations, scanImages]);
+  }, [autoItems.length, itemsProp, open, restoreAnnotations, scanMedia]);
 
   const changeIndex = React.useCallback(
     (nextIndex: number, reason: LightboxChangeReason, event?: Event) => {
@@ -1040,7 +1178,7 @@ function Lightbox({
       let nextItems = items;
       let nextSources: HTMLElement[] = [];
       if (!itemsProp) {
-        const scan = scanImages();
+        const scan = scanMedia();
         nextItems = scan.foundItems;
         nextSources = scan.sources;
         sourceMapRef.current.clear();
@@ -1081,7 +1219,7 @@ function Lightbox({
       loop,
       onChangeImage,
       runOpenChange,
-      scanImages,
+      scanMedia,
     ]
   );
 
@@ -1236,18 +1374,18 @@ function Lightbox({
     if (event.defaultPrevented || itemsProp) return;
     const gallery = galleryRef.current;
     if (!gallery) return;
-    const image = getStandaloneGalleryImage(event.target, gallery);
-    if (!image) return;
+    const media = getStandaloneGalleryMedia(event.target, gallery);
+    if (!media) return;
     const suppressedClick = suppressedGalleryClickRef.current;
     suppressedGalleryClickRef.current = null;
     if (
       event.detail !== 0 &&
-      suppressedClick?.image === image &&
+      suppressedClick?.media === media &&
       performance.now() - suppressedClick.time < 700
     ) {
       return;
     }
-    openGalleryImage(image, event.nativeEvent);
+    openGalleryMedia(media, event.nativeEvent);
   };
 
   const handleGalleryPointerDown = (
@@ -1265,11 +1403,11 @@ function Lightbox({
     }
     const gallery = galleryRef.current;
     if (!gallery) return;
-    const image = getStandaloneGalleryImage(event.target, gallery);
-    galleryTouchPressRef.current = image
+    const media = getStandaloneGalleryMedia(event.target, gallery);
+    galleryTouchPressRef.current = media
       ? {
           pointerId: event.pointerId,
-          image,
+          media,
           startX: event.clientX,
           startY: event.clientY,
         }
@@ -1305,31 +1443,42 @@ function Lightbox({
     }
     const gallery = galleryRef.current;
     if (!gallery) return;
-    const image = getStandaloneGalleryImage(event.target, gallery);
-    if (image !== press.image) return;
-    suppressedGalleryClickRef.current = { image, time: performance.now() };
-    openGalleryImage(image, event.nativeEvent);
+    const media = getStandaloneGalleryMedia(event.target, gallery);
+    if (media !== press.media) return;
+    suppressedGalleryClickRef.current = { media, time: performance.now() };
+    openGalleryMedia(media, event.nativeEvent);
   };
 
-  function openGalleryImage(image: HTMLImageElement, event: Event) {
+  function openGalleryMedia(media: GalleryMediaElement, event: Event) {
     const gallery = galleryRef.current;
     if (!gallery) return;
-    const sources = Array.from(gallery.querySelectorAll("img")).filter((item) =>
-      isStandaloneImage(item, gallery)
-    );
-    const sourceIndex = sources.indexOf(image);
+    const sources = Array.from(
+      gallery.querySelectorAll<GalleryMediaElement>("img,video")
+    ).filter((item) => isStandaloneMedia(item, gallery));
+    const sourceIndex = sources.indexOf(media);
     if (sourceIndex < 0) return;
-    requestOpen(sourceIndex, { element: image, morph: true }, event);
+    requestOpen(sourceIndex, { element: media, morph: true }, event);
   }
 
   const handleGalleryKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (itemsProp || (event.key !== "Enter" && event.key !== " ")) return;
     const gallery = galleryRef.current;
     const target = event.target;
-    if (!gallery || !(target instanceof HTMLImageElement)) return;
-    if (!isStandaloneImage(target, gallery)) return;
+    if (
+      !gallery ||
+      !(target instanceof HTMLImageElement || target instanceof HTMLVideoElement)
+    ) {
+      return;
+    }
+    if (!isStandaloneMedia(target, gallery)) return;
     event.preventDefault();
-    openGalleryImage(target, event.nativeEvent);
+    openGalleryMedia(target, event.nativeEvent);
+  };
+
+  const handleGalleryMediaLoad = () => {
+    if (itemsProp) return;
+    const { foundItems } = scanMedia();
+    setAutoItems(foundItems);
   };
 
   const customContent = hasCustomContent(children);
@@ -1353,6 +1502,8 @@ function Lightbox({
             data-slot="lightbox-gallery"
             onClick={handleGalleryClick}
             onKeyDown={handleGalleryKeyDown}
+            onLoadCapture={handleGalleryMediaLoad}
+            onLoadedDataCapture={handleGalleryMediaLoad}
             onPointerCancel={() => {
               galleryTouchPressRef.current = null;
             }}
@@ -1786,7 +1937,7 @@ function LightboxSlide({
         loading={active ? "eager" : "lazy"}
         onLoad={() => markAssetLoaded(loadKey)}
         className={cn(
-          "block h-auto w-auto max-w-[calc(100vw-2rem)] select-none rounded-lg object-contain",
+          "block h-auto w-[min(82vw,64rem)] max-w-[calc(100vw-2rem)] select-none rounded-lg object-contain",
           "max-h-[calc(100dvh-11rem)] sm:max-h-[calc(100dvh-12rem)]",
           "transition-opacity duration-200",
           !mediaLoaded && "opacity-0",
@@ -1818,7 +1969,8 @@ function LightboxSlide({
         playsInline={item.videoProps?.playsInline ?? true}
         preload={item.videoProps?.preload ?? (active ? "auto" : "metadata")}
         className={cn(
-          "block h-auto w-auto max-h-full max-w-[calc(100vw-2rem)] rounded-lg bg-black object-contain",
+          "block h-auto w-[min(82vw,64rem)] max-w-[calc(100vw-2rem)] rounded-lg bg-black object-contain",
+          "max-h-[calc(100dvh-11rem)] sm:max-h-[calc(100dvh-12rem)]",
           "transition-opacity duration-200",
           !mediaLoaded && "opacity-0",
           item.className
