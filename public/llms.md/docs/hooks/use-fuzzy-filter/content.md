@@ -86,7 +86,7 @@ export default function UseFuzzyFilterDefaultDemo() {
         type="search"
         value={query}
       />
-      <div className="divide-border rounded-lg border border-border bg-card divide-y">
+      <div className="divide-border rounded-lg border border-border bg-muted dark:bg-card divide-y">
         {filteredItems.length === 0 ? (
           <div className="p-4 text-center text-sm text-muted-foreground">
             No items matching &ldquo;{query}&rdquo;

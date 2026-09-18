@@ -10,9 +10,14 @@ const ComboboxMultipleSelectionDemo = lazy(
 const DatePickerMultipleDemo = lazy(
   () => import("@examples/date-picker/multiple")
 );
-const DialogDefaultDemo = lazy(() => import("@examples/dialog/default"));
+const DrawerStickyFooterDemo = lazy(
+  () => import("@examples/drawer/sticky-footer")
+);
 const InputOTPInvalidDemo = lazy(() => import("@examples/input-otp/invalid"));
 const LightboxDefaultDemo = lazy(() => import("@examples/lightbox/default"));
+const MarqueeTextDemo = lazy(() => import("@examples/marquee/text"));
+const CheckboxDefaultDemo = lazy(() => import("@examples/checkbox/default"));
+const DataTableDefaultDemo = lazy(() => import("@examples/data-table/default"));
 const RadioGroupDefaultDemo = lazy(
   () => import("@examples/radio-group/default")
 );
@@ -20,6 +25,7 @@ const ShimmerWithComponentsDemo = lazy(
   () => import("@examples/shimmer/with-components")
 );
 const SliderInvalidDemo = lazy(() => import("@examples/slider/invalid"));
+const SwitchWithLabelDemo = lazy(() => import("@examples/switch/with-label"));
 const TextMorphNumberAndSlotsDemo = lazy(
   () => import("@examples/text-morph/variants")
 );
@@ -48,8 +54,23 @@ export const HOME_COMPONENT_PREVIEWS = [
     size: "default",
   },
   {
-    name: "shimmer/with-components",
-    component: ShimmerWithComponentsDemo,
+    name: "switch/with-label",
+    component: SwitchWithLabelDemo,
+    size: "compact",
+  },
+  {
+    name: "marquee/text",
+    component: MarqueeTextDemo,
+    size: "default",
+  },
+  {
+    name: "checkbox/default",
+    component: CheckboxDefaultDemo,
+    size: "compact",
+  },
+  {
+    name: "data-table/default",
+    component: DataTableDefaultDemo,
     size: "compact",
   },
   {
@@ -68,6 +89,11 @@ export const HOME_COMPONENT_PREVIEWS = [
     size: "default",
   },
   {
+    name: "shimmer/with-components",
+    component: ShimmerWithComponentsDemo,
+    size: "compact",
+  },
+  {
     name: "input-otp/invalid",
     component: InputOTPInvalidDemo,
     size: "default",
@@ -83,8 +109,8 @@ export const HOME_COMPONENT_PREVIEWS = [
     size: "default",
   },
   {
-    name: "dialog/default",
-    component: DialogDefaultDemo,
+    name: "drawer/sticky-footer",
+    component: DrawerStickyFooterDemo,
     size: "compact",
   },
   {
