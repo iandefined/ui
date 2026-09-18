@@ -27,3 +27,10 @@ Choose the smallest check that can catch the likely failure. Passing `pnpm typec
 - Establish a baseline before broad work with the proportionate checks above; distinguish pre-existing failures from introduced failures.
 - If a repository-wide check fails for unrelated existing work, do not fix it silently. Record the command and failure, verify the changed files narrowly, and report the distinction.
 - Preserve unrelated worktree changes. Before commits or deployments, review generated and authored diffs separately and include only intentional output.
+
+## Test Command Behavior
+
+`pnpm test` runs Vitest with `--passWithNoTests`. During Vitest runs, the
+Cloudflare Vite plugin is skipped because it rejects Vitest's Node-module
+`resolve.external` list. There are no test files in the repository at present,
+so a passing command confirms test-runner startup but does not provide coverage.

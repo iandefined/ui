@@ -52,11 +52,12 @@ const docsPaths = (dir = docsDir): string[] =>
   });
 
 const prerenderPaths = Array.from(new Set(["/", ...docsPaths()])).toSorted();
+const isVitest = process.env.VITEST === "true";
 
 export default defineConfig({
   plugins: [
     ...mdx(),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
+    ...(isVitest ? [] : [cloudflare({ viteEnvironment: { name: "ssr" } })]),
     ...tanstackStart({
       prerender: {
         enabled: true,
