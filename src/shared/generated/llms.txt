@@ -9,6 +9,7 @@
 - [Forms](https://ui.iandefined.com/docs/forms.md) - Compose accessible native and TanStack Form workflows with registry controls.
 - [Installation](https://ui.iandefined.com/docs/installation.md) - Install registry components in your project.
 - [LLMS.txt](https://ui.iandefined.com/docs/llms.md) - Let AI coding assistants use iandefined/ui documentation and registry references.
+- [Pitfalls](https://ui.iandefined.com/docs/pitfalls.md) - Avoid common validation, overlay, and portal integration pitfalls in complex interfaces.
 - [Theming](https://ui.iandefined.com/docs/theming.md) - Customize the design system with CSS variables and global styles.
 
 ## Components

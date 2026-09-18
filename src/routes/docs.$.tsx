@@ -15,6 +15,10 @@ export const Route = createFileRoute("/docs/$")({
       throw redirect({ href: "/docs/theming" });
     }
 
+    if (params._splat === "overlays") {
+      throw redirect({ href: "/docs/pitfalls" });
+    }
+
     const slugs = slugsFromSplat(params._splat);
 
     if (!docsPageExists(slugs)) {

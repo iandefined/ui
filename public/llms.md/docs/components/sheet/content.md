@@ -1006,7 +1006,7 @@ Root component that forwards Base UI Dialog root props and defaults `modal` and
 | :--- | :--- | :--- | :--- |
 | `modal` | `boolean \| 'trap-focus'` | `true` | Controls focus trapping, page scrolling, and pointer interaction outside the sheet. `false` leaves the page interactive, while `"trap-focus"` traps focus without locking page scrolling. |
 | `dismissible` | `boolean` | `true` | Allows outside presses and Escape to dismiss the sheet. When `false`, the sheet can close only through `SheetCloseTrigger` or an externally controlled `open` value. |
-| `overlay` | `"blur" \| "brightness" \| "transparent"` | `blur` | Controls the backdrop treatment. Use `"brightness"` for a plain dark dimmer or `"transparent"` to retain modal interaction without visual dimming. See [Overlay Effects](../overlays#chromium-backdrop-blur-seams) when `"blur"` produces compositor seams in a nested scrolling layout. |
+| `overlay` | `"blur" \| "brightness" \| "transparent"` | `blur` | Controls the backdrop treatment. Use `"brightness"` for a plain dark dimmer or `"transparent"` to retain modal interaction without visual dimming. See [overlay effect pitfalls](../pitfalls#chromium-backdrop-blur-seams) when `"blur"` produces compositor seams in a nested scrolling layout. |
 | `disablePointerDismissal` | `boolean` | `-` | Prevents outside presses from closing the sheet. It defaults to `true` when `modal` is `false` or `"trap-focus"`. |
 
 #### SheetContent

@@ -601,9 +601,14 @@ const documentationIndex = (pages) => {
     (page) =>
       page.slugs.length === 0 ||
       (page.slugs.length === 1 &&
-        ["installation", "theming", "forms", "llms", "extending"].includes(
-          page.slugs[0]
-        ))
+        [
+          "installation",
+          "theming",
+          "forms",
+          "pitfalls",
+          "llms",
+          "extending",
+        ].includes(page.slugs[0]))
   );
 
   const formPages = pages.filter(
@@ -843,6 +848,9 @@ const redirects = () =>
     `${ROUTES.OG} ${ROUTES.OG}.png 301`,
     `${ROUTES.DOCS}.mdx ${ROUTES.DOCS}.md 301`,
     `${ROUTES.DOCS}/*.mdx ${ROUTES.DOCS}/:splat.md 301`,
+    `${ROUTES.DOCS}/overlays ${ROUTES.DOCS}/pitfalls 301`,
+    `${ROUTES.DOCS}/overlays.md ${ROUTES.DOCS}/pitfalls.md 301`,
+    `${ROUTES.LLMS_MD}${ROUTES.DOCS}/overlays/content.md ${ROUTES.LLMS_MD}${ROUTES.DOCS}/pitfalls/content.md 301`,
     "",
   ].join("\n");
 

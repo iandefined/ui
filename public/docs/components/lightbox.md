@@ -729,4 +729,4 @@ can omit both `thumbnail` and `poster` to derive a thumbnail automatically.
 
 In Chromium-based browsers, a fixed backdrop using `backdrop-filter: blur(...)` can produce horizontal or vertical colorless seams when sampling nested scroll containers under high device-pixel ratios. This is a browser compositor tile-rendering artifact rather than a CSS box shadow.
 
-When an application layout triggers this artifact, use the shared [Overlay Effects](../overlays#chromium-backdrop-blur-seams) workaround. It includes `[data-slot="lightbox-backdrop"]`, matches Lightbox's 200ms transition and 12px blur radius, and covers the underlying overlay wrapper when Lightbox is opened from a Dialog, Drawer, Sheet, or Popover.
+When an application layout triggers this artifact, use the shared [overlay effect pitfalls](../pitfalls#chromium-backdrop-blur-seams) workaround. It includes `[data-slot="lightbox-backdrop"]`, matches Lightbox's 200ms transition and 12px blur radius, and covers the underlying overlay wrapper when Lightbox is opened from a Dialog, Drawer, Sheet, or Popover.

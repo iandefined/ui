@@ -1,3 +1,6 @@
 /og /og.png 301
 /docs.mdx /docs.md 301
 /docs/*.mdx /docs/:splat.md 301
+/docs/overlays /docs/pitfalls 301
+/docs/overlays.md /docs/pitfalls.md 301
+/llms.md/docs/overlays/content.md /llms.md/docs/pitfalls/content.md 301

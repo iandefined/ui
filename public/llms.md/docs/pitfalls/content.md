@@ -1,8 +1,12 @@
-# Overlay Effects
+# Pitfalls
 
-Configure backdrop treatments and work around browser compositing artifacts.
+Avoid common validation, overlay, and portal integration pitfalls in complex interfaces.
 
 > For the complete documentation index, see [llms.txt](/llms.txt). Markdown variants are available at explicit `.md` URLs. An agent skill is available at [/.well-known/agent-skills/site-skill.md](/.well-known/agent-skills/site-skill.md).
+
+UI primitives often work in isolation and fail at application boundaries. This guide collects the problems that are easiest to misdiagnose when overlays, forms, portals, and motion interact.
+
+## Overlay Effect Pitfalls
 
 `Dialog`, `Drawer`, and `Sheet` share the same overlay modes. Use the default blur for depth, brightness for a plain dimmer, or transparent when modal interaction should remain without a visible backdrop. `Lightbox` supports the same blur and brightness treatments.
 
@@ -12,7 +16,7 @@ Configure backdrop treatments and work around browser compositing artifacts.
 | `"brightness"`  | Darkens content without applying a backdrop filter.  |
 | `"transparent"` | Preserves modal interaction without visible dimming. |
 
-## Chromium Backdrop Blur Seams
+### Chromium Backdrop Blur Seams
 
 Chromium-based browsers can render horizontal or vertical colorless seams when a fixed `backdrop-filter: blur(...)` samples a nested scroll container at a high device-pixel ratio. This is a browser compositor tile artifact, not a CSS box shadow. Changing the popup shadow, shadow color, or shadow blur does not remove it.
 
@@ -157,3 +161,35 @@ The selector excludes `[data-ending-style]` from the active target but keeps `fi
 Interactive swipe progress is scoped to the drawer portal and cannot cross into a sibling application container through CSS inheritance. If the fallback blur must track a drag continuously, mirror the drawer progress onto a shared ancestor. The CSS above synchronizes ordinary open and close transitions.
 
 When a body-portalled Lightbox opens from another overlay, that overlay is also outside `.app-scroll-container`. The second registered property applies the same compositor-safe blur to the underlying Dialog, Drawer, Sheet, or Popover wrapper while keeping the Lightbox itself sharp.
+
+## Form Validation Pitfalls
+
+Choose one validation authority for each form. A native `<form>` uses browser constraints such as `required`, `type`, and `pattern`. The registry `Form` component defaults `noValidate` to `true`, so TanStack Form owns validation unless you explicitly set `noValidate={false}`.
+
+Keep one active description or error directly after each control. For Radio Group and related choice groups, put `aria-invalid` and `aria-describedby` on the group root and render one group-level error instead of repeating the same message on every option.
+
+Treat invalid styling as persistent state and animation as transient feedback. Keep the field invalid until its rule passes, and use a shake only for a failed submission. Disable the submit control while `isSubmitting` is true so a pending request cannot be submitted twice.
+
+See the [Forms guide](./forms) for native constraints, TanStack Form validation, grouped controls, and asynchronous submission state.
+
+## Nested Popup Pitfalls
+
+Portals change the DOM relationship between a trigger, its popup, and any surrounding overlay. A popup can appear above a dialog and still sit outside that dialog's focus and outside-click boundary. Increasing `z-index` changes paint order, but it does not repair event or focus ownership.
+
+When a `SelectPopup` is nested in an overlay from another primitive library, pass `portalContainer` so the popup is mounted inside the container that owns the interaction boundary. Use the same principle for other portalled popups: choose a container that shares the intended stacking, focus, and outside-click context.
+
+## Modal Interaction Pitfalls
+
+Treat `modal` as an interaction contract, not a visual option. Choose the behavior that matches the task:
+
+| Value          | Interaction behavior                                                               |
+| -------------- | ---------------------------------------------------------------------------------- |
+| `false`        | Leaves page interaction and scrolling enabled.                                     |
+| `"trap-focus"` | Traps keyboard focus while leaving page scrolling and outside interaction enabled. |
+| `true`         | Traps focus, locks page scrolling, and disables outside pointer interaction.       |
+
+Non-modal and focus-trapping surfaces still need an explicit, keyboard-accessible close action. Give every dialog-like surface a stable title, and add a description when the task needs supporting context.
+
+## Motion and State Pitfalls
+
+Do not use an animation as the only signal for a state change. Persistent styles and text should communicate invalid, selected, loading, or closing states even when the user prefers reduced motion. The registry suppresses transient form shakes for `prefers-reduced-motion`, so the associated error remains the primary feedback.
