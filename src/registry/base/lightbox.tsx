@@ -523,9 +523,12 @@ function videoToItem(video: HTMLVideoElement): LightboxVideoItem {
     };
   });
   const src =
-    [video.currentSrc, video.dataset.lightboxSrc, video.src, sources.at(0)?.src].find(
-      (source) => source
-    ) ?? "";
+    [
+      video.currentSrc,
+      video.dataset.lightboxSrc,
+      video.src,
+      sources.at(0)?.src,
+    ].find((source) => source) ?? "";
   const label = [video.getAttribute("aria-label"), video.title, caption].find(
     (value) => value
   );
@@ -567,7 +570,9 @@ function getLoadedAssetKeys(media: GalleryMediaElement, item: LightboxItem) {
 }
 
 function mediaToItem(media: GalleryMediaElement): LightboxItem {
-  return media instanceof HTMLImageElement ? imageToItem(media) : videoToItem(media);
+  return media instanceof HTMLImageElement
+    ? imageToItem(media)
+    : videoToItem(media);
 }
 
 function hasCustomContent(children: React.ReactNode) {
@@ -927,8 +932,9 @@ function Lightbox({
       const label =
         media instanceof HTMLImageElement
           ? media.alt || `image ${index + 1}`
-          : ([media.getAttribute("aria-label"), media.title].find((value) => value) ??
-            `video ${index + 1}`);
+          : ([media.getAttribute("aria-label"), media.title].find(
+              (value) => value
+            ) ?? `video ${index + 1}`);
       media.setAttribute(
         "aria-label",
         media.getAttribute("aria-label") ?? `Open ${label} in lightbox`
@@ -1466,7 +1472,9 @@ function Lightbox({
     const target = event.target;
     if (
       !gallery ||
-      !(target instanceof HTMLImageElement || target instanceof HTMLVideoElement)
+      !(
+        target instanceof HTMLImageElement || target instanceof HTMLVideoElement
+      )
     ) {
       return;
     }

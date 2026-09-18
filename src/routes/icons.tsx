@@ -13,7 +13,8 @@ import { ROUTES } from "@/shared/constants/routes";
 import { createPageHead } from "@/shared/lib/seo/metadata";
 
 const ICONS_TITLE = "Icons";
-const ICONS_DESCRIPTION = `Explore ${ICON_CATALOG.length} alternative visual styles for Lucide icons.`;
+const ICONS_DESCRIPTION =
+  "Explore 595 alternative visual styles for Lucide icons.";
 
 export const ICON_SIZES = [16, 20, 24, 32, 40, 48, 64, 80] as const;
 export type IconSize = (typeof ICON_SIZES)[number];

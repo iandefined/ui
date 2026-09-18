@@ -29,8 +29,8 @@ const SwitchWithLabelDemo = lazy(() => import("@examples/switch/with-label"));
 const TextMorphNumberAndSlotsDemo = lazy(
   () => import("@examples/text-morph/variants")
 );
-const UseFuzzyFilterDefaultDemo = lazy(
-  () => import("@examples/use-fuzzy-filter/default")
+const TransitionPanelDefaultDemo = lazy(
+  () => import("@examples/transition-panel/default")
 );
 
 type PreviewSize = "compact" | "default" | "large";
@@ -44,9 +44,9 @@ export type HomeComponentPreview = {
 
 export const HOME_COMPONENT_PREVIEWS = [
   {
-    name: "use-fuzzy-filter/default",
-    component: UseFuzzyFilterDefaultDemo,
-    size: "large",
+    name: "data-table/default",
+    component: DataTableDefaultDemo,
+    size: "compact",
   },
   {
     name: "lightbox/default",
@@ -69,9 +69,9 @@ export const HOME_COMPONENT_PREVIEWS = [
     size: "compact",
   },
   {
-    name: "data-table/default",
-    component: DataTableDefaultDemo,
-    size: "compact",
+    name: "avatar/random-hash-avatar",
+    component: AvatarHashvatarDemo,
+    size: "large",
   },
   {
     name: "text-morph/number-and-slots",
@@ -114,8 +114,8 @@ export const HOME_COMPONENT_PREVIEWS = [
     size: "compact",
   },
   {
-    name: "avatar/random-hash-avatar",
-    component: AvatarHashvatarDemo,
+    name: "transition-panel/default",
+    component: TransitionPanelDefaultDemo,
     size: "large",
   },
 ] satisfies readonly HomeComponentPreview[];
