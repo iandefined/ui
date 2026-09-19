@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ui.iandefined.com/og.png" alt="iandefined/ui" width="100%" />
+  <img src="./cover.png" alt="iandefined/ui" width="100%" />
 </p>
 
 <p align="center">
@@ -77,20 +77,6 @@ Build and preview production bundle:
 pnpm build
 pnpm preview
 ```
-
-## Optional Umami Analytics
-
-Umami analytics is enabled only when both of these variables are set in the
-environment that runs `pnpm build`. For Cloudflare deployments, add them under
-the project’s **Build → Variables and secrets** settings:
-
-```bash
-VITE_UMAMI_SCRIPT_URL=https://umami-neptune.messy.top/script.js
-VITE_UMAMI_WEBSITE_ID=756db1fe-2f10-4965-a610-200986f5a5bd
-```
-
-This is optional: if either variable is missing or empty, the Umami script is
-not included in the generated site.
 
 ## License
 
