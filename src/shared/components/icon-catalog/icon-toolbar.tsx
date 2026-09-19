@@ -12,6 +12,7 @@ export type IconToolbarProps = {
   categories: CategoryInfo[];
   selectedCategory: "all" | IconCategory;
   onSelectCategory: (category: "all" | IconCategory) => void;
+  onPrefetchCategory?: (category: "all" | IconCategory) => void;
   selectedVariant: "all" | "duotone" | "filled";
   onSelectVariant: (variant: "all" | "duotone" | "filled") => void;
   searchQuery: string;
@@ -23,6 +24,7 @@ export function IconToolbar({
   categories,
   selectedCategory,
   onSelectCategory,
+  onPrefetchCategory,
   selectedVariant,
   onSelectVariant,
   searchQuery,
@@ -68,6 +70,7 @@ export function IconToolbar({
             categories={categories}
             selectedCategory={selectedCategory}
             onSelectCategory={onSelectCategory}
+            onPrefetchCategory={onPrefetchCategory}
             className="w-full"
           />
         </div>

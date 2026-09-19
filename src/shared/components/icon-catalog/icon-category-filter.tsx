@@ -22,6 +22,7 @@ export type CategoryFilterProps = {
   categories: CategoryInfo[];
   selectedCategory: "all" | IconCategory;
   onSelectCategory: (category: "all" | IconCategory) => void;
+  onPrefetchCategory?: (category: "all" | IconCategory) => void;
   className?: string;
 };
 
@@ -29,6 +30,7 @@ export function IconCategorySidebar({
   categories,
   selectedCategory,
   onSelectCategory,
+  onPrefetchCategory,
   className,
 }: CategoryFilterProps) {
   return (
@@ -44,6 +46,8 @@ export function IconCategorySidebar({
             type="button"
             variant={isSelected ? "default" : "ghost"}
             onClick={() => onSelectCategory(category.id)}
+            onFocus={() => onPrefetchCategory?.(category.id)}
+            onPointerEnter={() => onPrefetchCategory?.(category.id)}
             aria-current={isSelected ? "true" : undefined}
             className={cn(
               "h-9 w-full justify-between rounded-lg px-3 py-2 text-sm font-medium",
@@ -68,6 +72,7 @@ export function IconCategoryMobileSelect({
   categories,
   selectedCategory,
   onSelectCategory,
+  onPrefetchCategory,
   className,
 }: CategoryFilterProps) {
   const [open, setOpen] = useState(false);
@@ -136,6 +141,10 @@ export function IconCategoryMobileSelect({
                           setOpen(false);
                           onSelectCategory(category.value);
                         }}
+                        onFocus={() => onPrefetchCategory?.(category.value)}
+                        onPointerEnter={() =>
+                          onPrefetchCategory?.(category.value)
+                        }
                         value={category}
                       >
                         <CheckIcon

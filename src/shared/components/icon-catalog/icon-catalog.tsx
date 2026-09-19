@@ -8,11 +8,6 @@ import {
   type IconVariant,
 } from "@/icons/catalog";
 import { getCategoryCounts, getIconSvg, ICON_CATALOG } from "@/icons/catalog";
-import {
-  Tooltip,
-  TooltipPopup,
-  TooltipProvider,
-} from "@/registry/base/tooltip";
 import { useFuzzyFilter } from "@/registry/base/use-fuzzy-filter";
 import {
   Empty,
@@ -25,9 +20,8 @@ import {
 import { IconCard } from "./icon-card";
 import { IconCategorySidebar } from "./icon-category-filter";
 import { IconDetailDialog } from "./icon-detail-dialog";
+import { useIconRoutePrefetch } from "./icon-route-prefetch";
 import { IconToolbar } from "./icon-toolbar";
-
-const iconTooltipHandle = Tooltip.createHandle<string>();
 
 type IconDisplayItem = {
   item: IconCatalogItem;
@@ -37,6 +31,7 @@ type IconDisplayItem = {
 export function IconCatalog() {
   const search = useSearch({ from: "/icons" });
   const navigate = useNavigate({ from: "/icons" });
+  const prefetchIconRoute = useIconRoutePrefetch(search);
   const activeItem = useMemo(
     () =>
       search.icon
@@ -98,6 +93,7 @@ export function IconCatalog() {
 
   const openIcon = (item: IconCatalogItem, variant: IconVariant) => {
     void navigate({
+      replace: true,
       resetScroll: false,
       search: (previous) => {
         return {
@@ -128,6 +124,7 @@ export function IconCatalog() {
             categories={categoryCounts}
             selectedCategory={search.category}
             onSelectCategory={(category) => updateCatalogSearch({ category })}
+            onPrefetchCategory={(category) => prefetchIconRoute({ category })}
           />
         </div>
       </aside>
@@ -139,6 +136,7 @@ export function IconCatalog() {
           categories={categoryCounts}
           selectedCategory={search.category}
           onSelectCategory={(category) => updateCatalogSearch({ category })}
+          onPrefetchCategory={(category) => prefetchIconRoute({ category })}
           selectedVariant={search.variant}
           onSelectVariant={(variant) => updateCatalogSearch({ variant })}
           searchQuery={search.q}
@@ -147,33 +145,23 @@ export function IconCatalog() {
 
         {/* Grid or Empty State */}
         {displayItems.length > 0 ? (
-          <TooltipProvider delay={0} closeDelay={100}>
-            <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-10 sm:gap-2.5">
-              {displayItems.map(({ item, variant }) => (
-                <IconCard
-                  key={`${item.name}-${variant}`}
-                  item={item}
-                  variant={variant}
-                  svg={getIconSvg(item.name, variant)}
-                  tooltipHandle={iconTooltipHandle}
-                  onClick={() => openIcon(item, variant)}
-                />
-              ))}
-            </div>
-
-            <Tooltip handle={iconTooltipHandle}>
-              {({ payload }) => (
-                <TooltipPopup
-                  side="bottom"
-                  sideOffset={-10}
-                  showArrow={false}
-                  className="z-20 rounded-md border-none bg-primary px-2.5 py-0.5 text-xs font-medium tracking-tight text-primary-foreground shadow-sm"
-                >
-                  {payload}
-                </TooltipPopup>
-              )}
-            </Tooltip>
-          </TooltipProvider>
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-10 sm:gap-2.5">
+            {displayItems.map(({ item, variant }) => (
+              <IconCard
+                key={`${item.name}-${variant}`}
+                item={item}
+                variant={variant}
+                svg={getIconSvg(item.name, variant)}
+                onClick={() => openIcon(item, variant)}
+                onPrefetch={() =>
+                  prefetchIconRoute({
+                    icon: item.name,
+                    iconVariant: variant,
+                  })
+                }
+              />
+            ))}
+          </div>
         ) : (
           <Empty className="border border-dashed py-12">
             <EmptyHeader>

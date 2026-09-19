@@ -37,6 +37,10 @@ import { GITHUB, LINK } from "@/shared/constants/links";
 import { highlightCode } from "@/shared/lib/highlight-code";
 
 import { IconPreview } from "./icon-preview";
+import {
+  useIconRoutePrefetch,
+  type IconSearchPatch,
+} from "./icon-route-prefetch";
 
 const CATEGORY_COLORS: BadgeColor[] = [
   "blue",
@@ -78,6 +82,29 @@ const SIZES = [
   { label: "80px", value: "80" },
 ];
 
+function toSearchSize(value: string) {
+  switch (Number(value)) {
+    case 16:
+      return 16;
+    case 20:
+      return 20;
+    case 24:
+      return 24;
+    case 32:
+      return 32;
+    case 40:
+      return 40;
+    case 48:
+      return 48;
+    case 64:
+      return 64;
+    case 80:
+      return 80;
+    default:
+      return 24;
+  }
+}
+
 const CODE_FORMATS = [
   { label: "SVG", value: "svg" },
   { label: "React", value: "react" },
@@ -117,6 +144,7 @@ export function IconDetailDialog({
 }: IconDetailDialogProps) {
   const search = useSearch({ from: "/icons" });
   const navigate = useNavigate({ from: "/icons" });
+  const prefetchIconRoute = useIconRoutePrefetch(search);
   const [highlightedCode, setHighlightedCode] = useState<{
     source: string;
     html: string;
@@ -150,6 +178,10 @@ export function IconDetailDialog({
         };
       },
     });
+  };
+
+  const prefetchDialogOption = (patch: IconSearchPatch) => {
+    prefetchIconRoute(patch);
   };
 
   const svg = item ? getIconSvg(item.name, variant, numericSize) : "";
@@ -197,229 +229,263 @@ export function IconDetailDialog({
 
   const codeHtml = highlightedCode?.source === code ? highlightedCode.html : "";
 
-  if (!item) return null;
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full sm:max-w-xl">
-        <DialogHeader className="gap-2">
-          <div className="flex items-center gap-2">
-            <DialogTitle className="text-xl font-semibold lowercase">
-              {item.name}
-            </DialogTitle>
-            <Badge
-              depth="surface"
-              variant="translucent"
-              color={getCategoryBadgeColor(item.category)}
-              size="compact"
-            >
-              <Tag /> {CATEGORY_LABELS[item.category]}
-            </Badge>
-          </div>
-          <DialogDescription className="sr-only">
-            Icon details, variant selection, dimensions, live preview, and code
-            for {item.name}.
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogBody
-          fadeEdges="y"
-          className="flex min-w-0 w-full max-w-full flex-col gap-4 py-2 overflow-x-hidden"
-        >
-          {/* Section 1: Aliases */}
-          {item.tags.length > 0 && (
-            <div className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-muted-foreground">
-                Aliases
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {item.tags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="secondary"
-                    size="compact"
-                    className="lowercase"
-                  >
-                    {tag.toLowerCase()}
-                  </Badge>
-                ))}
+        {item ? (
+          <>
+            <DialogHeader className="gap-2">
+              <div className="flex items-center gap-2">
+                <DialogTitle className="text-xl font-semibold lowercase">
+                  {item.name}
+                </DialogTitle>
+                <Badge
+                  depth="surface"
+                  variant="translucent"
+                  color={getCategoryBadgeColor(item.category)}
+                  size="compact"
+                >
+                  <Tag /> {CATEGORY_LABELS[item.category]}
+                </Badge>
               </div>
-            </div>
-          )}
+              <DialogDescription className="sr-only">
+                Icon details, variant selection, dimensions, live preview, and
+                code for {item.name}.
+              </DialogDescription>
+            </DialogHeader>
 
-          {/* Section 2: Controls (Size, Variant & Syntax) */}
-          <div className="grid min-w-0 grid-cols-2 items-end gap-3 sm:grid-cols-3">
-            <div className="order-1 flex min-w-0 flex-col gap-1.5 sm:order-none">
-              <span className="text-xs font-medium text-muted-foreground">
-                Size
-              </span>
-              <Select
-                items={SIZES}
-                value={size}
-                onValueChange={(val) => {
-                  if (typeof val === "string" || typeof val === "number") {
-                    updateDialogSearch("size", val);
-                  }
-                }}
-              >
-                <SelectTrigger
-                  className="w-full min-w-0"
-                  aria-label="Select icon size"
-                >
-                  <SelectValue placeholder="24px" />
-                  <SelectIcon>
-                    <ChevronsUpDownIcon className="size-3.5" />
-                  </SelectIcon>
-                </SelectTrigger>
-                <SelectPopup>
-                  <SelectList>
-                    {SIZES.map(({ label, value: val }) => (
-                      <SelectItem key={val} value={val}>
-                        <SelectItemText>{label}</SelectItemText>
-                        <SelectItemIndicator>
-                          <CheckIcon className="size-3.5" />
-                        </SelectItemIndicator>
-                      </SelectItem>
-                    ))}
-                  </SelectList>
-                </SelectPopup>
-              </Select>
-            </div>
-
-            <div className="order-3 col-span-2 flex min-w-0 flex-col gap-1.5 sm:order-none sm:col-span-1">
-              <span className="text-xs font-medium text-muted-foreground">
-                Variant
-              </span>
-              <Select
-                items={availableVariants}
-                value={variant}
-                onValueChange={(val) => {
-                  if (val) {
-                    updateDialogSearch("iconVariant", val as IconVariant);
-                  }
-                }}
-              >
-                <SelectTrigger
-                  className="w-full min-w-0"
-                  aria-label="Select icon variant"
-                >
-                  <SelectValue placeholder="Stroke" />
-                  <SelectIcon>
-                    <ChevronsUpDownIcon className="size-3.5" />
-                  </SelectIcon>
-                </SelectTrigger>
-                <SelectPopup>
-                  <SelectList>
-                    {availableVariants.map(({ label, value: val }) => (
-                      <SelectItem key={val} value={val}>
-                        <SelectItemText>{label}</SelectItemText>
-                        <SelectItemIndicator>
-                          <CheckIcon className="size-3.5" />
-                        </SelectItemIndicator>
-                      </SelectItem>
-                    ))}
-                  </SelectList>
-                </SelectPopup>
-              </Select>
-            </div>
-
-            <div className="order-2 flex min-w-0 flex-col gap-1.5 sm:order-none">
-              <span className="text-xs font-medium text-muted-foreground">
-                Syntax
-              </span>
-              <Select
-                items={CODE_FORMATS}
-                value={codeFormat}
-                onValueChange={(value) => {
-                  if (value) updateDialogSearch("syntax", value as CodeFormat);
-                }}
-              >
-                <SelectTrigger
-                  className="w-full min-w-0"
-                  aria-label="Select code syntax"
-                >
-                  <SelectValue placeholder="SVG" />
-                  <SelectIcon>
-                    <ChevronsUpDownIcon className="size-3.5" />
-                  </SelectIcon>
-                </SelectTrigger>
-                <SelectPopup>
-                  <SelectList>
-                    {CODE_FORMATS.map(({ label, value }) => (
-                      <SelectItem key={value} value={value}>
-                        <SelectItemText>{label}</SelectItemText>
-                        <SelectItemIndicator>
-                          <CheckIcon className="size-3.5" />
-                        </SelectItemIndicator>
-                      </SelectItem>
-                    ))}
-                  </SelectList>
-                </SelectPopup>
-              </Select>
-            </div>
-          </div>
-
-          {/* Section 3: Preview Area */}
-          <div className="flex h-36 w-full min-w-0 max-w-full items-center justify-center shadow-xs overflow-hidden rounded-xl border border-input/70 bg-code">
-            <div
-              style={{
-                width: `${Math.min(Math.max(numericSize, 16), 112)}px`,
-                height: `${Math.min(Math.max(numericSize, 16), 112)}px`,
-              }}
-              className="flex items-center justify-center transition-all duration-150"
+            <DialogBody
+              fadeEdges="y"
+              className="flex min-w-0 w-full max-w-full flex-col gap-4 py-2 overflow-x-hidden"
             >
-              <IconPreview svg={svg} className="size-full text-foreground" />
-            </div>
-          </div>
-
-          {/* Section 4: Code Section */}
-          <div className="flex min-w-0 w-full max-w-full flex-col gap-1.5">
-            <span className="text-xs font-medium text-muted-foreground">
-              Code
-            </span>
-            <figure
-              data-rehype-pretty-code-figure=""
-              className="relative m-0! w-full min-w-0 max-w-full shadow-xs rounded-xl border! border-input/70! bg-code"
-            >
-              <CopyButton
-                value={code}
-                className="absolute top-2.5 right-2.5 z-10 size-7"
-              />
-              {codeHtml ? (
-                <div
-                  className="max-h-48 w-full min-w-0 max-w-full overflow-x-auto text-sm [&>pre]:max-h-48 [&>pre]:w-full [&>pre]:min-w-0 [&>pre]:overflow-x-auto"
-                  dangerouslySetInnerHTML={{ __html: codeHtml }}
-                />
-              ) : (
-                <pre className="max-h-48 w-full min-w-0 overflow-x-auto p-3.5 font-mono text-xs text-muted-foreground">
-                  <code>{code}</code>
-                </pre>
+              {/* Section 1: Aliases */}
+              {item.tags.length > 0 && (
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Aliases
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.tags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant="secondary"
+                        size="compact"
+                        className="lowercase"
+                      >
+                        {tag.toLowerCase()}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
               )}
-            </figure>
-          </div>
-        </DialogBody>
 
-        <DialogFooter className="flex-row justify-end">
-          <Button
-            variant="secondary"
-            render={
-              <a
-                href={sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="View source on GitHub"
-              />
-            }
-            nativeButton={false}
-          >
-            <CodeXml />
-            View Source
-          </Button>
-          <Button variant="default" onClick={handleDownload}>
-            <Download />
-            Download
-          </Button>
-        </DialogFooter>
+              {/* Section 2: Controls (Size, Variant & Syntax) */}
+              <div className="grid min-w-0 grid-cols-2 items-end gap-3 sm:grid-cols-3">
+                <div className="order-1 flex min-w-0 flex-col gap-1.5 sm:order-none">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Size
+                  </span>
+                  <Select
+                    items={SIZES}
+                    value={size}
+                    onValueChange={(val) => {
+                      if (typeof val === "string" || typeof val === "number") {
+                        updateDialogSearch("size", val);
+                      }
+                    }}
+                  >
+                    <SelectTrigger
+                      className="w-full min-w-0"
+                      aria-label="Select icon size"
+                    >
+                      <SelectValue placeholder="24px" />
+                      <SelectIcon>
+                        <ChevronsUpDownIcon className="size-3.5" />
+                      </SelectIcon>
+                    </SelectTrigger>
+                    <SelectPopup>
+                      <SelectList>
+                        {SIZES.map(({ label, value: val }) => (
+                          <SelectItem
+                            key={val}
+                            value={val}
+                            onFocus={() =>
+                              prefetchDialogOption({ size: toSearchSize(val) })
+                            }
+                            onPointerEnter={() =>
+                              prefetchDialogOption({ size: toSearchSize(val) })
+                            }
+                          >
+                            <SelectItemText>{label}</SelectItemText>
+                            <SelectItemIndicator>
+                              <CheckIcon className="size-3.5" />
+                            </SelectItemIndicator>
+                          </SelectItem>
+                        ))}
+                      </SelectList>
+                    </SelectPopup>
+                  </Select>
+                </div>
+
+                <div className="order-3 col-span-2 flex min-w-0 flex-col gap-1.5 sm:order-none sm:col-span-1">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Variant
+                  </span>
+                  <Select
+                    items={availableVariants}
+                    value={variant}
+                    onValueChange={(val) => {
+                      if (val) {
+                        updateDialogSearch("iconVariant", val as IconVariant);
+                      }
+                    }}
+                  >
+                    <SelectTrigger
+                      className="w-full min-w-0"
+                      aria-label="Select icon variant"
+                    >
+                      <SelectValue placeholder="Stroke" />
+                      <SelectIcon>
+                        <ChevronsUpDownIcon className="size-3.5" />
+                      </SelectIcon>
+                    </SelectTrigger>
+                    <SelectPopup>
+                      <SelectList>
+                        {availableVariants.map(({ label, value: val }) => (
+                          <SelectItem
+                            key={val}
+                            value={val}
+                            onFocus={() =>
+                              prefetchDialogOption({ iconVariant: val })
+                            }
+                            onPointerEnter={() =>
+                              prefetchDialogOption({ iconVariant: val })
+                            }
+                          >
+                            <SelectItemText>{label}</SelectItemText>
+                            <SelectItemIndicator>
+                              <CheckIcon className="size-3.5" />
+                            </SelectItemIndicator>
+                          </SelectItem>
+                        ))}
+                      </SelectList>
+                    </SelectPopup>
+                  </Select>
+                </div>
+
+                <div className="order-2 flex min-w-0 flex-col gap-1.5 sm:order-none">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Syntax
+                  </span>
+                  <Select
+                    items={CODE_FORMATS}
+                    value={codeFormat}
+                    onValueChange={(value) => {
+                      if (value) {
+                        updateDialogSearch("syntax", value as CodeFormat);
+                      }
+                    }}
+                  >
+                    <SelectTrigger
+                      className="w-full min-w-0"
+                      aria-label="Select code syntax"
+                    >
+                      <SelectValue placeholder="SVG" />
+                      <SelectIcon>
+                        <ChevronsUpDownIcon className="size-3.5" />
+                      </SelectIcon>
+                    </SelectTrigger>
+                    <SelectPopup>
+                      <SelectList>
+                        {CODE_FORMATS.map(({ label, value }) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                            onFocus={() =>
+                              prefetchDialogOption({ syntax: value })
+                            }
+                            onPointerEnter={() =>
+                              prefetchDialogOption({ syntax: value })
+                            }
+                          >
+                            <SelectItemText>{label}</SelectItemText>
+                            <SelectItemIndicator>
+                              <CheckIcon className="size-3.5" />
+                            </SelectItemIndicator>
+                          </SelectItem>
+                        ))}
+                      </SelectList>
+                    </SelectPopup>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Section 3: Preview Area */}
+              <div className="flex h-36 w-full min-w-0 max-w-full items-center justify-center shadow-xs overflow-hidden rounded-xl border border-input/70 bg-code">
+                <div
+                  style={{
+                    width: `${Math.min(Math.max(numericSize, 16), 112)}px`,
+                    height: `${Math.min(Math.max(numericSize, 16), 112)}px`,
+                  }}
+                  className="flex items-center justify-center transition-all duration-150"
+                >
+                  <IconPreview
+                    svg={svg}
+                    className="size-full text-foreground"
+                  />
+                </div>
+              </div>
+
+              {/* Section 4: Code Section */}
+              <div className="flex min-w-0 w-full max-w-full flex-col gap-1.5">
+                <span className="text-xs font-medium text-muted-foreground">
+                  Code
+                </span>
+                <figure
+                  data-rehype-pretty-code-figure=""
+                  className="relative m-0! w-full min-w-0 max-w-full shadow-xs rounded-xl border! border-input/70! bg-code"
+                >
+                  <CopyButton
+                    value={code}
+                    className="absolute top-2.5 right-2.5 z-10 size-7"
+                  />
+                  {codeHtml ? (
+                    <div
+                      className="max-h-48 w-full min-w-0 max-w-full overflow-x-auto text-sm [&>pre]:max-h-48 [&>pre]:w-full [&>pre]:min-w-0 [&>pre]:overflow-x-auto"
+                      dangerouslySetInnerHTML={{ __html: codeHtml }}
+                    />
+                  ) : (
+                    <pre className="max-h-48 w-full min-w-0 overflow-x-auto p-3.5 font-mono text-xs text-muted-foreground">
+                      <code>{code}</code>
+                    </pre>
+                  )}
+                </figure>
+              </div>
+            </DialogBody>
+
+            <DialogFooter className="flex-row justify-end">
+              <Button
+                variant="secondary"
+                render={
+                  <a
+                    href={sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="View source on GitHub"
+                  />
+                }
+                nativeButton={false}
+              >
+                <CodeXml />
+                View Source
+              </Button>
+              <Button variant="default" onClick={handleDownload}>
+                <Download />
+                Download
+              </Button>
+            </DialogFooter>
+          </>
+        ) : null}
       </DialogContent>
     </Dialog>
   );

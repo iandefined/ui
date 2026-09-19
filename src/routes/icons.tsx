@@ -10,11 +10,12 @@ import { getIconCount, ICON_CATALOG, ICON_CATEGORIES } from "@/icons/catalog";
 import { IconCatalog } from "@/shared/components/icon-catalog/icon-catalog";
 import { Link } from "@/shared/components/link";
 import { ROUTES } from "@/shared/constants/routes";
+import {
+  ICONS_OG_IMAGE,
+  ICONS_PAGE_DESCRIPTION,
+  ICONS_PAGE_TITLE,
+} from "@/shared/lib/icons";
 import { createPageHead } from "@/shared/lib/seo/metadata";
-
-const ICONS_TITLE = "Icons";
-const ICONS_DESCRIPTION =
-  "Explore 595 alternative visual styles for Lucide icons.";
 
 export const ICON_SIZES = [16, 20, 24, 32, 40, 48, 64, 80] as const;
 export type IconSize = (typeof ICON_SIZES)[number];
@@ -71,9 +72,13 @@ export const Route = createFileRoute("/icons")({
   },
   head: () =>
     createPageHead({
-      description: ICONS_DESCRIPTION,
+      description: ICONS_PAGE_DESCRIPTION,
+      ogDescription: ICONS_PAGE_DESCRIPTION,
+      ogImage: ICONS_OG_IMAGE,
+      ogImageAlt: ICONS_PAGE_TITLE,
+      ogTitle: ICONS_PAGE_TITLE,
       path: ROUTES.ICONS,
-      title: ICONS_TITLE,
+      title: ICONS_PAGE_TITLE,
     }),
 });
 
@@ -86,7 +91,7 @@ function IconsRoute() {
       <div className="container py-10 md:py-14">
         <div className="mb-8 space-y-2">
           <h1 className="scroll-m-20 text-neutral-800 dark:text-neutral-300 text-3xl font-semibold tracking-tight md:text-4xl">
-            {ICONS_TITLE}
+            {ICONS_PAGE_TITLE}
           </h1>
           <p className="text-muted-foreground max-w-2xl text-base md:text-lg">
             Explore {iconCount} alternative visual styles for{" "}

@@ -936,6 +936,10 @@ await writeOgImage(`${ROUTES.OG}/blocks.png`, {
     "Browse production-ready registry blocks and copy them directly to your project.",
   title: "Blocks",
 });
+await writeOgImage(`${ROUTES.OG}/icons.png`, {
+  description: "Explore 595 alternative visual styles for Lucide icons.",
+  title: "Icons",
+});
 
 for (const page of pages) {
   const segments = [...page.slugs, "image.png"];
