@@ -29,6 +29,12 @@ export default function TwemojiDemo() {
 npx shadcn@latest add https://ui.iandefined.com/r/twemoji.json
 ```
 
+## External assets
+
+By default, rendered SVGs are fetched from the Twitter Twemoji CDN. Ensure your
+application's network policy and Content Security Policy allow that image origin,
+or provide the `source` prop to self-host the assets or use another endpoint.
+
 ## Usage
 
 ```tsx
