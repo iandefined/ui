@@ -84,7 +84,7 @@ function Combobox<Value, Multiple extends boolean | undefined = false>({
 
   const handleOpenChange = (
     nextOpen: boolean,
-    eventDetails: ComboboxPrimitive.Root.ChangeEventDetails
+    eventDetails: ComboboxPrimitive.Root.OpenChangeEventDetails
   ) => {
     if (controlledOpen === undefined) {
       setUncontrolledOpen(nextOpen);

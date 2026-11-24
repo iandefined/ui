@@ -91,12 +91,7 @@ export default defineConfig({
     tasks: {
       "build:site": {
         command: ["pnpm registry:build", "pnpm static:build", "vp build"],
-        env: [
-          "NODE_ENV",
-          "SITE_URL",
-          "VITE_UMAMI_SCRIPT_URL",
-          "VITE_UMAMI_WEBSITE_ID",
-        ],
+        cache: false,
       },
     },
   },
