@@ -218,6 +218,13 @@ compose it around the button content with `render`.
   >
     Chooses whether `DialogBody` or the surrounding viewport scrolls.
   </ApiProp>
+  <ApiProp name="showCloseButton" fullType="boolean" defaultValue="true">
+    Controls the built-in close icon in a dismissible dialog. Escape and
+    outside-press behavior follow the dialog's dismissal settings.
+  </ApiProp>
+  <ApiProp name="backdropClassName" fullType="string">
+    Applies classes to the backdrop rendered for a modal dialog.
+  </ApiProp>
   <ApiProp
     name="initialFocus"
     fullType="boolean | React.RefObject<HTMLElement | null> | ((openType) => boolean | HTMLElement | null | void)"

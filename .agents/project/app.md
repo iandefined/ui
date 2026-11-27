@@ -25,6 +25,7 @@ For installable registry structure and publication, see [registry-system.md](reg
   * `lib/`: Registry loaders, Shiki highlighters, route helpers.
   * `constants/`: Route paths, metadata, navigation structures.
 - `src/registry/base/`: Installable registry components and hooks (see [registry-system.md](registry-system.md)).
+- Compose site search and searchable category pickers from the installable `src/registry/base/command.tsx` parts. Keep routing, search metadata, shortcuts, and analytics in their app components.
 - `content/docs/`: Authored Fumadocs MDX documentation pages (see [docs-writing.md](docs-writing.md)).
 - `examples/`: Reusable demo components for documentation previews.
 - `scripts/`: Build-time generators (`generate-static-assets.mjs`).

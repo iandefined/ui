@@ -918,6 +918,27 @@
       ]
     },
     {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "A searchable command palette for actions and navigation.",
+      "dependencies": ["@base-ui/react", "cn", "lucide-react"],
+      "registryDependencies": [
+        "https://ui.iandefined.com/r/autocomplete.json",
+        "https://ui.iandefined.com/r/dialog.json",
+        "https://ui.iandefined.com/r/input-group.json",
+        "https://ui.iandefined.com/r/kbd.json",
+        "https://ui.iandefined.com/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "src/registry/base/command.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/command.tsx"
+        }
+      ]
+    },
+    {
       "name": "use-fuzzy-filter",
       "type": "registry:hook",
       "title": "useFuzzyFilter",

@@ -1,0 +1,277 @@
+---
+title: Command
+description: A searchable command palette for actions and navigation.
+---
+
+Use `Command` for quick actions, navigation, or switching between workspaces. Render it inline or open it in a dialog.
+
+## Preview
+
+<ComponentPreview name="command/default" />
+
+## Installation
+
+<ComponentInstall name="command" />
+
+## Usage
+
+```tsx
+import {
+  Command,
+  CommandCollection,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+
+const actions = ["New file", "Open project", "Project settings"];
+
+<Command items={actions}>
+  <CommandInput aria-label="Search actions" placeholder="Search actions…" />
+  <CommandList>
+    <CommandGroup>
+      <CommandCollection>
+        {(action: string) => (
+          <CommandItem
+            key={action}
+            value={action}
+            onClick={() => runAction(action)}
+          >
+            {action}
+          </CommandItem>
+        )}
+      </CommandCollection>
+    </CommandGroup>
+  </CommandList>
+</Command>;
+```
+
+## Composition
+
+Use `CommandDialogPopup` inside `CommandDialog` to open the palette as a modal. `CommandContent` keeps the input and scrollable list together above the optional `CommandFooter`.
+
+```tsx
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandCollection,
+  CommandContent,
+  CommandDialog,
+  CommandDialogPopup,
+  CommandDialogTrigger,
+  CommandFooter,
+  CommandGroup,
+  CommandGroupLabel,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+
+<CommandDialog>
+  <CommandDialogTrigger render={<Button />}>Open commands</CommandDialogTrigger>
+  <CommandDialogPopup title="Project commands">
+    <Command items={actions}>
+      <CommandContent>
+        <CommandInput aria-label="Search project commands" />
+        <CommandList>
+          <CommandGroup>
+            <CommandGroupLabel>Project</CommandGroupLabel>
+            <CommandCollection>
+              {(action: string) => (
+                <CommandItem key={action} value={action}>
+                  {action}
+                </CommandItem>
+              )}
+            </CommandCollection>
+          </CommandGroup>
+        </CommandList>
+      </CommandContent>
+      <CommandFooter>Press Enter to run a command.</CommandFooter>
+    </Command>
+  </CommandDialogPopup>
+</CommandDialog>;
+```
+
+## Examples
+
+### Dialog
+
+The demo binds `Ctrl+L`. Use **Open workspace commands** when the browser reserves that shortcut for the address bar.
+
+<ComponentPreview name="command/dialog" />
+
+### With Footer
+
+Use `CommandFooter` to show navigation, selection, and dismissal keys below the scrollable results.
+
+<ComponentPreview name="command/footer" />
+
+### Fuzzy Search
+
+Pass `filterItem` from [useFuzzyFilter](/docs/hooks/use-fuzzy-filter) as the `filter` prop to match labels and keywords.
+
+<ComponentPreview name="command/fuzzy" />
+
+### Manual Filtering and Match Highlights
+
+Filter with `useCommandFilter().endsWith`, pass the results through `filteredItems`, and mark matching text with `CommandHighlight`. This example also uses a native scrollbar with a stable gutter.
+
+<ComponentPreview name="command/manual-filter" />
+
+### Virtualized Results
+
+Use `CommandVirtualizedList` and TanStack Virtual to search a large collection while rendering only the rows near the viewport.
+
+<ComponentPreview name="command/virtualized" />
+
+## Accessibility
+
+Give `CommandInput` an accessible name with `aria-label` or an associated label. Use the up and down arrow keys to move the highlight and Enter to run the highlighted action. A dialog also supports Escape to close it.
+
+## API Reference
+
+`Command` renders an inline [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete) using the registry's [Autocomplete](./autocomplete) parts. `CommandDialog` and its popup use the registry's [Dialog](./dialog). Supported props pass through to the corresponding primitives.
+
+### Props
+
+#### Command
+
+<ApiPropsList>
+  <ApiProp
+    name="items"
+    fullType="readonly Item[] | readonly { items: readonly Item[] }[]"
+    required
+  >
+    Supplies flat or grouped action data for filtering. Base UI Autocomplete
+    makes this prop optional.
+  </ApiProp>
+  <ApiProp
+    name="autoHighlight"
+    fullType='boolean | "always"'
+    defaultValue='"always"'
+  >
+    Highlights the first available action automatically. Base UI defaults to
+    `false`.
+  </ApiProp>
+  <ApiProp name="keepHighlight" fullType="boolean" defaultValue="true">
+    Preserves the highlighted action when the pointer leaves the list. Base UI
+    defaults to `false`.
+  </ApiProp>
+  <ApiProp name="open" fullType="boolean" defaultValue="true">
+    Keeps the inline autocomplete open. Base UI leaves `open` unset by default.
+  </ApiProp>
+</ApiPropsList>
+
+#### CommandInput
+
+Composes the autocomplete input with [Input Group](./input-group). The input receives the forwarded props.
+
+<ApiPropsList>
+  <ApiProp name="loading" fullType="boolean" defaultValue="false">
+    Marks the input as busy and animates the search icon when reduced motion is
+    disabled.
+  </ApiProp>
+</ApiPropsList>
+
+#### CommandList
+
+Composes the Base UI list with [Scroll Area](./scroll-area). The results fade at edges with more items to scroll to. Pass a render function or use `CommandCollection` to render filtered data.
+
+<ApiPropsList>
+  <ApiProp
+    name="emptyMessage"
+    fullType="ReactNode"
+    defaultValue='"No results found."'
+  >
+    Supplies the message announced when there are no matching actions.
+  </ApiProp>
+  <ApiProp name="nativeScroll" fullType="boolean" defaultValue="false">
+    Uses the browser's native scrollbar and skips the Scroll Area edge fades.
+  </ApiProp>
+  <ApiProp name="hideScrollbar" fullType="boolean" defaultValue="true">
+    Hides the scrollbar while keeping the results scrollable.
+  </ApiProp>
+  <ApiProp name="persistScrollbar" fullType="boolean" defaultValue="false">
+    Keeps an enabled scrollbar visible. In native mode, the browser controls its
+    appearance.
+  </ApiProp>
+  <ApiProp name="scrollbarGutter" fullType="boolean" defaultValue="false">
+    Requests a stable gutter in the scrolling viewport.
+  </ApiProp>
+  <ApiProp
+    name="scrollShadow"
+    fullType='"vertical" | "horizontal" | "both" | "none"'
+    defaultValue='"vertical"'
+  >
+    Sets the fade axis when using the registry Scroll Area.
+  </ApiProp>
+</ApiPropsList>
+
+#### CommandDialogPopup
+
+The popup forwards focus props such as `initialFocus` and `finalFocus` to `DialogContent`. With the default dismissal settings, Escape and outside presses close the palette.
+
+<ApiPropsList>
+  <ApiProp name="title" fullType="string" defaultValue='"Command palette"'>
+    Sets the visually hidden dialog title.
+  </ApiProp>
+  <ApiProp name="description" fullType="string">
+    Adds a visually hidden description of the palette.
+  </ApiProp>
+</ApiPropsList>
+
+#### CommandVirtualizedList
+
+Use this list with `virtualized` on `Command` and an external virtualizer. Pass the filtered items from `useCommandFilteredItems<Item>()` to the virtualizer and use each filtered index on the corresponding `CommandItem`. Connect `onItemHighlighted` to the virtualizer's scroll method so keyboard navigation can reach rows outside the viewport. See the [Base UI virtualized example](https://base-ui.com/react/components/autocomplete#virtualized) for scroller wiring, item positioning, and accessible row counts.
+
+<ApiPropsList>
+  <ApiProp name="scrollRef" fullType="React.Ref<HTMLDivElement>" required>
+    Connects the virtualizer to the scrolling viewport.
+  </ApiProp>
+  <ApiProp name="totalSize" fullType="number" required>
+    Sets the height of the virtualizer's spacer in pixels.
+  </ApiProp>
+  <ApiProp name="nativeScroll" fullType="boolean" defaultValue="false">
+    Uses the browser's native scrollbar and skips the Scroll Area edge fades.
+  </ApiProp>
+  <ApiProp name="hideScrollbar" fullType="boolean" defaultValue="false">
+    Hides the scrollbar while keeping the rows scrollable.
+  </ApiProp>
+  <ApiProp
+    name="scrollShadow"
+    fullType='"vertical" | "horizontal" | "both" | "none"'
+    defaultValue='"vertical"'
+  >
+    Sets the fade axis when using the registry Scroll Area.
+  </ApiProp>
+  <ApiProp
+    name="emptyMessage"
+    fullType="ReactNode"
+    defaultValue='"No results found."'
+  >
+    Supplies the message announced when there are no matching actions.
+  </ApiProp>
+</ApiPropsList>
+
+#### Other parts
+
+Use `CommandSeparator` between groups and `CommandShortcut` to display a key using the [Kbd](./kbd) primitive. `CommandShortcut` displays the binding you provide and leaves registration to your application. `CommandItem` uses `onClick` for both pointer activation and Enter.
+
+#### Filtering hooks
+
+`useCommandFilter()` exposes Base UI's `contains`, `startsWith`, and `endsWith` matchers for manual filtering. Call `useCommandFilteredItems<Item>()` inside `Command` to read the currently matching items.
+
+#### CommandHighlight
+
+Renders a label and wraps every case-insensitive occurrence of the query in a `<mark>`.
+
+<ApiPropsList>
+  <ApiProp name="text" fullType="string" required>
+    Supplies the full label to render.
+  </ApiProp>
+  <ApiProp name="query" fullType="string" required>
+    Supplies the text to highlight. An empty query leaves the label as plain
+    text.
+  </ApiProp>
+</ApiPropsList>

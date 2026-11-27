@@ -5,18 +5,19 @@ import { useState } from "react";
 import { type CategoryInfo, type IconCategory } from "@/icons/catalog";
 import { Button } from "@/registry/base/button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/registry/base/popover";
-import {
   Command,
-  CommandEmpty,
+  CommandCollection,
+  CommandContent,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shared/components/ui/command";
+} from "@/registry/base/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/registry/base/popover";
 
 export type CategoryFilterProps = {
   categories: CategoryInfo[];
@@ -78,18 +79,6 @@ export function IconCategoryMobileSelect({
   const [open, setOpen] = useState(false);
   const currentCategory =
     categories.find((c) => c.id === selectedCategory) ?? categories[0];
-  const categoryGroup = [
-    {
-      value: "Categories",
-      items: categories.map((category) => {
-        return {
-          value: category.id,
-          label: category.label,
-        };
-      }),
-    },
-  ];
-
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger
@@ -116,57 +105,53 @@ export function IconCategoryMobileSelect({
         transitionPreset="outQuint"
         className="w-56 p-0"
       >
-        <Command items={categoryGroup}>
-          <CommandInput placeholder="Search category..." />
-          <CommandList
-            className="max-h-96"
-            renderItem={(groupValue) => {
-              const group = groupValue as (typeof categoryGroup)[number];
-
-              return (
-                <CommandGroup
-                  key={group.value}
-                  items={group.items}
-                  renderItem={(itemValue) => {
-                    const category = itemValue as {
-                      value: "all" | IconCategory;
-                      label: string;
-                    };
-                    const isSelected = selectedCategory === category.value;
-
-                    return (
-                      <CommandItem
-                        key={category.value}
-                        onSelect={() => {
-                          setOpen(false);
-                          onSelectCategory(category.value);
-                        }}
-                        onFocus={() => onPrefetchCategory?.(category.value)}
-                        onPointerEnter={() =>
-                          onPrefetchCategory?.(category.value)
-                        }
-                        value={category}
-                      >
-                        <CheckIcon
-                          className={cn(
-                            "size-4",
-                            isSelected ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        <span className="flex-1">{category.label}</span>
-                        <span className="tabular-nums text-muted-foreground">
-                          {categories.find((item) => item.id === category.value)
-                            ?.count ?? 0}
-                        </span>
-                      </CommandItem>
-                    );
-                  }}
-                />
-              );
-            }}
-          >
-            <CommandEmpty>No category found.</CommandEmpty>
-          </CommandList>
+        <Command
+          className="rounded-md shadow-none ring-0 dark:bg-popover"
+          items={categories}
+          itemToStringValue={(category) => category.label}
+        >
+          <CommandContent>
+            <CommandInput
+              aria-label="Search icon categories"
+              placeholder="Search category..."
+            />
+            <CommandList
+              className="max-h-96"
+              emptyMessage="No category found."
+              hideScrollbar={false}
+            >
+              <CommandGroup>
+                <CommandCollection>
+                  {(category: CategoryInfo) => (
+                    <CommandItem
+                      key={category.id}
+                      onClick={() => {
+                        setOpen(false);
+                        onSelectCategory(category.id);
+                      }}
+                      onFocus={() => onPrefetchCategory?.(category.id)}
+                      onPointerEnter={() => onPrefetchCategory?.(category.id)}
+                      value={category}
+                    >
+                      <CheckIcon
+                        aria-hidden="true"
+                        className={cn(
+                          "size-4",
+                          selectedCategory === category.id
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      <span className="flex-1">{category.label}</span>
+                      <span className="tabular-nums text-muted-foreground">
+                        {category.count}
+                      </span>
+                    </CommandItem>
+                  )}
+                </CommandCollection>
+              </CommandGroup>
+            </CommandList>
+          </CommandContent>
         </Command>
       </PopoverContent>
     </Popover>

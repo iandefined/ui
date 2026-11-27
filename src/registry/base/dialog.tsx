@@ -244,18 +244,22 @@ function DialogViewport({
 }
 
 function DialogContent({
+  backdropClassName,
   className,
   children,
   variant = "default",
   scroll = "inside",
+  showCloseButton = true,
   ref,
   initialFocus,
   style,
   ...props
 }: BaseDialog.Popup.Props & {
+  backdropClassName?: string;
   variant?: "default" | "inset";
   /** Whether the body or the area around the popup owns scrolling. */
   scroll?: DialogScroll;
+  showCloseButton?: boolean;
 }) {
   const { dismissible, modal } = React.useContext(DialogConfigContext);
   const dialogStack = React.useContext(DialogStackContext);
@@ -398,7 +402,7 @@ function DialogContent({
       {...props}
     >
       {children}
-      {dismissible && (
+      {dismissible && showCloseButton && (
         <DialogCloseTrigger
           aria-label="Close"
           className="absolute end-2 top-2 text-muted-foreground"
@@ -412,7 +416,7 @@ function DialogContent({
 
   return (
     <DialogPortal>
-      {isModal && <DialogBackdrop />}
+      {isModal && <DialogBackdrop className={backdropClassName} />}
       <DialogViewport
         scroll={scroll}
         className={cn(!isModal && "pointer-events-none")}

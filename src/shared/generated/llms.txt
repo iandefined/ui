@@ -22,6 +22,7 @@
 - [Button Group](https://ui.iandefined.com/docs/components/button-group.md) - A container that groups related buttons together with consistent styling.
 - [Card](https://ui.iandefined.com/docs/components/card.md) - A container with header, content, action, and footer regions.
 - [Collapsible](https://ui.iandefined.com/docs/components/collapsible.md) - An interactive component which expands and collapses content with smooth animations.
+- [Command](https://ui.iandefined.com/docs/components/command.md) - A searchable command palette for actions and navigation.
 - [Data Table](https://ui.iandefined.com/docs/components/data-table.md) - A feature-rich data table built with TanStack Table, supporting sorting, filtering, selection, and pagination.
 - [Dialog](https://ui.iandefined.com/docs/components/dialog.md) - A modal window for focused tasks that require user interaction.
 - [Drawer](https://ui.iandefined.com/docs/components/drawer.md) - A swipe gesture drawer with positions, snap points, and nested panels.

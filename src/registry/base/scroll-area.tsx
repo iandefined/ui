@@ -1,5 +1,11 @@
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
 import { cn } from "cn";
+import { type ComponentProps } from "react";
+
+type ScrollAreaViewportProps = Pick<
+  ComponentProps<typeof ScrollAreaPrimitive.Viewport>,
+  "ref" | "role"
+> & { "data-slot"?: string };
 
 type ScrollAreaProps = {
   cornerStyle?: React.CSSProperties;
@@ -11,6 +17,7 @@ type ScrollAreaProps = {
   scrollShadow?: "vertical" | "horizontal" | "both" | "none";
   verticalScrollbarStyle?: React.CSSProperties;
   viewportClassName?: string;
+  viewportProps?: ScrollAreaViewportProps;
   viewportTabIndex?: number;
 } & ScrollAreaPrimitive.Root.Props;
 
@@ -22,6 +29,7 @@ function ScrollArea({
   fadeColor,
   horizontalScrollbarStyle,
   viewportClassName,
+  viewportProps,
   viewportTabIndex,
   hideScrollbar = false,
   orientation = "vertical",
@@ -40,9 +48,11 @@ function ScrollArea({
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
+        {...viewportProps}
         data-fade-mode={fadeColor === undefined ? "auto" : "custom"}
         data-scroll-shadow={scrollShadow}
-        data-slot="scroll-area-viewport"
+        data-scroll-area-viewport=""
+        data-slot={viewportProps?.["data-slot"] ?? "scroll-area-viewport"}
         tabIndex={viewportTabIndex}
         className={cn(
           "size-full min-h-0 flex-1 overscroll-contain rounded-[inherit] outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
@@ -137,8 +147,8 @@ function ScrollArea({
         style={cornerStyle}
       />
       <style>{`
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="vertical"],
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {
+[data-scroll-area-viewport][data-fade-mode="auto"][data-scroll-shadow="vertical"],
+[data-scroll-area-viewport][data-fade-mode="auto"][data-scroll-shadow="both"] {
   --scroll-area-fade-y-start: min(var(--scroll-area-overflow-y-start, 0px), var(--scroll-area-fade-size, 40px));
   --scroll-area-fade-y-end: min(var(--scroll-area-overflow-y-end, 0px), var(--scroll-area-fade-size, 40px));
   -webkit-mask-image: linear-gradient(
@@ -156,8 +166,8 @@ function ScrollArea({
     transparent 100%
   );
 }
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="horizontal"],
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {
+[data-scroll-area-viewport][data-fade-mode="auto"][data-scroll-shadow="horizontal"],
+[data-scroll-area-viewport][data-fade-mode="auto"][data-scroll-shadow="both"] {
   --scroll-area-fade-x-start: min(var(--scroll-area-overflow-x-start, 0px), var(--scroll-area-fade-size, 40px));
   --scroll-area-fade-x-end: min(var(--scroll-area-overflow-x-end, 0px), var(--scroll-area-fade-size, 40px));
   -webkit-mask-image: linear-gradient(
@@ -175,7 +185,7 @@ function ScrollArea({
     transparent 100%
   );
 }
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"][data-scroll-shadow="both"] {
+[data-scroll-area-viewport][data-fade-mode="auto"][data-scroll-shadow="both"] {
   -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0,
@@ -207,8 +217,8 @@ function ScrollArea({
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"] [data-slot="scroll-area-vertical-shadow"],
-[data-slot="scroll-area-viewport"][data-fade-mode="auto"] [data-slot="scroll-area-horizontal-shadow"] {
+[data-scroll-area-viewport][data-fade-mode="auto"] [data-slot="scroll-area-vertical-shadow"],
+[data-scroll-area-viewport][data-fade-mode="auto"] [data-slot="scroll-area-horizontal-shadow"] {
   display: none;
 }
 `}</style>

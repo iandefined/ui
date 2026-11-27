@@ -39,6 +39,7 @@ Every rule in this document is explicitly categorized into one of three levels:
 - Registry panel surfaces, including `Dialog` and `BaseDrawer`, use `border-border` for their border and `bg-popover text-popover-foreground` for the panel surface by default.
 - Keep these surface tokens consistent across portalled overlays. Use `bg-background` only when a component intentionally represents the page surface rather than an overlay panel.
 - Scroll fades inside an overlay panel use the same surface token (`fadeColor="var(--popover)"`) so the fade does not reveal the page background.
+- Use the site header search as the visual reference for registry command palettes. Match its inset search field, compact result rows, input-colored highlights, and neutral footer. Command dialog demos use the palette's Escape and outside-press dismissal without an inline close icon.
 
 ### [SITUATIONAL GUIDANCE] Raw HTML Elements
 - Use raw semantic elements for document structure and native form structure, including `form`, `fieldset`, `legend`, headings, paragraphs, lists, landmarks, and media.

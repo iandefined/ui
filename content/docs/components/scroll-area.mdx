@@ -104,6 +104,12 @@ Set `hideScrollbar` to keep the scroll area and edge fades while removing the cu
   <ApiProp name="scrollbarClassName" fullType="string">
     Adds classes to each rendered scrollbar.
   </ApiProp>
+  <ApiProp
+    name="viewportProps"
+    fullType='{ ref?: React.Ref<HTMLDivElement>; role?: React.AriaRole; "data-slot"?: string }'
+  >
+    Passes a ref, a role, or a custom slot directly to the scrolling viewport.
+  </ApiProp>
   <ApiProp name="verticalScrollbarStyle" fullType="React.CSSProperties">
     Applies inline positioning or sizing styles to the vertical scrollbar.
   </ApiProp>

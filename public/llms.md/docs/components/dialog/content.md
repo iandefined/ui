@@ -947,6 +947,8 @@ compose it around the button content with `render`.
 | :--- | :--- | :--- | :--- |
 | `variant` | `"default" \| "inset"` | `default` | Selects the dialog frame treatment. `"inset"` adds a muted footer surface when `DialogFooter` is present. |
 | `scroll` | `"inside" \| "outside"` | `inside` | Chooses whether `DialogBody` or the surrounding viewport scrolls. |
+| `showCloseButton` | `boolean` | `true` | Controls the built-in close icon in a dismissible dialog. Escape and outside-press behavior follow the dialog's dismissal settings. |
+| `backdropClassName` | `string` | `-` | Applies classes to the backdrop rendered for a modal dialog. |
 | `initialFocus` | `boolean \| React.RefObject<HTMLElement \| null> \| ((openType) => boolean \| HTMLElement \| null \| void)` | `-` | Chooses the element that receives focus when the dialog opens. In `"outside"` scroll mode, the popup is the default target. |
 
 #### DialogBody

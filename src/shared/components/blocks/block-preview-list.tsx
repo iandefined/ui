@@ -10,20 +10,21 @@ import {
   SearchIcon,
   TagIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { BlockShowcase } from "@/shared/components/blocks/block-showcase";
-import { DocsNavLink } from "@/shared/components/docs-nav-link";
-import { Link } from "@/shared/components/link";
-import { Button } from "@/shared/components/ui/button";
 import {
   Command,
-  CommandEmpty,
+  CommandCollection,
+  CommandContent,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shared/components/ui/command";
+} from "@/registry/base/command";
+import { BlockShowcase } from "@/shared/components/blocks/block-showcase";
+import { DocsNavLink } from "@/shared/components/docs-nav-link";
+import { Link } from "@/shared/components/link";
+import { Button } from "@/shared/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -46,16 +47,7 @@ import {
 
 const INITIAL_BLOCK_COUNT = 5;
 const BLOCKS_PER_LOAD = 5;
-
-type CategoryCommandItem = {
-  value: string;
-  label: string;
-};
-
-type CategoryCommandGroup = {
-  value: string;
-  items: CategoryCommandItem[];
-};
+const categoryOptions = [allBlockCategory, ...blockCategories];
 
 const getCategoryHref = (category: string) =>
   `/blocks?category=${encodeURIComponent(category)}`;
@@ -182,23 +174,9 @@ function CategoryFilter({
 }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const options = useMemo(() => [allBlockCategory, ...blockCategories], []);
   const selected =
-    options.find((option) => option.name === category) ?? allBlockCategory;
-  const commandGroups = useMemo<CategoryCommandGroup[]>(
-    () => [
-      {
-        value: "Categories",
-        items: options.map((option) => {
-          return {
-            value: option.name,
-            label: option.title,
-          };
-        }),
-      },
-    ],
-    [options]
-  );
+    categoryOptions.find((option) => option.name === category) ??
+    allBlockCategory;
 
   const handleSelect = (value: string) => {
     const nextQuery = query.trim();
@@ -230,42 +208,45 @@ function CategoryFilter({
         }
       />
       <PopoverContent align="start" className="p-0">
-        <Command items={commandGroups}>
-          <CommandInput placeholder="Search category..." />
-          <CommandList
-            className="max-h-96"
-            renderItem={(value) => {
-              const group = value as unknown as CategoryCommandGroup;
-              return (
-                <CommandGroup
-                  key={group.value}
-                  items={group.items}
-                  renderItem={(itemValue) => {
-                    const option = itemValue as unknown as CategoryCommandItem;
-                    return (
-                      <CommandItem
-                        key={option.value}
-                        onSelect={() => handleSelect(option.value)}
-                        value={option}
-                      >
-                        <CheckIcon
-                          className={cn(
-                            "mr-2 size-4",
-                            selected.name === option.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {option.label}
-                      </CommandItem>
-                    );
-                  }}
-                />
-              );
-            }}
-          >
-            <CommandEmpty>No category found.</CommandEmpty>
-          </CommandList>
+        <Command
+          className="rounded-md shadow-none ring-0 dark:bg-popover"
+          items={categoryOptions}
+          itemToStringValue={(option) => option.title}
+        >
+          <CommandContent>
+            <CommandInput
+              aria-label="Search block categories"
+              placeholder="Search category..."
+            />
+            <CommandList
+              className="max-h-96"
+              emptyMessage="No category found."
+              hideScrollbar={false}
+            >
+              <CommandGroup>
+                <CommandCollection>
+                  {(option: (typeof categoryOptions)[number]) => (
+                    <CommandItem
+                      key={option.name}
+                      onClick={() => handleSelect(option.name)}
+                      value={option}
+                    >
+                      <CheckIcon
+                        aria-hidden="true"
+                        className={cn(
+                          "mr-2 size-4",
+                          selected.name === option.name
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {option.title}
+                    </CommandItem>
+                  )}
+                </CommandCollection>
+              </CommandGroup>
+            </CommandList>
+          </CommandContent>
         </Command>
       </PopoverContent>
     </Popover>

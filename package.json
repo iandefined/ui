@@ -66,6 +66,7 @@
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",
     "@tanstack/eslint-plugin-router": "catalog:",
+    "@tanstack/react-virtual": "^3.14.28",
     "@tanstack/router-plugin": "catalog:",
     "@testing-library/react": "16.3.3",
     "@types/mdx": "catalog:",

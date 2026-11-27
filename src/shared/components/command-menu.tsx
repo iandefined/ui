@@ -8,27 +8,31 @@ import {
   CircleDashedIcon,
   SquareDashedIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
-import { Kbd } from "@/registry/base/kbd";
-import { Button } from "@/shared/components/ui/button";
 import {
   Command,
-  CommandEmpty,
+  CommandCollection,
+  CommandContent,
+  CommandDialog,
+  CommandDialogPopup,
+  CommandDialogTrigger,
+  CommandFooter,
   CommandGroup,
+  CommandGroupLabel,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shared/components/ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/components/ui/dialog";
+} from "@/registry/base/command";
+import { Kbd } from "@/registry/base/kbd";
+import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
 import { SITE } from "@/shared/constants/site";
 import { useCopyToClipboard } from "@/shared/hooks/use-copy-to-clipboard";
@@ -59,9 +63,6 @@ type DocUrlKind =
   | { kind: "template"; slug: string }
   | { kind: "page" };
 
-const GROUP_HEADING_CLS =
-  "!p-0 [&_[data-slot=command-group-heading]]:scroll-mt-16 [&_[data-slot=command-group-heading]]:!p-3 [&_[data-slot=command-group-heading]]:!pb-1";
-
 const getNodeText = (value: ReactNode): string => {
   if (
     typeof value === "string" ||
@@ -81,15 +82,19 @@ type CommandMenuOption = {
   keywords: string[];
   icon: ReactNode;
   trailing?: ReactNode;
-  onHighlight?: () => void;
+  registryItem?: string;
   onSelect: () => void;
 };
 
 type CommandMenuGroup = {
   value: string;
   items: CommandMenuOption[];
-  className?: string;
 };
+
+const matchesCommand = (item: CommandMenuOption, search: string) =>
+  `${item.label} ${item.keywords.join(" ")}`
+    .toLowerCase()
+    .includes(search.toLowerCase());
 
 const parseDocPageUrl = (url: string): DocUrlKind => {
   const parts = url.split("/").filter(Boolean);
@@ -147,20 +152,27 @@ const DocPageLeadingIcon = ({ parsed }: { parsed: DocUrlKind }) => {
 
 export const CommandMenu = ({
   blocks,
+  className,
   navItems,
   tree,
-  ...props
-}: React.ComponentProps<typeof Dialog> & {
+}: {
   blocks?: { name: string; description: string; categories: string[] }[];
+  className?: string;
   navItems: { href: string; label: string }[];
   tree: PageTreeRoot;
 }) => {
-  const router = useRouter();
+  const { push } = useRouter();
   const isMac = useIsMac();
   const [packageManager] = usePackageManager();
   const [open, setOpen] = useState(false);
-  const [showGoToPage, setShowGoToPage] = useState(false);
-  const [copyPayload, setCopyPayload] = useState("");
+  const [highlightedItem, setHighlightedItem] = useState<CommandMenuOption>();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const copyPayload = highlightedItem?.registryItem
+    ? getShadcnAddCommand(
+        packageManager,
+        `${SITE.REGISTRY}/r/${highlightedItem.registryItem}.json`
+      )
+    : "";
 
   const { copyToClipboard } = useCopyToClipboard({
     onCopy: () => {
@@ -189,63 +201,10 @@ export const CommandMenu = ({
     [tree]
   );
 
-  const handleDocPageHighlight = useCallback(
-    (item: { url: string; name?: string }) => {
-      setShowGoToPage(true);
-      const parsed = parseDocPageUrl(item.url);
-      if (parsed.kind === "theme") {
-        setCopyPayload(
-          getShadcnAddCommand(
-            packageManager,
-            `${SITE.REGISTRY}/r/theme-${parsed.slug}.json`
-          )
-        );
-        return;
-      }
-      if (parsed.kind === "component" || parsed.kind === "template") {
-        setCopyPayload(
-          getShadcnAddCommand(
-            packageManager,
-            `${SITE.REGISTRY}/r/${parsed.slug}.json`
-          )
-        );
-        return;
-      }
-      setCopyPayload("");
-    },
-    [packageManager]
-  );
-
-  const handleBlockHighlight = useCallback(
-    (block: { name: string; description: string; categories: string[] }) => {
-      setShowGoToPage(true);
-      setCopyPayload(
-        getShadcnAddCommand(
-          packageManager,
-          `${SITE.REGISTRY}/r/${block.name}.json`
-        )
-      );
-    },
-    [packageManager]
-  );
-
   const runCommand = useCallback((command: () => unknown) => {
     setOpen(false);
     command();
   }, []);
-
-  const handleOpenClick = useCallback(() => setOpen(true), []);
-
-  const handleFilter = useCallback(
-    (value: string, search: string, keywords?: string[]) => {
-      const extendValue = `${value} ${keywords?.join(" ") ?? ""}`;
-      if (extendValue.toLowerCase().includes(search.toLowerCase())) {
-        return 1;
-      }
-      return 0;
-    },
-    []
-  );
 
   const commandGroups = useMemo<CommandMenuGroup[]>(() => {
     const groups: CommandMenuGroup[] = [];
@@ -259,11 +218,7 @@ export const CommandMenu = ({
             label: item.label,
             keywords: ["nav", "navigation", item.label.toLowerCase()],
             icon: <ArrowRightIcon />,
-            onHighlight: () => {
-              setShowGoToPage(true);
-              setCopyPayload("");
-            },
-            onSelect: () => runCommand(() => router.push(item.href)),
+            onSelect: () => runCommand(() => push(item.href)),
           };
         }),
       });
@@ -279,19 +234,21 @@ export const CommandMenu = ({
             label: page.name,
             keywords: buildDocPageKeywords(parsed, page.url, [group.label]),
             icon: <DocPageLeadingIcon parsed={parsed} />,
-            onHighlight: () =>
-              handleDocPageHighlight({ name: page.name, url: page.url }),
-            onSelect: () => runCommand(() => router.push(page.url)),
+            registryItem:
+              parsed.kind === "page"
+                ? undefined
+                : parsed.kind === "theme"
+                  ? `theme-${parsed.slug}`
+                  : parsed.slug,
+            onSelect: () => runCommand(() => push(page.url)),
           };
         }),
-        className: GROUP_HEADING_CLS,
       });
     }
 
     if (blocks?.length) {
       groups.push({
         value: "Blocks",
-        className: "p-0! [&_[data-slot=command-group-heading]]:p-3!",
         items: blocks.map((block) => {
           return {
             value: block.name,
@@ -308,10 +265,10 @@ export const CommandMenu = ({
                 {block.name}
               </span>
             ),
-            onHighlight: () => handleBlockHighlight(block),
+            registryItem: block.name,
             onSelect: () =>
               runCommand(() =>
-                router.push(
+                push(
                   `/blocks?category=${encodeURIComponent(block.categories[0] ?? "all")}`
                 )
               ),
@@ -321,21 +278,7 @@ export const CommandMenu = ({
     }
 
     return groups;
-  }, [
-    blocks,
-    handleBlockHighlight,
-    handleDocPageHighlight,
-    navItems,
-    router,
-    runCommand,
-    treeGroups,
-  ]);
-
-  const handleItemHighlighted = useCallback((item: unknown) => {
-    if (item && typeof item === "object") {
-      (item as CommandMenuOption).onHighlight?.();
-    }
-  }, []);
+  }, [blocks, navItems, push, runCommand, treeGroups]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -366,10 +309,12 @@ export const CommandMenu = ({
       }
 
       if (
+        open &&
         e.key === "c" &&
         (e.metaKey || e.ctrlKey) &&
         copyPayload.includes("shadcn@latest")
       ) {
+        e.preventDefault();
         runCommand(() => {
           void copyToClipboard(copyPayload);
         });
@@ -378,19 +323,19 @@ export const CommandMenu = ({
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, [copyPayload, runCommand, copyToClipboard]);
+  }, [copyPayload, runCommand, copyToClipboard, open]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
+    <CommandDialog open={open} onOpenChange={setOpen} overlay="brightness">
+      <CommandDialogTrigger
+        ref={triggerRef}
         render={
           <Button
             variant="secondary"
             className={cn(
-              "bg-surface text-surface-foreground/60 dark:bg-card relative h-8 w-full justify-start pl-2.5 font-normal shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64"
+              "bg-surface text-surface-foreground/60 dark:bg-card relative h-8 w-full justify-start pl-2.5 font-normal shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64",
+              className
             )}
-            onClick={handleOpenClick}
-            {...props}
           >
             <span className="hidden lg:inline-flex">
               Search documentation...
@@ -403,77 +348,67 @@ export const CommandMenu = ({
           </Button>
         }
       />
-      <DialogContent
-        showCloseButton={false}
-        overlayClassName="data-closed:animate-none data-closed:opacity-0"
-        className="data-closed:animate-none rounded-xl border-none bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-neutral-200/80 dark:bg-neutral-900 dark:ring-neutral-800"
+      <CommandDialogPopup
+        backdropClassName="data-ending-style:transition-none"
+        className="data-ending-style:transition-none"
+        description="Search for a command to run."
+        finalFocus={triggerRef}
+        title="Search documentation"
       >
-        <DialogHeader className="sr-only">
-          <DialogTitle>Search documentation...</DialogTitle>
-          <DialogDescription>Search for a command to run...</DialogDescription>
-        </DialogHeader>
-        <Command
-          className="**:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input-wrapper]:border-input rounded-none bg-transparent **:data-[slot=command-input]:h-9! **:data-[slot=command-input]:py-0 **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border"
+        <Command<CommandMenuOption>
           items={commandGroups}
-          filter={handleFilter}
-          onItemHighlighted={handleItemHighlighted}
+          filter={matchesCommand}
+          itemToStringValue={(item) => item.label}
+          onItemHighlighted={setHighlightedItem}
         >
-          <CommandInput placeholder="Search documentation..." />
-          <CommandList
-            className="no-scrollbar min-h-80 scroll-pt-2 scroll-pb-1.5"
-            renderItem={(value) => {
-              const group = value as unknown as CommandMenuGroup;
-              return (
-                <CommandGroup
-                  key={group.value}
-                  className={group.className}
-                  heading={group.value}
-                  items={group.items}
-                  renderItem={(itemValue) => {
-                    const item = itemValue as unknown as CommandMenuOption;
-                    return (
+          <CommandContent>
+            <CommandInput
+              aria-label="Search documentation"
+              placeholder="Search documentation..."
+            />
+            <CommandList>
+              {(group: CommandMenuGroup) => (
+                <CommandGroup key={group.value} items={group.items}>
+                  <CommandGroupLabel>{group.value}</CommandGroupLabel>
+                  <CommandCollection>
+                    {(item: CommandMenuOption) => (
                       <CommandItem
                         key={item.value}
-                        className="data-highlighted:border-input data-highlighted:bg-input/50 h-9 rounded-md border border-transparent px-3! font-medium"
                         value={item}
-                        onSelect={item.onSelect}
+                        onClick={item.onSelect}
                       >
                         {item.icon}
                         {item.label}
                         {item.trailing}
                       </CommandItem>
-                    );
-                  }}
-                />
-              );
-            }}
-          >
-            <CommandEmpty className="text-muted-foreground py-12 text-center text-sm">
-              No results found.
-            </CommandEmpty>
-          </CommandList>
+                    )}
+                  </CommandCollection>
+                </CommandGroup>
+              )}
+            </CommandList>
+          </CommandContent>
+          <CommandFooter className="flex-nowrap gap-2 overflow-hidden">
+            <div className="flex items-center gap-2 shrink-0">
+              <Kbd className="shrink-0" aria-label="Enter">
+                <CornerDownLeftIcon aria-hidden="true" />
+              </Kbd>
+              {highlightedItem && (
+                <span className="min-w-0 truncate">Go to Page</span>
+              )}
+            </div>
+            {copyPayload && (
+              <>
+                <Separator orientation="vertical" className="h-4!" />
+                <div className="flex min-w-0 items-center gap-1">
+                  <Kbd className="shrink-0">{isMac ? "⌘" : "Ctrl"}</Kbd>
+                  <Kbd className="shrink-0">C</Kbd>
+                  <span className="min-w-0 truncate">{copyPayload}</span>
+                </div>
+              </>
+            )}
+          </CommandFooter>
         </Command>
-        <div className="text-muted-foreground absolute inset-x-0 bottom-0 z-20 flex h-10 items-center gap-2 overflow-hidden rounded-b-xl border-t border-t-neutral-100 bg-neutral-50 px-4 text-xs font-medium dark:border-t-neutral-700 dark:bg-neutral-800">
-          <div className="flex items-center gap-2 shrink-0">
-            <Kbd className="shrink-0">
-              <CornerDownLeftIcon />
-            </Kbd>{" "}
-            {showGoToPage ? (
-              <span className="min-w-0 truncate">Go to Page</span>
-            ) : null}
-          </div>
-          {copyPayload && (
-            <>
-              <Separator orientation="vertical" className="h-4!" />
-              <div className="flex min-w-0 items-center gap-1">
-                <Kbd className="shrink-0">{isMac ? "⌘" : "Ctrl"}</Kbd>
-                <Kbd className="shrink-0">C</Kbd>
-                <span className="min-w-0 truncate">{copyPayload}</span>
-              </div>
-            </>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+      </CommandDialogPopup>
+    </CommandDialog>
   );
 };

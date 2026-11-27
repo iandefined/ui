@@ -21,8 +21,8 @@ const source = JSON.parse(
 );
 const expectedNames = source.items.map((item) => item.name);
 
-if (expectedNames.length !== 56) {
-  throw new Error(`Expected 56 registry items, found ${expectedNames.length}`);
+if (expectedNames.length !== 57) {
+  throw new Error(`Expected 57 registry items, found ${expectedNames.length}`);
 }
 
 await rm(outDir, { recursive: true, force: true });
