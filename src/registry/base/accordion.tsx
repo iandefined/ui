@@ -198,6 +198,7 @@ function AccordionContent({
       <div
         className={cn(
           "p-3.5 text-muted-foreground",
+          variant === "default" && "px-0",
           (variant === "default" ||
             variant === "split" ||
             variant === "outline" ||
