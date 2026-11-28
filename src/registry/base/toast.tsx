@@ -136,8 +136,7 @@ const TOAST_SURFACE_CLASSES =
   "border border-border/70 shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.06),0_3px_3px_-1.5px_rgb(0_0_0/0.05)] dark:border-border dark:shadow-[0_1px_1px_-0.5px_rgb(0_0_0/0.18),0_3px_3px_-1.5px_rgb(0_0_0/0.16),inset_0_1px_0_0_rgb(255_255_255/0.02),inset_0_0_0_1px_rgb(255_255_255/0.02)]";
 
 const TOAST_ROOT_CLASSES = [
-  "group/toast absolute z-[calc(50-var(--toast-index))] h-(--toast-calc-height) w-full select-none text-popover-foreground [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s,background-color_.5s] motion-reduce:[transition:opacity_.2s,height_.15s] motion-reduce:transform-none",
-  "[--popup-surface:var(--card)]",
+  "group/toast absolute z-[calc(50-var(--toast-index))] h-(--toast-calc-height) w-full rounded-lg select-none text-popover-foreground [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s] motion-reduce:[transition:opacity_.2s,height_.15s] motion-reduce:transform-none",
   "data-[position*=top]:top-0 data-[position*=top]:right-0 data-[position*=top]:left-0 data-[position*=top]:origin-[50%_calc(50%-50%*min(var(--toast-index,0),1))]",
   "data-[position*=bottom]:right-0 data-[position*=bottom]:bottom-0 data-[position*=bottom]:left-0 data-[position*=bottom]:origin-[50%_calc(50%+50%*min(var(--toast-index,0),1))]",
   "after:absolute after:left-0 after:h-[calc(var(--toast-gap)+1px)] after:w-full",
@@ -149,7 +148,6 @@ const TOAST_ROOT_CLASSES = [
   "data-[position*=bottom]:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--toast-peek))-(var(--toast-shrink)*var(--toast-calc-height))))_scale(var(--toast-scale))]",
   "data-limited:opacity-0",
   "data-expanded:h-(--toast-height) data-position:data-expanded:transform-[translateX(var(--toast-swipe-movement-x))_translateY(var(--toast-calc-offset-y))]",
-  "bg-[color-mix(in_srgb,var(--popup-surface),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))] data-expanded:bg-(--popup-surface)",
   "data-[position*=top]:data-starting-style:transform-[translateY(calc(-100%-var(--toast-inset)))] data-[position*=bottom]:data-starting-style:transform-[translateY(calc(100%+var(--toast-inset)))]",
   "data-ending-style:opacity-0",
   "data-[position*=top]:data-ending-style:not-data-limited:not-data-swipe-direction:transform-[translateY(calc(-100%-var(--toast-inset)))]",
@@ -166,7 +164,8 @@ const TOAST_ROOT_CLASSES = [
 ].join(" ");
 
 const TOAST_MICROINTERACTION_CLASSES = [
-  "h-full w-full rounded-lg motion-reduce:transition-none",
+  "h-full w-full rounded-lg transition-colors duration-500 motion-reduce:transition-none",
+  "bg-[color-mix(in_srgb,var(--card),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))] group-data-expanded/toast:bg-card",
   TOAST_SURFACE_CLASSES,
 ].join(" ");
 
@@ -502,7 +501,7 @@ function StackedToastItem({
                   {showCloseButton ? (
                     <ToastPrimitive.Close
                       data-slot="toast-close"
-                      className="hitbox-4 -mt-1 -mr-1 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] touch-manipulation"
+                      className="hitbox-4 -my-0.5 -me-1 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 forced-colors:focus-visible:outline-[Highlight] touch-manipulation"
                       aria-label="Close notification"
                     >
                       <X aria-hidden="true" className="size-4" />
